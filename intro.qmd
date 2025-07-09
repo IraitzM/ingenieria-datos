@@ -3,6 +3,7 @@
 Este libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:
 
 * Sistemas de gestión de datos
+* Mejores prácticas en el modelado
 * Herramientas de volcado y transformación
 * Buen gobierno de los datos
 * Calidad y monitorización
