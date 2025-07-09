@@ -14,7 +14,7 @@
     "href": "intro.html",
     "title": "1  Introducción",
     "section": "",
-    "text": "Este libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:\n\nSistemas de gestión de datos\nMejores prácticas en el modelado\nHerramientas de volcado y transformación\nBuen gobierno de los datos\nCalidad y monitorización\n\nE intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.\n\n\n\nCiclo de los datos",
+    "text": "Este libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:\n\nSistemas de gestión de datos\nMejores prácticas en el modelado\nHerramientas de volcado y transformación\nBuen gobierno de los datos\nCalidad y monitorización\n\nE intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.\n\n\n\nCiclo de vida de los datos",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introducción</span>"
     ]
