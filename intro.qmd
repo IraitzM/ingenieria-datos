@@ -10,4 +10,4 @@ Este libro pretende ser una guía sencilla con referencias al estado de la cuest
 
 E intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.
 
-![Ciclo de los datos](assets/datacycle.png){width=50%}
+![Ciclo de vida de los datos](assets/datacycle.png){width=50%}
