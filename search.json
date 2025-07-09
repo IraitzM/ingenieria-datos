@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Ingeniería de datos",
     "section": "",
-    "text": "Prólogo\nSeamos honestos, el mundo de la ingeniería de datos es un lío. Tenemos que lidiar con el desarrollo de las aplicaciones que recaban datos, fuentes internas, externas, con distintos formatos y cadencias de datos,… Y unificar todo en un repositorio que permita un buen gobierno de los datos, facilite su uso para analistas y científicos de datos, permita una evolución de nuestro modelo de datos corporativo y sea fácil e intuitivo.\nAh, y barato a poder ser. Todo un reto.",
+    "text": "Prólogo\nSeamos honestos, el mundo de la ingeniería de datos es un lío. Tenemos que lidiar con el desarrollo de las aplicaciones que recaban datos, fuentes internas, externas, con distintos formatos y cadencias de datos,… Y unificar todo en un repositorio que permita un buen gobierno de los datos, facilite su uso para analistas y científicos de datos, permita una evolución de nuestro modelo de datos corporativo y sea fácil e intuitivo.\nAh, y barato a poder ser. Todo un reto.\nNuestro posición como ingenieros de datos está en el epicentro de la acción dada la relevancia que han tomado los campos de la ciencia de datos e inteligencia artificial. Además, el ámbito corporativo necesita de ciertas garantías para poder dar cumplimiento al marco regulatorio cuando se trata de datos de carácter personal o con impacto a usuarios.\nPor ello debemos de datos buena cuenta de las mejores prácticas a la hora de realizar nuestra tarea.",
     "crumbs": [
       "Prólogo"
     ]
@@ -14,7 +14,7 @@
     "href": "intro.html",
     "title": "1  Introducción",
     "section": "",
-    "text": "Este libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:\n\nSistemas de gestión de datos\nMejores prácticas en el modelado\nHerramientas de volcado y transformación\nBuen gobierno de los datos\nCalidad y monitorización\n\nE intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible.",
+    "text": "Este libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:\n\nSistemas de gestión de datos\nMejores prácticas en el modelado\nHerramientas de volcado y transformación\nBuen gobierno de los datos\nCalidad y monitorización\n\nE intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.\n\n\n\nCiclo de los datos",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introducción</span>"
     ]
