@@ -1,5 +1,0 @@
-# Prólogo {.unnumbered}
-
-Seamos honestos, el mundo de la ingeniería de datos es un lío. Tenemos que lidiar con el desarrollo de las aplicaciones que recaban datos, fuentes internas, externas, con distintos formatos y cadencias de datos,... Y unificar todo en un repositorio que permita un buen gobierno de los datos, facilite su uso para analistas y científicos de datos, permita una evolución de nuestro modelo de datos corporativo y sea fácil e intuitivo.
-
-Ah, y barato a poder ser. Todo un reto.
