@@ -10,13 +10,89 @@
     ]
   },
   {
-    "objectID": "intro.html",
-    "href": "intro.html",
+    "objectID": "content/intro.html",
+    "href": "content/intro.html",
     "title": "1  Introducción",
     "section": "",
     "text": "Este libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:\n\nSistemas de gestión de datos\nMejores prácticas en el modelado\nHerramientas de volcado y transformación\nBuen gobierno de los datos\nCalidad y monitorización\n\nE intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.\n\n\n\nCiclo de vida de los datos",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introducción</span>"
+    ]
+  },
+  {
+    "objectID": "content/modelado/intro.html",
+    "href": "content/modelado/intro.html",
+    "title": "2  Modelado de datos",
+    "section": "",
+    "text": "pendiente",
+    "crumbs": [
+      "Modelado de datos",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Modelado de datos</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/intro.html",
+    "href": "content/sistemas/intro.html",
+    "title": "3  Sistemas de gestión de datos",
+    "section": "",
+    "text": "pendiente",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
+    ]
+  },
+  {
+    "objectID": "content/load/intro.html",
+    "href": "content/load/intro.html",
+    "title": "4  Carga de datos",
+    "section": "",
+    "text": "pendiente",
+    "crumbs": [
+      "Ingesta de datos",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Carga de datos</span>"
+    ]
+  },
+  {
+    "objectID": "content/transform/intro.html",
+    "href": "content/transform/intro.html",
+    "title": "5  Transformación",
+    "section": "",
+    "text": "pendiente",
+    "crumbs": [
+      "Transformación de datos",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Transformación</span>"
+    ]
+  },
+  {
+    "objectID": "content/explotacion/intro.html",
+    "href": "content/explotacion/intro.html",
+    "title": "Explotación de los datos",
+    "section": "",
+    "text": "pendiente",
+    "crumbs": [
+      "Explotación de los datos"
+    ]
+  },
+  {
+    "objectID": "content/explotacion/bi.html",
+    "href": "content/explotacion/bi.html",
+    "title": "6  Inteligencia de negocio",
+    "section": "",
+    "text": "La inteligencia de negocio o Business Intelligence (BI) es sin duda uno de los recursos clave a la hora de conocer la actividad de nuestra empresa. Toda esa información que los datos ocultan, si la manipulamos de forma correcta y la presentamos de un modo lógico puede ayudarnos a determinar si estamos comprando de más, vendiendo de menos, si nuestras líneas de fabricación están siendo bien empleadas o si nuestros almacenes requieren una renovación del stock.",
+    "crumbs": [
+      "Explotación de los datos",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Inteligencia de negocio</span>"
+    ]
+  },
+  {
+    "objectID": "content/explotacion/ds.html",
+    "href": "content/explotacion/ds.html",
+    "title": "7  Ciencia de datos",
+    "section": "",
+    "text": "pendiente",
+    "crumbs": [
+      "Explotación de los datos",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Ciencia de datos</span>"
     ]
   }
 ]
