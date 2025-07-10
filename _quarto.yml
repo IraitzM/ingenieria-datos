@@ -29,16 +29,38 @@ book:
     background: light
   chapters:
     - index.qmd
-    - intro.qmd
-    - references.qmd
+    - content/intro.qmd
 
-bibliography: references.bib
+    - part: "Modelado de datos"
+      chapters:
+      - content/modelado/intro.qmd
+
+    - part: "Sistemas gestores de datos"
+      chapters:
+      - content/sistemas/intro.qmd
+
+    - part: "Ingesta de datos"
+      chapters:
+      - content/load/intro.qmd
+
+    - part: "Transformación de datos"
+      chapters:
+      - content/transform/intro.qmd
+
+    - part: content/explotacion/intro.qmd
+      chapters:
+      - content/explotacion/bi.qmd
+      - content/explotacion/ds.qmd
+
+    - content/references.qmd
+
+bibliography: content/references.bib
 
 format:
   html:
     include-in-header: static/code_head.html
     include-before-body: static/code_body.html
-    number-depth: 2
+    number-depth: 3
     theme: 
      - cosmo
      - style.scss
