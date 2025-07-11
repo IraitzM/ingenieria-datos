@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -151,7 +171,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+            <a href="../content/modelado/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Modelado de datos</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -160,8 +180,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/modelado/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Modelado de datos</span></span></a>
+  <a href="../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
       </ul>
@@ -251,8 +271,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#inicios" id="toc-inicios" class="nav-link active" data-scroll-target="#inicios"><span class="header-section-number">1.1</span> Inicios</a></li>
+  <li><a href="#los-sistemas-centrales" id="toc-los-sistemas-centrales" class="nav-link" data-scroll-target="#los-sistemas-centrales"><span class="header-section-number">1.2</span> Los sistemas centrales</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -294,8 +321,87 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <figcaption>Ciclo de vida de los datos</figcaption>
 </figure>
 </div>
+<p>Y empezaremos con un concepto que no está exento de controversia: <a href="../content/modelado/intro.html">el modelado de datos</a>. Aunque para ello, debemos entender el contexto histórico que rodea a los ingenieros de datos trasladándonos a los primeros sistemas de gestión de datos y su aparción a finales de los años 60 del siglo pasado.</p>
+<section id="inicios" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="inicios"><span class="header-section-number">1.1</span> Inicios</h2>
+<p>Con frecuencia olvidamos el recorrido que hemos realizado en el mundo de la informática y cómo impacta las decisiones o aspectos de los sistemas de hoy día.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Curiosidades
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Es habitual que las nuevas generaciones no sepan el origen del símbolo de guardar.</p>
+<p>El disquete que era un medio <em>físico</em> para guardar contenido (el pendrive de los antiguos).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/disquete.webp" class="img-fluid figure-img" style="width:40.0%"></p>
+<figcaption>Disquete físico</figcaption>
+</figure>
+</div>
+<p>Pero mucha gente se olvida que la configuración de teclado que empleamos en la actualidad es España, QWERTY por las primeras teclas en el extremo superior izquierdo de los teclados, es una herencia de las máquinas de escribir y que esta configuración a pesar de no ser la que nos permite una mayor velocidad de redacción impedia que los martillos de la máquina se bloquearan.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/maquinaescribir.webp" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Martillos en una máquina de escribir</figcaption>
+</figure>
+</div>
+<p>La misma razón por la que la tecla enter en sus inicios se conocia como retorno de carro (<em>return carriage</em>) cuando no existe carro que retornar en nuestros ordenadores modernos.</p>
+</div>
+</div>
+</div>
+<p>Por eso es importante entender el trasfondo histórico y las herencias que a pesar de no ser muy lógicas, determinan algunas de las prácticas que nos encontramos en la actualidad.</p>
+</section>
+<section id="los-sistemas-centrales" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="los-sistemas-centrales"><span class="header-section-number">1.2</span> Los sistemas centrales</h2>
+<p>En sus inicios, las máquinas evolucionaron de máquinas individuales donde tarjetas perforadas determinaban los automatismos, a sistemas eléctrónicos y sofisticados que disponian de canales de entrada y salida (teclados y pantallas) para realizar las acciones que determinaban las acciones de la máquina.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/oldibm.webp" class="img-fluid figure-img" style="width:40.0%"></p>
+<figcaption>Aquellos maravillosos años</figcaption>
+</figure>
+</div>
+<p><a href="https://es.wikipedia.org/wiki/IBM">International Business Machines</a> (IBM) fue una de las primeras compañias en realizar esa transición de máquinas que habían servido para fines militares al ámbito comercial, corporativo, al servicio de instituciones privadas con problemas de grandes dimensiones.</p>
+<p>En aquella época las máquinas que hoy llamamos ordenadores o computadoras eran recursos muy costosos y por ello, existían unidades centrales a las que se accedía desde nodos terminales. Sistemas únicamente de acceso a la máquina a la que estaban conectadas para pedirle que hiciera algo, introducir datos de cuentas de cliente, operaciones de cálculo y balances, etc. Lo habitual en la empresa donde este rol lo cubrían secretarias que venían de ámbitos como la mecanografía.</p>
+<p>No existia internet además y una vez salíamos del dominio de la empresa no se podía actuar sobre esos sistemas. Había que hablar en un lenguaje de muy bajo nivel con la máquina, poco intuitivo para gente poco versada en esas tecnologías. Eran tiempos oscuros.</p>
+<p>Estos sistemas gestionaban tanto los datos que los empleados iban registrando así como las acciones que se realizaban sobre estos con rutinas que reflejana la operativa de la compañia: procesos de compa, transferencias bancarias, facturación de servicios y contabilidad general, entre otros.</p>
+<p>Son los que conocemos como <a href="sistemas/intro">sistemas centrales de datos</a> y gran parte de este trabajo se lo debemos a una persona en concreto, <a href="https://es.wikipedia.org/wiki/Edgar_Frank_Codd">Edgar Fank Codd</a>, y su trabajo en este ámbito titulado <em>Un modelo tabular<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> de datos para grandes bancos de datos compartidos</em> <span class="citation" data-cites="codd1970relational">(<a href="references.html#ref-codd1970relational" role="doc-biblioref">Codd 1970</a>)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mainframe y COBOL
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Os sorprendería la cantidad de empresas que aún a día de hoy emplean máquinas mainframe con programas COBOL que muy pocos individuos a nivel global saben a ciencia cierta lo que hacen. Es parte de la deuda técnica que muchas empresas no terminan de quitarse de encima por mucho avance de la tecnología que haya. Es parte de nuestra componente humana y la dificultad que nos supone <em>el cambio</em>.</p>
+</div>
+</div>
+</div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-codd1970relational" class="csl-entry" role="listitem">
+Codd, Edgar F. 1970. <span>«A relational model of data for large shared data banks»</span>. <em>Communications of the ACM</em> 13 (6): 377-87.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Uso la traducción tabular de el término inglés <em>relation</em> que se refiere a la estrucura de los datos y la traducción a relacional puede dar a entender una gestión relacional que no es tal en los sistemas que ideó Codd<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -705,7 +811,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   <div class="nav-page nav-page-next">
       <a href="../content/modelado/intro.html" class="pagination-link" aria-label="Modelado de datos">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Modelado de datos</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Modelado de datos</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

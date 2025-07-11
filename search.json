@@ -14,20 +14,39 @@
     "href": "content/intro.html",
     "title": "1  Introducción",
     "section": "",
-    "text": "Este libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:\n\nSistemas de gestión de datos\nMejores prácticas en el modelado\nHerramientas de volcado y transformación\nBuen gobierno de los datos\nCalidad y monitorización\n\nE intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.\n\n\n\nCiclo de vida de los datos",
+    "text": "1.1 Inicios\nEste libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:\nE intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.\nY empezaremos con un concepto que no está exento de controversia: el modelado de datos. Aunque para ello, debemos entender el contexto histórico que rodea a los ingenieros de datos trasladándonos a los primeros sistemas de gestión de datos y su aparción a finales de los años 60 del siglo pasado.\nCon frecuencia olvidamos el recorrido que hemos realizado en el mundo de la informática y cómo impacta las decisiones o aspectos de los sistemas de hoy día.\nPor eso es importante entender el trasfondo histórico y las herencias que a pesar de no ser muy lógicas, determinan algunas de las prácticas que nos encontramos en la actualidad.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introducción</span>"
     ]
   },
   {
-    "objectID": "content/modelado/intro.html",
-    "href": "content/modelado/intro.html",
-    "title": "2  Modelado de datos",
+    "objectID": "content/intro.html#inicios",
+    "href": "content/intro.html#inicios",
+    "title": "1  Introducción",
     "section": "",
-    "text": "pendiente",
+    "text": "Curiosidades\n\n\n\n\n\nEs habitual que las nuevas generaciones no sepan el origen del símbolo de guardar.\nEl disquete que era un medio físico para guardar contenido (el pendrive de los antiguos).\n\n\n\nDisquete físico\n\n\nPero mucha gente se olvida que la configuración de teclado que empleamos en la actualidad es España, QWERTY por las primeras teclas en el extremo superior izquierdo de los teclados, es una herencia de las máquinas de escribir y que esta configuración a pesar de no ser la que nos permite una mayor velocidad de redacción impedia que los martillos de la máquina se bloquearan.\n\n\n\nMartillos en una máquina de escribir\n\n\nLa misma razón por la que la tecla enter en sus inicios se conocia como retorno de carro (return carriage) cuando no existe carro que retornar en nuestros ordenadores modernos.",
     "crumbs": [
-      "Modelado de datos",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Modelado de datos</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introducción</span>"
+    ]
+  },
+  {
+    "objectID": "content/intro.html#los-sistemas-centrales",
+    "href": "content/intro.html#los-sistemas-centrales",
+    "title": "1  Introducción",
+    "section": "1.2 Los sistemas centrales",
+    "text": "1.2 Los sistemas centrales\nEn sus inicios, las máquinas evolucionaron de máquinas individuales donde tarjetas perforadas determinaban los automatismos, a sistemas eléctrónicos y sofisticados que disponian de canales de entrada y salida (teclados y pantallas) para realizar las acciones que determinaban las acciones de la máquina.\n\n\n\nAquellos maravillosos años\n\n\nInternational Business Machines (IBM) fue una de las primeras compañias en realizar esa transición de máquinas que habían servido para fines militares al ámbito comercial, corporativo, al servicio de instituciones privadas con problemas de grandes dimensiones.\nEn aquella época las máquinas que hoy llamamos ordenadores o computadoras eran recursos muy costosos y por ello, existían unidades centrales a las que se accedía desde nodos terminales. Sistemas únicamente de acceso a la máquina a la que estaban conectadas para pedirle que hiciera algo, introducir datos de cuentas de cliente, operaciones de cálculo y balances, etc. Lo habitual en la empresa donde este rol lo cubrían secretarias que venían de ámbitos como la mecanografía.\nNo existia internet además y una vez salíamos del dominio de la empresa no se podía actuar sobre esos sistemas. Había que hablar en un lenguaje de muy bajo nivel con la máquina, poco intuitivo para gente poco versada en esas tecnologías. Eran tiempos oscuros.\nEstos sistemas gestionaban tanto los datos que los empleados iban registrando así como las acciones que se realizaban sobre estos con rutinas que reflejana la operativa de la compañia: procesos de compa, transferencias bancarias, facturación de servicios y contabilidad general, entre otros.\nSon los que conocemos como sistemas centrales de datos y gran parte de este trabajo se lo debemos a una persona en concreto, Edgar Fank Codd, y su trabajo en este ámbito titulado Un modelo tabular1 de datos para grandes bancos de datos compartidos (Codd 1970).\n\n\n\n\n\n\nMainframe y COBOL\n\n\n\n\n\nOs sorprendería la cantidad de empresas que aún a día de hoy emplean máquinas mainframe con programas COBOL que muy pocos individuos a nivel global saben a ciencia cierta lo que hacen. Es parte de la deuda técnica que muchas empresas no terminan de quitarse de encima por mucho avance de la tecnología que haya. Es parte de nuestra componente humana y la dificultad que nos supone el cambio.\n\n\n\n\n\n\n\nCodd, Edgar F. 1970. «A relational model of data for large shared data banks». Communications of the ACM 13 (6): 377-87.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introducción</span>"
+    ]
+  },
+  {
+    "objectID": "content/intro.html#footnotes",
+    "href": "content/intro.html#footnotes",
+    "title": "1  Introducción",
+    "section": "",
+    "text": "Uso la traducción tabular de el término inglés relation que se refiere a la estrucura de los datos y la traducción a relacional puede dar a entender una gestión relacional que no es tal en los sistemas que ideó Codd↩︎",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introducción</span>"
     ]
   },
   {
@@ -93,6 +112,16 @@
     "crumbs": [
       "Explotación de los datos",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Ciencia de datos</span>"
+    ]
+  },
+  {
+    "objectID": "content/references.html",
+    "href": "content/references.html",
+    "title": "Referencias",
+    "section": "",
+    "text": "Codd, Edgar F. 1970. “A Relational Model of Data for Large Shared\nData Banks.” Communications of the ACM 13 (6): 377–87.",
+    "crumbs": [
+      "Referencias"
     ]
   }
 ]
