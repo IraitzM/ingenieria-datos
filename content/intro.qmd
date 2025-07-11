@@ -8,6 +8,60 @@ Este libro pretende ser una guía sencilla con referencias al estado de la cuest
 * Buen gobierno de los datos
 * Calidad y monitorización
 
-E intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.
+E intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. 
+Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.
 
 ![Ciclo de vida de los datos](../assets/datacycle.png){width=50%}
+
+Y empezaremos con un concepto que no está exento de controversia: [el modelado de datos](modelado/intro.qmd). 
+Aunque para ello, debemos entender el contexto histórico que rodea a los ingenieros de datos trasladándonos a los primeros 
+sistemas de gestión de datos y su aparción a finales de los años 60 del siglo pasado.
+
+## Inicios
+
+Con frecuencia olvidamos el recorrido que hemos realizado en el mundo de la informática y cómo impacta las decisiones o aspectos de los sistemas de hoy día.
+
+:::{.callout-note collapse="true"}
+# Curiosidades
+
+Es habitual que las nuevas generaciones no sepan el origen del símbolo de guardar. 
+
+El disquete que era un medio _físico_ para guardar contenido (el pendrive de los antiguos).
+
+![Disquete físico](../assets/disquete.webp){width=40%}
+
+Pero mucha gente se olvida que la configuración de teclado que empleamos en la actualidad es España, QWERTY por las primeras teclas en el extremo superior izquierdo de los teclados, es una herencia
+de las máquinas de escribir y que esta configuración a pesar de no ser la que nos permite una mayor velocidad de redacción impedia que los martillos de la máquina se bloquearan.
+
+![Martillos en una máquina de escribir](../assets/maquinaescribir.webp){width=60%}
+
+La misma razón por la que la tecla enter en sus inicios se conocia como retorno de carro (_return carriage_) cuando no existe carro que retornar en nuestros ordenadores modernos.
+
+:::
+
+Por eso es importante entender el trasfondo histórico y las herencias que a pesar de no ser muy lógicas, determinan algunas de las prácticas que nos encontramos en la actualidad.
+
+## Los sistemas centrales
+
+En sus inicios, las máquinas evolucionaron de máquinas individuales donde tarjetas perforadas determinaban los automatismos, a sistemas eléctrónicos y sofisticados que disponian de canales de entrada y salida (teclados y pantallas) para realizar las acciones que determinaban las acciones de la máquina.
+
+![Aquellos maravillosos años](../assets/oldibm.webp){width=40%}
+
+[International Business Machines](https://es.wikipedia.org/wiki/IBM) (IBM) fue una de las primeras compañias en realizar esa transición de máquinas que habían servido para fines militares al ámbito comercial, corporativo, al servicio de instituciones privadas con problemas de grandes dimensiones.
+
+En aquella época las máquinas que hoy llamamos ordenadores o computadoras eran recursos muy costosos y por ello, existían unidades centrales a las que se accedía desde nodos terminales.
+Sistemas únicamente de acceso a la máquina a la que estaban conectadas para pedirle que hiciera algo, introducir datos de cuentas de cliente, operaciones de cálculo y balances, etc. Lo habitual en la empresa donde este rol lo cubrían secretarias que venían de ámbitos como la mecanografía. 
+
+No existia internet además y una vez salíamos del dominio de la empresa no se podía actuar sobre esos sistemas. Había que hablar en un lenguaje de muy bajo nivel con la máquina, poco intuitivo para gente poco versada en esas tecnologías. Eran tiempos oscuros.
+
+Estos sistemas gestionaban tanto los datos que los empleados iban registrando así como las acciones que se realizaban sobre estos con rutinas que reflejana la operativa de la compañia: procesos de compa, transferencias bancarias, facturación de servicios y contabilidad general, entre otros.
+
+Son los que conocemos como [sistemas centrales de datos](sistemas/intro) y gran parte de este trabajo se lo debemos a una persona en concreto, [Edgar Fank Codd](https://es.wikipedia.org/wiki/Edgar_Frank_Codd), y su trabajo en este ámbito titulado _Un modelo tabular[^1] de datos para grandes bancos de datos compartidos_ [@codd1970relational].
+
+:::{.callout-tip collapse="true"}
+# Mainframe y COBOL
+
+Os sorprendería la cantidad de empresas que aún a día de hoy emplean máquinas mainframe con programas COBOL que muy pocos individuos a nivel global saben a ciencia cierta lo que hacen. Es parte de la deuda técnica que muchas empresas no terminan de quitarse de encima por mucho avance de la tecnología que haya. Es parte de nuestra componente humana y la dificultad que nos supone _el cambio_.
+:::
+
+[^1]: Uso la traducción tabular de el término inglés _relation_ que se refiere a la estrucura de los datos y la traducción a relacional puede dar a entender una gestión relacional que no es tal en los sistemas que ideó Codd

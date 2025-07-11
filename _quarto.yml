@@ -31,9 +31,9 @@ book:
     - index.qmd
     - content/intro.qmd
 
-    - part: "Modelado de datos"
+    - part: content/modelado/intro.qmd
       chapters:
-      - content/modelado/intro.qmd
+      - content/modelado/formasnormales.qmd
 
     - part: "Sistemas gestores de datos"
       chapters:
