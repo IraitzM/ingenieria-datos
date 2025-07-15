@@ -42,7 +42,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-44ac3565a66b37603b39fced7b91dfed.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-7f38787a8fb4e156b95eea4cf8a57695.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -89,9 +89,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <meta property="og:title" content="2&nbsp; Formas normales – Ingeniería de datos">
+<meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
 <meta property="og:image:height" content="1536">
@@ -250,8 +254,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#primera-forma-normal-2fn" id="toc-primera-forma-normal-2fn" class="nav-link active" data-scroll-target="#primera-forma-normal-2fn"><span class="header-section-number">2.1</span> Primera forma normal (2FN)</a></li>
+  <li><a href="#segunda-forma-normal-2fn" id="toc-segunda-forma-normal-2fn" class="nav-link" data-scroll-target="#segunda-forma-normal-2fn"><span class="header-section-number">2.2</span> Segunda forma normal (2FN)</a></li>
+  <li><a href="#tercera-forma-normal-3fn" id="toc-tercera-forma-normal-3fn" class="nav-link" data-scroll-target="#tercera-forma-normal-3fn"><span class="header-section-number">2.3</span> Tercera forma normal (3FN)</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -278,8 +290,316 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
+<p>Cuando Edgar Codd diseño los sistemas de gestión de datos tabulares o RDBMS (<em>Relational Data Base Management Systems</em>) su planteamiento no cubría únicamente la necesidad de informar el esquema, si no de que este cubriera las necesidades de los procesos de negocio. De manera que estos sistemas fueran los garantes de que la base de datos cumpliera estas restricciones y siempre ofreciera una visión consistente de la información.</p>
+<p>Un sencillo ejemplo es pensar en una estructura de datos que almacena nuestro balance en cuenta. Si nuestro banco no permite que ese balance sea negativo, ninguna acción debería permitir que esto suceda a nivel del sistema que los almacena y gestiona. Codd se aseguró de diseñar un sistema que ofreciera esas capacidades.</p>
+<p>Las formas normales nacen precisamente de los trabajos de Codd como solución a algunos de los problemas que presentaban los sistemas iniciales. El planteamiento inicial es que los datos deben ser almacenados en tablas, con lo que podemos representar de forma visual nuestras <em>tablas</em> del siguiente modo.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>id_alumno</th>
+<th>nombre</th>
+<th>apellido</th>
+<th>asignaturas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>001</td>
+<td>Ana</td>
+<td>García</td>
+<td>Matemáticas, Física</td>
+</tr>
+<tr class="even">
+<td>002</td>
+<td>Luis</td>
+<td>Pérez</td>
+<td>Química, Biología</td>
+</tr>
+<tr class="odd">
+<td>003</td>
+<td>Marta</td>
+<td>López</td>
+<td>Historia, Inglés</td>
+</tr>
+</tbody>
+</table>
+<p><em>Ejemplo de una tabla sobre alumnos apuntados a asignaturas</em></p>
+<p>Solemos representar estas estructuras indicando la información de su esquema:</p>
+<ul>
+<li>Nombre de la estructura: CURSO</li>
+<li>Campos que contiene por nombre y tipo</li>
+</ul>
+<p>Esto genera una ilustración de <strong>entidad</strong> como esta. Una entidad que contiene distintos <strong>atributos</strong> que en el contexto tabular conocemos como <strong>columnas</strong> de la <strong>tabla</strong>.</p>
+<div class="cell" data-fig-width="6.5" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    CURSO {
+        numero id_alumno
+        texto nombre
+        texto apellido
+        lista asignaturas
+    }
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<section id="primera-forma-normal-2fn" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="primera-forma-normal-2fn"><span class="header-section-number">2.1</span> Primera forma normal (2FN)</h2>
+<p>La <strong>primera forma normal (1FN)</strong> establece que todos los valores de los atributos en una tabla deben ser atómicos, es decir, cada campo debe contener un solo valor y no listas o conjuntos. Esto implica eliminar grupos repetitivos y asegurar que cada columna almacene únicamente un dato por fila.</p>
+<p>Esto es una limitación de los sistemas de aquella época que los actuales no disponen, pero bien es cierto que si la información corresponde a una entidad relevante como son las asignaturas de una academia, con multiples interacción y datos relativos a distintas operaciones, bien se antoja que dispongan de su propia entidad como veremos más adelante.</p>
+<p><strong>Ventajas de la 1FN:</strong></p>
+<ul>
+<li>Facilita la consulta y manipulación de los datos.</li>
+<li>Evita la ambigüedad y redundancia en los registros.</li>
+<li>Permite una mejor organización y estructuración de la información.</li>
+</ul>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>id_alumno</th>
+<th>nombre</th>
+<th>apellido</th>
+<th>asignatura</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>001</td>
+<td>Ana</td>
+<td>García</td>
+<td>Matemáticas</td>
+</tr>
+<tr class="even">
+<td>001</td>
+<td>Ana</td>
+<td>García</td>
+<td>Física</td>
+</tr>
+<tr class="odd">
+<td>002</td>
+<td>Luis</td>
+<td>Pérez</td>
+<td>Química</td>
+</tr>
+<tr class="even">
+<td>002</td>
+<td>Luis</td>
+<td>Pérez</td>
+<td>Biología</td>
+</tr>
+<tr class="odd">
+<td>003</td>
+<td>Marta</td>
+<td>López</td>
+<td>Historia</td>
+</tr>
+<tr class="even">
+<td>003</td>
+<td>Marta</td>
+<td>López</td>
+<td>Inglés</td>
+</tr>
+</tbody>
+</table>
+<p><em>Ejemplo de una tabla en 1FN sobre alumnos apuntados a asignaturas</em></p>
+<p>Disponer de la información de este modo me obliga a que cualquier cambio sobre los datos de los alumnos deba realizarse en varias filas. En estas tablas nos gusta disponer de un concepto llamado <strong>clave</strong> que identifica unívocamente cada registro.</p>
+<p>En nuestro caso, el <em>id_alumno</em> refiere a cada alumno pero esta información está por duplicado y no permite identificar filas concretas.</p>
+</section>
+<section id="segunda-forma-normal-2fn" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="segunda-forma-normal-2fn"><span class="header-section-number">2.2</span> Segunda forma normal (2FN)</h2>
+<p>La <strong>segunda forma normal (2FN)</strong> se alcanza cuando una tabla está en primera forma normal y, además, todos los atributos que no forman parte de la clave principal dependen completamente de ella, no solo de una parte de la clave si esta es compuesta. Esto implica eliminar dependencias parciales, dividiendo la información en varias tablas si es necesario.</p>
+<p><strong>Ventajas de la 2FN:</strong></p>
+<ul>
+<li>Reduce la redundancia de datos.</li>
+<li>Facilita la actualización y mantenimiento de la base de datos.</li>
+<li>Evita inconsistencias al modificar información relacionada.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Clave compuesta
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Una <strong>clave compuesta</strong> es una clave primaria formada por dos o más columnas que, en conjunto, identifican de manera única cada fila de una tabla. Se utiliza cuando ningún atributo por sí solo puede garantizar la unicidad de los registros, pero la combinación de varios sí lo hace.</p>
+</div>
+</div>
+</div>
+<p>La segunda forma normal nos obliga a separar nuestra tabla en dos entidades separadas: <strong>alumnos</strong> y <strong>asignaturas</strong>. Esto tiene sentido ya que si somos una escuela, serán dos entidades relevantes que se relacionarán con otras entidades de forma individualizada. Por ejemplo, si añadiéramos una tercera entidad, <strong>profesores</strong>, esta tendrá relaciones específicas y concretas con las asignaturas y no con los alumnos directamente <em>a priori</em>.</p>
+<p>Para indicar las relaciones entre entidades solemos indicar conexiones entrantes y salientes de los dos esquemas.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+    }
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Las relaciones varían dependiendo de la <strong>cardinalidad</strong> de las mismas. Es decir, como se relacionan los datos entre sí:</p>
+<ul>
+<li><strong>1-a-1</strong>: Una asignatura tiene solo un alumno y viceversa</li>
+<li><strong>1-a-muchos</strong>: Una asignatura tiene muchos alumnos, pero cada alumno solo tiene una asignatura</li>
+<li><strong>muchos-a-muchos</strong>: Las asignaturas tiene muchos alumnos y cada alumno puede estar en varias asignaturas.</li>
+</ul>
+<p><a href="https://es.wikipedia.org/wiki/Modelo_entidad-relaci%C3%B3n#Correspondencia_de_cardinalidades">Entrada wikipedia</a></p>
+<p>En nuestro ejemplo anterior la relación entre alumnos y asignaturas es muchos-a-muchos, lo cual requiere una tabla intermedia para que la relación entre ambas entidades no genere un volumen excesivo de datos al <strong>desnormalizar</strong> la información.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Desnormalizar
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si bien es cierto que la normalización de los datos en estos términos nos permite una mejor gestión, casi seguro que el consumo de estos requerirá construir tablas donde se combine la información de alumnos, profesores y asignaturas, como bien pudiera ser un informe de carga de trabajo por profesor o de alumnos promedio por aula. Casi siempre la información la consumiremos de una forma distinta a la forzada para ser almacenada y gestionada.</p>
+</div>
+</div>
+<p>Para indicar el tipo de relación se emplean indicaciones visuales como el hecho de que la relación tenga como mínimo una relación existente (con el circulo se marca que pueda no existir dato asociado), o si la relación identifica a a las partes.</p>
+<p>Si queremos indicar que un alumno puede o no estar matriculado en muchas asignaturas, mientras que una asignatura debe tener solo un alumno (es una academia muy privada) lo indicaremos así:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    ALUMNOS ||--o{ ASIGNATURAS: matriculado
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Mientras que si entendemos que para formar parte de la academia las asignaturas debe tener al menos un alumno (y pueden tener muchos) y cada alumno deberá tener al menos una asignatura (y puede matricularse en varias), lo haremos así:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    ALUMNOS }|--|{ ASIGNATURAS: matriculado
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="tercera-forma-normal-3fn" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="tercera-forma-normal-3fn"><span class="header-section-number">2.3</span> Tercera forma normal (3FN)</h2>
+<p>La <strong>tercera forma normal (3FN)</strong> se alcanza cuando una tabla está en segunda forma normal y, además, todos los atributos que no forman parte de la clave principal no dependen transitivamente de ella. Es decir, cada campo debe depender únicamente de la clave primaria y no de otros atributos no clave.</p>
+<p>Esto resuelve problemas como la redundancia y las dependencias indirectas, evitando que la modificación de un dato implique cambios en múltiples lugares y reduciendo el riesgo de inconsistencias. La 3FN facilita el mantenimiento y la integridad de la base de datos, asegurando que cada dato se almacene en un solo lugar y que las relaciones entre entidades sean claras y directas.</p>
+<p>Por ejemplo, bien pudiera ser que un mismo profesor imparta varias asignaturas, con lo que el identificador de la asignatura no identifica univocamente a nuestros profesores.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+        texto profesor
+    }
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Esto merece separar este concepto en una entidad independiente con su propio identificador.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+    }
+    PROFESORES {
+        numero id_profesor
+        texto nombre
+    }
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Y posteriormente podremos unir las relaciones entre las entidades:</p>
+<ul>
+<li>Un alumno debe estar matriculado en al menos una asignatura</li>
+<li>Una asignatura debe tener al menos un alumno matriculado para ser cursada</li>
+<li>Un profesor puede dar multiples asignatura con la opción de no estar impartiendo ninguna</li>
+<li>Una asignatura solo puede ser impartida por un profesor</li>
+</ul>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+    }
+    PROFESORES {
+        numero id_profesor
+        texto nombre
+    }
+    ALUMNOS }|--|{ ASIGNATURAS: matriculado
+    PROFESORES ||--o{ ASIGNATURAS: imparte
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Con este esquema claro podemos ver como debemos disponer la información para que nuestro sistema gestor de datos pueda contener la estructura tal y como necesitamos.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
