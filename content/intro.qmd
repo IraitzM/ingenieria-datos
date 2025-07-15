@@ -13,9 +13,11 @@ Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su exte
 
 ![Ciclo de vida de los datos](../assets/datacycle.png){width=50%}
 
+El del ingeniero de datos es un rol a caballo entre las áreas de negocio y los desarrolladores de software, tomando gran parte de [las prácticas aprendidas de estos](https://pydevtools.com/handbook/). Aunque enfocándonos en la puesta al servicio de los datos.
+
 Y empezaremos con un concepto que no está exento de controversia: [el modelado de datos](modelado/intro.qmd). 
 Aunque para ello, debemos entender el contexto histórico que rodea a los ingenieros de datos trasladándonos a los primeros 
-sistemas de gestión de datos y su aparción a finales de los años 60 del siglo pasado.
+sistemas de gestión de datos y su aparición a finales de los años 60 del siglo pasado.
 
 ## Inicios
 

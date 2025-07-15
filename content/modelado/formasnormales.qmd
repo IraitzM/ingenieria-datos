@@ -1,2 +1,192 @@
 # Formas normales
 
+Cuando Edgar Codd diseño los sistemas de gestión de datos tabulares o RDBMS (_Relational Data Base Management Systems_) su planteamiento no cubría únicamente la necesidad de informar el esquema, si no de que este cubriera las necesidades de los procesos de negocio. De manera que estos sistemas fueran los garantes de que la base de datos cumpliera estas restricciones y siempre ofreciera una visión consistente de la información.
+
+Un sencillo ejemplo es pensar en una estructura de datos que almacena nuestro balance en cuenta. Si nuestro banco no permite que ese balance sea negativo, ninguna acción debería permitir que esto suceda a nivel del sistema que los almacena y gestiona. Codd se aseguró de diseñar un sistema que ofreciera esas capacidades.
+
+Las formas normales nacen precisamente de los trabajos de Codd como solución a algunos de los problemas que presentaban los sistemas iniciales. El planteamiento inicial es que los datos deben ser almacenados en tablas, con lo que podemos representar de forma visual nuestras _tablas_ del siguiente modo.
+
+| id_alumno | nombre   | apellido | asignaturas            |
+|-----------|----------|----------|------------------------|
+| 001       | Ana      | García   | Matemáticas, Física    |
+| 002       | Luis     | Pérez    | Química, Biología      |
+| 003       | Marta    | López    | Historia, Inglés       |
+
+_Ejemplo de una tabla sobre alumnos apuntados a asignaturas_
+
+Solemos representar estas estructuras indicando la información de su esquema:
+
+* Nombre de la estructura: CURSO
+* Campos que contiene por nombre y tipo
+
+Esto genera una ilustración de **entidad** como esta. Una entidad que contiene distintos **atributos** que en el contexto tabular conocemos como **columnas** de la **tabla**.
+
+```{mermaid}
+%%| fig-width: 6.5
+erDiagram
+    CURSO {
+        numero id_alumno
+        texto nombre
+        texto apellido
+        lista asignaturas
+    }
+```
+
+## Primera forma normal (2FN)
+
+La **primera forma normal (1FN)** establece que todos los valores de los atributos en una tabla deben ser atómicos, es decir, cada campo debe contener un solo valor y no listas o conjuntos. Esto implica eliminar grupos repetitivos y asegurar que cada columna almacene únicamente un dato por fila.
+
+Esto es una limitación de los sistemas de aquella época que los actuales no disponen, pero bien es cierto que si la información corresponde a una entidad relevante como son las asignaturas de una academia, con multiples interacción y datos relativos a distintas operaciones, bien se antoja que dispongan de su propia entidad como veremos más adelante.
+
+**Ventajas de la 1FN:**
+
+- Facilita la consulta y manipulación de los datos.
+- Evita la ambigüedad y redundancia en los registros.
+- Permite una mejor organización y estructuración de la información.
+
+| id_alumno | nombre   | apellido | asignatura             |
+|-----------|----------|----------|------------------------|
+| 001       | Ana      | García   | Matemáticas            |
+| 001       | Ana      | García   | Física                 |
+| 002       | Luis     | Pérez    | Química                |
+| 002       | Luis     | Pérez    | Biología               |
+| 003       | Marta    | López    | Historia               |
+| 003       | Marta    | López    | Inglés                 |
+
+_Ejemplo de una tabla en 1FN sobre alumnos apuntados a asignaturas_
+
+Disponer de la información de este modo me obliga a que cualquier cambio sobre los datos de los alumnos deba realizarse en varias filas. En estas tablas nos gusta disponer de un concepto llamado **clave** que identifica unívocamente cada registro.
+
+En nuestro caso, el _id_alumno_ refiere a cada alumno pero esta información está por duplicado y no permite identificar filas concretas. 
+
+## Segunda forma normal (2FN)
+
+La **segunda forma normal (2FN)** se alcanza cuando una tabla está en primera forma normal y, además, todos los atributos que no forman parte de la clave principal dependen completamente de ella, no solo de una parte de la clave si esta es compuesta. Esto implica eliminar dependencias parciales, dividiendo la información en varias tablas si es necesario.
+
+**Ventajas de la 2FN:**
+
+- Reduce la redundancia de datos.
+- Facilita la actualización y mantenimiento de la base de datos.
+- Evita inconsistencias al modificar información relacionada.
+
+:::{.callout-note collapse="false"}
+# Clave compuesta
+
+Una **clave compuesta** es una clave primaria formada por dos o más columnas que, en conjunto, identifican de manera única cada fila de una tabla. Se utiliza cuando ningún atributo por sí solo puede garantizar la unicidad de los registros, pero la combinación de varios sí lo hace.
+:::
+
+La segunda forma normal nos obliga a separar nuestra tabla en dos entidades separadas: **alumnos** y **asignaturas**. Esto tiene sentido ya que si somos una escuela, serán dos entidades relevantes que se relacionarán con otras entidades de forma individualizada. Por ejemplo, si añadiéramos una tercera entidad, **profesores**, esta tendrá relaciones específicas y concretas con las asignaturas y no con los alumnos directamente _a priori_.
+
+Para indicar las relaciones entre entidades solemos indicar conexiones entrantes y salientes de los dos esquemas.
+
+```{mermaid}
+erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+    }
+```
+
+Las relaciones varían dependiendo de la **cardinalidad** de las mismas. Es decir, como se relacionan los datos entre sí:
+
+* **1-a-1**: Una asignatura tiene solo un alumno y viceversa
+* **1-a-muchos**: Una asignatura tiene muchos alumnos, pero cada alumno solo tiene una asignatura
+* **muchos-a-muchos**: Las asignaturas tiene muchos alumnos y cada alumno puede estar en varias asignaturas.
+
+[Entrada wikipedia](https://es.wikipedia.org/wiki/Modelo_entidad-relaci%C3%B3n#Correspondencia_de_cardinalidades)
+
+En nuestro ejemplo anterior la relación entre alumnos y asignaturas es muchos-a-muchos, lo cual requiere una tabla intermedia para que la relación entre ambas entidades no genere un volumen excesivo de datos al **desnormalizar** la información.
+
+:::{.callout-note}
+# Desnormalizar
+
+Si bien es cierto que la normalización de los datos en estos términos nos permite una mejor gestión, casi seguro que el consumo de estos requerirá construir tablas donde se combine la información de alumnos, profesores y asignaturas, como bien pudiera ser un informe de carga de trabajo por profesor o de alumnos promedio por aula. Casi siempre la información la consumiremos de una forma distinta a la forzada para ser almacenada y gestionada.
+:::
+
+Para indicar el tipo de relación se emplean indicaciones visuales como el hecho de que la relación tenga como mínimo una relación existente (con el circulo se marca que pueda no existir dato asociado), o si la relación identifica a a las partes.
+
+Si queremos indicar que un alumno puede o no estar matriculado en muchas asignaturas, mientras que una asignatura debe tener solo un alumno (es una academia muy privada) lo indicaremos así:
+```{mermaid}
+erDiagram
+    ALUMNOS ||--o{ ASIGNATURAS: matriculado
+```
+
+Mientras que si entendemos que para formar parte de la academia las asignaturas debe tener al menos un alumno (y pueden tener muchos) y cada alumno deberá tener al menos una asignatura (y puede matricularse en varias), lo haremos así:
+```{mermaid}
+erDiagram
+    ALUMNOS }|--|{ ASIGNATURAS: matriculado
+```
+
+## Tercera forma normal (3FN)
+
+La **tercera forma normal (3FN)** se alcanza cuando una tabla está en segunda forma normal y, además, todos los atributos que no forman parte de la clave principal no dependen transitivamente de ella. Es decir, cada campo debe depender únicamente de la clave primaria y no de otros atributos no clave.
+
+Esto resuelve problemas como la redundancia y las dependencias indirectas, evitando que la modificación de un dato implique cambios en múltiples lugares y reduciendo el riesgo de inconsistencias. La 3FN facilita el mantenimiento y la integridad de la base de datos, asegurando que cada dato se almacene en un solo lugar y que las relaciones entre entidades sean claras y directas.
+
+Por ejemplo, bien pudiera ser que un mismo profesor imparta varias asignaturas, con lo que el identificador de la asignatura no identifica univocamente a nuestros profesores.
+
+```{mermaid}
+erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+        texto profesor
+    }
+```
+
+Esto merece separar este concepto en una entidad independiente con su propio identificador.
+
+```{mermaid}
+erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+    }
+    PROFESORES {
+        numero id_profesor
+        texto nombre
+    }
+```
+
+Y posteriormente podremos unir las relaciones entre las entidades:
+
+* Un alumno debe estar matriculado en al menos una asignatura
+* Una asignatura debe tener al menos un alumno matriculado para ser cursada
+* Un profesor puede dar multiples asignatura con la opción de no estar impartiendo ninguna
+* Una asignatura solo puede ser impartida por un profesor
+
+```{mermaid}
+erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+    }
+    PROFESORES {
+        numero id_profesor
+        texto nombre
+    }
+    ALUMNOS }|--|{ ASIGNATURAS: matriculado
+    PROFESORES ||--o{ ASIGNATURAS: imparte
+```
+
+Con este esquema claro podemos ver como debemos disponer la información para que nuestro sistema gestor de datos pueda contener la estructura tal y como necesitamos.

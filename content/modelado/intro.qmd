@@ -1,1 +1,106 @@
 # Modelado de datos
+
+Debemos considerar que el modelado de datos era algo obligatorio en los sistemas iniciales. Las bases de relacionales requerían informar del esquema de sus estructuras de datos antes de poder insertar datos en estas.
+
+En la década de los 2000 esto fue alterado debido al crecimiento de sistemas flexibles en ese sentido, las bases de datos NoSQL y sistemas Hadoop que no requerían informar de las estructuras de datos almacenadas. Pero es una cuestión de quién realiza esta tarea, no tanto de no necesitarla más, ya que la estructuración de los datos es algo obligatorio para poder entender lo que tenemos entre manos.
+
+Haremos un pequeño barrido histórico y así quizás podamos entender las opciones actuales. Pero primero es crucial que entendamos que el modelado es el medio por el que conseguimos trasladar nuestra realidad a un medio técnico.
+
+## Entidades y relaciones
+
+El proceso de modelar los datos de una empresa es en primera instancia un entendimiento de sus procesos productivos. Debemos entender como interactúan las distintas partes para así conocer los datos que estos procesos generaran y las necesidades de estos.
+
+Solemos tener la urgencia de correr a las implementaciones técnicas pero estas pueden variar dependiendo las necesidades del sistema que manejemos. Sin embargo, el modelado **lógico** solo cambiará cuando los procesos de negocio cambien o nuestra empresa incluya nuevas líneas de negocio.
+
+De este modo, el modelado es un proceso que parte de la estructura más abstracta hasta la implementación técnica del modelo.
+
+### Entidades
+
+Una **entidad** en un diagrama entidad-relación representa un objeto o concepto del mundo real que puede ser identificado de manera única y sobre el cual se desea almacenar información. Una entidad que contiene distintos **atributos** que describen características de esta.
+
+```{mermaid}
+%%| fig-width: 6.5
+erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+```
+
+Podríamos tener varias entidades que representan conceptos clave (personas, lugares, unidades corporativas, etc.) de nuestros procesos de negocio. Si tuviéramos una academia, existirían entidades como estas.
+
+```{mermaid}
+%%| fig-width: 6.5
+erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+    }
+
+    PROFESORES {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+```
+
+La clave es entender cómo interactúan entre sí. Por ejemplo, un alumno estará matriculado a una o varias asignaturas. Y un profesor imparte una o varias asignaturas.
+
+```{mermaid}
+%%| fig-width: 6.5
+erDiagram
+    ALUMNOS ||--|| ASIGNATURAS : matriculado
+    PROFESORES ||--|| ASIGNATURAS : imparte
+```
+
+A estas nociones, (_matriculado_ e _imparte_) las conocemos como **relaciones** y juntas conforman un diagrama entidad relación.
+
+```{mermaid}
+%%| fig-width: 6.5
+erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+    }
+
+    PROFESORES {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+
+    ALUMNOS ||--|| ASIGNATURAS : matriculado
+    PROFESORES ||--|| ASIGNATURAS : imparte
+```
+
+Estas relaciones también pueden disponer de atributos, como el año de matriculación o impartición, y esto define la granularidad de estas relaciones
+
+```
+un PROFESOR IMPARTIÓ en Febrero del 2025 una ASIGNATURA 
+```
+a la vez que describe nuestros procesos empresariales.
+
+```
+un EMPLEADO VENDIÓ 500 unidades de un PRODUCTO a un CLIENTE
+```
+```
+un CLIENTE TRANSFIRIÓ x cantidad de euros a otro CLIENTE
+```
+Nos ayuda a entender el contexto de información que deberá albergar nuestro sistema.
+
+Una vez este esquema está claro y consolidado con nuestro interlocutores las unidades de negocio podemos empezar a aterrizar en base a las necesidades técnicas qué forma final tomarán nuestros datos en su repositorio final.
+
+![Proceso de modelado de datos](../../assets/modelado.svg){width="60%"}

@@ -56,3 +56,11 @@ code a:any-link {
 pre {
   background-image: linear-gradient(160deg,#f8f8f8 0,#f1f1f1 100%);
 }
+
+/* Mermaid blocks styling */
+svg.mermaid-js {
+  background: #e3f2fd;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
+  color: #0d47a1; // dark blue
+}
