@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Carga de datos – Ingeniería de datos</title>
+<title>5&nbsp; Extracción – Ingeniería de datos</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -39,7 +39,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-7f38787a8fb4e156b95eea4cf8a57695.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -91,7 +91,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
 
 
-<meta property="og:title" content="4&nbsp; Carga de datos – Ingeniería de datos">
+<meta property="og:title" content="5&nbsp; Extracción – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -108,7 +108,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/intro.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Carga de datos</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/intro.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extracción</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -164,6 +164,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -178,7 +184,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -195,7 +201,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Carga de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
       </ul>
@@ -212,7 +218,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
       </ul>
@@ -229,13 +235,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -251,8 +257,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#bases-de-datos" id="toc-bases-de-datos" class="nav-link active" data-scroll-target="#bases-de-datos"><span class="header-section-number">5.1</span> Bases de datos</a></li>
+  <li><a href="#apis" id="toc-apis" class="nav-link" data-scroll-target="#apis"><span class="header-section-number">5.2</span> APIs</a></li>
+  <li><a href="#colas" id="toc-colas" class="nav-link" data-scroll-target="#colas"><span class="header-section-number">5.3</span> Colas</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -260,9 +274,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/intro.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Carga de datos</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/intro.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extracción</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Carga de datos</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extracción</span></h1>
 </div>
 
 
@@ -279,9 +293,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p><em>pendiente</em></p>
+<p>Uno de los pasos primeros que deberemos hacer es conocer los datos a extraer y las características base de estos:</p>
+<ul>
+<li>Tipo de sistema origen</li>
+<li>Cadencia de actualización de la información</li>
+<li>Estructura de la información</li>
+</ul>
+<p>De modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.</p>
+<section id="bases-de-datos" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="bases-de-datos"><span class="header-section-number">5.1</span> Bases de datos</h2>
+<p>Frecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:</p>
+<ul>
+<li>SQL: Sistemas de origen tabular (RDBMS) a los que podemos interrogar con sentencias SQL para extraer la información necesaria. Son sistemas de consulta por lo que a no ser que dispongan de un campo informando de la fecha de la información, es difícil gestionar posibles variaciones con respecto a las cargas anteriores sin almacenar en un sistema intermedio la información para comparar que fue cargado y qué es nuevo.</li>
+<li>NoSQL: Sistemas de origen no tabular que suelen disponer la información en formatos <em>modernos</em>, siendo JSON el más habitual. Esto obliga a identificar si el destino permite el registro de información de estructura variable o debemos darle un formato tabular antes de poder insertarla. Al igual que con las bases de datos tabulares, deberemos ver qué medios tenemos para poder identificar los registros sumados o que hayan variado desde la última consulta.</li>
+</ul>
+<p>Muchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.</p>
+</section>
+<section id="apis" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="apis"><span class="header-section-number">5.2</span> APIs</h2>
+<p>Uno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.</p>
+</section>
+<section id="colas" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="colas"><span class="header-section-number">5.3</span> Colas</h2>
+<p>Los sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este <em>buffer</em> que retiene los datos hasta ser consumidos o expiren.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -686,12 +723,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../../content/sistemas/intro.html" class="pagination-link" aria-label="Sistemas de gestión de datos">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../../content/transform/intro.html" class="pagination-link" aria-label="Transformación">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transformación</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transformación</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; Transformación – Ingeniería de datos</title>
+<title>3&nbsp; Desnormalizar – Ingeniería de datos</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/explotacion/intro.html" rel="next">
-<link href="../../content/load/intro.html" rel="prev">
+<link href="../../content/sistemas/intro.html" rel="next">
+<link href="../../content/modelado/formasnormales.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -89,9 +89,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<meta property="og:title" content="6&nbsp; Transformación – Ingeniería de datos">
+<meta property="og:title" content="3&nbsp; Desnormalizar – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -108,7 +111,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/transform/intro.html">Transformación de datos</a></li><li class="breadcrumb-item"><a href="../../content/transform/intro.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transformación</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/modelado/intro.html">Modelado de datos</a></li><li class="breadcrumb-item"><a href="../../content/modelado/desnormalizar.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -153,11 +156,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <div class="sidebar-item-container"> 
             <a href="../../content/modelado/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Modelado de datos</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
@@ -166,7 +169,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
   </div>
 </li>
@@ -208,16 +211,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
  <span class="menu-text">Transformación de datos</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
@@ -257,8 +260,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#relación-1-a-1n" id="toc-relación-1-a-1n" class="nav-link active" data-scroll-target="#relación-1-a-1n"><span class="header-section-number">3.1</span> Relación 1-a-1/n</a></li>
+  <li><a href="#relación-n-a-m" id="toc-relación-n-a-m" class="nav-link" data-scroll-target="#relación-n-a-m"><span class="header-section-number">3.2</span> Relación n-a-m</a></li>
+  <li><a href="#joins" id="toc-joins" class="nav-link" data-scroll-target="#joins"><span class="header-section-number">3.3</span> JOINs</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -266,9 +277,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/transform/intro.html">Transformación de datos</a></li><li class="breadcrumb-item"><a href="../../content/transform/intro.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transformación</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/modelado/intro.html">Modelado de datos</a></li><li class="breadcrumb-item"><a href="../../content/modelado/desnormalizar.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transformación</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></h1>
 </div>
 
 
@@ -285,9 +296,338 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p><em>pendiente</em></p>
+<p>Como comentábamos anteriormente, aunque debamos normalizar nuestra estructura informativa, en muchos casos deberemos volver a juntarla en una sola respuesta para poder informar de todos los campos de interés para nuestra consulta.</p>
+<p>Por ejemplo ¿qué profesor tiene una carga mayor de alumnos? Pues para ello deberemos juntar la información almacenada en las entidades y relaciones que nos permiten llegar de un extremo (PROFESORES) al otro (ALUMNOS) a través de las relaciones y entidades intermedias.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+    }
+    PROFESORES {
+        numero id_profesor
+        texto nombre
+    }
+    ALUMNOS }|--|{ ASIGNATURAS: matriculado
+    PROFESORES ||--o{ ASIGNATURAS: imparte
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>De forma que obtengamos como resultado…</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>profesor</th>
+<th>cantidad de alumnos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Javier</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>Jesús</td>
+<td>20</td>
+</tr>
+<tr class="odd">
+<td>Julian</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><em>Ejemplo de resultado con información agregada</em></p>
+<p>En este ejemplo debemos relacionar los profesores con sus asignaturas impartidas y los alumnos que las cursan para así poder contabilizar, por profesor cuantos tienen. Si solo informamos del nombre puede ser que existan varios Javier, pero cada uno tendrá una relación bien definida con respecto a las asignaturas y alumnos asociados gracias a su <a href="../../content/modelado/formasnormales.html#segunda-forma-normal-(2fn)">clave primaria</a>.</p>
+<section id="relación-1-a-1n" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="relación-1-a-1n"><span class="header-section-number">3.1</span> Relación 1-a-1/n</h2>
+<p>Dentro de las distintas formas en las que podemos asociar dos entidades, las de 1-a-1 o 1-a-n quizás resulten las más sencillas, dado que únicamente requieren que seamos capaces de añadir un campo que haga referencia a una instancia concreta de una entidad. Y la forma más sencilla de hacer esto es mediante la referencia a su clave primaria. Cuando esta clave es empleada de forma referencial, nos referiremos a ellas como <strong>claves foráneas</strong>.</p>
+<p>Por ejemplo, asumamos que un alumno solo cursa una asignatura. Podemos incluir el campo de la asignatura que cursa como atributo en su entidad e identificarla como clave foránea (FK) mientras que el mismo campo en la tabla ASIGNATURAS será clave primaria (PK). Sucedería igual si cada asignatura es impartida por un único docente.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+        numero id_asignatura FK
+    }
+    ASIGNATURAS {
+        numero id_asignatura PK
+        texto nombre
+        numero id_docente FK
+    }
+    PROFESORES {
+        numero id_profesor PK
+        texto nombre
+    }
+    ALUMNOS }|--|{ ASIGNATURAS: matriculado
+    PROFESORES ||--o{ ASIGNATURAS: imparte
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="relación-n-a-m" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="relación-n-a-m"><span class="header-section-number">3.2</span> Relación n-a-m</h2>
+<p>Cuando la relación es de muchos a muchos, las bases de datos tabulares (RDBMS) presentan un problema, que es el poder conjugar esta información de forma que no explote. Multiplicar todas las filas de ua entidad relacionada con la otra y a su vez que estas presenten todas las de la primera resulta en un <strong>producto cartesiano</strong> difícil de gestionar de una sola vez.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Producto cartesiano
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>En bases de datos relacionales, el producto cartesiano ocurre cuando combinamos dos tablas sin especificar una condición de relación entre ellas. Esto genera todas las combinaciones posibles de filas entre ambas tablas, lo que puede resultar en un número de registros extremadamente grande y difícil de manejar.</p>
+<p>Por ejemplo, si tenemos una tabla de 10 alumnos y otra de 5 asignaturas, el producto cartesiano generaría 10 x 5 = 50 filas, donde cada alumno aparece emparejado con cada asignatura, aunque no tenga relación real entre ellos. Esto no solo consume recursos innecesarios, sino que también puede llevar a resultados incorrectos si no se filtra adecuadamente la información relevante mediante condiciones de unión (JOIN) apropiadas.</p>
+</div>
+</div>
+</div>
+<p>Para evitar esta problemática, las relaciones se guardan en una tabla que registra estas relaciones como filas con dos claves foráneas de las entidades asociadas que forma clave principal para potenciales atributos que sean particulares de esa relación.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    ALUMNOS {
+        numero id_alumno PK
+        texto nombre
+        texto apellido
+    }
+    CURSA{
+        numero id_alumno FK
+        numero id_asignatura FK
+        numero anio
+    }
+    ASIGNATURAS {
+        numero id_asignatura PK
+        texto nombre
+        numero id_docente FK
+    }
+    PROFESORES {
+        numero id_profesor PK
+        texto nombre
+    }
+
+    ALUMNOS }|--|{ CURSA: matriculado
+    CURSA }|--|{ ASIGNATURAS: cursando
+    PROFESORES ||--o{ ASIGNATURAS: imparte
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Esto nos permitiría por ejemplo, variar el esquema también si existe la posibilidad de que una asignatura en un año se imparta por uno o varios profesores a distintos alumnos.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    ALUMNOS {
+        numero id_alumno PK
+        texto nombre
+        texto apellido
+    }
+    CURSA{
+        numero id_alumno FK
+        numero id_asignatura FK
+        numero id_profesor FK
+        numero anio
+    }
+    ASIGNATURAS {
+        numero id_asignatura PK
+        texto nombre
+    }
+    PROFESORES {
+        numero id_profesor PK
+        texto nombre
+    }
+
+    ALUMNOS }|--|{ CURSA: matriculado
+    CURSA }|--|{ ASIGNATURAS: cursando
+    PROFESORES ||--o{ CURSA: imparte
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Es cuestión de entender bien el contexto ya que una vez determinamos las restricciones efectivas mediante estas relaciones, no podremos por ejemplo introducir un profesor no registrado en nuestro sistema como docente (error de clave foránea), eliminar un alumno de nuestros registros si está cursando aún alguna asignatura, etc… Es clave definir bien estos conceptos para luego operar sobre los datos y más aún, saber qué tablas es necesario combinar para obtener la información necesaria.</p>
+</section>
+<section id="joins" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="joins"><span class="header-section-number">3.3</span> JOINs</h2>
+<p>Las famosas JOINs no son más que la especificación técnica de cómo queremos juntar los datos para poder extraer la información necesaria. Si queremos conocer todos los alumnos que tiene un profesor, deberemos sobre el esquema anterior juntar las tablas CURSA, ALUMNOS y PROFESORES (al menos) para poder recurrir a sus atributos. Esto es lo que nos obliga a generar consultas algo más complejas ya que debemos realizar esa desnormalización donde las tablas vuelven a tomar una forma similar a la original.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 30%">
+<col style="width: 13%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>id_alumno</th>
+<th>nombre</th>
+<th>apellido</th>
+<th>asignatura</th>
+<th>nombre</th>
+<th>id_profesor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>001</td>
+<td>Ana</td>
+<td>García</td>
+<td>Matemáticas</td>
+<td>Javier</td>
+<td>001</td>
+</tr>
+<tr class="even">
+<td>001</td>
+<td>Ana</td>
+<td>García</td>
+<td>Física</td>
+<td>Jesús</td>
+<td>002</td>
+</tr>
+<tr class="odd">
+<td>002</td>
+<td>Luis</td>
+<td>Pérez</td>
+<td>Química</td>
+<td>Julian</td>
+<td>003</td>
+</tr>
+<tr class="even">
+<td>002</td>
+<td>Luis</td>
+<td>Pérez</td>
+<td>Biología</td>
+<td>Javier</td>
+<td>001</td>
+</tr>
+<tr class="odd">
+<td>003</td>
+<td>Marta</td>
+<td>López</td>
+<td>Historia</td>
+<td>Javier</td>
+<td>004</td>
+</tr>
+<tr class="even">
+<td>003</td>
+<td>Marta</td>
+<td>López</td>
+<td>Inglés</td>
+<td>Jason</td>
+<td>005</td>
+</tr>
+</tbody>
+</table>
+<p><em>Ejemplo de una tabla en desnormalizada</em></p>
+<p>En caso de que dispongamos de coincidencias en los nombres de los campos (¿<em>nombre</em> se refiere al atributo en PROFESORES o en ALUMNOS?) que en estos casos formarán parte de la <em>misma tabla</em> usarmos el concepto de <strong>alias</strong> o <strong>renombrado</strong> para indicar un numbro que haga referencia al campo de forma más clara.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 18%">
+<col style="width: 10%">
+<col style="width: 26%">
+<col style="width: 18%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>id_alumno</th>
+<th>nombre_alumno</th>
+<th>apellido</th>
+<th>asignatura</th>
+<th>nombre_profe</th>
+<th>id_profesor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>001</td>
+<td>Ana</td>
+<td>García</td>
+<td>Matemáticas</td>
+<td>Javier</td>
+<td>001</td>
+</tr>
+<tr class="even">
+<td>001</td>
+<td>Ana</td>
+<td>García</td>
+<td>Física</td>
+<td>Jesús</td>
+<td>002</td>
+</tr>
+<tr class="odd">
+<td>002</td>
+<td>Luis</td>
+<td>Pérez</td>
+<td>Química</td>
+<td>Julian</td>
+<td>003</td>
+</tr>
+<tr class="even">
+<td>002</td>
+<td>Luis</td>
+<td>Pérez</td>
+<td>Biología</td>
+<td>Javier</td>
+<td>001</td>
+</tr>
+<tr class="odd">
+<td>003</td>
+<td>Marta</td>
+<td>López</td>
+<td>Historia</td>
+<td>Javier</td>
+<td>004</td>
+</tr>
+<tr class="even">
+<td>003</td>
+<td>Marta</td>
+<td>López</td>
+<td>Inglés</td>
+<td>Jason</td>
+<td>005</td>
+</tr>
+</tbody>
+</table>
+<p><em>Ejemplo de una tabla en desnormalizada con alias</em></p>
+<p>Debemos entender que la normalización se presenta como un mecanismo de gestión de la información que no atiende tanto al consumo posterior si no a la consistencia de los datos con un rendimiento base, de modo que pueda servir a su propósito al margen de los consumos posteriores que puedan ser necesarios y las composiciones de los datos en esos nuevos escenarios. Esto nos obliga a considerar el uso que haremos de la información existiendo dos caracteres muy diferenciados en toda organización en lo que a <a href="../../content/sistemas/intro.html">sistemas</a> se refiere.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -691,13 +1031,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/load/intro.html" class="pagination-link" aria-label="Extracción">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extracción</span></span>
+      <a href="../../content/modelado/formasnormales.html" class="pagination-link" aria-label="Formas normales">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/explotacion/intro.html" class="pagination-link" aria-label="Explotación de los datos">
-        <span class="nav-page-text">Explotación de los datos</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/sistemas/intro.html" class="pagination-link" aria-label="Sistemas de gestión de datos">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

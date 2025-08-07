@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -59,7 +59,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-7f38787a8fb4e156b95eea4cf8a57695.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -184,6 +184,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -198,7 +204,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -215,7 +221,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Carga de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
       </ul>
@@ -232,7 +238,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
       </ul>
@@ -249,13 +255,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -346,14 +352,14 @@ Curiosidades
 <figcaption>Disquete físico</figcaption>
 </figure>
 </div>
-<p>Pero mucha gente se olvida que la configuración de teclado que empleamos en la actualidad es España, QWERTY por las primeras teclas en el extremo superior izquierdo de los teclados, es una herencia de las máquinas de escribir y que esta configuración a pesar de no ser la que nos permite una mayor velocidad de redacción impedia que los martillos de la máquina se bloquearan.</p>
+<p>Pero mucha gente se olvida que la configuración de teclado que empleamos en la actualidad es España, QWERTY por las primeras teclas en el extremo superior izquierdo de los teclados, es una herencia de las máquinas de escribir y que esta configuración a pesar de no ser la que nos permite una mayor velocidad de redacción impedía que los martillos de la máquina se bloquearan.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../assets/maquinaescribir.webp" class="img-fluid figure-img" style="width:60.0%"></p>
 <figcaption>Martillos en una máquina de escribir</figcaption>
 </figure>
 </div>
-<p>La misma razón por la que la tecla enter en sus inicios se conocia como retorno de carro (<em>return carriage</em>) cuando no existe carro que retornar en nuestros ordenadores modernos.</p>
+<p>La misma razón por la que la tecla enter en sus inicios se conocía como retorno de carro (<em>return carriage</em>) cuando no existe carro que retornar en nuestros ordenadores modernos.</p>
 </div>
 </div>
 </div>
@@ -361,18 +367,18 @@ Curiosidades
 </section>
 <section id="los-sistemas-centrales" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="los-sistemas-centrales"><span class="header-section-number">1.2</span> Los sistemas centrales</h2>
-<p>En sus inicios, las máquinas evolucionaron de máquinas individuales donde tarjetas perforadas determinaban los automatismos, a sistemas eléctrónicos y sofisticados que disponian de canales de entrada y salida (teclados y pantallas) para realizar las acciones que determinaban las acciones de la máquina.</p>
+<p>En sus inicios, las máquinas evolucionaron de máquinas individuales donde tarjetas perforadas determinaban los automatismos, a sistemas electrónicos y sofisticados que disponían de canales de entrada y salida (teclados y pantallas) para realizar las acciones que determinaban las acciones de la máquina.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../assets/oldibm.webp" class="img-fluid figure-img" style="width:40.0%"></p>
 <figcaption>Aquellos maravillosos años</figcaption>
 </figure>
 </div>
-<p><a href="https://es.wikipedia.org/wiki/IBM">International Business Machines</a> (IBM) fue una de las primeras compañias en realizar esa transición de máquinas que habían servido para fines militares al ámbito comercial, corporativo, al servicio de instituciones privadas con problemas de grandes dimensiones.</p>
+<p><a href="https://es.wikipedia.org/wiki/IBM">International Business Machines</a> (IBM) fue una de las primeras compañías en realizar esa transición de máquinas que habían servido para fines militares al ámbito comercial, corporativo, al servicio de instituciones privadas con problemas de grandes dimensiones.</p>
 <p>En aquella época las máquinas que hoy llamamos ordenadores o computadoras eran recursos muy costosos y por ello, existían unidades centrales a las que se accedía desde nodos terminales. Sistemas únicamente de acceso a la máquina a la que estaban conectadas para pedirle que hiciera algo, introducir datos de cuentas de cliente, operaciones de cálculo y balances, etc. Lo habitual en la empresa donde este rol lo cubrían secretarias que venían de ámbitos como la mecanografía.</p>
-<p>No existia internet además y una vez salíamos del dominio de la empresa no se podía actuar sobre esos sistemas. Había que hablar en un lenguaje de muy bajo nivel con la máquina, poco intuitivo para gente poco versada en esas tecnologías. Eran tiempos oscuros.</p>
-<p>Estos sistemas gestionaban tanto los datos que los empleados iban registrando así como las acciones que se realizaban sobre estos con rutinas que reflejana la operativa de la compañia: procesos de compa, transferencias bancarias, facturación de servicios y contabilidad general, entre otros.</p>
-<p>Son los que conocemos como <a href="sistemas/intro">sistemas centrales de datos</a> y gran parte de este trabajo se lo debemos a una persona en concreto, <a href="https://es.wikipedia.org/wiki/Edgar_Frank_Codd">Edgar Fank Codd</a>, y su trabajo en este ámbito titulado <em>Un modelo tabular<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> de datos para grandes bancos de datos compartidos</em> <span class="citation" data-cites="codd1970relational">(<a href="references.html#ref-codd1970relational" role="doc-biblioref">Codd 1970</a>)</span>.</p>
+<p>No existía internet además y una vez salíamos del dominio de la empresa no se podía actuar sobre esos sistemas. Había que hablar en un lenguaje de muy bajo nivel con la máquina, poco intuitivo para gente poco versada en esas tecnologías. Eran tiempos oscuros.</p>
+<p>Estos sistemas gestionaban tanto los datos que los empleados iban registrando así como las acciones que se realizaban sobre estos con rutinas que reflejan la operativa de la compañía: procesos de compra, transferencias bancarias, facturación de servicios y contabilidad general, entre otros.</p>
+<p>Son los que conocemos como <a href="sistemas/intro">sistemas centrales de datos</a> y gran parte de este trabajo se lo debemos a una persona en concreto, <a href="https://es.wikipedia.org/wiki/Edgar_Frank_Codd">Edgar Frank Codd</a>, y su trabajo en este ámbito titulado <em>Un modelo tabular<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> de datos para grandes bancos de datos compartidos</em> <span class="citation" data-cites="codd1970relational">(<a href="references.html#ref-codd1970relational" role="doc-biblioref">Codd 1970</a>)</span>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -400,7 +406,7 @@ Codd, Edgar F. 1970. <span>«A relational model of data for large shared data ba
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Uso la traducción tabular de el término inglés <em>relation</em> que se refiere a la estrucura de los datos y la traducción a relacional puede dar a entender una gestión relacional que no es tal en los sistemas que ideó Codd<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Uso la traducción tabular de el término inglés <em>relation</em> que se refiere a la estructura de los datos y la traducción a relacional puede dar a entender una gestión relacional que no es tal en los sistemas que ideó Codd.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

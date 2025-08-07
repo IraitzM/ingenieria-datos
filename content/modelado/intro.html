@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -39,7 +39,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-7f38787a8fb4e156b95eea4cf8a57695.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -167,6 +167,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -181,7 +187,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -198,7 +204,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Carga de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
       </ul>
@@ -215,7 +221,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
       </ul>
@@ -232,13 +238,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -262,6 +268,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <li><a href="#entidades-y-relaciones" id="toc-entidades-y-relaciones" class="nav-link active" data-scroll-target="#entidades-y-relaciones">Entidades y relaciones</a>
   <ul class="collapse">
   <li><a href="#entidades" id="toc-entidades" class="nav-link" data-scroll-target="#entidades">Entidades</a></li>
+  <li><a href="#relaciones" id="toc-relaciones" class="nav-link" data-scroll-target="#relaciones">Relaciones</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -291,7 +298,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p>Debemos considerar que el modelado de datos era algo obligatorio en los sistemas iniciales. Las bases de relacionales requerían informar del esquema de sus estructuras de datos antes de poder insertar datos en estas.</p>
+<p>Debemos considerar que el modelado de datos era algo obligatorio en los sistemas iniciales. Las bases de relacionales requerían informar del esquema de sus estructuras de datos antes de poder insertar datos en estas. Es decir, debo informar de los campos y su tipología (texto, valores numéricos, etc.) antes de poder informar de los datos asociados.</p>
 <p>En la década de los 2000 esto fue alterado debido al crecimiento de sistemas flexibles en ese sentido, las bases de datos NoSQL y sistemas Hadoop que no requerían informar de las estructuras de datos almacenadas. Pero es una cuestión de quién realiza esta tarea, no tanto de no necesitarla más, ya que la estructuración de los datos es algo obligatorio para poder entender lo que tenemos entre manos.</p>
 <p>Haremos un pequeño barrido histórico y así quizás podamos entender las opciones actuales. Pero primero es crucial que entendamos que el modelado es el medio por el que conseguimos trasladar nuestra realidad a un medio técnico.</p>
 <section id="entidades-y-relaciones" class="level2">
@@ -301,7 +308,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>De este modo, el modelado es un proceso que parte de la estructura más abstracta hasta la implementación técnica del modelo.</p>
 <section id="entidades" class="level3">
 <h3 class="anchored" data-anchor-id="entidades">Entidades</h3>
-<p>Una <strong>entidad</strong> en un diagrama entidad-relación representa un objeto o concepto del mundo real que puede ser identificado de manera única y sobre el cual se desea almacenar información. Una entidad que contiene distintos <strong>atributos</strong> que describen características de esta.</p>
+<p>Una <strong>entidad</strong> en un diagrama entidad-relación representa un objeto o concepto del mundo real (persona, lugar o cosa ) que puede ser identificado de manera única y sobre el cual se desea almacenar información. nos referimos a estos conceptos como conceptos nucleares de negocio o Core Business Concept (CBC)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Una entidad que contiene distintos <strong>atributos</strong> que describen características de esta.</p>
 <div class="cell" data-fig-width="6.5" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -319,7 +326,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 </div>
-<p>Podríamos tener varias entidades que representan conceptos clave (personas, lugares, unidades corporativas, etc.) de nuestros procesos de negocio. Si tuviéramos una academia, existirían entidades como estas.</p>
+<p>Podríamos tener varias entidades que representan conceptos clave (personas, lugares, unidades corporativas, etc.) de nuestros procesos de negocio. Si tuviéramos una academia, por ejemplo, resulta claro que existirán entidades como estas y muy posiblemente querremos recolectar información con respecto a cada una. Esto determina los atributos que deberemos declarar.</p>
 <div class="cell" data-fig-width="6.5" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -348,6 +355,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 </div>
+</section>
+<section id="relaciones" class="level3">
+<h3 class="anchored" data-anchor-id="relaciones">Relaciones</h3>
 <p>La clave es entender cómo interactúan entre sí. Por ejemplo, un alumno estará matriculado a una o varias asignaturas. Y un profesor imparte una o varias asignaturas.</p>
 <div class="cell" data-fig-width="6.5" data-layout-align="default">
 <div class="cell-output-display">
@@ -363,7 +373,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 </div>
-<p>A estas nociones, (<em>matriculado</em> e <em>imparte</em>) las conocemos como <strong>relaciones</strong> y juntas conforman un diagrama entidad relación.</p>
+<p>A estas nociones, (<em>matriculado</em> e <em>imparte</em>) las conocemos como <strong>relaciones</strong> (Natural Business Relationships<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>) que no son más que eventos clave de nuestra operativa y juntas conforman un diagrama entidad relación, que representa de forma lógica el <strong>qué</strong> y <strong>cómo</strong> opera nuestra empresa de una forma lógica. El hecho de transformar e ir concretando el modelo conceptual a esta representación más detallada se la conoce como <strong>modelado lógico</strong>, donde deberemos ir definiendo aspectos clave a la hora de poder explotar esta información y responder preguntas que surgirán sobre los datos.</p>
 <div class="cell" data-fig-width="6.5" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -395,22 +405,47 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 </div>
-<p>Estas relaciones también pueden disponer de atributos, como el año de matriculación o impartición, y esto define la granularidad de estas relaciones</p>
+<p>Estas relaciones también pueden disponer de atributos, como el año de matriculación o impartición, y esto define la granularidad de estas relaciones. Es decir, cómo se relacionan las instancias de las distintas entidades entre sí. Veamos un ejemplo sencillo:</p>
 <pre><code>un PROFESOR IMPARTIÓ en Febrero del 2025 una ASIGNATURA </code></pre>
-<p>a la vez que describe nuestros procesos empresariales.</p>
+<p>Vemos cómo las entidades clave (CBC) y sus relaciones naturales son definidas con artículos que enumeran la relación <code>un ... una...</code>.</p>
 <pre><code>un EMPLEADO VENDIÓ 500 unidades de un PRODUCTO a un CLIENTE</code></pre>
 <pre><code>un CLIENTE TRANSFIRIÓ x cantidad de euros a otro CLIENTE</code></pre>
-<p>Nos ayuda a entender el contexto de información que deberá albergar nuestro sistema.</p>
-<p>Una vez este esquema está claro y consolidado con nuestro interlocutores las unidades de negocio podemos empezar a aterrizar en base a las necesidades técnicas qué forma final tomarán nuestros datos en su repositorio final.</p>
+<p>Nos ayuda a entender el contexto de información que deberá albergar nuestro sistema. Por ejemplo,</p>
+<pre><code>un PROFESOR IMPARTE varias ASIGNATURAs por CURSO/AÑO.</code></pre>
+<pre><code>un ALUMNO RECIBE varias ASIGNATURAs por CURSO/AÑO.</code></pre>
+<p>pero</p>
+<pre><code>un ALUMNO debe tener un único TUTOR por CURSO/AÑO.</code></pre>
+<p>Gran parte de este primer ejercicio es poder aclarar estos aspectos clave:</p>
+<ul>
+<li>Entidades clave (CBC)</li>
+<li>Relaciones entre entidades (NBR)</li>
+<li>Atributos</li>
+<li>Cardinalidad de las relaciones</li>
+</ul>
+<p>Una vez este esquema está claro y consolidado con nuestros interlocutores las unidades de negocio podemos empezar a aterrizar en base a las necesidades técnicas qué forma final tomarán nuestros datos en su repositorio final.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../assets/modelado.svg" class="img-fluid figure-img" style="width:60.0%"></p>
 <figcaption>Proceso de modelado de datos</figcaption>
 </figure>
 </div>
+<p>Este proceso debe siempre contar con la validación de los responsables de negocio y la mejor manera es poder poner ejemplos de cosas que el sistema pueda o no albergar.</p>
+<ul>
+<li><strong>nosotros</strong>: Un ejemplo de lo que no podremos guardar <code>un ALUMNO puede tener varios TUTORes por CURSO/AÑO.</code></li>
+<li><strong>negocio</strong>: Aunque no debería, un año nos pasó porque un tutor se dió de baja durante el año lectivo.</li>
+<li><strong>nosotros</strong>: Ok, incluiremos una opción para que pueda suceder que un alumno tenga varios tutores en un mismo curso, con atributos de hasta en la relación de ALUMNO y TUTOR.</li>
+</ul>
+<p>Resulta que allá por los años en los que todo encajaba en tablas, existían varios problemas a la hora de gestionar estas estructuras de datos de forma que resultara un esquema consistente y con buen rendimiento. Para resolver problemas de los sistemas de la época se definieron <a href="../../content/modelado/formasnormales.html">las formas normales</a>.</p>
 
 
 </section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Muy recomendables los artefactos en <a href="https://www.elmstandards.com/">ELM Standards</a> al respecto de los CBC: <a href="https://www.elmstandards.com/the-cbc-list">CBC list</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>De la misma fuente, sobre los NBR: <a href="https://www.elmstandards.com/the-nbr-matrix">NBR matrix</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
