@@ -1,8 +1,8 @@
 # Formas normales
 
-Cuando Edgar Codd diseño los sistemas de gestión de datos tabulares o RDBMS (_Relational Data Base Management Systems_) su planteamiento no cubría únicamente la necesidad de informar el esquema, si no de que este cubriera las necesidades de los procesos de negocio. De manera que estos sistemas fueran los garantes de que la base de datos cumpliera estas restricciones y siempre ofreciera una visión consistente de la información.
+Cuando Edgar Codd diseño los sistemas de gestión de datos tabulares o RDBMS (_Relational Data Base Management Systems_) su planteamiento no cubría únicamente la necesidad de informar el esquema, si no de que este cubriera las necesidades de los **procesos de negocio**. De manera que estos sistemas fueran los garantes de que la base de datos cumpliera estas restricciones y siempre ofreciera una visión consistente de la información.
 
-Un sencillo ejemplo es pensar en una estructura de datos que almacena nuestro balance en cuenta. Si nuestro banco no permite que ese balance sea negativo, ninguna acción debería permitir que esto suceda a nivel del sistema que los almacena y gestiona. Codd se aseguró de diseñar un sistema que ofreciera esas capacidades.
+Un sencillo ejemplo es pensar en una estructura de datos que almacena nuestro balance en cuenta. Si nuestro banco no permite que ese balance sea negativo, ninguna acción debería permitir que esto suceda a nivel del sistema que los almacena y gestiona. Codd se aseguró de diseñar un sistema que ofreciera esas capacidades a modo de **restricción**. Del mismo modo, no debería existir más de una persona con el mismo identificador único... De ahí es de donde nace el concepto de **clave primaria** que permite identificar unívocamente un registro en nuestra tabla.
 
 Las formas normales nacen precisamente de los trabajos de Codd como solución a algunos de los problemas que presentaban los sistemas iniciales. El planteamiento inicial es que los datos deben ser almacenados en tablas, con lo que podemos representar de forma visual nuestras _tablas_ del siguiente modo.
 
@@ -32,7 +32,7 @@ erDiagram
     }
 ```
 
-## Primera forma normal (2FN)
+## Primera forma normal (1FN)
 
 La **primera forma normal (1FN)** establece que todos los valores de los atributos en una tabla deben ser atómicos, es decir, cada campo debe contener un solo valor y no listas o conjuntos. Esto implica eliminar grupos repetitivos y asegurar que cada columna almacene únicamente un dato por fila.
 
@@ -55,25 +55,29 @@ Esto es una limitación de los sistemas de aquella época que los actuales no di
 
 _Ejemplo de una tabla en 1FN sobre alumnos apuntados a asignaturas_
 
-Disponer de la información de este modo me obliga a que cualquier cambio sobre los datos de los alumnos deba realizarse en varias filas. En estas tablas nos gusta disponer de un concepto llamado **clave** que identifica unívocamente cada registro.
+Disponer de la información de este modo nos obliga a que cualquier cambio sobre los datos de los alumnos deba realizarse en varias filas. Resulta difícil ver qué concepto identifica la **clave primaria** en estos casos. ¿Un alumno en una asignatura? ¿Es la asignatura _Matemáticas_ solo cursada por _Ana_?
 
-En nuestro caso, el _id_alumno_ refiere a cada alumno pero esta información está por duplicado y no permite identificar filas concretas. 
+En nuestro caso, el nombre del campo _id_alumno_ refiere a cada alumno pero esta información está por duplicado y no permite identificar filas concretas. Debemos separar conceptos, por un lado tenemos ALUMNOS y por el otro ASIGNATURAS. 
 
 ## Segunda forma normal (2FN)
 
-La **segunda forma normal (2FN)** se alcanza cuando una tabla está en primera forma normal y, además, todos los atributos que no forman parte de la clave principal dependen completamente de ella, no solo de una parte de la clave si esta es compuesta. Esto implica eliminar dependencias parciales, dividiendo la información en varias tablas si es necesario.
+La **segunda forma normal (2FN)** se alcanza cuando una tabla está en primera forma normal y, además, todos los atributos que no forman parte de la clave principal dependen completamente de ella, no solo de una parte de la clave si esta es **compuesta**. Existen situaciones donde un solo atributo no es suficiente para identificar unívocamente cada instancia. Por ejemplo, si realizamos una orden de venta, donde tenemos varios productos, la cantidad de producto que se vendió en cada orden de compra viene determinada por al dupla, ORDEN y PRODUCTO, solo conociendo a qué ORDEN y PRODUCTO nos referimos podemos determinar un valor de forma única de cantidad, descuento u otros conceptos asociados a ese caso particular.
+
+| id_venta  | id_producto   | cantidad  |
+|-----------|---------------|-----------|
+| 001       | 001           |     5     |
+| 001       | 002           |     10    |
+| 002       | 001           |     7     |
+
+_Ejemplo de evento de venta con cantidad de producto_
+
+Esto implica eliminar dependencias parciales, dividiendo la información en varias tablas si es necesario.
 
 **Ventajas de la 2FN:**
 
 - Reduce la redundancia de datos.
 - Facilita la actualización y mantenimiento de la base de datos.
 - Evita inconsistencias al modificar información relacionada.
-
-:::{.callout-note collapse="false"}
-# Clave compuesta
-
-Una **clave compuesta** es una clave primaria formada por dos o más columnas que, en conjunto, identifican de manera única cada fila de una tabla. Se utiliza cuando ningún atributo por sí solo puede garantizar la unicidad de los registros, pero la combinación de varios sí lo hace.
-:::
 
 La segunda forma normal nos obliga a separar nuestra tabla en dos entidades separadas: **alumnos** y **asignaturas**. Esto tiene sentido ya que si somos una escuela, serán dos entidades relevantes que se relacionarán con otras entidades de forma individualizada. Por ejemplo, si añadiéramos una tercera entidad, **profesores**, esta tendrá relaciones específicas y concretas con las asignaturas y no con los alumnos directamente _a priori_.
 
@@ -100,7 +104,7 @@ Las relaciones varían dependiendo de la **cardinalidad** de las mismas. Es deci
 
 [Entrada wikipedia](https://es.wikipedia.org/wiki/Modelo_entidad-relaci%C3%B3n#Correspondencia_de_cardinalidades)
 
-En nuestro ejemplo anterior la relación entre alumnos y asignaturas es muchos-a-muchos, lo cual requiere una tabla intermedia para que la relación entre ambas entidades no genere un volumen excesivo de datos al **desnormalizar** la información.
+En nuestro ejemplo anterior la relación entre alumnos y asignaturas es muchos-a-muchos, lo cual requiere una tabla intermedia para que la relación entre ambas entidades no genere un volumen excesivo de datos al [desnormalizar](desnormalizar.qmd) la información.
 
 :::{.callout-note}
 # Desnormalizar

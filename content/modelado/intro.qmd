@@ -1,6 +1,6 @@
 # Modelado de datos
 
-Debemos considerar que el modelado de datos era algo obligatorio en los sistemas iniciales. Las bases de relacionales requerían informar del esquema de sus estructuras de datos antes de poder insertar datos en estas.
+Debemos considerar que el modelado de datos era algo obligatorio en los sistemas iniciales. Las bases de relacionales requerían informar del esquema de sus estructuras de datos antes de poder insertar datos en estas. Es decir, debo informar de los campos y su tipología (texto, valores numéricos, etc.) antes de poder informar de los datos asociados.
 
 En la década de los 2000 esto fue alterado debido al crecimiento de sistemas flexibles en ese sentido, las bases de datos NoSQL y sistemas Hadoop que no requerían informar de las estructuras de datos almacenadas. Pero es una cuestión de quién realiza esta tarea, no tanto de no necesitarla más, ya que la estructuración de los datos es algo obligatorio para poder entender lo que tenemos entre manos.
 
@@ -16,7 +16,7 @@ De este modo, el modelado es un proceso que parte de la estructura más abstract
 
 ### Entidades
 
-Una **entidad** en un diagrama entidad-relación representa un objeto o concepto del mundo real que puede ser identificado de manera única y sobre el cual se desea almacenar información. Una entidad que contiene distintos **atributos** que describen características de esta.
+Una **entidad** en un diagrama entidad-relación representa un objeto o concepto del mundo real (persona, lugar o cosa ) que puede ser identificado de manera única y sobre el cual se desea almacenar información. nos referimos a estos conceptos como conceptos nucleares de negocio o Core Business Concept (CBC)[^1]. Una entidad que contiene distintos **atributos** que describen características de esta.
 
 ```{mermaid}
 %%| fig-width: 6.5
@@ -28,7 +28,7 @@ erDiagram
     }
 ```
 
-Podríamos tener varias entidades que representan conceptos clave (personas, lugares, unidades corporativas, etc.) de nuestros procesos de negocio. Si tuviéramos una academia, existirían entidades como estas.
+Podríamos tener varias entidades que representan conceptos clave (personas, lugares, unidades corporativas, etc.) de nuestros procesos de negocio. Si tuviéramos una academia, por ejemplo, resulta claro que existirán entidades como estas y muy posiblemente querremos recolectar información con respecto a cada una. Esto determina los atributos que deberemos declarar.
 
 ```{mermaid}
 %%| fig-width: 6.5
@@ -50,6 +50,8 @@ erDiagram
         texto apellido
     }
 ```
+
+### Relaciones
 
 La clave es entender cómo interactúan entre sí. Por ejemplo, un alumno estará matriculado a una o varias asignaturas. Y un profesor imparte una o varias asignaturas.
 
@@ -60,7 +62,7 @@ erDiagram
     PROFESORES ||--|| ASIGNATURAS : imparte
 ```
 
-A estas nociones, (_matriculado_ e _imparte_) las conocemos como **relaciones** y juntas conforman un diagrama entidad relación.
+A estas nociones, (_matriculado_ e _imparte_) las conocemos como **relaciones** (Natural Business Relationships[^2]) que no son más que eventos clave de nuestra operativa y juntas conforman un diagrama entidad relación, que representa de forma lógica el **qué** y **cómo** opera nuestra empresa de una forma lógica. El hecho de transformar e ir concretando el modelo conceptual a esta representación más detallada se la conoce como **modelado lógico**, donde deberemos ir definiendo aspectos clave a la hora de poder explotar esta información y responder preguntas que surgirán sobre los datos.
 
 ```{mermaid}
 %%| fig-width: 6.5
@@ -86,12 +88,12 @@ erDiagram
     PROFESORES ||--|| ASIGNATURAS : imparte
 ```
 
-Estas relaciones también pueden disponer de atributos, como el año de matriculación o impartición, y esto define la granularidad de estas relaciones
+Estas relaciones también pueden disponer de atributos, como el año de matriculación o impartición, y esto define la granularidad de estas relaciones. Es decir, cómo se relacionan las instancias de las distintas entidades entre sí. Veamos un ejemplo sencillo:
 
 ```
 un PROFESOR IMPARTIÓ en Febrero del 2025 una ASIGNATURA 
 ```
-a la vez que describe nuestros procesos empresariales.
+Vemos cómo las entidades clave (CBC) y sus relaciones naturales son definidas con artículos que enumeran la relación `un ... una... `.
 
 ```
 un EMPLEADO VENDIÓ 500 unidades de un PRODUCTO a un CLIENTE
@@ -99,8 +101,36 @@ un EMPLEADO VENDIÓ 500 unidades de un PRODUCTO a un CLIENTE
 ```
 un CLIENTE TRANSFIRIÓ x cantidad de euros a otro CLIENTE
 ```
-Nos ayuda a entender el contexto de información que deberá albergar nuestro sistema.
+Nos ayuda a entender el contexto de información que deberá albergar nuestro sistema. Por ejemplo,
+```
+un PROFESOR IMPARTE varias ASIGNATURAs por CURSO/AÑO.
+```
+```
+un ALUMNO RECIBE varias ASIGNATURAs por CURSO/AÑO.
+```
+pero
+```
+un ALUMNO debe tener un único TUTOR por CURSO/AÑO.
+```
 
-Una vez este esquema está claro y consolidado con nuestro interlocutores las unidades de negocio podemos empezar a aterrizar en base a las necesidades técnicas qué forma final tomarán nuestros datos en su repositorio final.
+Gran parte de este primer ejercicio es poder aclarar estos aspectos clave:
+
+* Entidades clave (CBC)
+* Relaciones entre entidades (NBR)
+* Atributos
+* Cardinalidad de las relaciones
+
+Una vez este esquema está claro y consolidado con nuestros interlocutores las unidades de negocio podemos empezar a aterrizar en base a las necesidades técnicas qué forma final tomarán nuestros datos en su repositorio final.
 
 ![Proceso de modelado de datos](../../assets/modelado.svg){width="60%"}
+
+Este proceso debe siempre contar con la validación de los responsables de negocio y la mejor manera es poder poner ejemplos de cosas que el sistema pueda o no albergar.
+
+* **nosotros**: Un ejemplo de lo que no podremos guardar `un ALUMNO puede tener varios TUTORes por CURSO/AÑO.`
+* **negocio**: Aunque no debería, un año nos pasó porque un tutor se dió de baja durante el año lectivo.
+* **nosotros**: Ok, incluiremos una opción para que pueda suceder que un alumno tenga varios tutores en un mismo curso, con atributos de hasta en la relación de ALUMNO y TUTOR.
+
+Resulta que allá por los años en los que todo encajaba en tablas, existían varios problemas a la hora de gestionar estas estructuras de datos de forma que resultara un esquema consistente y con buen rendimiento. Para resolver problemas de los sistemas de la época se definieron [las formas normales](./formasnormales.qmd).
+
+[^1]: Muy recomendables los artefactos en [ELM Standards](https://www.elmstandards.com/) al respecto de los CBC: [CBC list](https://www.elmstandards.com/the-cbc-list)
+[^2]: De la misma fuente, sobre los NBR: [NBR matrix](https://www.elmstandards.com/the-nbr-matrix)

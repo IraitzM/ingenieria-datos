@@ -34,6 +34,7 @@ book:
     - part: content/modelado/intro.qmd
       chapters:
       - content/modelado/formasnormales.qmd
+      - content/modelado/desnormalizar.qmd
 
     - part: "Sistemas gestores de datos"
       chapters:

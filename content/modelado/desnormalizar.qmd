@@ -1,0 +1,167 @@
+# Desnormalizar
+
+Como comentábamos anteriormente, aunque debamos normalizar nuestra estructura informativa, en muchos casos deberemos volver a juntarla en una sola respuesta para poder informar de todos los campos de interés para nuestra consulta.
+
+Por ejemplo ¿qué profesor tiene una carga mayor de alumnos? Pues para ello deberemos juntar la información almacenada en las entidades y relaciones que nos permiten llegar de un extremo (PROFESORES) al otro (ALUMNOS) a través de las relaciones y entidades intermedias.
+
+```{mermaid}
+erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+    }
+    ASIGNATURAS {
+        numero id_asignatura
+        texto nombre
+    }
+    PROFESORES {
+        numero id_profesor
+        texto nombre
+    }
+    ALUMNOS }|--|{ ASIGNATURAS: matriculado
+    PROFESORES ||--o{ ASIGNATURAS: imparte
+```
+
+De forma que obtengamos como resultado...
+
+| profesor  | cantidad de alumnos   |
+|-----------|-----------------------|
+| Javier    |                  5    |
+| Jesús     |                 20    |
+| Julian    |                  0    |
+
+_Ejemplo de resultado con información agregada_
+
+En este ejemplo debemos relacionar los profesores con sus asignaturas impartidas y los alumnos que las cursan para así poder contabilizar, por profesor cuantos tienen. Si solo informamos del nombre puede ser que existan varios Javier, pero cada uno tendrá una relación bien definida con respecto a las asignaturas y alumnos asociados gracias a su [clave primaria](formasnormales.qmd#segunda-forma-normal-(2fn)).
+
+## Relación 1-a-1/n
+
+Dentro de las distintas formas en las que podemos asociar dos entidades, las de 1-a-1 o 1-a-n quizás resulten las más sencillas, dado que únicamente requieren que seamos capaces de añadir un campo que haga referencia a una instancia concreta de una entidad. Y la forma más sencilla de hacer esto es mediante la referencia a su clave primaria. Cuando esta clave es empleada de forma referencial, nos referiremos a ellas como **claves foráneas**.
+
+Por ejemplo, asumamos que un alumno solo cursa una asignatura. Podemos incluir el campo de la asignatura que cursa como atributo en su entidad e identificarla como clave foránea (FK) mientras que el mismo campo en la tabla ASIGNATURAS será clave primaria (PK). Sucedería igual si cada asignatura es impartida por un único docente.
+
+```{mermaid}
+erDiagram
+    ALUMNOS {
+        numero id_alumno
+        texto nombre
+        texto apellido
+        numero id_asignatura FK
+    }
+    ASIGNATURAS {
+        numero id_asignatura PK
+        texto nombre
+        numero id_docente FK
+    }
+    PROFESORES {
+        numero id_profesor PK
+        texto nombre
+    }
+    ALUMNOS }|--|{ ASIGNATURAS: matriculado
+    PROFESORES ||--o{ ASIGNATURAS: imparte
+```
+
+## Relación n-a-m
+
+Cuando la relación es de muchos a muchos, las bases de datos tabulares (RDBMS) presentan un problema, que es el poder conjugar esta información de forma que no explote. Multiplicar todas las filas de ua entidad relacionada con la otra y a su vez que estas presenten todas las de la primera resulta en un **producto cartesiano** difícil de gestionar de una sola vez.
+
+:::{.callout-tip collapse="true"}
+# Producto cartesiano
+
+En bases de datos relacionales, el producto cartesiano ocurre cuando combinamos dos tablas sin especificar una condición de relación entre ellas. Esto genera todas las combinaciones posibles de filas entre ambas tablas, lo que puede resultar en un número de registros extremadamente grande y difícil de manejar.
+
+Por ejemplo, si tenemos una tabla de 10 alumnos y otra de 5 asignaturas, el producto cartesiano generaría 10 x 5 = 50 filas, donde cada alumno aparece emparejado con cada asignatura, aunque no tenga relación real entre ellos. Esto no solo consume recursos innecesarios, sino que también puede llevar a resultados incorrectos si no se filtra adecuadamente la información relevante mediante condiciones de unión (JOIN) apropiadas.
+
+:::
+
+Para evitar esta problemática, las relaciones se guardan en una tabla que registra estas relaciones como filas con dos claves foráneas de las entidades asociadas que forma clave principal para potenciales atributos que sean particulares de esa relación.
+
+```{mermaid}
+erDiagram
+    ALUMNOS {
+        numero id_alumno PK
+        texto nombre
+        texto apellido
+    }
+    CURSA{
+        numero id_alumno FK
+        numero id_asignatura FK
+        numero anio
+    }
+    ASIGNATURAS {
+        numero id_asignatura PK
+        texto nombre
+        numero id_docente FK
+    }
+    PROFESORES {
+        numero id_profesor PK
+        texto nombre
+    }
+
+    ALUMNOS }|--|{ CURSA: matriculado
+    CURSA }|--|{ ASIGNATURAS: cursando
+    PROFESORES ||--o{ ASIGNATURAS: imparte
+```
+
+Esto nos permitiría por ejemplo, variar el esquema también si existe la posibilidad de que una asignatura en un año se imparta por uno o varios profesores a distintos alumnos.
+
+```{mermaid}
+erDiagram
+    ALUMNOS {
+        numero id_alumno PK
+        texto nombre
+        texto apellido
+    }
+    CURSA{
+        numero id_alumno FK
+        numero id_asignatura FK
+        numero id_profesor FK
+        numero anio
+    }
+    ASIGNATURAS {
+        numero id_asignatura PK
+        texto nombre
+    }
+    PROFESORES {
+        numero id_profesor PK
+        texto nombre
+    }
+
+    ALUMNOS }|--|{ CURSA: matriculado
+    CURSA }|--|{ ASIGNATURAS: cursando
+    PROFESORES ||--o{ CURSA: imparte
+```
+
+Es cuestión de entender bien el contexto ya que una vez determinamos las restricciones efectivas mediante estas relaciones, no podremos por ejemplo introducir un profesor no registrado en nuestro sistema como docente (error de clave foránea), eliminar un alumno de nuestros registros si está cursando aún alguna asignatura, etc... Es clave definir bien estos conceptos para luego operar sobre los datos y más aún, saber qué tablas es necesario combinar para obtener la información necesaria.
+
+## JOINs
+
+Las famosas JOINs no son más que la especificación técnica de cómo queremos juntar los datos para poder extraer la información necesaria. Si queremos conocer todos los alumnos que tiene un profesor, deberemos sobre el esquema anterior juntar las tablas CURSA, ALUMNOS y PROFESORES (al menos) para poder recurrir a sus atributos. Esto es lo que nos obliga a generar consultas algo más complejas ya que debemos realizar esa desnormalización donde las tablas vuelven a tomar una forma similar a la original.
+
+
+| id_alumno | nombre   | apellido | asignatura             | nombre    | id_profesor |
+|-----------|----------|----------|------------------------|-----------|-------------|
+| 001       | Ana      | García   | Matemáticas            |  Javier   | 001         |
+| 001       | Ana      | García   | Física                 |  Jesús    | 002         |
+| 002       | Luis     | Pérez    | Química                |  Julian   | 003         |
+| 002       | Luis     | Pérez    | Biología               |  Javier   | 001         |
+| 003       | Marta    | López    | Historia               |  Javier   | 004         |
+| 003       | Marta    | López    | Inglés                 |  Jason    | 005         |
+
+_Ejemplo de una tabla en desnormalizada_
+
+En caso de que dispongamos de coincidencias en los nombres de los campos (¿_nombre_ se refiere al atributo en PROFESORES o en ALUMNOS?) que en estos casos formarán parte de la _misma tabla_ usarmos el concepto de **alias** o **renombrado** para indicar un numbro que haga referencia al campo de forma más clara.
+
+| id_alumno | nombre_alumno   | apellido | asignatura             | nombre_profe    | id_profesor |
+|-----------|-----------------|----------|------------------------|-----------------|-------------|
+| 001       | Ana             | García   | Matemáticas            |  Javier         | 001         |
+| 001       | Ana             | García   | Física                 |  Jesús          | 002         |
+| 002       | Luis            | Pérez    | Química                |  Julian         | 003         |
+| 002       | Luis            | Pérez    | Biología               |  Javier         | 001         |
+| 003       | Marta           | López    | Historia               |  Javier         | 004         |
+| 003       | Marta           | López    | Inglés                 |  Jason          | 005         |
+
+_Ejemplo de una tabla en desnormalizada con alias_
+
+Debemos entender que la normalización se presenta como un mecanismo de gestión de la información que no atiende tanto al consumo posterior si no a la consistencia de los datos con un rendimiento base, de modo que pueda servir a su propósito al margen de los consumos posteriores que puedan ser necesarios y las composiciones de los datos en esos nuevos escenarios. Esto nos obliga a considerar el uso que haremos de la información existiendo dos caracteres muy diferenciados en toda organización en lo que a [sistemas](../sistemas/intro.qmd) se refiere.
