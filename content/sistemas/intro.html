@@ -287,6 +287,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text">Referencias</span></a>
   </div>
 </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -359,6 +376,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="etlelt" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="etlelt"><span class="header-section-number">4.3</span> ETL/ELT</h2>
 <p>Extract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).</p>
+<p>Esto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../assets/data-lifecycle.png" class="img-fluid figure-img"></p>
+<figcaption>Ciclo de vida de los datos</figcaption>
+</figure>
+</div>
+<p>Quizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:</p>
+<ul>
+<li>Orquestadores para coordinar las distintas fases</li>
+<li>Plataformas de computación distribuida</li>
+<li>Sistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos</li>
+<li>Programación, desde SQL y Python a frameworks como Apache Spark, Kafka Streams, etc…</li>
+</ul>
 
 
 </section>

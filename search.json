@@ -194,7 +194,7 @@
     "href": "content/sistemas/intro.html#etlelt",
     "title": "4  Sistemas de gestión de datos",
     "section": "4.3 ETL/ELT",
-    "text": "4.3 ETL/ELT\nExtract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).",
+    "text": "4.3 ETL/ELT\nExtract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).\nEsto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.\n\n\n\nCiclo de vida de los datos\n\n\nQuizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:\n\nOrquestadores para coordinar las distintas fases\nPlataformas de computación distribuida\nSistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos\nProgramación, desde SQL y Python a frameworks como Apache Spark, Kafka Streams, etc…",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
@@ -295,6 +295,17 @@
     "text": "Codd, Edgar F. 1970. “A Relational Model of Data for Large Shared\nData Banks.” Communications of the ACM 13 (6): 377–87.",
     "crumbs": [
       "Referencias"
+    ]
+  },
+  {
+    "objectID": "content/appendices/de_storybook.html",
+    "href": "content/appendices/de_storybook.html",
+    "title": "Apéndice A — La danza del Ingeniero de Datos",
+    "section": "",
+    "text": "Download PDF file.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>La danza del Ingeniero de Datos</span>"
     ]
   }
 ]
