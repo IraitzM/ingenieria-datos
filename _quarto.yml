@@ -55,6 +55,9 @@ book:
 
     - content/references.qmd
 
+  appendices:
+    - content/appendices/de_storybook.qmd
+
 bibliography: content/references.bib
 
 format:

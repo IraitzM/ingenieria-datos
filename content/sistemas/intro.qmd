@@ -38,3 +38,14 @@ Precisamente por ser los sistemas transaccionales la fuente de información para
 ## ETL/ELT
 
 Extract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).
+
+Esto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.
+
+![Ciclo de vida de los datos](../../assets/data-lifecycle.png)
+
+Quizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:
+
+* Orquestadores para coordinar las distintas fases
+* Plataformas de computación distribuida
+* Sistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos
+* Programación, desde SQL y Python a frameworks como Apache Spark, Kafka Streams, etc...
