@@ -9,7 +9,7 @@ Este libro pretende ser una guía sencilla con referencias al estado de la cuest
 * Calidad y monitorización
 
 E intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. 
-Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.
+Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión. Aunque nos centraremos mucho en los conceptos y las herramientas serán ejemplos en los que podemos implementar estas ideas.
 
 ![Ciclo de vida de los datos](../assets/datacycle.png){width=50%}
 

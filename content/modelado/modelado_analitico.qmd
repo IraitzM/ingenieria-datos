@@ -1,0 +1,108 @@
+# Modelado analítico
+
+El modelado cubre una necesidad muy real y operativa. El modelado, tal y como lo hemos vista hasta ahora permite eliminar redundancias, hacer la gestión de datos coherente con los requisitos del negocio y aún así, sacar el máximo provecho del sistema. Sin embargo no está orientado a ser sencillo de operar o entender por parte de aquellos que quieren extraer conocimiento de los datos.
+
+![Ejemplo de la base de datos Northwind](../../assets/northwind.webp){width=60%}
+
+Por ello, ya que de todos modos tenemos que disponer un sistema pensado para analítica, por qué no darle una forma que haga la información más fácil de consumir. Aunque este proceso no está falto de trabajo. [William (Bill) Inmon](https://en.wikipedia.org/wiki/Bill_Inmon) es reconocido como el padre del concepto almacén de datos o _data warehouse_. Un data warehouse es esencialmente ese repositorio donde residen todos los datos de la compañía, no de forma operacional, si no para poder realizar consultas, análisis e informes sobre ellos. Esto permite además unificar las distintas fuentes para dar una visión cohesionada de los procesos en la empresa y sus datos asociados.
+
+![Data Warehouse](https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Data_Warehouse_%26_Data-Marts_overview.svg/1920px-Data_Warehouse_%26_Data-Marts_overview.svg.png){width=60%}
+
+Sin embargo, el modelo de Inmon requería una consolidación entre fuentes que es difícil de construir. Además, el ritmo al que operan las distintas unidades hace que existan urgencias de datos que "no pueden esperar". Un enfoque algo más pragmático que permitía enfocarse en necesidades concretas es asociado con [Ralph Kimball](https://en.wikipedia.org/wiki/Ralph_Kimball). Fue años más tarde y quizás el progreso de la tecnología hacia los 90 hizo posible el enfoque de Kimball pero sin duda es uno de los modelados más comunes cuando nos acercamos a las áreas de consumo de datos. De hecho, el término Business Intelligence se inicia en esta época gracias al foco en el warehousing y el modelado analítico.
+
+## Modelado dimensional
+
+El [modelado dimensional](https://es.wikipedia.org/wiki/Modelado_dimensional), en estrella o también referido Kimball, se enfoca en disponer las dimensiones de corte de los análisis en tablas muy próximas a los conceptos de entidad que comentamos en el modelado [Entidad-Relación](intro.qmd#entidades-y-relaciones) y los hechos, acontecimientos en otra entidad de crecimiento más frecuente y vertical.
+
+```{mermaid}
+erDiagram
+    DIM_EMPLEADOS {
+        numero id_empleado PK
+        texto nombre
+        texto apellido
+        texto desc_territorio
+    }
+    DIM_CLIENTES {
+        numero id_cliente PK
+        texto nombre
+    }
+    DIM_PRODUCTOS {
+        numero id_producto PK
+        texto nombre
+        texto categoria
+        numero precio_unitario
+        texto proveedor
+    }
+    DIM_TIEMPO {
+        numero id_tiempo PK
+        numero anio
+        numero mes
+        numero trimestre
+        texto nombre_mes
+        numero dia
+        texto dia_semana
+    }
+    FACT_FACTURAS {
+        numero id_tiempo FK
+        numero id_cliente FK
+        numero id_producto FK
+        numero id_empleado FK
+        numero total
+    }
+
+    DIM_TIEMPO }|--o{ FACT_FACTURAS: fecha
+    DIM_PRODUCTOS }|--o{ FACT_FACTURAS: producto
+    DIM_CLIENTES }|--o{ FACT_FACTURAS: cliente
+    DIM_EMPLEADOS }|--o{ FACT_FACTURAS: empleado
+```
+
+El enfoque se basa en que las dimensiones son instancias de datos poco cambiantes (listado de empleados, clientes, productos,...) mientras que los hechos crecen de forma constante (en nuestro caso las ventas facturadas). Aunque esto no siempre pasa así y podemos tener información cambiante en nuestras dimensiones como veremos [más adelante](#scd).
+
+Las dimensiones cubren aspectos relativos a puntos de corte en nuestros análisis:
+
+* quién
+* qué
+* dónde
+* cómo
+
+Mientras que los hechos son los hechos cuantificables:
+
+* cuántos
+* en total
+* promedio
+
+De modo que la pregunta de negocio
+
+> ¿cuantos pedidos que contengan salsa de tomate hemos tenido en este último trimestre?
+
+Se aterriza indicando:
+
+* DIM_PRODUCTOS: salsa de tomate
+* DIM_TIEMPO: último trimestre
+* FACT_FACTURAS: número de facturas asociadas a DIMs
+
+Pudiendo variar únicamente la métrica (cuantas unidades, cuantos dolares, qué porcentaje de descuentos, ...). Esto hace que muchas consultas puedan componerse de forma aditiva en base a preguntas frecuentes, atributos concretos usados frecuentemente, agregadas de forma distinta.
+
+### SCD
+
+El concepto de **Slowly Changing Dimension (SCD)** nos obliga a indicar distintos valores para nuestras dimensiones en base a una condición temporal. Un producto que cambia de nombre a una fecha dada, un cliente que cambia de apellidos,... Existen varias modalidades con las que podemos intentar paliar este hecho, y una de las más comunes es historificar los cambios con fechas de efecto, también conocido como dimensión de **tipo 2**.
+
+```{mermaid}
+erDiagram
+    DIM_EMPLEADOS {
+        numero id_empleado PK
+        texto nombre
+        texto apellido
+        texto desc_territorio
+        fecha efectivo_desde
+        fecha efectivo_hasta
+    }
+    DIM_CLIENTES {
+        numero id_cliente PK
+        texto nombre
+        fecha efectivo_desde
+        fecha efectivo_hasta
+    }
+```
+
+Esto nos obliga a añadir condiciones que filtren los registros vigentes, o indiquen la fecha de efecto pudiendo así consultar la información como hubiera sido consultada en un intervalo entre fechas efectivas. Esto sin duda complica la composición de consulta, aunque nos permite copar con estos cambios.

@@ -1,0 +1,26 @@
+# Nuevos paradigmas
+
+Precisamente conciliar estas necesidades de consumo por un lado, y de fuentes de datos cambiantes por el otro hace que disponer una pieza central, modelada y coherente con todos los procesos de la empresa de forma histórica resulte excepcionalmente retador. De hecho, los conceptos que determinaban el concepto Data Warehouse definido por Bill Inmon requerían:
+
+* Orientado al dominio
+* Integrado
+* No volátil o durable
+* Variante en el tiempo
+
+Esto nos obliga a guardar todas las versiones temporales en una forma que permita tanto la integración de nuevas fuentes como el consumo orientado a dominio en un sistema centralizado.
+
+## Modelos lógicos ensamblados
+
+Ensemble Logical Modelling (ELM) es una técnica de abstracción que nos permite realizar una integración de los datos enfocándonos en las entidades de negocio (CBC) y sus relaciones naturales (NBR) de forma que todo lo demás una vez esta estructura base existe es la asociación de datos a estos conceptos.
+
+### Data Vault
+
+Una de las implementaciones lógicas de las ELM es Data Vault, donde los conceptos previos se presentan con nombres específicos:
+
+* HUBs: Donde se registran las instancias de las entidades
+* LINKs: Donde se registran los eventos o hechos que vinculan una o más entidades
+* SATELITEs: Donde se alberga la información asociada a una entidad para una fecha concreta
+
+Tanto los HUBs como los LINKs llevan huellas temporales de carácter efectivo e identifican la fuente de donde la instancia fue informada, de manera que resulta sencillo realizar viajes temporales a los datos efectivos a una fecha dada. El hecho de trabajar con huellas temporales hace que podamos plantear un sistema en el que simplemente nuevos datos son añadidos y en tiempo de consumo se seleccionen aquellos que tomen efecto.
+
+Existen otras modalidades que extienden más aún este concepto aunque Data Vault ha sido quizás el paradigma que más adopción presenta teniendo en cuenta la complejidad técnica y madurez del equipo que requiere su correcto gobierno.

@@ -27,6 +27,8 @@ A este paquete podemos llamarlo **transacción** y los sistemas capaces de gesti
 
 Con esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter **analítico**.
 
+El hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.
+
 ## OLTP vs OLAP
 
 OLTP (Procesamiento Transaccional en Línea) y OLAP (Procesamiento Analítico en Línea) son dos enfoques diferentes para el manejo de bases de datos, diseñados para propósitos distintos dentro de la gestión de datos. OLTP se centra en el procesamiento de transacciones en tiempo real, como operaciones bancarias, compras en línea o gestión de inventarios, y está optimizado para manejar un gran número de transacciones cortas que implican operaciones de inserción, actualización y eliminación (INSERT, UPDATE, DELETE). Estos sistemas priorizan tiempos de respuesta rápidos (en milisegundos), alta concurrencia y consistencia de datos mediante propiedades ACID, lo que garantiza la integridad de las transacciones.

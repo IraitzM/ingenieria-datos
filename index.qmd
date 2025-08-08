@@ -7,3 +7,15 @@ Ah, y barato a poder ser. Todo un reto.
 Nuestro posición como ingenieros de datos está en el epicentro de la acción dada la relevancia que han tomado los campos de la ciencia de datos e inteligencia artificial. Además, el ámbito corporativo necesita de ciertas garantías para poder dar cumplimiento al marco regulatorio cuando se trata de datos de carácter personal o con impacto a usuarios.
 
 Por ello debemos de datos buena cuenta de las mejores prácticas a la hora de realizar nuestra tarea.
+
+## Referencias
+
+Tenéis muy buenos recursos online, aunque en inglés muchos:
+
+* El [roadmap ideal](https://awesomedataengineering.com/) lleno de recursos de pago y gratuitos
+* La [wiki](https://dataengineering.wiki/Index) del ingeniero de datos
+* Muchos recursos muy buenos por [Zach Wilson de DataExpert.io](https://github.com/DataExpert-io/data-engineer-handbook)
+* Data Engineering por [Karl Christian](https://karlchris.github.io/data-engineering/)
+* El gran curso de [Joe Reis en Deeplearning.ai](https://www.deeplearning.ai/courses/data-engineering/)
+
+Ahora toca digerir todo esto. Con suerte esta guía os puede asistir.
