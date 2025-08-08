@@ -2,54 +2,66 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/index.html</loc>
-    <lastmod>2025-08-07T16:35:59.826Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.237Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/intro.html</loc>
-    <lastmod>2025-08-07T16:35:59.819Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.230Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/modelado/intro.html</loc>
-    <lastmod>2025-08-07T16:35:59.819Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.231Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/modelado/formasnormales.html</loc>
-    <lastmod>2025-08-07T16:35:59.819Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.231Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/modelado/desnormalizar.html</loc>
-    <lastmod>2025-08-07T16:35:59.819Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.231Z</lastmod>
+  </url>
+  <url>
+    <loc>https://iraitzm.github.io/ingenieria-datos/content/modelado/modelado_analitico.html</loc>
+    <lastmod>2025-08-08T17:41:23.231Z</lastmod>
+  </url>
+  <url>
+    <loc>https://iraitzm.github.io/ingenieria-datos/content/modelado/nuevos_paradigmas.html</loc>
+    <lastmod>2025-08-08T17:41:23.231Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/sistemas/intro.html</loc>
-    <lastmod>2025-08-07T16:35:59.820Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.231Z</lastmod>
+  </url>
+  <url>
+    <loc>https://iraitzm.github.io/ingenieria-datos/content/sistemas/rdbms_transaccional.html</loc>
+    <lastmod>2025-08-08T17:41:23.231Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/load/intro.html</loc>
-    <lastmod>2025-08-07T16:35:59.819Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.230Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/transform/intro.html</loc>
-    <lastmod>2025-08-07T16:35:59.820Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.231Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/explotacion/intro.html</loc>
-    <lastmod>2025-08-07T16:35:59.819Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.230Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/explotacion/bi.html</loc>
-    <lastmod>2025-08-07T16:35:59.819Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.230Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/explotacion/ds.html</loc>
-    <lastmod>2025-08-07T16:35:59.819Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.230Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/references.html</loc>
-    <lastmod>2025-08-07T16:35:59.819Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.231Z</lastmod>
   </url>
   <url>
     <loc>https://iraitzm.github.io/ingenieria-datos/content/appendices/de_storybook.html</loc>
-    <lastmod>2025-08-07T16:35:59.819Z</lastmod>
+    <lastmod>2025-08-08T17:41:23.230Z</lastmod>
   </url>
 </urlset>

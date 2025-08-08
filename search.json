@@ -10,11 +10,21 @@
     ]
   },
   {
+    "objectID": "index.html#referencias",
+    "href": "index.html#referencias",
+    "title": "Ingeniería de datos",
+    "section": "Referencias",
+    "text": "Referencias\nTenéis muy buenos recursos online, aunque en inglés muchos:\n\nEl roadmap ideal lleno de recursos de pago y gratuitos\nLa wiki del ingeniero de datos\nMuchos recursos muy buenos por Zach Wilson de DataExpert.io\nData Engineering por Karl Christian\nEl gran curso de Joe Reis en Deeplearning.ai\n\nAhora toca digerir todo esto. Con suerte esta guía os puede asistir.",
+    "crumbs": [
+      "Prólogo"
+    ]
+  },
+  {
     "objectID": "content/intro.html",
     "href": "content/intro.html",
     "title": "1  Introducción",
     "section": "",
-    "text": "1.1 Inicios\nEste libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:\nE intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión.\nEl del ingeniero de datos es un rol a caballo entre las áreas de negocio y los desarrolladores de software, tomando gran parte de las prácticas aprendidas de estos. Aunque enfocándonos en la puesta al servicio de los datos.\nY empezaremos con un concepto que no está exento de controversia: el modelado de datos. Aunque para ello, debemos entender el contexto histórico que rodea a los ingenieros de datos trasladándonos a los primeros sistemas de gestión de datos y su aparición a finales de los años 60 del siglo pasado.\nCon frecuencia olvidamos el recorrido que hemos realizado en el mundo de la informática y cómo impacta las decisiones o aspectos de los sistemas de hoy día.\nPor eso es importante entender el trasfondo histórico y las herencias que a pesar de no ser muy lógicas, determinan algunas de las prácticas que nos encontramos en la actualidad.",
+    "text": "1.1 Inicios\nEste libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:\nE intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión. Aunque nos centraremos mucho en los conceptos y las herramientas serán ejemplos en los que podemos implementar estas ideas.\nEl del ingeniero de datos es un rol a caballo entre las áreas de negocio y los desarrolladores de software, tomando gran parte de las prácticas aprendidas de estos. Aunque enfocándonos en la puesta al servicio de los datos.\nY empezaremos con un concepto que no está exento de controversia: el modelado de datos. Aunque para ello, debemos entender el contexto histórico que rodea a los ingenieros de datos trasladándonos a los primeros sistemas de gestión de datos y su aparición a finales de los años 60 del siglo pasado.\nCon frecuencia olvidamos el recorrido que hemos realizado en el mundo de la informática y cómo impacta las decisiones o aspectos de los sistemas de hoy día.\nPor eso es importante entender el trasfondo histórico y las herencias que a pesar de no ser muy lógicas, determinan algunas de las prácticas que nos encontramos en la actualidad.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introducción</span>"
     ]
@@ -157,102 +167,157 @@
     ]
   },
   {
+    "objectID": "content/modelado/modelado_analitico.html",
+    "href": "content/modelado/modelado_analitico.html",
+    "title": "4  Modelado analítico",
+    "section": "",
+    "text": "4.1 Modelado dimensional\nEl modelado cubre una necesidad muy real y operativa. El modelado, tal y como lo hemos vista hasta ahora permite eliminar redundancias, hacer la gestión de datos coherente con los requisitos del negocio y aún así, sacar el máximo provecho del sistema. Sin embargo no está orientado a ser sencillo de operar o entender por parte de aquellos que quieren extraer conocimiento de los datos.\nPor ello, ya que de todos modos tenemos que disponer un sistema pensado para analítica, por qué no darle una forma que haga la información más fácil de consumir. Aunque este proceso no está falto de trabajo. William (Bill) Inmon es reconocido como el padre del concepto almacén de datos o data warehouse. Un data warehouse es esencialmente ese repositorio donde residen todos los datos de la compañía, no de forma operacional, si no para poder realizar consultas, análisis e informes sobre ellos. Esto permite además unificar las distintas fuentes para dar una visión cohesionada de los procesos en la empresa y sus datos asociados.\nSin embargo, el modelo de Inmon requería una consolidación entre fuentes que es difícil de construir. Además, el ritmo al que operan las distintas unidades hace que existan urgencias de datos que “no pueden esperar”. Un enfoque algo más pragmático que permitía enfocarse en necesidades concretas es asociado con Ralph Kimball. Fue años más tarde y quizás el progreso de la tecnología hacia los 90 hizo posible el enfoque de Kimball pero sin duda es uno de los modelados más comunes cuando nos acercamos a las áreas de consumo de datos. De hecho, el término Business Intelligence se inicia en esta época gracias al foco en el warehousing y el modelado analítico.\nEl modelado dimensional, en estrella o también referido Kimball, se enfoca en disponer las dimensiones de corte de los análisis en tablas muy próximas a los conceptos de entidad que comentamos en el modelado Entidad-Relación y los hechos, acontecimientos en otra entidad de crecimiento más frecuente y vertical.\nerDiagram\n    DIM_EMPLEADOS {\n        numero id_empleado PK\n        texto nombre\n        texto apellido\n        texto desc_territorio\n    }\n    DIM_CLIENTES {\n        numero id_cliente PK\n        texto nombre\n    }\n    DIM_PRODUCTOS {\n        numero id_producto PK\n        texto nombre\n        texto categoria\n        numero precio_unitario\n        texto proveedor\n    }\n    DIM_TIEMPO {\n        numero id_tiempo PK\n        numero anio\n        numero mes\n        numero trimestre\n        texto nombre_mes\n        numero dia\n        texto dia_semana\n    }\n    FACT_FACTURAS {\n        numero id_tiempo FK\n        numero id_cliente FK\n        numero id_producto FK\n        numero id_empleado FK\n        numero total\n    }\n\n    DIM_TIEMPO }|--o{ FACT_FACTURAS: fecha\n    DIM_PRODUCTOS }|--o{ FACT_FACTURAS: producto\n    DIM_CLIENTES }|--o{ FACT_FACTURAS: cliente\n    DIM_EMPLEADOS }|--o{ FACT_FACTURAS: empleado\nEl enfoque se basa en que las dimensiones son instancias de datos poco cambiantes (listado de empleados, clientes, productos,…) mientras que los hechos crecen de forma constante (en nuestro caso las ventas facturadas). Aunque esto no siempre pasa así y podemos tener información cambiante en nuestras dimensiones como veremos más adelante.\nLas dimensiones cubren aspectos relativos a puntos de corte en nuestros análisis:\nMientras que los hechos son los hechos cuantificables:\nDe modo que la pregunta de negocio\nSe aterriza indicando:\nPudiendo variar únicamente la métrica (cuantas unidades, cuantos dolares, qué porcentaje de descuentos, …). Esto hace que muchas consultas puedan componerse de forma aditiva en base a preguntas frecuentes, atributos concretos usados frecuentemente, agregadas de forma distinta.",
+    "crumbs": [
+      "Modelado de datos",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelado analítico</span>"
+    ]
+  },
+  {
+    "objectID": "content/modelado/modelado_analitico.html#modelado-dimensional",
+    "href": "content/modelado/modelado_analitico.html#modelado-dimensional",
+    "title": "4  Modelado analítico",
+    "section": "",
+    "text": "quién\nqué\ndónde\ncómo\n\n\n\ncuántos\nen total\npromedio\n\n\n\n¿cuantos pedidos que contengan salsa de tomate hemos tenido en este último trimestre?\n\n\n\nDIM_PRODUCTOS: salsa de tomate\nDIM_TIEMPO: último trimestre\nFACT_FACTURAS: número de facturas asociadas a DIMs\n\n\n\n4.1.1 SCD\nEl concepto de Slowly Changing Dimension (SCD) nos obliga a indicar distintos valores para nuestras dimensiones en base a una condición temporal. Un producto que cambia de nombre a una fecha dada, un cliente que cambia de apellidos,… Existen varias modalidades con las que podemos intentar paliar este hecho, y una de las más comunes es historificar los cambios con fechas de efecto, también conocido como dimensión de tipo 2.\n\n\n\n\n\nerDiagram\n    DIM_EMPLEADOS {\n        numero id_empleado PK\n        texto nombre\n        texto apellido\n        texto desc_territorio\n        fecha efectivo_desde\n        fecha efectivo_hasta\n    }\n    DIM_CLIENTES {\n        numero id_cliente PK\n        texto nombre\n        fecha efectivo_desde\n        fecha efectivo_hasta\n    }\n\n\n\n\n\n\nEsto nos obliga a añadir condiciones que filtren los registros vigentes, o indiquen la fecha de efecto pudiendo así consultar la información como hubiera sido consultada en un intervalo entre fechas efectivas. Esto sin duda complica la composición de consulta, aunque nos permite copar con estos cambios.",
+    "crumbs": [
+      "Modelado de datos",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelado analítico</span>"
+    ]
+  },
+  {
+    "objectID": "content/modelado/nuevos_paradigmas.html",
+    "href": "content/modelado/nuevos_paradigmas.html",
+    "title": "5  Nuevos paradigmas",
+    "section": "",
+    "text": "5.1 Modelos lógicos ensamblados\nPrecisamente conciliar estas necesidades de consumo por un lado, y de fuentes de datos cambiantes por el otro hace que disponer una pieza central, modelada y coherente con todos los procesos de la empresa de forma histórica resulte excepcionalmente retador. De hecho, los conceptos que determinaban el concepto Data Warehouse definido por Bill Inmon requerían:\nEsto nos obliga a guardar todas las versiones temporales en una forma que permita tanto la integración de nuevas fuentes como el consumo orientado a dominio en un sistema centralizado.\nEnsemble Logical Modelling (ELM) es una técnica de abstracción que nos permite realizar una integración de los datos enfocándonos en las entidades de negocio (CBC) y sus relaciones naturales (NBR) de forma que todo lo demás una vez esta estructura base existe es la asociación de datos a estos conceptos.",
+    "crumbs": [
+      "Modelado de datos",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Nuevos paradigmas</span>"
+    ]
+  },
+  {
+    "objectID": "content/modelado/nuevos_paradigmas.html#modelos-lógicos-ensamblados",
+    "href": "content/modelado/nuevos_paradigmas.html#modelos-lógicos-ensamblados",
+    "title": "5  Nuevos paradigmas",
+    "section": "",
+    "text": "5.1.1 Data Vault\nUna de las implementaciones lógicas de las ELM es Data Vault, donde los conceptos previos se presentan con nombres específicos:\n\nHUBs: Donde se registran las instancias de las entidades\nLINKs: Donde se registran los eventos o hechos que vinculan una o más entidades\nSATELITEs: Donde se alberga la información asociada a una entidad para una fecha concreta\n\nTanto los HUBs como los LINKs llevan huellas temporales de carácter efectivo e identifican la fuente de donde la instancia fue informada, de manera que resulta sencillo realizar viajes temporales a los datos efectivos a una fecha dada. El hecho de trabajar con huellas temporales hace que podamos plantear un sistema en el que simplemente nuevos datos son añadidos y en tiempo de consumo se seleccionen aquellos que tomen efecto.\nExisten otras modalidades que extienden más aún este concepto aunque Data Vault ha sido quizás el paradigma que más adopción presenta teniendo en cuenta la complejidad técnica y madurez del equipo que requiere su correcto gobierno.",
+    "crumbs": [
+      "Modelado de datos",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Nuevos paradigmas</span>"
+    ]
+  },
+  {
     "objectID": "content/sistemas/intro.html",
     "href": "content/sistemas/intro.html",
-    "title": "4  Sistemas de gestión de datos",
+    "title": "6  Sistemas de gestión de datos",
     "section": "",
-    "text": "4.1 Transacciones\nLos sistemas de gestión de datos deben cumplir el requisito de responder en tiempo y forma a las consultas que se les plantean, aunque estas pueden venir de dos propósitos muy diferenciados.\nCuando realizamos operaciones sobre una base de datos que presenta la información en estructuras normalizadas, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.\n¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.\nA este paquete podemos llamarlo transacción y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de sistemas transaccionales. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo ACID:\nCon esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter analítico.",
+    "text": "6.1 Transacciones\nLos sistemas de gestión de datos deben cumplir el requisito de responder en tiempo y forma a las consultas que se les plantean, aunque estas pueden venir de dos propósitos muy diferenciados.\nCuando realizamos operaciones sobre una base de datos que presenta la información en estructuras normalizadas, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.\n¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.\nA este paquete podemos llamarlo transacción y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de sistemas transaccionales. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo ACID:\nCon esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter analítico.\nEl hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.",
     "crumbs": [
       "Sistemas gestores de datos",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
     ]
   },
   {
     "objectID": "content/sistemas/intro.html#transacciones",
     "href": "content/sistemas/intro.html#transacciones",
-    "title": "4  Sistemas de gestión de datos",
+    "title": "6  Sistemas de gestión de datos",
     "section": "",
     "text": "El dinero sale de la cuenta origen\nEl dinero se inserta en la cuenta destinataria\n\n\n&lt;transacciones&gt;\n    &lt;operación&gt;El dinero sale de la cuenta origen&lt;/operación&gt;\n    &lt;operación&gt;El dinero se inserta en la cuenta destinataria&lt;/operación&gt;\n&lt;transacciones/&gt;\n\n\nAtomicidad: La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos\nConsistencia: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.\nIndependencia: El aislamiento de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento\nDurable: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.",
     "crumbs": [
       "Sistemas gestores de datos",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
     ]
   },
   {
     "objectID": "content/sistemas/intro.html#oltp-vs-olap",
     "href": "content/sistemas/intro.html#oltp-vs-olap",
-    "title": "4  Sistemas de gestión de datos",
-    "section": "4.2 OLTP vs OLAP",
-    "text": "4.2 OLTP vs OLAP\nOLTP (Procesamiento Transaccional en Línea) y OLAP (Procesamiento Analítico en Línea) son dos enfoques diferentes para el manejo de bases de datos, diseñados para propósitos distintos dentro de la gestión de datos. OLTP se centra en el procesamiento de transacciones en tiempo real, como operaciones bancarias, compras en línea o gestión de inventarios, y está optimizado para manejar un gran número de transacciones cortas que implican operaciones de inserción, actualización y eliminación (INSERT, UPDATE, DELETE). Estos sistemas priorizan tiempos de respuesta rápidos (en milisegundos), alta concurrencia y consistencia de datos mediante propiedades ACID, lo que garantiza la integridad de las transacciones.\nEn contraste, los sistemas OLAP están diseñados para el análisis de grandes volúmenes de datos históricos y agregaciones voluminosas, apoyando tareas de inteligencia de negocio como informes, planificación y descubrimiento de tendencias. Las consultas OLAP suelen ser complejas, implican agregaciones (como suma, promediado) y análisis multidimensional, y pueden tardar desde segundos hasta horas en ejecutarse. Estos sistemas están optimizados para operaciones de lectura masiva y utilizan estructuras particulars como el esquema en estrella o en copo de nieve para mejorar el rendimiento de las consultas analíticas.\nPrecisamente por ser los sistemas transaccionales la fuente de información para las plataformas que soportan consultas OLAP, que requieren de reestructurar parte de la información, una pieza clave en este ecosistema son los procesos de transformación de datos.",
+    "title": "6  Sistemas de gestión de datos",
+    "section": "6.2 OLTP vs OLAP",
+    "text": "6.2 OLTP vs OLAP\nOLTP (Procesamiento Transaccional en Línea) y OLAP (Procesamiento Analítico en Línea) son dos enfoques diferentes para el manejo de bases de datos, diseñados para propósitos distintos dentro de la gestión de datos. OLTP se centra en el procesamiento de transacciones en tiempo real, como operaciones bancarias, compras en línea o gestión de inventarios, y está optimizado para manejar un gran número de transacciones cortas que implican operaciones de inserción, actualización y eliminación (INSERT, UPDATE, DELETE). Estos sistemas priorizan tiempos de respuesta rápidos (en milisegundos), alta concurrencia y consistencia de datos mediante propiedades ACID, lo que garantiza la integridad de las transacciones.\nEn contraste, los sistemas OLAP están diseñados para el análisis de grandes volúmenes de datos históricos y agregaciones voluminosas, apoyando tareas de inteligencia de negocio como informes, planificación y descubrimiento de tendencias. Las consultas OLAP suelen ser complejas, implican agregaciones (como suma, promediado) y análisis multidimensional, y pueden tardar desde segundos hasta horas en ejecutarse. Estos sistemas están optimizados para operaciones de lectura masiva y utilizan estructuras particulars como el esquema en estrella o en copo de nieve para mejorar el rendimiento de las consultas analíticas.\nPrecisamente por ser los sistemas transaccionales la fuente de información para las plataformas que soportan consultas OLAP, que requieren de reestructurar parte de la información, una pieza clave en este ecosistema son los procesos de transformación de datos.",
     "crumbs": [
       "Sistemas gestores de datos",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
     ]
   },
   {
     "objectID": "content/sistemas/intro.html#etlelt",
     "href": "content/sistemas/intro.html#etlelt",
-    "title": "4  Sistemas de gestión de datos",
-    "section": "4.3 ETL/ELT",
-    "text": "4.3 ETL/ELT\nExtract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).\nEsto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.\n\n\n\nCiclo de vida de los datos\n\n\nQuizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:\n\nOrquestadores para coordinar las distintas fases\nPlataformas de computación distribuida\nSistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos\nProgramación, desde SQL y Python a frameworks como Apache Spark, Kafka Streams, etc…",
+    "title": "6  Sistemas de gestión de datos",
+    "section": "6.3 ETL/ELT",
+    "text": "6.3 ETL/ELT\nExtract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).\nEsto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.\n\n\n\nCiclo de vida de los datos\n\n\nQuizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:\n\nOrquestadores para coordinar las distintas fases\nPlataformas de computación distribuida\nSistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos\nProgramación, desde SQL y Python a frameworks como Apache Spark, Kafka Streams, etc…",
     "crumbs": [
       "Sistemas gestores de datos",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/rdbms_transaccional.html",
+    "href": "content/sistemas/rdbms_transaccional.html",
+    "title": "7  Base de datos operacional",
+    "section": "",
+    "text": "Pensemos que necesitamos plantear una web, un sistema con capas frontales de presentación de datos, servicios back-end de gestión de lógicas de negocio y un sistema de almacenamiento de datos.\n\n\n\n\n\nflowchart LR\n    df[(Base de datos)]\n    bend[Lógica de negocio]\n    fend[Capa visual]\n\n    df --- bend\n    bend --- fend\n\n\n\n\n\n\nEn los últimos años, la gestión de la capa transaccional ha evolucionado significativamente. Tradicionalmente, los sistemas de bases de datos como DB2 o PostgreSQL se encargaban de controlar las transacciones, asegurando la integridad y coherencia de los datos mediante mecanismos internos. Sin embargo, con el auge de arquitecturas más complejas y distribuidas, esta responsabilidad ha pasado en gran medida a los frameworks de desarrollo liberando de esta carga al sistema de almacenamiento.\nFrameworks como Spring en Java, entre otros, permiten definir y gestionar transacciones directamente en la lógica de negocio, desacoplando el control transaccional del sistema de almacenamiento. Esto facilita la implementación de reglas de negocio más flexibles y adaptadas a las necesidades de cada aplicación, además de permitir la integración con múltiples fuentes de datos y servicios externos. Así, la capa transaccional se ha convertido en una parte fundamental de los frameworks modernos, proporcionando herramientas avanzadas para el manejo de la consistencia y la recuperación ante fallos.\nLa base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar acabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Base de datos operacional</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html",
     "href": "content/load/intro.html",
-    "title": "5  Extracción",
+    "title": "8  Extracción",
     "section": "",
-    "text": "5.1 Bases de datos\nUno de los pasos primeros que deberemos hacer es conocer los datos a extraer y las características base de estos:\nDe modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.\nFrecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:\nMuchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.",
+    "text": "8.1 Bases de datos\nUno de los pasos primeros que deberemos hacer es conocer los datos a extraer y las características base de estos:\nDe modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.\nFrecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:\nMuchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#bases-de-datos",
     "href": "content/load/intro.html#bases-de-datos",
-    "title": "5  Extracción",
+    "title": "8  Extracción",
     "section": "",
     "text": "SQL: Sistemas de origen tabular (RDBMS) a los que podemos interrogar con sentencias SQL para extraer la información necesaria. Son sistemas de consulta por lo que a no ser que dispongan de un campo informando de la fecha de la información, es difícil gestionar posibles variaciones con respecto a las cargas anteriores sin almacenar en un sistema intermedio la información para comparar que fue cargado y qué es nuevo.\nNoSQL: Sistemas de origen no tabular que suelen disponer la información en formatos modernos, siendo JSON el más habitual. Esto obliga a identificar si el destino permite el registro de información de estructura variable o debemos darle un formato tabular antes de poder insertarla. Al igual que con las bases de datos tabulares, deberemos ver qué medios tenemos para poder identificar los registros sumados o que hayan variado desde la última consulta.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#apis",
     "href": "content/load/intro.html#apis",
-    "title": "5  Extracción",
-    "section": "5.2 APIs",
-    "text": "5.2 APIs\nUno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.",
+    "title": "8  Extracción",
+    "section": "8.2 APIs",
+    "text": "8.2 APIs\nUno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#colas",
     "href": "content/load/intro.html#colas",
-    "title": "5  Extracción",
-    "section": "5.3 Colas",
-    "text": "5.3 Colas\nLos sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este buffer que retiene los datos hasta ser consumidos o expiren.",
+    "title": "8  Extracción",
+    "section": "8.3 Colas",
+    "text": "8.3 Colas\nLos sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este buffer que retiene los datos hasta ser consumidos o expiren.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/transform/intro.html",
     "href": "content/transform/intro.html",
-    "title": "6  Transformación",
+    "title": "9  Transformación",
     "section": "",
     "text": "pendiente",
     "crumbs": [
       "Transformación de datos",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Transformación</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Transformación</span>"
     ]
   },
   {
@@ -268,23 +333,23 @@
   {
     "objectID": "content/explotacion/bi.html",
     "href": "content/explotacion/bi.html",
-    "title": "7  Inteligencia de negocio",
+    "title": "10  Inteligencia de negocio",
     "section": "",
     "text": "La inteligencia de negocio o Business Intelligence (BI) es sin duda uno de los recursos clave a la hora de conocer la actividad de nuestra empresa. Toda esa información que los datos ocultan, si la manipulamos de forma correcta y la presentamos de un modo lógico puede ayudarnos a determinar si estamos comprando de más, vendiendo de menos, si nuestras líneas de fabricación están siendo bien empleadas o si nuestros almacenes requieren una renovación del stock.",
     "crumbs": [
       "Explotación de los datos",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Inteligencia de negocio</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Inteligencia de negocio</span>"
     ]
   },
   {
     "objectID": "content/explotacion/ds.html",
     "href": "content/explotacion/ds.html",
-    "title": "8  Ciencia de datos",
+    "title": "11  Ciencia de datos",
     "section": "",
     "text": "pendiente",
     "crumbs": [
       "Explotación de los datos",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Ciencia de datos</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Ciencia de datos</span>"
     ]
   },
   {

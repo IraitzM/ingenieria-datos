@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1&nbsp; Introducción – Ingeniería de datos</title>
+<title>4&nbsp; Modelado analítico – Ingeniería de datos</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,49 +20,29 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../content/modelado/intro.html" rel="next">
-<link href="../index.html" rel="prev">
-<link href="../cover.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-7f38787a8fb4e156b95eea4cf8a57695.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../content/modelado/nuevos_paradigmas.html" rel="next">
+<link href="../../content/modelado/desnormalizar.html" rel="prev">
+<link href="../../cover.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-7f38787a8fb4e156b95eea4cf8a57695.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -109,9 +89,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<meta property="og:title" content="1&nbsp; Introducción – Ingeniería de datos">
+<meta property="og:title" content="4&nbsp; Modelado analítico – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -128,7 +111,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/modelado/intro.html">Modelado de datos</a></li><li class="breadcrumb-item"><a href="../../content/modelado/modelado_analitico.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -143,7 +126,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="../">Ingeniería de datos</a> 
+      <a href="../../">Ingeniería de datos</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/IraitzM/ingenieria-datos" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
     <a href="https://www.linkedin.com/sharing/share-offsite/?url=|url|" title="LinkedIn" class="quarto-navigation-tool px-1" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
@@ -159,46 +142,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Prólogo</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/intro.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../content/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../content/modelado/intro.html" class="sidebar-item-text sidebar-link">
+            <a href="../../content/modelado/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Modelado de datos</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/modelado/modelado_analitico.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/modelado/modelado_analitico.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/modelado/nuevos_paradigmas.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/modelado/nuevos_paradigmas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
   </div>
 </li>
@@ -215,13 +198,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
@@ -238,7 +221,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/load/intro.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
@@ -255,7 +238,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/transform/intro.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
@@ -263,7 +246,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../content/explotacion/intro.html" class="sidebar-item-text sidebar-link">
+            <a href="../../content/explotacion/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Explotación de los datos</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -272,13 +255,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
@@ -286,7 +269,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/references.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Referencias</span></a>
   </div>
 </li>
@@ -301,7 +284,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
@@ -317,8 +300,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#inicios" id="toc-inicios" class="nav-link active" data-scroll-target="#inicios"><span class="header-section-number">1.1</span> Inicios</a></li>
-  <li><a href="#los-sistemas-centrales" id="toc-los-sistemas-centrales" class="nav-link" data-scroll-target="#los-sistemas-centrales"><span class="header-section-number">1.2</span> Los sistemas centrales</a></li>
+  <li><a href="#modelado-dimensional" id="toc-modelado-dimensional" class="nav-link active" data-scroll-target="#modelado-dimensional"><span class="header-section-number">4.1</span> Modelado dimensional</a>
+  <ul class="collapse">
+  <li><a href="#scd" id="toc-scd" class="nav-link" data-scroll-target="#scd"><span class="header-section-number">4.1.1</span> SCD</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -328,9 +313,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/modelado/intro.html">Modelado de datos</a></li><li class="breadcrumb-item"><a href="../../content/modelado/modelado_analitico.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></h1>
 </div>
 
 
@@ -347,102 +332,132 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p>Este libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:</p>
+<p>El modelado cubre una necesidad muy real y operativa. El modelado, tal y como lo hemos vista hasta ahora permite eliminar redundancias, hacer la gestión de datos coherente con los requisitos del negocio y aún así, sacar el máximo provecho del sistema. Sin embargo no está orientado a ser sencillo de operar o entender por parte de aquellos que quieren extraer conocimiento de los datos.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../assets/northwind.webp" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Ejemplo de la base de datos Northwind</figcaption>
+</figure>
+</div>
+<p>Por ello, ya que de todos modos tenemos que disponer un sistema pensado para analítica, por qué no darle una forma que haga la información más fácil de consumir. Aunque este proceso no está falto de trabajo. <a href="https://en.wikipedia.org/wiki/Bill_Inmon">William (Bill) Inmon</a> es reconocido como el padre del concepto almacén de datos o <em>data warehouse</em>. Un data warehouse es esencialmente ese repositorio donde residen todos los datos de la compañía, no de forma operacional, si no para poder realizar consultas, análisis e informes sobre ellos. Esto permite además unificar las distintas fuentes para dar una visión cohesionada de los procesos en la empresa y sus datos asociados.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Data_Warehouse_%26_Data-Marts_overview.svg/1920px-Data_Warehouse_%26_Data-Marts_overview.svg.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Data Warehouse</figcaption>
+</figure>
+</div>
+<p>Sin embargo, el modelo de Inmon requería una consolidación entre fuentes que es difícil de construir. Además, el ritmo al que operan las distintas unidades hace que existan urgencias de datos que “no pueden esperar”. Un enfoque algo más pragmático que permitía enfocarse en necesidades concretas es asociado con <a href="https://en.wikipedia.org/wiki/Ralph_Kimball">Ralph Kimball</a>. Fue años más tarde y quizás el progreso de la tecnología hacia los 90 hizo posible el enfoque de Kimball pero sin duda es uno de los modelados más comunes cuando nos acercamos a las áreas de consumo de datos. De hecho, el término Business Intelligence se inicia en esta época gracias al foco en el warehousing y el modelado analítico.</p>
+<section id="modelado-dimensional" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="modelado-dimensional"><span class="header-section-number">4.1</span> Modelado dimensional</h2>
+<p>El <a href="https://es.wikipedia.org/wiki/Modelado_dimensional">modelado dimensional</a>, en estrella o también referido Kimball, se enfoca en disponer las dimensiones de corte de los análisis en tablas muy próximas a los conceptos de entidad que comentamos en el modelado <a href="../../content/modelado/intro.html#entidades-y-relaciones">Entidad-Relación</a> y los hechos, acontecimientos en otra entidad de crecimiento más frecuente y vertical.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    DIM_EMPLEADOS {
+        numero id_empleado PK
+        texto nombre
+        texto apellido
+        texto desc_territorio
+    }
+    DIM_CLIENTES {
+        numero id_cliente PK
+        texto nombre
+    }
+    DIM_PRODUCTOS {
+        numero id_producto PK
+        texto nombre
+        texto categoria
+        numero precio_unitario
+        texto proveedor
+    }
+    DIM_TIEMPO {
+        numero id_tiempo PK
+        numero anio
+        numero mes
+        numero trimestre
+        texto nombre_mes
+        numero dia
+        texto dia_semana
+    }
+    FACT_FACTURAS {
+        numero id_tiempo FK
+        numero id_cliente FK
+        numero id_producto FK
+        numero id_empleado FK
+        numero total
+    }
+
+    DIM_TIEMPO }|--o{ FACT_FACTURAS: fecha
+    DIM_PRODUCTOS }|--o{ FACT_FACTURAS: producto
+    DIM_CLIENTES }|--o{ FACT_FACTURAS: cliente
+    DIM_EMPLEADOS }|--o{ FACT_FACTURAS: empleado
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>El enfoque se basa en que las dimensiones son instancias de datos poco cambiantes (listado de empleados, clientes, productos,…) mientras que los hechos crecen de forma constante (en nuestro caso las ventas facturadas). Aunque esto no siempre pasa así y podemos tener información cambiante en nuestras dimensiones como veremos <a href="#scd">más adelante</a>.</p>
+<p>Las dimensiones cubren aspectos relativos a puntos de corte en nuestros análisis:</p>
 <ul>
-<li>Sistemas de gestión de datos</li>
-<li>Mejores prácticas en el modelado</li>
-<li>Herramientas de volcado y transformación</li>
-<li>Buen gobierno de los datos</li>
-<li>Calidad y monitorización</li>
+<li>quién</li>
+<li>qué</li>
+<li>dónde</li>
+<li>cómo</li>
 </ul>
-<p>E intentaremos cubrir las últimas tendencias en herramientas, en la medida de lo posible. Para ello, deberemos hacernos eco del ciclo de vida de los datos en toda su extensión. Aunque nos centraremos mucho en los conceptos y las herramientas serán ejemplos en los que podemos implementar estas ideas.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../assets/datacycle.png" class="img-fluid figure-img" style="width:50.0%"></p>
-<figcaption>Ciclo de vida de los datos</figcaption>
-</figure>
+<p>Mientras que los hechos son los hechos cuantificables:</p>
+<ul>
+<li>cuántos</li>
+<li>en total</li>
+<li>promedio</li>
+</ul>
+<p>De modo que la pregunta de negocio</p>
+<blockquote class="blockquote">
+<p>¿cuantos pedidos que contengan salsa de tomate hemos tenido en este último trimestre?</p>
+</blockquote>
+<p>Se aterriza indicando:</p>
+<ul>
+<li>DIM_PRODUCTOS: salsa de tomate</li>
+<li>DIM_TIEMPO: último trimestre</li>
+<li>FACT_FACTURAS: número de facturas asociadas a DIMs</li>
+</ul>
+<p>Pudiendo variar únicamente la métrica (cuantas unidades, cuantos dolares, qué porcentaje de descuentos, …). Esto hace que muchas consultas puedan componerse de forma aditiva en base a preguntas frecuentes, atributos concretos usados frecuentemente, agregadas de forma distinta.</p>
+<section id="scd" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="scd"><span class="header-section-number">4.1.1</span> SCD</h3>
+<p>El concepto de <strong>Slowly Changing Dimension (SCD)</strong> nos obliga a indicar distintos valores para nuestras dimensiones en base a una condición temporal. Un producto que cambia de nombre a una fecha dada, un cliente que cambia de apellidos,… Existen varias modalidades con las que podemos intentar paliar este hecho, y una de las más comunes es historificar los cambios con fechas de efecto, también conocido como dimensión de <strong>tipo 2</strong>.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    DIM_EMPLEADOS {
+        numero id_empleado PK
+        texto nombre
+        texto apellido
+        texto desc_territorio
+        fecha efectivo_desde
+        fecha efectivo_hasta
+    }
+    DIM_CLIENTES {
+        numero id_cliente PK
+        texto nombre
+        fecha efectivo_desde
+        fecha efectivo_hasta
+    }
+</pre>
 </div>
-<p>El del ingeniero de datos es un rol a caballo entre las áreas de negocio y los desarrolladores de software, tomando gran parte de <a href="https://pydevtools.com/handbook/">las prácticas aprendidas de estos</a>. Aunque enfocándonos en la puesta al servicio de los datos.</p>
-<p>Y empezaremos con un concepto que no está exento de controversia: <a href="../content/modelado/intro.html">el modelado de datos</a>. Aunque para ello, debemos entender el contexto histórico que rodea a los ingenieros de datos trasladándonos a los primeros sistemas de gestión de datos y su aparición a finales de los años 60 del siglo pasado.</p>
-<section id="inicios" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="inicios"><span class="header-section-number">1.1</span> Inicios</h2>
-<p>Con frecuencia olvidamos el recorrido que hemos realizado en el mundo de la informática y cómo impacta las decisiones o aspectos de los sistemas de hoy día.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Curiosidades
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Es habitual que las nuevas generaciones no sepan el origen del símbolo de guardar.</p>
-<p>El disquete que era un medio <em>físico</em> para guardar contenido (el pendrive de los antiguos).</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../assets/disquete.webp" class="img-fluid figure-img" style="width:40.0%"></p>
-<figcaption>Disquete físico</figcaption>
-</figure>
-</div>
-<p>Pero mucha gente se olvida que la configuración de teclado que empleamos en la actualidad es España, QWERTY por las primeras teclas en el extremo superior izquierdo de los teclados, es una herencia de las máquinas de escribir y que esta configuración a pesar de no ser la que nos permite una mayor velocidad de redacción impedía que los martillos de la máquina se bloquearan.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../assets/maquinaescribir.webp" class="img-fluid figure-img" style="width:60.0%"></p>
-<figcaption>Martillos en una máquina de escribir</figcaption>
-</figure>
-</div>
-<p>La misma razón por la que la tecla enter en sus inicios se conocía como retorno de carro (<em>return carriage</em>) cuando no existe carro que retornar en nuestros ordenadores modernos.</p>
-</div>
-</div>
-</div>
-<p>Por eso es importante entender el trasfondo histórico y las herencias que a pesar de no ser muy lógicas, determinan algunas de las prácticas que nos encontramos en la actualidad.</p>
-</section>
-<section id="los-sistemas-centrales" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="los-sistemas-centrales"><span class="header-section-number">1.2</span> Los sistemas centrales</h2>
-<p>En sus inicios, las máquinas evolucionaron de máquinas individuales donde tarjetas perforadas determinaban los automatismos, a sistemas electrónicos y sofisticados que disponían de canales de entrada y salida (teclados y pantallas) para realizar las acciones que determinaban las acciones de la máquina.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../assets/oldibm.webp" class="img-fluid figure-img" style="width:40.0%"></p>
-<figcaption>Aquellos maravillosos años</figcaption>
-</figure>
-</div>
-<p><a href="https://es.wikipedia.org/wiki/IBM">International Business Machines</a> (IBM) fue una de las primeras compañías en realizar esa transición de máquinas que habían servido para fines militares al ámbito comercial, corporativo, al servicio de instituciones privadas con problemas de grandes dimensiones.</p>
-<p>En aquella época las máquinas que hoy llamamos ordenadores o computadoras eran recursos muy costosos y por ello, existían unidades centrales a las que se accedía desde nodos terminales. Sistemas únicamente de acceso a la máquina a la que estaban conectadas para pedirle que hiciera algo, introducir datos de cuentas de cliente, operaciones de cálculo y balances, etc. Lo habitual en la empresa donde este rol lo cubrían secretarias que venían de ámbitos como la mecanografía.</p>
-<p>No existía internet además y una vez salíamos del dominio de la empresa no se podía actuar sobre esos sistemas. Había que hablar en un lenguaje de muy bajo nivel con la máquina, poco intuitivo para gente poco versada en esas tecnologías. Eran tiempos oscuros.</p>
-<p>Estos sistemas gestionaban tanto los datos que los empleados iban registrando así como las acciones que se realizaban sobre estos con rutinas que reflejan la operativa de la compañía: procesos de compra, transferencias bancarias, facturación de servicios y contabilidad general, entre otros.</p>
-<p>Son los que conocemos como <a href="sistemas/intro">sistemas centrales de datos</a> y gran parte de este trabajo se lo debemos a una persona en concreto, <a href="https://es.wikipedia.org/wiki/Edgar_Frank_Codd">Edgar Frank Codd</a>, y su trabajo en este ámbito titulado <em>Un modelo tabular<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> de datos para grandes bancos de datos compartidos</em> <span class="citation" data-cites="codd1970relational">(<a href="references.html#ref-codd1970relational" role="doc-biblioref">Codd 1970</a>)</span>.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Mainframe y COBOL
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Os sorprendería la cantidad de empresas que aún a día de hoy emplean máquinas mainframe con programas COBOL que muy pocos individuos a nivel global saben a ciencia cierta lo que hacen. Es parte de la deuda técnica que muchas empresas no terminan de quitarse de encima por mucho avance de la tecnología que haya. Es parte de nuestra componente humana y la dificultad que nos supone <em>el cambio</em>.</p>
+<p></p></figure><p></p>
 </div>
 </div>
 </div>
+<p>Esto nos obliga a añadir condiciones que filtren los registros vigentes, o indiquen la fecha de efecto pudiendo así consultar la información como hubiera sido consultada en un intervalo entre fechas efectivas. Esto sin duda complica la composición de consulta, aunque nos permite copar con estos cambios.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-codd1970relational" class="csl-entry" role="listitem">
-Codd, Edgar F. 1970. <span>«A relational model of data for large shared data banks»</span>. <em>Communications of the ACM</em> 13 (6): 377-87.
-</div>
-</div>
 </section>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>Uso la traducción tabular de el término inglés <em>relation</em> que se refiere a la estructura de los datos y la traducción a relacional puede dar a entender una gestión relacional que no es tal en los sistemas que ideó Codd.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
 </section>
 
 </main> <!-- /main -->
@@ -847,13 +862,13 @@ Codd, Edgar F. 1970. <span>«A relational model of data for large shared data ba
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../index.html" class="pagination-link" aria-label="Prólogo">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Prólogo</span>
+      <a href="../../content/modelado/desnormalizar.html" class="pagination-link" aria-label="Desnormalizar">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/modelado/intro.html" class="pagination-link" aria-label="Modelado de datos">
-        <span class="nav-page-text">Modelado de datos</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/modelado/nuevos_paradigmas.html" class="pagination-link" aria-label="Nuevos paradigmas">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
