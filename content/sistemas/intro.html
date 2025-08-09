@@ -20,41 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -240,6 +205,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -254,7 +225,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
       </ul>
@@ -271,7 +242,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
       </ul>
@@ -288,13 +259,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -332,9 +303,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#transacciones" id="toc-transacciones" class="nav-link active" data-scroll-target="#transacciones"><span class="header-section-number">6.1</span> Transacciones</a></li>
-  <li><a href="#oltp-vs-olap" id="toc-oltp-vs-olap" class="nav-link" data-scroll-target="#oltp-vs-olap"><span class="header-section-number">6.2</span> OLTP vs OLAP</a></li>
-  <li><a href="#etlelt" id="toc-etlelt" class="nav-link" data-scroll-target="#etlelt"><span class="header-section-number">6.3</span> ETL/ELT</a></li>
+  <li><a href="#operacional" id="toc-operacional" class="nav-link active" data-scroll-target="#operacional"><span class="header-section-number">6.1</span> Operacional</a></li>
+  <li><a href="#analítico" id="toc-analítico" class="nav-link" data-scroll-target="#analítico"><span class="header-section-number">6.2</span> Analítico</a>
+  <ul class="collapse">
+  <li><a href="#etlelt" id="toc-etlelt" class="nav-link" data-scroll-target="#etlelt"><span class="header-section-number">6.2.1</span> ETL/ELT</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -364,37 +337,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 <p>Los sistemas de gestión de datos deben cumplir el requisito de responder en tiempo y forma a las consultas que se les plantean, aunque estas pueden venir de dos propósitos muy diferenciados.</p>
-<section id="transacciones" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="transacciones"><span class="header-section-number">6.1</span> Transacciones</h2>
-<p>Cuando realizamos operaciones sobre una base de datos que presenta la información en <a href="../../content/modelado/formasnormales.html">estructuras normalizadas</a>, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.</p>
-<ol type="1">
-<li>El dinero sale de la cuenta origen</li>
-<li>El dinero se inserta en la cuenta destinataria</li>
-</ol>
-<p>¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">transacciones</span>&gt;</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">operación</span>&gt;El dinero sale de la cuenta origen&lt;/<span class="kw">operación</span>&gt;</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">operación</span>&gt;El dinero se inserta en la cuenta destinataria&lt;/<span class="kw">operación</span>&gt;</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">transacciones</span>/&gt;</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>A este paquete podemos llamarlo <strong>transacción</strong> y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de <strong>sistemas transaccionales</strong>. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo <strong>ACID</strong>:</p>
-<ul>
-<li><strong>Atomicidad</strong>: La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos</li>
-<li><strong>Consistencia</strong>: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.</li>
-<li><strong>Independencia</strong>: El aislamiento de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento</li>
-<li><strong>Durable</strong>: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.</li>
-</ul>
-<p>Con esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter <strong>analítico</strong>.</p>
-<p>El hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.</p>
+<p>Los sistemas pensados para el procesamiento de transacciones en línea (On Line Transaction Processing o <strong>OLTP</strong>) y los sistemas para el procesamiento analítico en línea (On Line Analytical Processing o <strong>OLAP</strong>) son dos enfoques diferentes para el manejo de bases de datos, diseñados para propósitos distintos dentro de la gestión de datos y el propio ciclo de vida que estos cumplen.</p>
+<section id="operacional" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="operacional"><span class="header-section-number">6.1</span> Operacional</h2>
+<p>OLTP se centra en el procesamiento de transacciones en tiempo real, como operaciones bancarias, compras en línea o gestión de inventarios, y está optimizado para manejar un gran número de transacciones cortas que implican operaciones de inserción, actualización y eliminación (INSERT, UPDATE, DELETE). Estos sistemas priorizan tiempos de respuesta rápidos (en milisegundos), alta concurrencia y consistencia de datos mediante <a href="../../content/sistemas/rdbms_transaccional.html#acid">propiedades ACID</a>, lo que garantiza la integridad de las transacciones.</p>
 </section>
-<section id="oltp-vs-olap" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="oltp-vs-olap"><span class="header-section-number">6.2</span> OLTP vs OLAP</h2>
-<p>OLTP (Procesamiento Transaccional en Línea) y OLAP (Procesamiento Analítico en Línea) son dos enfoques diferentes para el manejo de bases de datos, diseñados para propósitos distintos dentro de la gestión de datos. OLTP se centra en el procesamiento de transacciones en tiempo real, como operaciones bancarias, compras en línea o gestión de inventarios, y está optimizado para manejar un gran número de transacciones cortas que implican operaciones de inserción, actualización y eliminación (INSERT, UPDATE, DELETE). Estos sistemas priorizan tiempos de respuesta rápidos (en milisegundos), alta concurrencia y consistencia de datos mediante propiedades ACID, lo que garantiza la integridad de las transacciones.</p>
+<section id="analítico" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="analítico"><span class="header-section-number">6.2</span> Analítico</h2>
 <p>En contraste, los sistemas OLAP están diseñados para el análisis de grandes volúmenes de datos históricos y agregaciones voluminosas, apoyando tareas de inteligencia de negocio como informes, planificación y descubrimiento de tendencias. Las consultas OLAP suelen ser complejas, implican agregaciones (como suma, promediado) y análisis multidimensional, y pueden tardar desde segundos hasta horas en ejecutarse. Estos sistemas están optimizados para operaciones de lectura masiva y utilizan estructuras particulars como el esquema en estrella o en copo de nieve para mejorar el rendimiento de las consultas analíticas.</p>
 <p>Precisamente por ser los sistemas transaccionales la fuente de información para las plataformas que soportan consultas OLAP, que requieren de reestructurar parte de la información, una pieza clave en este ecosistema son los procesos de transformación de datos.</p>
-</section>
-<section id="etlelt" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="etlelt"><span class="header-section-number">6.3</span> ETL/ELT</h2>
-<p>Extract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).</p>
+<section id="etlelt" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="etlelt"><span class="header-section-number">6.2.1</span> ETL/ELT</h3>
+<p><strong>E</strong>xtract, <strong>L</strong>oad y <strong>T</strong>ransform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).</p>
 <p>Esto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -404,13 +358,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <p>Quizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:</p>
 <ul>
-<li>Orquestadores para coordinar las distintas fases</li>
-<li>Plataformas de computación distribuida</li>
-<li>Sistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos</li>
-<li>Programación, desde SQL y Python a frameworks como Apache Spark, Kafka Streams, etc…</li>
+<li><strong>Orquestadores</strong> para coordinar las distintas fases</li>
+<li>Plataformas de <strong>computación distribuida</strong></li>
+<li>Sistemas de <strong>validación y registro de metadatos</strong> para resolver problemas mediante linaje de datos</li>
+<li><strong>Programación</strong>, desde SQL y simple Bash a lenguajes más flexibles como Python o frameworks como Apache Spark, Kafka Streams, etc…</li>
 </ul>
+<p>Los ingenieros tenemos cierta tendencia en centrarnos en las herramientas pero no debemos olvidar que el propósito es disponer los datos en tiempo informa para nuestros clientes, los usuarios de los datos.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

@@ -205,6 +205,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -219,7 +225,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
       </ul>
@@ -236,7 +242,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
       </ul>
@@ -253,13 +259,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -348,8 +354,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>LINKs: Donde se registran los eventos o hechos que vinculan una o más entidades</li>
 <li>SATELITEs: Donde se alberga la información asociada a una entidad para una fecha concreta</li>
 </ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Data_Vault_Example.png/500px-Data_Vault_Example.png" class="img-fluid figure-img"></p>
+<figcaption>Estructuras base de un Data Vault (HUBs, LINKs y SATELITEs)</figcaption>
+</figure>
+</div>
 <p>Tanto los HUBs como los LINKs llevan huellas temporales de carácter efectivo e identifican la fuente de donde la instancia fue informada, de manera que resulta sencillo realizar viajes temporales a los datos efectivos a una fecha dada. El hecho de trabajar con huellas temporales hace que podamos plantear un sistema en el que simplemente nuevos datos son añadidos y en tiempo de consumo se seleccionen aquellos que tomen efecto.</p>
-<p>Existen otras modalidades que extienden más aún este concepto aunque Data Vault ha sido quizás el paradigma que más adopción presenta teniendo en cuenta la complejidad técnica y madurez del equipo que requiere su correcto gobierno.</p>
+<p>En un mecanismo intermediario entre datos de fuentes normalizadas y entornos donde el consumo se realiza en base a dimensiones y hechos. Algunos lo regieren incluso como una <a href="https://www.scalefree.com/consulting/data-vault-2-0/">metodología ágil</a> debido a sus características. Son un perfecto nexo que permite una adición incremental pero con huella temporal de todos los hechos acontecidos y permite promocionar la información consumible a las capas de acceso de los usuarios en base a sus necesidades.</p>
+<p>Existen otras modalidades que extienden más aún este concepto aunque Data Vault ha sido quizás el paradigma que más adopción presenta teniendo en cuenta la complejidad técnica y madurez del equipo que requiere su correcto gobierno. Cabe destacar que todos estos conceptos no implican un <strong>uso de tablas</strong> para almacenar la información. Esto ha venido determinado por la tecnología disponible en cada momento.</p>
 
 
 </section>

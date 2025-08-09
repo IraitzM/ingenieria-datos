@@ -189,6 +189,17 @@
     ]
   },
   {
+    "objectID": "content/modelado/modelado_analitico.html#modelado-de-copo-de-nieve",
+    "href": "content/modelado/modelado_analitico.html#modelado-de-copo-de-nieve",
+    "title": "4  Modelado analítico",
+    "section": "4.2 Modelado de copo de nieve",
+    "text": "4.2 Modelado de copo de nieve\nEl modelo de copo de nieve extiende el modelo estrella arriba mencionado a jerarquías de dimensiones. Pensemos que por ejemplo, cuando hablamos del territorio que cubre un empleado, esto se refiere a una entidad o dimensión en esta etapa, donde se determinan todos los territorios existentes.\n\n\n\n\n\nerDiagram\n    DIM_TERRITORIOS {\n        numero id_territorio PK\n        texto desc_territorio\n    }\n    DIM_EMPLEADOS {\n        numero id_empleado PK\n        texto nombre\n        texto apellido\n        texto id_territorio FK\n    }\n    DIM_CLIENTES {\n        numero id_cliente PK\n        texto nombre\n    }\n    DIM_PROVEEDORES {\n        numero id_proveedor PK\n        texto nombre\n        texto direccion\n    }\n    DIM_CATEGORIAS {\n        numero id_categoria PK\n        texto categoria\n    }\n    DIM_PRODUCTOS {\n        numero id_producto PK\n        texto nombre\n        numero precio_unitario\n        numero id_categoria FK\n        numero id_proveedor FK\n    }\n    DIM_TRIMESTRES {\n        numero id_trimestre PK\n        texto trimestre\n        numero num_trimestre\n    }\n    DIM_MESES {\n        numero id_mes PK\n        texto mes\n        numero num_mes\n    }\n    DIM_TIEMPO {\n        numero id_tiempo PK\n        numero anio\n        numero id_mes FK\n        numero id_trimestre FK\n    }\n    FACT_FACTURAS {\n        numero id_tiempo FK\n        numero id_cliente FK\n        numero id_producto FK\n        numero id_empleado FK\n        numero total\n    }\n\n    DIM_TERRITORIOS }|--o{ DIM_EMPLEADOS: en\n    DIM_CATEGORIAS }|--o{ DIM_PRODUCTOS: pertenece\n    DIM_PROVEEDORES }|--o{ DIM_PRODUCTOS: provee\n\n    DIM_TRIMESTRES }|--o{ DIM_TIEMPO: en\n    DIM_MESES }|--o{ DIM_TIEMPO: en\n\n    DIM_TIEMPO }|--o{ FACT_FACTURAS: fecha\n    DIM_PRODUCTOS }|--o{ FACT_FACTURAS: producto\n    DIM_CLIENTES }|--o{ FACT_FACTURAS: cliente\n    DIM_EMPLEADOS }|--o{ FACT_FACTURAS: empleado\n\n\n\n\n\n\nSi conseguimos tener dimensiones comunes a todas las áreas de negocio, esto nos da una consolidación de la información con poca variación entre unidades. Sin embargo, suele ser común la variación entre unidades de esas dimensiones comunes a nuestra actividad. El control sobre estas dimensiones clave ha hecho que la gestión de datos maestros se convierta en una actividad en si misma.\n\n4.2.1 Gestión de datos maestros\nLa gestión de datos maestros (Master Data Management, MDM) es una disciplina tecnológica en la que las empresas y los departamentos de TI colaboran para garantizar la uniformidad, la precisión, la gestión, la coherencia semántica y la responsabilidad de los activos de datos maestros compartidos de la empresa.\nEs un marco utilizado por empresas que buscan aprovechar sus datos de manera más efectiva, asegurando la precisión, coherencia y accesibilidad de los datos comerciales centrales, como información de clientes, detalles de productos o registros de proveedores.\nMDM se define como una disciplina en la que el negocio y la tecnología trabajan juntos para asegurar la uniformidad, la exactitud, la custodia, la consistencia semántica y la responsabilidad de los activos de datos maestros oficiales de la empresa.",
+    "crumbs": [
+      "Modelado de datos",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelado analítico</span>"
+    ]
+  },
+  {
     "objectID": "content/modelado/nuevos_paradigmas.html",
     "href": "content/modelado/nuevos_paradigmas.html",
     "title": "5  Nuevos paradigmas",
@@ -204,7 +215,7 @@
     "href": "content/modelado/nuevos_paradigmas.html#modelos-lógicos-ensamblados",
     "title": "5  Nuevos paradigmas",
     "section": "",
-    "text": "5.1.1 Data Vault\nUna de las implementaciones lógicas de las ELM es Data Vault, donde los conceptos previos se presentan con nombres específicos:\n\nHUBs: Donde se registran las instancias de las entidades\nLINKs: Donde se registran los eventos o hechos que vinculan una o más entidades\nSATELITEs: Donde se alberga la información asociada a una entidad para una fecha concreta\n\nTanto los HUBs como los LINKs llevan huellas temporales de carácter efectivo e identifican la fuente de donde la instancia fue informada, de manera que resulta sencillo realizar viajes temporales a los datos efectivos a una fecha dada. El hecho de trabajar con huellas temporales hace que podamos plantear un sistema en el que simplemente nuevos datos son añadidos y en tiempo de consumo se seleccionen aquellos que tomen efecto.\nExisten otras modalidades que extienden más aún este concepto aunque Data Vault ha sido quizás el paradigma que más adopción presenta teniendo en cuenta la complejidad técnica y madurez del equipo que requiere su correcto gobierno.",
+    "text": "5.1.1 Data Vault\nUna de las implementaciones lógicas de las ELM es Data Vault, donde los conceptos previos se presentan con nombres específicos:\n\nHUBs: Donde se registran las instancias de las entidades\nLINKs: Donde se registran los eventos o hechos que vinculan una o más entidades\nSATELITEs: Donde se alberga la información asociada a una entidad para una fecha concreta\n\n\n\n\nEstructuras base de un Data Vault (HUBs, LINKs y SATELITEs)\n\n\nTanto los HUBs como los LINKs llevan huellas temporales de carácter efectivo e identifican la fuente de donde la instancia fue informada, de manera que resulta sencillo realizar viajes temporales a los datos efectivos a una fecha dada. El hecho de trabajar con huellas temporales hace que podamos plantear un sistema en el que simplemente nuevos datos son añadidos y en tiempo de consumo se seleccionen aquellos que tomen efecto.\nEn un mecanismo intermediario entre datos de fuentes normalizadas y entornos donde el consumo se realiza en base a dimensiones y hechos. Algunos lo regieren incluso como una metodología ágil debido a sus características. Son un perfecto nexo que permite una adición incremental pero con huella temporal de todos los hechos acontecidos y permite promocionar la información consumible a las capas de acceso de los usuarios en base a sus necesidades.\nExisten otras modalidades que extienden más aún este concepto aunque Data Vault ha sido quizás el paradigma que más adopción presenta teniendo en cuenta la complejidad técnica y madurez del equipo que requiere su correcto gobierno. Cabe destacar que todos estos conceptos no implican un uso de tablas para almacenar la información. Esto ha venido determinado por la tecnología disponible en cada momento.",
     "crumbs": [
       "Modelado de datos",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Nuevos paradigmas</span>"
@@ -215,40 +226,18 @@
     "href": "content/sistemas/intro.html",
     "title": "6  Sistemas de gestión de datos",
     "section": "",
-    "text": "6.1 Transacciones\nLos sistemas de gestión de datos deben cumplir el requisito de responder en tiempo y forma a las consultas que se les plantean, aunque estas pueden venir de dos propósitos muy diferenciados.\nCuando realizamos operaciones sobre una base de datos que presenta la información en estructuras normalizadas, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.\n¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.\nA este paquete podemos llamarlo transacción y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de sistemas transaccionales. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo ACID:\nCon esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter analítico.\nEl hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.",
+    "text": "6.1 Operacional\nLos sistemas de gestión de datos deben cumplir el requisito de responder en tiempo y forma a las consultas que se les plantean, aunque estas pueden venir de dos propósitos muy diferenciados.\nLos sistemas pensados para el procesamiento de transacciones en línea (On Line Transaction Processing o OLTP) y los sistemas para el procesamiento analítico en línea (On Line Analytical Processing o OLAP) son dos enfoques diferentes para el manejo de bases de datos, diseñados para propósitos distintos dentro de la gestión de datos y el propio ciclo de vida que estos cumplen.\nOLTP se centra en el procesamiento de transacciones en tiempo real, como operaciones bancarias, compras en línea o gestión de inventarios, y está optimizado para manejar un gran número de transacciones cortas que implican operaciones de inserción, actualización y eliminación (INSERT, UPDATE, DELETE). Estos sistemas priorizan tiempos de respuesta rápidos (en milisegundos), alta concurrencia y consistencia de datos mediante propiedades ACID, lo que garantiza la integridad de las transacciones.",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
     ]
   },
   {
-    "objectID": "content/sistemas/intro.html#transacciones",
-    "href": "content/sistemas/intro.html#transacciones",
+    "objectID": "content/sistemas/intro.html#analítico",
+    "href": "content/sistemas/intro.html#analítico",
     "title": "6  Sistemas de gestión de datos",
-    "section": "",
-    "text": "El dinero sale de la cuenta origen\nEl dinero se inserta en la cuenta destinataria\n\n\n&lt;transacciones&gt;\n    &lt;operación&gt;El dinero sale de la cuenta origen&lt;/operación&gt;\n    &lt;operación&gt;El dinero se inserta en la cuenta destinataria&lt;/operación&gt;\n&lt;transacciones/&gt;\n\n\nAtomicidad: La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos\nConsistencia: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.\nIndependencia: El aislamiento de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento\nDurable: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.",
-    "crumbs": [
-      "Sistemas gestores de datos",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
-    ]
-  },
-  {
-    "objectID": "content/sistemas/intro.html#oltp-vs-olap",
-    "href": "content/sistemas/intro.html#oltp-vs-olap",
-    "title": "6  Sistemas de gestión de datos",
-    "section": "6.2 OLTP vs OLAP",
-    "text": "6.2 OLTP vs OLAP\nOLTP (Procesamiento Transaccional en Línea) y OLAP (Procesamiento Analítico en Línea) son dos enfoques diferentes para el manejo de bases de datos, diseñados para propósitos distintos dentro de la gestión de datos. OLTP se centra en el procesamiento de transacciones en tiempo real, como operaciones bancarias, compras en línea o gestión de inventarios, y está optimizado para manejar un gran número de transacciones cortas que implican operaciones de inserción, actualización y eliminación (INSERT, UPDATE, DELETE). Estos sistemas priorizan tiempos de respuesta rápidos (en milisegundos), alta concurrencia y consistencia de datos mediante propiedades ACID, lo que garantiza la integridad de las transacciones.\nEn contraste, los sistemas OLAP están diseñados para el análisis de grandes volúmenes de datos históricos y agregaciones voluminosas, apoyando tareas de inteligencia de negocio como informes, planificación y descubrimiento de tendencias. Las consultas OLAP suelen ser complejas, implican agregaciones (como suma, promediado) y análisis multidimensional, y pueden tardar desde segundos hasta horas en ejecutarse. Estos sistemas están optimizados para operaciones de lectura masiva y utilizan estructuras particulars como el esquema en estrella o en copo de nieve para mejorar el rendimiento de las consultas analíticas.\nPrecisamente por ser los sistemas transaccionales la fuente de información para las plataformas que soportan consultas OLAP, que requieren de reestructurar parte de la información, una pieza clave en este ecosistema son los procesos de transformación de datos.",
-    "crumbs": [
-      "Sistemas gestores de datos",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
-    ]
-  },
-  {
-    "objectID": "content/sistemas/intro.html#etlelt",
-    "href": "content/sistemas/intro.html#etlelt",
-    "title": "6  Sistemas de gestión de datos",
-    "section": "6.3 ETL/ELT",
-    "text": "6.3 ETL/ELT\nExtract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).\nEsto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.\n\n\n\nCiclo de vida de los datos\n\n\nQuizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:\n\nOrquestadores para coordinar las distintas fases\nPlataformas de computación distribuida\nSistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos\nProgramación, desde SQL y Python a frameworks como Apache Spark, Kafka Streams, etc…",
+    "section": "6.2 Analítico",
+    "text": "6.2 Analítico\nEn contraste, los sistemas OLAP están diseñados para el análisis de grandes volúmenes de datos históricos y agregaciones voluminosas, apoyando tareas de inteligencia de negocio como informes, planificación y descubrimiento de tendencias. Las consultas OLAP suelen ser complejas, implican agregaciones (como suma, promediado) y análisis multidimensional, y pueden tardar desde segundos hasta horas en ejecutarse. Estos sistemas están optimizados para operaciones de lectura masiva y utilizan estructuras particulars como el esquema en estrella o en copo de nieve para mejorar el rendimiento de las consultas analíticas.\nPrecisamente por ser los sistemas transaccionales la fuente de información para las plataformas que soportan consultas OLAP, que requieren de reestructurar parte de la información, una pieza clave en este ecosistema son los procesos de transformación de datos.\n\n6.2.1 ETL/ELT\nExtract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).\nEsto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.\n\n\n\nCiclo de vida de los datos\n\n\nQuizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:\n\nOrquestadores para coordinar las distintas fases\nPlataformas de computación distribuida\nSistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos\nProgramación, desde SQL y simple Bash a lenguajes más flexibles como Python o frameworks como Apache Spark, Kafka Streams, etc…\n\nLos ingenieros tenemos cierta tendencia en centrarnos en las herramientas pero no debemos olvidar que el propósito es disponer los datos en tiempo informa para nuestros clientes, los usuarios de los datos.",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
@@ -259,65 +248,120 @@
     "href": "content/sistemas/rdbms_transaccional.html",
     "title": "7  Base de datos operacional",
     "section": "",
-    "text": "Pensemos que necesitamos plantear una web, un sistema con capas frontales de presentación de datos, servicios back-end de gestión de lógicas de negocio y un sistema de almacenamiento de datos.\n\n\n\n\n\nflowchart LR\n    df[(Base de datos)]\n    bend[Lógica de negocio]\n    fend[Capa visual]\n\n    df --- bend\n    bend --- fend\n\n\n\n\n\n\nEn los últimos años, la gestión de la capa transaccional ha evolucionado significativamente. Tradicionalmente, los sistemas de bases de datos como DB2 o PostgreSQL se encargaban de controlar las transacciones, asegurando la integridad y coherencia de los datos mediante mecanismos internos. Sin embargo, con el auge de arquitecturas más complejas y distribuidas, esta responsabilidad ha pasado en gran medida a los frameworks de desarrollo liberando de esta carga al sistema de almacenamiento.\nFrameworks como Spring en Java, entre otros, permiten definir y gestionar transacciones directamente en la lógica de negocio, desacoplando el control transaccional del sistema de almacenamiento. Esto facilita la implementación de reglas de negocio más flexibles y adaptadas a las necesidades de cada aplicación, además de permitir la integración con múltiples fuentes de datos y servicios externos. Así, la capa transaccional se ha convertido en una parte fundamental de los frameworks modernos, proporcionando herramientas avanzadas para el manejo de la consistencia y la recuperación ante fallos.\nLa base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar acabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores.",
+    "text": "7.1 Transacciones\nPara entender las capacidades de los sistemas empleados en tiempo de aplicación, debemos entender primero el concepto de las transacciones.\nCuando realizamos operaciones sobre una base de datos que presenta la información en estructuras normalizadas, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.\n¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Base de datos operacional</span>"
     ]
   },
   {
+    "objectID": "content/sistemas/rdbms_transaccional.html#transacciones",
+    "href": "content/sistemas/rdbms_transaccional.html#transacciones",
+    "title": "7  Base de datos operacional",
+    "section": "",
+    "text": "El dinero sale de la cuenta origen\nEl dinero se inserta en la cuenta destinataria\n\n\n&lt;transacciones&gt;\n    &lt;operación&gt;El dinero sale de la cuenta origen&lt;/operación&gt;\n    &lt;operación&gt;El dinero se inserta en la cuenta destinataria&lt;/operación&gt;\n&lt;transacciones/&gt;\n\n7.1.1 ACID\nA este paquete podemos llamarlo transacción y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de sistemas transaccionales. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo ACID:\n\nAtomicidad: La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos\nConsistencia: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.\nIndependencia: El aislamiento de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento\nDurable: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.\n\nCon esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter analítico.\nEl hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.\n\n\n7.1.2 Usos\nPensemos que necesitamos plantear una web, un sistema con capas frontales de presentación de datos, servicios back-end de gestión de lógicas de negocio y un sistema de almacenamiento de datos.\n\n\n\n\n\nflowchart LR\n    df[(Base de datos)]\n    bend[Lógica de negocio]\n    fend[Capa visual]\n\n    df --- bend\n    bend --- fend\n\n\n\n\n\n\nEn los últimos años, la gestión de la capa transaccional ha evolucionado significativamente. Tradicionalmente, los sistemas de bases de datos como DB2 o PostgreSQL se encargaban de controlar las transacciones, asegurando la integridad y coherencia de los datos mediante mecanismos internos. Sin embargo, con el auge de arquitecturas más complejas y distribuidas, esta responsabilidad ha pasado en gran medida a los frameworks de desarrollo liberando de esta carga al sistema de almacenamiento.\nFrameworks como Spring en Java, entre otros, permiten definir y gestionar transacciones directamente en la lógica de negocio, desacoplando el control transaccional del sistema de almacenamiento. Esto facilita la implementación de reglas de negocio más flexibles y adaptadas a las necesidades de cada aplicación, además de permitir la integración con múltiples fuentes de datos y servicios externos. Así, la capa transaccional se ha convertido en una parte fundamental de los frameworks modernos, proporcionando herramientas avanzadas para el manejo de la consistencia y la recuperación ante fallos.\nLa base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar acabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores. Y muy posiblemente debamos conocer algo de SQL para poder interactuar con estos sistemas.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Base de datos operacional</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/sql.html",
+    "href": "content/sistemas/sql.html",
+    "title": "8  Structured Query Language",
+    "section": "",
+    "text": "8.1 DDL\nTambién abreviado como SQL, es el lenguaje de alto nivel que desde los años 70 del siglo XX nos permite interactuar con estructuras tabulares en sistemas de gestión de bases de datos tabulares o RDBMS1.\nExisten varios subgrupos dentro de la especificación de SQL dependiendo de las tareas que nos interesen:\nY en los casos en los que nuestro sistema permita la gestión de transacciones Transaction Control Language (TCL).\nTras la etapa de modelado y haber seleccionado nuestro repositorio de datos, emplearemos los comandos que nos permiten crear el homólogo físico de nuestro modelo en el sistema.\nEs decir, si nuestro modelo dispone una tabla con ALUMNOS en nuestro modelo\nerDiagram\n    ALUMNOS {\n        numero id_alumno PK\n        texto nombre\n        texto apellido\n    }\nTenemos que crear las instrucciones que indican esta estructura al sistema\nUan cuestión clave cuestiones en esta sentencia, la tipología de datos deberá ser establecida en base a los tipos de datos que soporte nuestro sistema. Además, podemos incluir la restricción de que el id_alumno debe ser único,\nO bien crearlo en una única sentencia.\nSi, por ejemplo, seleccionamos SQLite para nuestro ejemplo, podemos ver cómo resulta de forma práctica.\nimport sqlite3\n\n# Conectamos con la base de datos chinook.db\ncon = sqlite3.connect(\"my.db\")\n\n# Obtenemos un cursor que utilizaremos para hacer las consultas\ncur = con.cursor()\nY continuar ejecutando nuestra creación de tabla.\n# La creamos si no existe\ncur.execute(\"\"\"\n    CREATE TABLE IF NOT EXISTS alumnos (\n        id_alumno INTEGER,\n        nombre TEXTO,\n        apellido TEXTO,\n        PRIMARY KEY(id_alumno)\n    )\n\"\"\");\n\n# Mostramos la información de la tabla\ncur.execute(\"PRAGMA table_info(alumnos)\").fetchall()\n\n[(0, 'id_alumno', 'INTEGER', 0, None, 1),\n (1, 'nombre', 'TEXTO', 0, None, 0),\n (2, 'apellido', 'TEXTO', 0, None, 0)]\nHemos añadido la condición IF NOT EXISTS que nos permite crear una tabla solo si no existe. Si intentara crearla existiendo previamente, nos arrojará un error.\n# La creamos si no existe\ncur.execute(\"\"\"\n    CREATE TABLE alumnos (\n        id_alumno INTEGER,\n        nombre TEXTO,\n        apellido TEXTO,\n        PRIMARY KEY(id_alumno)\n    )\n\"\"\");\n\n\n---------------------------------------------------------------------------\nOperationalError                          Traceback (most recent call last)\nCell In[4], line 2\n      1 # La creamos si no existe\n----&gt; 2 cur.execute(\"\"\"\n      3     CREATE TABLE alumnos (\n      4         id_alumno INTEGER,\n      5         nombre TEXTO,\n      6         apellido TEXTO,\n      7         PRIMARY KEY(id_alumno)\n      8     )\n      9 \"\"\");\n\nOperationalError: table alumnos already exists\nLa función .fetchall() tras la ejecución del PRAGMA se realice para que retorne la información. Un cursor ejecuta las acciones en el sistema destino, la base de datos, pero para obtener de vuelta el resultado de la operación, deberemos pedirlo expresamente.\nPodemos seguir extendiendo nuestro modelo, con el resto de estructuras, donde deberemos indicar los campos que registran claves foráneas, para que exista un nexo explícito entre ambas tablas. Esto permite, por ejemplo, que no de de alta a un alumno que no esté en el listado de alumnos previamente.\nerDiagram\n    ALUMNOS {\n        numero id_alumno PK\n        texto nombre\n        texto apellido\n    }\n    CURSA{\n        numero id_alumno FK\n        numero id_asignatura FK\n        numero id_profesor FK\n        numero anio\n    }\n    ASIGNATURAS {\n        numero id_asignatura PK\n        texto nombre\n    }\n    PROFESORES {\n        numero id_profesor PK\n        texto nombre\n    }\n\n    ALUMNOS }|--|{ CURSA: matriculado\n    CURSA }|--|{ ASIGNATURAS: cursando\n    PROFESORES ||--o{ CURSA: imparte\n# La creamos si no existe\ncur.execute(\"\"\"\n    CREATE TABLE IF NOT EXISTS asignaturas (\n        id_asignatura INTEGER PRIMARY KEY,\n        nombre TEXTO\n    )\n\"\"\");\n\ncur.execute(\"\"\"\n    CREATE TABLE IF NOT EXISTS cursa (\n        id_alumno INTEGER,\n        id_asignatura INTEGER,\n        FOREIGN KEY (id_alumno) REFERENCES alumnos (id_alumno),\n        FOREIGN KEY (id_asignatura) REFERENCES asignaturas (id_asignatura)\n    )\n\"\"\");\n\n# Mostramos la información de la tabla\ncur.execute(\"PRAGMA table_info(cursa)\").fetchall()\n\n[(0, 'id_alumno', 'INTEGER', 0, None, 0),\n (1, 'id_asignatura', 'INTEGER', 0, None, 0)]\nCon esto hemos informado de una estructura base que ahora podremos poblar con datos.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Structured Query Language</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/sql.html#ddl",
+    "href": "content/sistemas/sql.html#ddl",
+    "title": "8  Structured Query Language",
+    "section": "",
+    "text": "CREATE TABLE alumnos (\n    id_alumno INTEGER,\n    nombre TEXT,\n    apellido TEXT,\n)\n\nALTER TABLE alumnos ADD PRIMARY KEY(id_alumno)\n\nCREATE TABLE alumnos (\n    id_alumno INTEGER,\n    nombre TEXT,\n    apellido TEXT,\n    PRIMARY KEY (id_alumno)\n)\n\n\n\n\n\n\n\n\nAdvertencia\n\n\n\n\n\nPuede que necesitéis ejecutar\ncur.execute(\"\"\"PRAGMA foreign_keys = ON;\"\"\");\npara poder contemplar las restricciones de clave foránea que veremos más adelante.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Structured Query Language</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/sql.html#dml",
+    "href": "content/sistemas/sql.html#dml",
+    "title": "8  Structured Query Language",
+    "section": "8.2 DML",
+    "text": "8.2 DML\nEl lenguaje de manipulación de datos nos permite introducir información, alterarla, borrar y por último seleccionar o extraer información del sistema.\nInsertamos datos de un alumno.\n\ncur.execute(\"\"\"\n    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');\n\"\"\");\n\n\ncur.execute(\"\"\"\n    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');\n\"\"\");\n\n\n---------------------------------------------------------------------------\nIntegrityError                            Traceback (most recent call last)\nCell In[7], line 1\n----&gt; 1 cur.execute(\"\"\"\n      2     INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');\n      3 \"\"\");\n\nIntegrityError: UNIQUE constraint failed: alumnos.id_alumno\n\n\n\nEstas restricciones se extienden a las tablas con clave foránea, ya que podríamos estar matriculando a un alumno que no existe en una asignatura que no existe.\n\ncur.execute(\"\"\"\n    INSERT INTO cursa VALUES (2, 1);\n\"\"\");\n\n\n---------------------------------------------------------------------------\nIntegrityError                            Traceback (most recent call last)\nCell In[8], line 1\n----&gt; 1 cur.execute(\"\"\"\n      2     INSERT INTO cursa VALUES (2, 1);\n      3 \"\"\");\n\nIntegrityError: FOREIGN KEY constraint failed\n\n\n\nEs una de las labores clave de los sistemas transaccionales, garantizar que el sistema responde a las lógicas de los procesos de negocio que hemos modelado.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Structured Query Language</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/sql.html#footnotes",
+    "href": "content/sistemas/sql.html#footnotes",
+    "title": "8  Structured Query Language",
+    "section": "",
+    "text": "Os dejo una muy buena entrada sobre la historia de SQL↩︎",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Structured Query Language</span>"
+    ]
+  },
+  {
     "objectID": "content/load/intro.html",
     "href": "content/load/intro.html",
-    "title": "8  Extracción",
+    "title": "9  Extracción",
     "section": "",
-    "text": "8.1 Bases de datos\nUno de los pasos primeros que deberemos hacer es conocer los datos a extraer y las características base de estos:\nDe modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.\nFrecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:\nMuchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.",
+    "text": "9.1 Bases de datos\nUno de los pasos primeros que deberemos hacer es conocer los datos a extraer y las características base de estos:\nDe modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.\nFrecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:\nMuchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#bases-de-datos",
     "href": "content/load/intro.html#bases-de-datos",
-    "title": "8  Extracción",
+    "title": "9  Extracción",
     "section": "",
     "text": "SQL: Sistemas de origen tabular (RDBMS) a los que podemos interrogar con sentencias SQL para extraer la información necesaria. Son sistemas de consulta por lo que a no ser que dispongan de un campo informando de la fecha de la información, es difícil gestionar posibles variaciones con respecto a las cargas anteriores sin almacenar en un sistema intermedio la información para comparar que fue cargado y qué es nuevo.\nNoSQL: Sistemas de origen no tabular que suelen disponer la información en formatos modernos, siendo JSON el más habitual. Esto obliga a identificar si el destino permite el registro de información de estructura variable o debemos darle un formato tabular antes de poder insertarla. Al igual que con las bases de datos tabulares, deberemos ver qué medios tenemos para poder identificar los registros sumados o que hayan variado desde la última consulta.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#apis",
     "href": "content/load/intro.html#apis",
-    "title": "8  Extracción",
-    "section": "8.2 APIs",
-    "text": "8.2 APIs\nUno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.",
+    "title": "9  Extracción",
+    "section": "9.2 APIs",
+    "text": "9.2 APIs\nUno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#colas",
     "href": "content/load/intro.html#colas",
-    "title": "8  Extracción",
-    "section": "8.3 Colas",
-    "text": "8.3 Colas\nLos sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este buffer que retiene los datos hasta ser consumidos o expiren.",
+    "title": "9  Extracción",
+    "section": "9.3 Colas",
+    "text": "9.3 Colas\nLos sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este buffer que retiene los datos hasta ser consumidos o expiren.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/transform/intro.html",
     "href": "content/transform/intro.html",
-    "title": "9  Transformación",
+    "title": "10  Transformación",
     "section": "",
     "text": "pendiente",
     "crumbs": [
       "Transformación de datos",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Transformación</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Transformación</span>"
     ]
   },
   {
@@ -333,23 +377,23 @@
   {
     "objectID": "content/explotacion/bi.html",
     "href": "content/explotacion/bi.html",
-    "title": "10  Inteligencia de negocio",
+    "title": "11  Inteligencia de negocio",
     "section": "",
     "text": "La inteligencia de negocio o Business Intelligence (BI) es sin duda uno de los recursos clave a la hora de conocer la actividad de nuestra empresa. Toda esa información que los datos ocultan, si la manipulamos de forma correcta y la presentamos de un modo lógico puede ayudarnos a determinar si estamos comprando de más, vendiendo de menos, si nuestras líneas de fabricación están siendo bien empleadas o si nuestros almacenes requieren una renovación del stock.",
     "crumbs": [
       "Explotación de los datos",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Inteligencia de negocio</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Inteligencia de negocio</span>"
     ]
   },
   {
     "objectID": "content/explotacion/ds.html",
     "href": "content/explotacion/ds.html",
-    "title": "11  Ciencia de datos",
+    "title": "12  Ciencia de datos",
     "section": "",
     "text": "pendiente",
     "crumbs": [
       "Explotación de los datos",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Ciencia de datos</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Ciencia de datos</span>"
     ]
   },
   {

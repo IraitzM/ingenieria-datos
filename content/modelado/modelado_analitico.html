@@ -208,6 +208,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -222,7 +228,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
       </ul>
@@ -239,7 +245,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
       </ul>
@@ -256,13 +262,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -303,6 +309,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <li><a href="#modelado-dimensional" id="toc-modelado-dimensional" class="nav-link active" data-scroll-target="#modelado-dimensional"><span class="header-section-number">4.1</span> Modelado dimensional</a>
   <ul class="collapse">
   <li><a href="#scd" id="toc-scd" class="nav-link" data-scroll-target="#scd"><span class="header-section-number">4.1.1</span> SCD</a></li>
+  </ul></li>
+  <li><a href="#modelado-de-copo-de-nieve" id="toc-modelado-de-copo-de-nieve" class="nav-link" data-scroll-target="#modelado-de-copo-de-nieve"><span class="header-section-number">4.2</span> Modelado de copo de nieve</a>
+  <ul class="collapse">
+  <li><a href="#gestión-de-datos-maestros" id="toc-gestión-de-datos-maestros" class="nav-link" data-scroll-target="#gestión-de-datos-maestros"><span class="header-section-number">4.2.1</span> Gestión de datos maestros</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -455,6 +465,94 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Esto nos obliga a añadir condiciones que filtren los registros vigentes, o indiquen la fecha de efecto pudiendo así consultar la información como hubiera sido consultada en un intervalo entre fechas efectivas. Esto sin duda complica la composición de consulta, aunque nos permite copar con estos cambios.</p>
+</section>
+</section>
+<section id="modelado-de-copo-de-nieve" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="modelado-de-copo-de-nieve"><span class="header-section-number">4.2</span> Modelado de copo de nieve</h2>
+<p>El modelo de copo de nieve extiende el modelo estrella arriba mencionado a jerarquías de dimensiones. Pensemos que por ejemplo, cuando hablamos del territorio que cubre un empleado, esto se refiere a una entidad o dimensión en esta etapa, donde se determinan todos los territorios existentes.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    DIM_TERRITORIOS {
+        numero id_territorio PK
+        texto desc_territorio
+    }
+    DIM_EMPLEADOS {
+        numero id_empleado PK
+        texto nombre
+        texto apellido
+        texto id_territorio FK
+    }
+    DIM_CLIENTES {
+        numero id_cliente PK
+        texto nombre
+    }
+    DIM_PROVEEDORES {
+        numero id_proveedor PK
+        texto nombre
+        texto direccion
+    }
+    DIM_CATEGORIAS {
+        numero id_categoria PK
+        texto categoria
+    }
+    DIM_PRODUCTOS {
+        numero id_producto PK
+        texto nombre
+        numero precio_unitario
+        numero id_categoria FK
+        numero id_proveedor FK
+    }
+    DIM_TRIMESTRES {
+        numero id_trimestre PK
+        texto trimestre
+        numero num_trimestre
+    }
+    DIM_MESES {
+        numero id_mes PK
+        texto mes
+        numero num_mes
+    }
+    DIM_TIEMPO {
+        numero id_tiempo PK
+        numero anio
+        numero id_mes FK
+        numero id_trimestre FK
+    }
+    FACT_FACTURAS {
+        numero id_tiempo FK
+        numero id_cliente FK
+        numero id_producto FK
+        numero id_empleado FK
+        numero total
+    }
+
+    DIM_TERRITORIOS }|--o{ DIM_EMPLEADOS: en
+    DIM_CATEGORIAS }|--o{ DIM_PRODUCTOS: pertenece
+    DIM_PROVEEDORES }|--o{ DIM_PRODUCTOS: provee
+
+    DIM_TRIMESTRES }|--o{ DIM_TIEMPO: en
+    DIM_MESES }|--o{ DIM_TIEMPO: en
+
+    DIM_TIEMPO }|--o{ FACT_FACTURAS: fecha
+    DIM_PRODUCTOS }|--o{ FACT_FACTURAS: producto
+    DIM_CLIENTES }|--o{ FACT_FACTURAS: cliente
+    DIM_EMPLEADOS }|--o{ FACT_FACTURAS: empleado
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Si conseguimos tener dimensiones comunes a todas las áreas de negocio, esto nos da una consolidación de la información con poca variación entre unidades. Sin embargo, suele ser común la variación entre unidades de esas dimensiones comunes a nuestra actividad. El control sobre estas dimensiones clave ha hecho que la gestión de datos maestros se convierta en una actividad en si misma.</p>
+<section id="gestión-de-datos-maestros" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="gestión-de-datos-maestros"><span class="header-section-number">4.2.1</span> Gestión de datos maestros</h3>
+<p>La gestión de datos maestros (Master Data Management, MDM) es una disciplina tecnológica en la que las empresas y los departamentos de TI colaboran para garantizar la uniformidad, la precisión, la gestión, la coherencia semántica y la responsabilidad de los activos de datos maestros compartidos de la empresa.</p>
+<p>Es un marco utilizado por empresas que buscan aprovechar sus datos de manera más efectiva, asegurando la precisión, coherencia y accesibilidad de los datos comerciales centrales, como información de clientes, detalles de productos o registros de proveedores.</p>
+<p>MDM se define como una disciplina en la que el negocio y la tecnología trabajan juntos para asegurar la uniformidad, la exactitud, la custodia, la consistencia semántica y la responsabilidad de los activos de datos maestros oficiales de la empresa.</p>
 
 
 </section>
