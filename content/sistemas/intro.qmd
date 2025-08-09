@@ -1,45 +1,22 @@
 # Sistemas de gestión de datos
 
-Los sistemas de gestión de datos deben cumplir el requisito de responder en tiempo y forma a las consultas que se les plantean, aunque estas pueden venir de dos propósitos muy diferenciados.
+Los sistemas de gestión de datos deben cumplir el requisito de responder en tiempo y forma a las consultas que se les plantean, aunque estas pueden venir de dos propósitos muy diferenciados. 
 
-## Transacciones
+Los sistemas pensados para el procesamiento de transacciones en línea (On Line Transaction Processing o **OLTP**) y los sistemas para el procesamiento analítico en línea (On Line Analytical Processing o **OLAP**) son dos enfoques diferentes para el manejo de bases de datos, diseñados para propósitos distintos dentro de la gestión de datos y el propio ciclo de vida que estos cumplen. 
 
-Cuando realizamos operaciones sobre una base de datos que presenta la información en [estructuras normalizadas](../modelado/formasnormales.qmd), casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.
+## Operacional
 
-1. El dinero sale de la cuenta origen
-2. El dinero se inserta en la cuenta destinataria
+OLTP se centra en el procesamiento de transacciones en tiempo real, como operaciones bancarias, compras en línea o gestión de inventarios, y está optimizado para manejar un gran número de transacciones cortas que implican operaciones de inserción, actualización y eliminación (INSERT, UPDATE, DELETE). Estos sistemas priorizan tiempos de respuesta rápidos (en milisegundos), alta concurrencia y consistencia de datos mediante [propiedades ACID](rdbms_transaccional.qmd#acid), lo que garantiza la integridad de las transacciones.
 
-¿Y si pasara algo en medio? Un corte, un fallo... ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.
-
-```xml
-<transacciones>
-    <operación>El dinero sale de la cuenta origen</operación>
-    <operación>El dinero se inserta en la cuenta destinataria</operación>
-<transacciones/>
-```
-
-A este paquete podemos llamarlo **transacción** y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de **sistemas transaccionales**. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo **ACID**:
-
-* **Atomicidad**:  La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos
-* **Consistencia**: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.
-* **Independencia**: El aislamiento  de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento
-* **Durable**: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.
-
-Con esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter **analítico**.
-
-El hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.
-
-## OLTP vs OLAP
-
-OLTP (Procesamiento Transaccional en Línea) y OLAP (Procesamiento Analítico en Línea) son dos enfoques diferentes para el manejo de bases de datos, diseñados para propósitos distintos dentro de la gestión de datos. OLTP se centra en el procesamiento de transacciones en tiempo real, como operaciones bancarias, compras en línea o gestión de inventarios, y está optimizado para manejar un gran número de transacciones cortas que implican operaciones de inserción, actualización y eliminación (INSERT, UPDATE, DELETE). Estos sistemas priorizan tiempos de respuesta rápidos (en milisegundos), alta concurrencia y consistencia de datos mediante propiedades ACID, lo que garantiza la integridad de las transacciones.
+## Analítico
 
 En contraste, los sistemas OLAP están diseñados para el análisis de grandes volúmenes de datos históricos y agregaciones voluminosas, apoyando tareas de inteligencia de negocio como informes, planificación y descubrimiento de tendencias. Las consultas OLAP suelen ser complejas, implican agregaciones (como suma, promediado) y análisis multidimensional, y pueden tardar desde segundos hasta horas en ejecutarse. Estos sistemas están optimizados para operaciones de lectura masiva y utilizan estructuras particulars como el esquema en estrella o en copo de nieve para mejorar el rendimiento de las consultas analíticas.
 
 Precisamente por ser los sistemas transaccionales la fuente de información para las plataformas que soportan consultas OLAP, que requieren de reestructurar parte de la información, una pieza clave en este ecosistema son los procesos de transformación de datos.
 
-## ETL/ELT
+### ETL/ELT
 
-Extract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).
+**E**xtract, **L**oad y **T**ransform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).
 
 Esto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.
 
@@ -47,7 +24,9 @@ Esto nos permite dibujar un ciclo de vida esperado de los datos que requiere nue
 
 Quizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:
 
-* Orquestadores para coordinar las distintas fases
-* Plataformas de computación distribuida
-* Sistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos
-* Programación, desde SQL y Python a frameworks como Apache Spark, Kafka Streams, etc...
+* **Orquestadores** para coordinar las distintas fases
+* Plataformas de **computación distribuida**
+* Sistemas de **validación y registro de metadatos** para resolver problemas mediante linaje de datos
+* **Programación**, desde SQL y simple Bash a lenguajes más flexibles como Python o frameworks como Apache Spark, Kafka Streams, etc...
+
+Los ingenieros tenemos cierta tendencia en centrarnos en las herramientas pero no debemos olvidar que el propósito es disponer los datos en tiempo informa para nuestros clientes, los usuarios de los datos.

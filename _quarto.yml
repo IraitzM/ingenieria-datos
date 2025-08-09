@@ -42,6 +42,7 @@ book:
       chapters:
       - content/sistemas/intro.qmd
       - content/sistemas/rdbms_transaccional.qmd
+      - content/sistemas/sql.qmd
 
     - part: "Ingesta de datos"
       chapters:

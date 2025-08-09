@@ -106,3 +106,86 @@ erDiagram
 ```
 
 Esto nos obliga a añadir condiciones que filtren los registros vigentes, o indiquen la fecha de efecto pudiendo así consultar la información como hubiera sido consultada en un intervalo entre fechas efectivas. Esto sin duda complica la composición de consulta, aunque nos permite copar con estos cambios.
+
+## Modelado de copo de nieve
+
+El modelo de copo de nieve extiende el modelo estrella arriba mencionado a jerarquías de dimensiones. Pensemos que por ejemplo, cuando hablamos del territorio que cubre un empleado, esto se refiere a una entidad o dimensión en esta etapa, donde se determinan todos los territorios existentes. 
+
+```{mermaid}
+erDiagram
+    DIM_TERRITORIOS {
+        numero id_territorio PK
+        texto desc_territorio
+    }
+    DIM_EMPLEADOS {
+        numero id_empleado PK
+        texto nombre
+        texto apellido
+        texto id_territorio FK
+    }
+    DIM_CLIENTES {
+        numero id_cliente PK
+        texto nombre
+    }
+    DIM_PROVEEDORES {
+        numero id_proveedor PK
+        texto nombre
+        texto direccion
+    }
+    DIM_CATEGORIAS {
+        numero id_categoria PK
+        texto categoria
+    }
+    DIM_PRODUCTOS {
+        numero id_producto PK
+        texto nombre
+        numero precio_unitario
+        numero id_categoria FK
+        numero id_proveedor FK
+    }
+    DIM_TRIMESTRES {
+        numero id_trimestre PK
+        texto trimestre
+        numero num_trimestre
+    }
+    DIM_MESES {
+        numero id_mes PK
+        texto mes
+        numero num_mes
+    }
+    DIM_TIEMPO {
+        numero id_tiempo PK
+        numero anio
+        numero id_mes FK
+        numero id_trimestre FK
+    }
+    FACT_FACTURAS {
+        numero id_tiempo FK
+        numero id_cliente FK
+        numero id_producto FK
+        numero id_empleado FK
+        numero total
+    }
+
+    DIM_TERRITORIOS }|--o{ DIM_EMPLEADOS: en
+    DIM_CATEGORIAS }|--o{ DIM_PRODUCTOS: pertenece
+    DIM_PROVEEDORES }|--o{ DIM_PRODUCTOS: provee
+
+    DIM_TRIMESTRES }|--o{ DIM_TIEMPO: en
+    DIM_MESES }|--o{ DIM_TIEMPO: en
+
+    DIM_TIEMPO }|--o{ FACT_FACTURAS: fecha
+    DIM_PRODUCTOS }|--o{ FACT_FACTURAS: producto
+    DIM_CLIENTES }|--o{ FACT_FACTURAS: cliente
+    DIM_EMPLEADOS }|--o{ FACT_FACTURAS: empleado
+```
+
+Si conseguimos tener dimensiones comunes a todas las áreas de negocio, esto nos da una consolidación de la información con poca variación entre unidades. Sin embargo, suele ser común la variación entre unidades de esas dimensiones comunes a nuestra actividad. El control sobre estas dimensiones clave ha hecho que la gestión de datos maestros se convierta en una actividad en si misma.
+
+### Gestión de datos maestros
+
+La gestión de datos maestros (Master Data Management, MDM) es una disciplina tecnológica en la que las empresas y los departamentos de TI colaboran para garantizar la uniformidad, la precisión, la gestión, la coherencia semántica y la responsabilidad de los activos de datos maestros compartidos de la empresa.
+
+Es un marco utilizado por empresas que buscan aprovechar sus datos de manera más efectiva, asegurando la precisión, coherencia y accesibilidad de los datos comerciales centrales, como información de clientes, detalles de productos o registros de proveedores.
+
+MDM se define como una disciplina en la que el negocio y la tecnología trabajan juntos para asegurar la uniformidad, la exactitud, la custodia, la consistencia semántica y la responsabilidad de los activos de datos maestros oficiales de la empresa.

@@ -1,0 +1,12 @@
+# En base de datos
+
+Cuando los sistemas permiten una carga de datos flexible y disponen de capacidad de computo, podemos hacernos valer de la propia sintaxis para que realice todas las transformaciones necesarias con mínimo movimiento de datos.
+
+Data Build Tool o [dbt](getdbt.com) se ha convertido en uno de los estándares a la hora de orquestar todas estas transformaciones.
+
+## Data Vault en DBT
+
+Disponemos de varias opciones que nos ayudan a iniciar el proyecto con la mayoría de las piezas activas:
+
+* AutomateDV: https://automate-dv.com/
+* DataVault4dbt: https://github.com/ScalefreeCOM/datavault4dbt

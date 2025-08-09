@@ -1,0 +1,213 @@
+# Structured Query Language
+
+También abreviado como SQL, es el lenguaje de alto nivel que desde los años 70 del siglo XX nos permite interactuar con estructuras tabulares en sistemas de gestión de bases de datos tabulares o RDBMS[^1].
+
+Existen varios subgrupos dentro de la especificación de SQL dependiendo de las tareas que nos interesen:
+
+* **Data Definition Language (DDL)** reúne los comandos necesarios para crear nuestras estructuras físicas tras tener claro qué vamos a almacenar en el sistema (posterior al [modelado](../modelado/intro.qmd))
+* **Data Manipulation Language (DML)** que reúne los comandos para insertar, borrar, actualizar y seleccionar, incluso agregando, la información existente en la base de datos.
+* **Data Control Language (DCL)** que dispone los comandos para dar o revocar el acceso a la información.
+
+Y en los casos en los que nuestro sistema permita la gestión de transacciones **Transaction Control Language (TCL)**.
+
+## DDL
+
+Tras la etapa de modelado y haber seleccionado nuestro repositorio de datos, emplearemos los comandos que nos permiten crear el homólogo físico de nuestro modelo en el sistema.
+
+Es decir, si nuestro modelo dispone una tabla con ALUMNOS en nuestro modelo
+
+```{mermaid}
+erDiagram
+    ALUMNOS {
+        numero id_alumno PK
+        texto nombre
+        texto apellido
+    }
+```
+
+Tenemos que crear las instrucciones que indican esta estructura al sistema
+
+```sql
+CREATE TABLE alumnos (
+    id_alumno INTEGER,
+    nombre TEXT,
+    apellido TEXT,
+)
+```
+
+Uan cuestión clave cuestiones en esta sentencia, la tipología de datos deberá ser establecida en base a los tipos de datos que soporte nuestro sistema. Además, podemos incluir la restricción de que el `id_alumno` debe ser único,
+
+```sql
+ALTER TABLE alumnos ADD PRIMARY KEY(id_alumno)
+```
+
+O bien crearlo en una única sentencia.
+```sql
+CREATE TABLE alumnos (
+    id_alumno INTEGER,
+    nombre TEXT,
+    apellido TEXT,
+    PRIMARY KEY (id_alumno)
+)
+```
+
+Si, por ejemplo, seleccionamos [SQLite](https://www.sqlitetutorial.net/) para nuestro ejemplo, podemos ver cómo resulta de forma práctica.
+
+```{python}
+import sqlite3
+
+# Conectamos con la base de datos chinook.db
+con = sqlite3.connect("my.db")
+
+# Obtenemos un cursor que utilizaremos para hacer las consultas
+cur = con.cursor()
+```
+
+:::{.callout-warning collapse="true"}
+Puede que necesitéis ejecutar
+
+```python
+cur.execute("""PRAGMA foreign_keys = ON;""");
+```
+
+para poder contemplar las restricciones de clave foránea que veremos más adelante.
+:::
+
+```{python}
+#| echo: false
+#| output: false
+cur.execute("""PRAGMA foreign_keys = ON;""");
+```
+
+Y continuar ejecutando nuestra creación de tabla.
+```{python}
+#| echo: true
+#| output: true
+
+# La creamos si no existe
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS alumnos (
+        id_alumno INTEGER,
+        nombre TEXTO,
+        apellido TEXTO,
+        PRIMARY KEY(id_alumno)
+    )
+""");
+
+# Mostramos la información de la tabla
+cur.execute("PRAGMA table_info(alumnos)").fetchall()
+```
+
+Hemos añadido la condición `IF NOT EXISTS` que nos permite crear una tabla solo si no existe. Si intentara crearla existiendo previamente, nos arrojará un error.
+
+```{python}
+#| echo: true
+#| output: true
+#| error: true
+
+# La creamos si no existe
+cur.execute("""
+    CREATE TABLE alumnos (
+        id_alumno INTEGER,
+        nombre TEXTO,
+        apellido TEXTO,
+        PRIMARY KEY(id_alumno)
+    )
+""");
+```
+
+La función `.fetchall()` tras la ejecución del PRAGMA se realice para que retorne la información. Un cursor ejecuta las acciones en el sistema destino, la base de datos, pero para obtener de vuelta el resultado de la operación, **deberemos pedirlo expresamente**.
+
+Podemos seguir extendiendo nuestro modelo, con el resto de estructuras, donde deberemos indicar los campos que registran claves foráneas, para que exista un nexo explícito entre ambas tablas. Esto permite, por ejemplo, que no de de alta a un alumno que no esté en el listado de alumnos previamente.
+
+```{mermaid}
+erDiagram
+    ALUMNOS {
+        numero id_alumno PK
+        texto nombre
+        texto apellido
+    }
+    CURSA{
+        numero id_alumno FK
+        numero id_asignatura FK
+        numero id_profesor FK
+        numero anio
+    }
+    ASIGNATURAS {
+        numero id_asignatura PK
+        texto nombre
+    }
+    PROFESORES {
+        numero id_profesor PK
+        texto nombre
+    }
+
+    ALUMNOS }|--|{ CURSA: matriculado
+    CURSA }|--|{ ASIGNATURAS: cursando
+    PROFESORES ||--o{ CURSA: imparte
+```
+
+```{python}
+#| echo: true
+#| output: true
+
+# La creamos si no existe
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS asignaturas (
+        id_asignatura INTEGER PRIMARY KEY,
+        nombre TEXTO
+    )
+""");
+
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS cursa (
+        id_alumno INTEGER,
+        id_asignatura INTEGER,
+	    FOREIGN KEY (id_alumno) REFERENCES alumnos (id_alumno),
+	    FOREIGN KEY (id_asignatura) REFERENCES asignaturas (id_asignatura)
+    )
+""");
+
+# Mostramos la información de la tabla
+cur.execute("PRAGMA table_info(cursa)").fetchall()
+```
+
+Con esto hemos informado de una estructura base que ahora podremos poblar con datos.
+
+## DML
+
+El lenguaje de manipulación de datos nos permite introducir información, alterarla, borrar y por último seleccionar o extraer información del sistema.
+
+Insertamos datos de un alumno.
+
+```{python}
+#| echo: true
+#| output: true
+cur.execute("""
+    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');
+""");
+```
+
+```{python}
+#| echo: true
+#| output: true
+#| error : true
+cur.execute("""
+    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');
+""");
+```
+
+Estas restricciones se extienden a las tablas con clave foránea, ya que podríamos estar matriculando a un alumno que no existe en una asignatura que no existe.
+
+```{python}
+#| echo: true
+#| output: true
+#| error : true
+cur.execute("""
+    INSERT INTO cursa VALUES (2, 1);
+""");
+```
+
+Es una de las labores clave de los sistemas transaccionales, garantizar que el sistema responde a las **lógicas de los procesos de negocio que hemos modelado**.
+
+[^1]: Os dejo una muy buena entrada sobre [la historia de SQL](https://learnsql.es/blog/la-historia-de-sql-como-empezo-todo/)

@@ -1,3 +1,6 @@
 # Quarto
 /.quarto/
 /_book/
+
+# Databases
+*.db

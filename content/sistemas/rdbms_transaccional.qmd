@@ -1,5 +1,38 @@
 # Base de datos operacional
 
+Para entender las capacidades de los sistemas empleados en tiempo de aplicación, debemos entender primero el concepto de las transacciones.
+
+## Transacciones
+
+Cuando realizamos operaciones sobre una base de datos que presenta la información en [estructuras normalizadas](../modelado/formasnormales.qmd), casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.
+
+1. El dinero sale de la cuenta origen
+2. El dinero se inserta en la cuenta destinataria
+
+¿Y si pasara algo en medio? Un corte, un fallo... ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.
+
+```xml
+<transacciones>
+    <operación>El dinero sale de la cuenta origen</operación>
+    <operación>El dinero se inserta en la cuenta destinataria</operación>
+<transacciones/>
+```
+
+### ACID
+
+A este paquete podemos llamarlo **transacción** y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de **sistemas transaccionales**. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo **ACID**:
+
+* **Atomicidad**:  La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos
+* **Consistencia**: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.
+* **Independencia**: El aislamiento  de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento
+* **Durable**: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.
+
+Con esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter **analítico**.
+
+El hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.
+
+### Usos
+
 Pensemos que necesitamos plantear una web, un sistema con capas frontales de presentación de datos, servicios back-end de gestión de lógicas de negocio y un sistema de almacenamiento de datos.
 
 ```{mermaid}
@@ -16,4 +49,4 @@ En los últimos años, la gestión de la capa transaccional ha evolucionado sign
 
 Frameworks como [Spring](https://spring.io/) en Java, entre otros, permiten definir y gestionar transacciones directamente en la lógica de negocio, desacoplando el control transaccional del sistema de almacenamiento. Esto facilita la implementación de reglas de negocio más flexibles y adaptadas a las necesidades de cada aplicación, además de permitir la integración con múltiples fuentes de datos y servicios externos. Así, la capa transaccional se ha convertido en una parte fundamental de los frameworks modernos, proporcionando herramientas avanzadas para el manejo de la consistencia y la recuperación ante fallos.
 
-La base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar acabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores.
+La base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar acabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores. Y muy posiblemente debamos conocer algo de [SQL](sql.qmd) para poder interactuar con estos sistemas.
