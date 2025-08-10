@@ -29,4 +29,4 @@ Quizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben e
 * Sistemas de **validación y registro de metadatos** para resolver problemas mediante linaje de datos
 * **Programación**, desde SQL y simple Bash a lenguajes más flexibles como Python o frameworks como Apache Spark, Kafka Streams, etc...
 
-Los ingenieros tenemos cierta tendencia en centrarnos en las herramientas pero no debemos olvidar que el propósito es disponer los datos en tiempo informa para nuestros clientes, los usuarios de los datos.
+Los ingenieros tenemos cierta tendencia en centrarnos en las herramientas pero no debemos olvidar que el propósito es disponer los datos en tiempo informa para nuestros clientes, los usuarios de los datos.Veremos más en detalle estos aspectos cuando hablemos de [arquitecturas de datos](arquitecturas.qmd).

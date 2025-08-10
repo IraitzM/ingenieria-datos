@@ -15,7 +15,7 @@ Ensemble Logical Modelling (ELM) es una técnica de abstracción que nos permite
 
 ### Data Vault
 
-Una de las implementaciones lógicas de las ELM es Data Vault, donde los conceptos previos se presentan con nombres específicos:
+Una de las implementaciones lógicas de las ELM se la debemos a [Daniel Lindstedt](https://en.wikipedia.org/wiki/Dan_Linstedt). Su enfoque, llamado Data Vault, realiza un mapeo bastante fiel de nuestro modelo lógico, con una flexibilidad adicional sobre la información ligada a los conceptos clave y las relaciones naturales:
 
 * HUBs: Donde se registran las instancias de las entidades
 * LINKs: Donde se registran los eventos o hechos que vinculan una o más entidades

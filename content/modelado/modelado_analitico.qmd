@@ -189,3 +189,7 @@ La gestión de datos maestros (Master Data Management, MDM) es una disciplina te
 Es un marco utilizado por empresas que buscan aprovechar sus datos de manera más efectiva, asegurando la precisión, coherencia y accesibilidad de los datos comerciales centrales, como información de clientes, detalles de productos o registros de proveedores.
 
 MDM se define como una disciplina en la que el negocio y la tecnología trabajan juntos para asegurar la uniformidad, la exactitud, la custodia, la consistencia semántica y la responsabilidad de los activos de datos maestros oficiales de la empresa.
+
+## Data Marts
+
+Siendo prácticos, por mucho que dispongamos de toda la información de una empresa, solo necesitaremos ciertas dimensiones y hechos para conformar nuestras métricas y realizar nuestro análisis. Habitualmente la organización se dispone de manera que un subconjunto de los datos es accesible por la unidad que los necesita y a ese subconjunto lo conocemos como **data mart**. Dónde reside y cómo se modela no cambia, pero es el nombre que se le atribuye a esas colecciones de tablas que permiten a la unidad gestionar los datos necesarios en el universo de datos disponibles.

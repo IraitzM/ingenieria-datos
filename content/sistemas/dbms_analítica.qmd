@@ -1,0 +1,59 @@
+# Base de datos analítica
+
+Si bien es cierto que heredamos de los sistemas operacionales la estructura base, las necesidades de un sistema analítico son muy distintos.
+
+## Ordenación de los datos
+
+Las bases de datos operacionales para facilitar el acceso concurrente a los datos, ordenan estos en filas.
+
+| id|nombre  | apellido  | edad |
+|---|--------|-----------|----|
+| 1 | Iraitz | Montalbán | 18 |
+| 2 | Javier | Garcia    | 19 |
+
+En los ficheros convencionales ordenados por filas la información la representaríamos así.
+
+> 1;Iraitz;Montalbán;18;2;Javier;Garcia;19
+
+Mientras que las consultas analíticas precisan acceder a la información en columnas. Por ejemplo, si quisiéramos hacer un promedio de la edad de nuestros alumnos, solo necesitamos esa cuarta columna. Es decir, sabiendo qué número de filas tenemos solo debemos posicionarnos donde empieza la cuarta columna y leer los siguientes 2 datos, obviando todo lo anterior.
+
+> 1;2;Iraitz;Javier;Montalbán;Garcia;18;19
+
+De forma que la ordenación columnar nos permite no tener que cargar la información innecesaria en la operación `AVG(edad)`.
+
+En el mundo de los sistemas de código abierto, [Apache Parquet](https://parquet.apache.org/) para el almacenamiento en disco y [Apache Arrow](https://arrow.apache.org/) para el mismo concepto en memoria se han convertido en un estándar.
+
+## Restricciones
+
+Para el caso general no existen cuestiones como las restricciones de clave primaria y clave foránea, ya que el sistema origen es quien impone estas restricciones y el sistema analítico recoge la información tal y como este la provea.
+
+Del mismo modo, de cara a hacer las operaciones más rápidas, los `índices` son clave en los sistemas operacionales. Las bases de datos analíticas no presentan esta necesidad ya que solemos consumir la información en bloques y se asumen las latencias de estos procesos por no impacta  a procesos de negocio. Si que tener una buena ordenación nos ayuda a no leer información que no vayamos a utilizar y aligerar la carga del proceso, de ahí que si sea común tener políticas de `particionado`.
+
+## Sistemas comunes
+
+### Nube
+
+* Azure Synpase SQL
+* Redshift
+* Google BigQuery
+
+### Multinube
+
+* Snowflake
+* Databricks
+* Motherduck
+
+### On-premise
+
+* Microsoft SQL Server
+* Apache Hadoop
+* Clickhouse
+* DuckDB
+
+### Motores de consulta
+
+* Trino
+* Pinot
+* Apache Spark
+* Stardust
+* Daft

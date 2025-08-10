@@ -178,13 +178,15 @@ Con esto hemos informado de una estructura base que ahora podremos poblar con da
 
 El lenguaje de manipulación de datos nos permite introducir información, alterarla, borrar y por último seleccionar o extraer información del sistema.
 
+### Inserciones
+
 Insertamos datos de un alumno.
 
 ```{python}
 #| echo: true
 #| output: true
 cur.execute("""
-    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');
+    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalban');
 """);
 ```
 
@@ -193,7 +195,7 @@ cur.execute("""
 #| output: true
 #| error : true
 cur.execute("""
-    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');
+    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalban');
 """);
 ```
 
@@ -209,5 +211,146 @@ cur.execute("""
 ```
 
 Es una de las labores clave de los sistemas transaccionales, garantizar que el sistema responde a las **lógicas de los procesos de negocio que hemos modelado**.
+
+### Actualizaciones
+
+Podemos actualizar su información, donde la cláusula where permite filtrar y aislar qué fila deberemos actualizar.
+
+```{python}
+#| echo: true
+#| output: true
+#| error : true
+cur.execute("""
+    UPDATE alumnos SET apellido = 'Montalbán' WHERE id_alumno = 1;
+""");
+```
+
+### Selección
+
+Y extraer información de estas tablas, recordando que si traemos información de la fuente deberemos hacer un `fetch` para que la retorne a nuestro cliente.
+
+```{python}
+#| echo: true
+#| output: true
+#| error : true
+cur.execute("""
+    SELECT * 
+    FROM alumnos
+""").fetchall()
+```
+
+### Desnormalización
+
+Si contamos con información asociada deberemos juntarla para poder extraer los datos relevantes.
+
+```{python}
+#| echo: true
+#| output: true
+
+# Nuevos alumnos
+cur.execute("""
+    INSERT INTO alumnos VALUES (2, 'Javier', 'Garcia'), (3, 'Miguel', 'Fernandez');
+""");
+
+# Nuevas asignaturas
+cur.execute("""
+    INSERT INTO asignaturas VALUES (1, 'Matemáticas'), (2, 'Historia'), (3, 'Biología');
+""");
+
+# Matrículas
+cur.execute("""
+    INSERT INTO cursa VALUES (1, 2), (2, 3), (3, 3);
+""");
+```
+
+Por ejemplo, ¿qué alumnos cursan biología? No podemos saberlo de la tabla que almacena la relación.
+
+```{python}
+#| echo: true
+#| output: true
+#| error : true
+cur.execute("""
+    SELECT * 
+    FROM cursa
+""").fetchall()
+```
+
+Deberemos juntarla con la tabla que presenta la información de las asignaturas y filtrar por nombre.
+
+```{python}
+#| echo: true
+#| output: true
+#| error : true
+cur.execute("""
+    SELECT * 
+    FROM cursa c
+        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura
+    WHERE asig.nombre = 'Biología'
+""").fetchall()
+```
+
+Y esta a su vez juntarla con los alumnos para obtener los datos de estos.
+```{python}
+#| echo: true
+#| output: true
+#| error : true
+cur.execute("""
+    SELECT * 
+    FROM cursa c
+        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura
+        JOIN alumnos alum ON alum.id_alumno = c.id_alumno
+    WHERE asig.nombre = 'Biología'
+""").fetchall()
+```
+
+Gracias a la estructura tabular tenemos las relaciones y los datos de nuestras entidades bien representados una vez que desnormalizamos y bien podemos seleccionar los atributos (columnas) que sean de interés.
+
+
+```{python}
+#| echo: true
+#| output: true
+#| error : true
+cur.execute("""
+    SELECT alum.nombre, alum.apellido
+    FROM cursa c
+        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura
+        JOIN alumnos alum ON alum.id_alumno = c.id_alumno
+    WHERE asig.nombre = 'Biología'
+""").fetchall()
+```
+
+O incluso realizar agregaciones sobre estos datos.
+
+```{python}
+#| echo: true
+#| output: true
+#| error : true
+cur.execute("""
+    SELECT asig.nombre, COUNT(alum.id_alumno) AS cuantos_alumnos
+    FROM cursa c
+        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura
+        JOIN alumnos alum ON alum.id_alumno = c.id_alumno
+    WHERE asig.nombre = 'Biología'
+    GROUP BY asig.nombre
+""").fetchall()
+```
+
+## TCL
+
+Las transacciones nos obligan a declarar procesos en la propia base de datos de forma que podamos invocarlos como si de funciones se trataran. Esto permite a la base de datos realizar su labor y gestionar todas las operaciones de las transacciones tal y como se precisan.
+
+```sql
+
+BEGIN TRANSACTION;
+
+INSERT INTO alumnos VALUES (4, 'María', 'Garcia');
+
+INSERT INTO cursa VALUES (4, 2), (4, 1);
+
+COMMIT;
+
+```
+
+El `COMMIT` final se hace cargo de realizar toda la operación y en caso de fallo siempre podremos recurrir al `ROLLBACK` que deshace los cambios realizados al inicio de la transacción sin afectar a otros procesos del sistema.
 
 [^1]: Os dejo una muy buena entrada sobre [la historia de SQL](https://learnsql.es/blog/la-historia-de-sql-como-empezo-todo/)

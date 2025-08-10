@@ -1,0 +1,119 @@
+# Elección de arquitecturas
+
+Es una fuente constante de debate pensar en si existe una mejor manera de hacer lo que hacemos, y cómo movemos los datos de un extremo al otro. Y siempre habrá nuevas piezas técnicas a descubrir que nos permitirán hacer las cosas mejor, pero la base, el servicio que ofrecemos a los consumidores de datos y la lógica tras nuestro modelo de datos debe perdurar ya que es un fiel reflejo de nuestra organización y esto no cambia tan frecuentemente. Ya lo decía [Conway](https://en.wikipedia.org/wiki/Melvin_Conway)
+
+> Las organizaciones que diseñan sistemas son un fiel reflejo de la comunicación en la misma.
+
+## Top-down o bottom-up
+
+Quizás con un foco más operativo debido a los sistemas existentes, tanto Bill Inmon como Ralph Kimball se enfrentaron al reto de almacenar de forma efectiva toda la información que contiene una organización, pero a su vez presentar vistas específicas y cohesionadas que permitieran a los usuarios entender lo que los datos reflejaban sobre el funcionamiento de la empresa en áreas concretas.
+
+El enfoque de Inmon abogaba por fijarnos en las fuentes y generar un sistema centralizado de datos al que luego poder destilar los recursos necesarios.
+```{mermaid}
+flowchart LR
+    source1["ERP empresarial"]
+    source2["Base de datos Logistica"]
+
+    etl1["ETL"]
+
+    dw[("Sistema informacional")]
+
+    etl2["ETL"]
+
+    datamart1["Data Mart Finanzas"]
+    datamart2["Data Mart Operaciones"]
+
+    source1 --- etl1
+    source2 --- etl1
+
+    etl1 --- dw
+
+    dw --- etl2
+
+    etl2 --- datamart1
+    etl2 --- datamart2
+```
+
+Mientras que la colección de Data Marts representan para Kimball el Data Warehouse, la pieza central. Desde las unidades de negocio podemos indicar las dimensiones y hechos a agregar que deberemos materializar en visiones concretas para cada unidad donde, entendemos, las dimensiones serán comunes dado que trabajamos en unidades de una empresa en una misma industria.
+```{mermaid}
+flowchart LR
+    source1["ERP empresarial"]
+    source2["Base de datos Logistica"]
+
+    etl1["ETL"]
+
+    subgraph dw ["Sistema informacional"]
+        datamart1["Data Mart Finanzas"]
+        datamart2["Data Mart Operaciones"]
+    end
+
+    source1 --- etl1
+    source2 --- etl1
+
+    etl1 --- dw
+
+```
+
+Estas dos aproximaciones han sentado la base de lo que es necesario en un warehouse, tanto para el equipo que lo mantiene y quieren dar un buen servicio como paras los consumidores de datos que los necesitan para tener una operativa inteligente.
+
+## La caja fuerte
+
+El Data Vault, se plateó como una metodología más allá del propio sistema de modelado intermedio. Habíamos aprendido mucho sobre cómo nos comunicamos con los negocios y sus necesidades. Pero esto también nos daba una perspectiva de cómo la información debía ser promocionada hacia las capas de consumo.
+
+![Fases de madurez del dato en DV](https://www.scalefree.com/wp-content/uploads/2024/03/Data-Vault-20-Architecture.png)
+
+Sabemos que debemos recibir información cruda de las fuentes, y esta información debe reposar al menos por un tiempo para poder ser entendida y gestionada. En el mejor caso, simplemente se integrará con las estructuras existentes. En el peor, deberemos alterar nuestro modelo para albergar estos nuevos datos e informar de su existencia a capas superiores. Es el área de aterrizaje de los datos o **staging**.
+
+Una vez entendidos los datos y su cohesión en los conceptos de negocio, formarán parte de la estructura base de nuestro sistema informacional. Quizás podamos aplicar algunas restricciones de negocio o validar la bondad de los datos recibidos. Todas estas fases son parte de una etapa intermedia que en el caso de data vault, forman el **raw vault**, con la información cruda ya estructurada; y el **business vault** donde ciertas reglas de negocio puedan ser aplicadas.
+
+Finalmente, el usuario debe ser abstraído de toda esta complejidad técnica. Una última capa pensada para la extracción de información, en un modelado en [estrella](../modelado/modelado_analitico.qmd#modelado-dimensional) o de tabla única, es donde la información resulta sencilla de consumir y con suerte disponemos de información adicional sobre cuándo fue actualizada por última vez, si algo ha cambiado en los datos, etc. Es la capa de consumo  o **business intelligence**.
+
+## La era Big Data
+
+Para principios de los 2000s, varias empresas se enfrentaban a problemas relativos a la _velocidad_ y _variabilidad_ de los datos que venían de procedencias ajenas a la red empresarial: internet. El _volumen_ [^1] que debían de procesar bien al vuelo como en reposo, crecía exponencialmente. Y si añadimos a esto la necesidad de modelar al mismo ritmo debido a la variabilidad de los formatos ([XML](https://es.wikipedia.org/wiki/Extensible_Markup_Language) en gran medida en aquella época). Recordemos que los sistemas tabulares requerían de informar del esquema de la tabla incluyendo el tipo de dato de antemano, y cada cambio supone un quebradero de cabeza de gestión.
+
+Ya en 1998, Carlo Strozzi había sugerido el uso de sistemas que [no solo soportarán SQL](https://en.wikipedia.org/wiki/NoSQL). Es decir, que permitieran lo que conocemos como _schema-on-read_ trasladando el problema de modelado a capas posteriores del sistema de forma que al menos, no perdiéramos información. En la misma medida, los equipos de Google y Yahoo! se encontraban en su pelea particular de cómo almacenar y procesar la información disponible en internet de manera económica y efectiva.
+
+Un par de trabajos del equipo de Google ([Google File System](https://static.googleusercontent.com/media/research.google.com/es//archive/gfs-sosp2003.pdf) y [Map Reduce](https://static.googleusercontent.com/media/research.google.com/es//archive/mapreduce-osdi04.pdf)) motivaron la implementación de Mike Cafarella y Doug Cutting, [Apache Hadoop](https://hadoop.apache.org/) un sistema que tuvo una adopción vertiginosa en la década de 2010, algo antes de que se desencadenara el movimiento a la nube.
+
+Este sistema fue de los primeros que ofrecía a las empresas un sistema desacoplado entre almacenamiento y computación, con un sistema de código abierto, lo cual lo hacía accesible a todo el mundo al coste de ser uno mismo quien mantiene este sistema organizado.
+
+## La casa del lago
+
+Hadoop estaba basado en un sistema de ficheros, lo cual daba la versatilidad de almacenar lo que fuera necesario, sin embargo, consumir datos de esta fuente se volvía engorroso. Dado que los conocimientos de los equipos seguían centrándose en SQL y herramientas que podían realizar este tipo de consultas, los ingenieros de Facebook tomaron como referencia el trabajo del equipo de Google [Dremel](https://static.googleusercontent.com/media/research.google.com/es//pubs/archive/36632.pdf) y crearon un sistema que permitía consultar información tabular en el sistema, [Apache Hive](https://hive.apache.org/). Simplemente catalogando cómo realizar la traducción tabla a fichero, estos sistemas abstraían a los usuarios de las complejidades del **lago de datos** empezando a vislumbrar lo que años más tarde el equipo de Databricks denominaría **la casa del lago** (o Data Lakehouse).
+
+## Ordenando el lago
+
+Tras la polvareda generada por la tumultuosa era de los clústeres Hadoop, la nube se abrió camino y con ello soluciones que haciendo uso de las tecnologías abiertas disponibles ofrecieron soluciones renovadas a las empresas. En cierta forma es como si hubiéramos reinventado los sistemas de gestión de base de datos cayendo en los mismos problemas que presentaban los sistemas originales. No es que no hubiera almacenamiento columnar antes de [Apache Parquet](https://parquet.apache.org/) o computación distribuida en memoria antes de [Apache Spark](https://spark.apache.org/), pero a veces tenemos que romper el _status quo_ para apreciar el trabajo existente.
+
+Dos grandes empresas salieron de esta época, [Snowflake](https://www.snowflake.com/es/) con su sistema de gestión de bases de datos tabulares que permitía una gestión desacoplada de almacenamiento y computo. Y Databricks, cuyo co-fundador es [Matei Zaharia](https://en.wikipedia.org/wiki/Matei_Zaharia), autor principal del trabajo en Apache Spark[^2].
+
+Estas dos soluciones de algún modo han vuelto a enfocarse en ofrecer rendimiento y estructura a los sistemas de datos. Han incorporado necesidades como las de lanzar procesos de bajo nivel o permitir flexibilizar los tipos de datos (VARIANT o JSON) para albergar estructuras anidadas de datos
+
+```json
+{
+    "persona": {
+        "nombre": "Iraitz",
+		"appelido": "Montalban",
+        "empresas": 
+            [
+                "SDG Group"
+                "Iberdrola",
+                "panda Security",
+                "Tecnalia"
+            ]
+        }
+    }
+}
+```
+
+pero se centran en disponer la información de forma tabular a sus consumidores. Databricks se ha encargado de acuñar varios términos como el Lakehouse para este tipo de flexibilización de la base de datos tradicional que incluye además capacidades operacionales; o incluso la **arquitectura medallón**[^3]
+
+![Arquitectura medallón](https://www.databricks.com/sites/default/files/inline-images/building-data-pipelines-with-delta-lake-120823.png)
+
+Que de algún modo, reinventa las tres capas base que ya veníamos empleando con otro nombre. Podríamos llamarlo la **arquitectura del sentido común** ya que sabemos que nuestras fuentes y nuestros consumidores vana  tener distintas necesidades y únicamente nos estamos concediendo un hueco entre ambos para poder realizar nuestro trabajo y consolidar toda la información de la empresa de forma que sea manejable.
+
+
+[^1]: Con esta tercera V es como conocemos las tres Vs del Big Data.
+[^2]: Junto con nombres como [Ion Stoica](https://en.wikipedia.org/wiki/Ion_Stoica)
+[^3]: De su fuente oficial https://www.databricks.com/glossary/medallion-architecture
