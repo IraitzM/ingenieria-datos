@@ -200,6 +200,17 @@
     ]
   },
   {
+    "objectID": "content/modelado/modelado_analitico.html#data-marts",
+    "href": "content/modelado/modelado_analitico.html#data-marts",
+    "title": "4  Modelado analítico",
+    "section": "4.3 Data Marts",
+    "text": "4.3 Data Marts\nSiendo prácticos, por mucho que dispongamos de toda la información de una empresa, solo necesitaremos ciertas dimensiones y hechos para conformar nuestras métricas y realizar nuestro análisis. Habitualmente la organización se dispone de manera que un subconjunto de los datos es accesible por la unidad que los necesita y a ese subconjunto lo conocemos como data mart. Dónde reside y cómo se modela no cambia, pero es el nombre que se le atribuye a esas colecciones de tablas que permiten a la unidad gestionar los datos necesarios en el universo de datos disponibles.",
+    "crumbs": [
+      "Modelado de datos",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelado analítico</span>"
+    ]
+  },
+  {
     "objectID": "content/modelado/nuevos_paradigmas.html",
     "href": "content/modelado/nuevos_paradigmas.html",
     "title": "5  Nuevos paradigmas",
@@ -215,7 +226,7 @@
     "href": "content/modelado/nuevos_paradigmas.html#modelos-lógicos-ensamblados",
     "title": "5  Nuevos paradigmas",
     "section": "",
-    "text": "5.1.1 Data Vault\nUna de las implementaciones lógicas de las ELM es Data Vault, donde los conceptos previos se presentan con nombres específicos:\n\nHUBs: Donde se registran las instancias de las entidades\nLINKs: Donde se registran los eventos o hechos que vinculan una o más entidades\nSATELITEs: Donde se alberga la información asociada a una entidad para una fecha concreta\n\n\n\n\nEstructuras base de un Data Vault (HUBs, LINKs y SATELITEs)\n\n\nTanto los HUBs como los LINKs llevan huellas temporales de carácter efectivo e identifican la fuente de donde la instancia fue informada, de manera que resulta sencillo realizar viajes temporales a los datos efectivos a una fecha dada. El hecho de trabajar con huellas temporales hace que podamos plantear un sistema en el que simplemente nuevos datos son añadidos y en tiempo de consumo se seleccionen aquellos que tomen efecto.\nEn un mecanismo intermediario entre datos de fuentes normalizadas y entornos donde el consumo se realiza en base a dimensiones y hechos. Algunos lo regieren incluso como una metodología ágil debido a sus características. Son un perfecto nexo que permite una adición incremental pero con huella temporal de todos los hechos acontecidos y permite promocionar la información consumible a las capas de acceso de los usuarios en base a sus necesidades.\nExisten otras modalidades que extienden más aún este concepto aunque Data Vault ha sido quizás el paradigma que más adopción presenta teniendo en cuenta la complejidad técnica y madurez del equipo que requiere su correcto gobierno. Cabe destacar que todos estos conceptos no implican un uso de tablas para almacenar la información. Esto ha venido determinado por la tecnología disponible en cada momento.",
+    "text": "5.1.1 Data Vault\nUna de las implementaciones lógicas de las ELM se la debemos a Daniel Lindstedt. Su enfoque, llamado Data Vault, realiza un mapeo bastante fiel de nuestro modelo lógico, con una flexibilidad adicional sobre la información ligada a los conceptos clave y las relaciones naturales:\n\nHUBs: Donde se registran las instancias de las entidades\nLINKs: Donde se registran los eventos o hechos que vinculan una o más entidades\nSATELITEs: Donde se alberga la información asociada a una entidad para una fecha concreta\n\n\n\n\nEstructuras base de un Data Vault (HUBs, LINKs y SATELITEs)\n\n\nTanto los HUBs como los LINKs llevan huellas temporales de carácter efectivo e identifican la fuente de donde la instancia fue informada, de manera que resulta sencillo realizar viajes temporales a los datos efectivos a una fecha dada. El hecho de trabajar con huellas temporales hace que podamos plantear un sistema en el que simplemente nuevos datos son añadidos y en tiempo de consumo se seleccionen aquellos que tomen efecto.\nEn un mecanismo intermediario entre datos de fuentes normalizadas y entornos donde el consumo se realiza en base a dimensiones y hechos. Algunos lo regieren incluso como una metodología ágil debido a sus características. Son un perfecto nexo que permite una adición incremental pero con huella temporal de todos los hechos acontecidos y permite promocionar la información consumible a las capas de acceso de los usuarios en base a sus necesidades.\nExisten otras modalidades que extienden más aún este concepto aunque Data Vault ha sido quizás el paradigma que más adopción presenta teniendo en cuenta la complejidad técnica y madurez del equipo que requiere su correcto gobierno. Cabe destacar que todos estos conceptos no implican un uso de tablas para almacenar la información. Esto ha venido determinado por la tecnología disponible en cada momento.",
     "crumbs": [
       "Modelado de datos",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Nuevos paradigmas</span>"
@@ -237,7 +248,7 @@
     "href": "content/sistemas/intro.html#analítico",
     "title": "6  Sistemas de gestión de datos",
     "section": "6.2 Analítico",
-    "text": "6.2 Analítico\nEn contraste, los sistemas OLAP están diseñados para el análisis de grandes volúmenes de datos históricos y agregaciones voluminosas, apoyando tareas de inteligencia de negocio como informes, planificación y descubrimiento de tendencias. Las consultas OLAP suelen ser complejas, implican agregaciones (como suma, promediado) y análisis multidimensional, y pueden tardar desde segundos hasta horas en ejecutarse. Estos sistemas están optimizados para operaciones de lectura masiva y utilizan estructuras particulars como el esquema en estrella o en copo de nieve para mejorar el rendimiento de las consultas analíticas.\nPrecisamente por ser los sistemas transaccionales la fuente de información para las plataformas que soportan consultas OLAP, que requieren de reestructurar parte de la información, una pieza clave en este ecosistema son los procesos de transformación de datos.\n\n6.2.1 ETL/ELT\nExtract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).\nEsto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.\n\n\n\nCiclo de vida de los datos\n\n\nQuizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:\n\nOrquestadores para coordinar las distintas fases\nPlataformas de computación distribuida\nSistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos\nProgramación, desde SQL y simple Bash a lenguajes más flexibles como Python o frameworks como Apache Spark, Kafka Streams, etc…\n\nLos ingenieros tenemos cierta tendencia en centrarnos en las herramientas pero no debemos olvidar que el propósito es disponer los datos en tiempo informa para nuestros clientes, los usuarios de los datos.",
+    "text": "6.2 Analítico\nEn contraste, los sistemas OLAP están diseñados para el análisis de grandes volúmenes de datos históricos y agregaciones voluminosas, apoyando tareas de inteligencia de negocio como informes, planificación y descubrimiento de tendencias. Las consultas OLAP suelen ser complejas, implican agregaciones (como suma, promediado) y análisis multidimensional, y pueden tardar desde segundos hasta horas en ejecutarse. Estos sistemas están optimizados para operaciones de lectura masiva y utilizan estructuras particulars como el esquema en estrella o en copo de nieve para mejorar el rendimiento de las consultas analíticas.\nPrecisamente por ser los sistemas transaccionales la fuente de información para las plataformas que soportan consultas OLAP, que requieren de reestructurar parte de la información, una pieza clave en este ecosistema son los procesos de transformación de datos.\n\n6.2.1 ETL/ELT\nExtract, Load y Transform son las siglas con los que se asocian los sistemas destinados a extraer, transformar y cargar la información entre distintos sistemas gestores de datos. Pueden darse en distinto orden en base a si la información a transformar puede ser gestionada en un sistema intermedio entre origen y destino (ETL) o si se precisa de volumen de información y capacidad de computo, de forma que podamos usar el sistema destino como motor de transformación (ELT).\nEsto nos permite dibujar un ciclo de vida esperado de los datos que requiere nuestra intervención en distintos puntos y con distintas necesidades.\n\n\n\nCiclo de vida de los datos\n\n\nQuizás esta foto es un buen ejemplo de por qué los ingenieros de datos deben emplear:\n\nOrquestadores para coordinar las distintas fases\nPlataformas de computación distribuida\nSistemas de validación y registro de metadatos para resolver problemas mediante linaje de datos\nProgramación, desde SQL y simple Bash a lenguajes más flexibles como Python o frameworks como Apache Spark, Kafka Streams, etc…\n\nLos ingenieros tenemos cierta tendencia en centrarnos en las herramientas pero no debemos olvidar que el propósito es disponer los datos en tiempo informa para nuestros clientes, los usuarios de los datos.Veremos más en detalle estos aspectos cuando hablemos de arquitecturas de datos.",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Sistemas de gestión de datos</span>"
@@ -292,7 +303,18 @@
     "href": "content/sistemas/sql.html#dml",
     "title": "8  Structured Query Language",
     "section": "8.2 DML",
-    "text": "8.2 DML\nEl lenguaje de manipulación de datos nos permite introducir información, alterarla, borrar y por último seleccionar o extraer información del sistema.\nInsertamos datos de un alumno.\n\ncur.execute(\"\"\"\n    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');\n\"\"\");\n\n\ncur.execute(\"\"\"\n    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');\n\"\"\");\n\n\n---------------------------------------------------------------------------\nIntegrityError                            Traceback (most recent call last)\nCell In[7], line 1\n----&gt; 1 cur.execute(\"\"\"\n      2     INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');\n      3 \"\"\");\n\nIntegrityError: UNIQUE constraint failed: alumnos.id_alumno\n\n\n\nEstas restricciones se extienden a las tablas con clave foránea, ya que podríamos estar matriculando a un alumno que no existe en una asignatura que no existe.\n\ncur.execute(\"\"\"\n    INSERT INTO cursa VALUES (2, 1);\n\"\"\");\n\n\n---------------------------------------------------------------------------\nIntegrityError                            Traceback (most recent call last)\nCell In[8], line 1\n----&gt; 1 cur.execute(\"\"\"\n      2     INSERT INTO cursa VALUES (2, 1);\n      3 \"\"\");\n\nIntegrityError: FOREIGN KEY constraint failed\n\n\n\nEs una de las labores clave de los sistemas transaccionales, garantizar que el sistema responde a las lógicas de los procesos de negocio que hemos modelado.",
+    "text": "8.2 DML\nEl lenguaje de manipulación de datos nos permite introducir información, alterarla, borrar y por último seleccionar o extraer información del sistema.\n\n8.2.1 Inserciones\nInsertamos datos de un alumno.\n\ncur.execute(\"\"\"\n    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalban');\n\"\"\");\n\n\ncur.execute(\"\"\"\n    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalban');\n\"\"\");\n\n\n---------------------------------------------------------------------------\nIntegrityError                            Traceback (most recent call last)\nCell In[7], line 1\n----&gt; 1 cur.execute(\"\"\"\n      2     INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalban');\n      3 \"\"\");\n\nIntegrityError: UNIQUE constraint failed: alumnos.id_alumno\n\n\n\nEstas restricciones se extienden a las tablas con clave foránea, ya que podríamos estar matriculando a un alumno que no existe en una asignatura que no existe.\n\ncur.execute(\"\"\"\n    INSERT INTO cursa VALUES (2, 1);\n\"\"\");\n\n\n---------------------------------------------------------------------------\nIntegrityError                            Traceback (most recent call last)\nCell In[8], line 1\n----&gt; 1 cur.execute(\"\"\"\n      2     INSERT INTO cursa VALUES (2, 1);\n      3 \"\"\");\n\nIntegrityError: FOREIGN KEY constraint failed\n\n\n\nEs una de las labores clave de los sistemas transaccionales, garantizar que el sistema responde a las lógicas de los procesos de negocio que hemos modelado.\n\n\n8.2.2 Actualizaciones\nPodemos actualizar su información, donde la cláusula where permite filtrar y aislar qué fila deberemos actualizar.\n\ncur.execute(\"\"\"\n    UPDATE alumnos SET apellido = 'Montalbán' WHERE id_alumno = 1;\n\"\"\");\n\n\n\n8.2.3 Selección\nY extraer información de estas tablas, recordando que si traemos información de la fuente deberemos hacer un fetch para que la retorne a nuestro cliente.\n\ncur.execute(\"\"\"\n    SELECT * \n    FROM alumnos\n\"\"\").fetchall()\n\n[(1, 'Iraitz', 'Montalbán')]\n\n\n\n\n8.2.4 Desnormalización\nSi contamos con información asociada deberemos juntarla para poder extraer los datos relevantes.\n\n# Nuevos alumnos\ncur.execute(\"\"\"\n    INSERT INTO alumnos VALUES (2, 'Javier', 'Garcia'), (3, 'Miguel', 'Fernandez');\n\"\"\");\n\n# Nuevas asignaturas\ncur.execute(\"\"\"\n    INSERT INTO asignaturas VALUES (1, 'Matemáticas'), (2, 'Historia'), (3, 'Biología');\n\"\"\");\n\n# Matrículas\ncur.execute(\"\"\"\n    INSERT INTO cursa VALUES (1, 2), (2, 3), (3, 3);\n\"\"\");\n\nPor ejemplo, ¿qué alumnos cursan biología? No podemos saberlo de la tabla que almacena la relación.\n\ncur.execute(\"\"\"\n    SELECT * \n    FROM cursa\n\"\"\").fetchall()\n\n[(1, 2), (2, 3), (3, 3)]\n\n\nDeberemos juntarla con la tabla que presenta la información de las asignaturas y filtrar por nombre.\n\ncur.execute(\"\"\"\n    SELECT * \n    FROM cursa c\n        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura\n    WHERE asig.nombre = 'Biología'\n\"\"\").fetchall()\n\n[(2, 3, 3, 'Biología'), (3, 3, 3, 'Biología')]\n\n\nY esta a su vez juntarla con los alumnos para obtener los datos de estos.\n\ncur.execute(\"\"\"\n    SELECT * \n    FROM cursa c\n        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura\n        JOIN alumnos alum ON alum.id_alumno = c.id_alumno\n    WHERE asig.nombre = 'Biología'\n\"\"\").fetchall()\n\n[(2, 3, 3, 'Biología', 2, 'Javier', 'Garcia'),\n (3, 3, 3, 'Biología', 3, 'Miguel', 'Fernandez')]\n\n\nGracias a la estructura tabular tenemos las relaciones y los datos de nuestras entidades bien representados una vez que desnormalizamos y bien podemos seleccionar los atributos (columnas) que sean de interés.\n\ncur.execute(\"\"\"\n    SELECT alum.nombre, alum.apellido\n    FROM cursa c\n        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura\n        JOIN alumnos alum ON alum.id_alumno = c.id_alumno\n    WHERE asig.nombre = 'Biología'\n\"\"\").fetchall()\n\n[('Javier', 'Garcia'), ('Miguel', 'Fernandez')]\n\n\nO incluso realizar agregaciones sobre estos datos.\n\ncur.execute(\"\"\"\n    SELECT asig.nombre, COUNT(alum.id_alumno) AS cuantos_alumnos\n    FROM cursa c\n        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura\n        JOIN alumnos alum ON alum.id_alumno = c.id_alumno\n    WHERE asig.nombre = 'Biología'\n    GROUP BY asig.nombre\n\"\"\").fetchall()\n\n[('Biología', 2)]",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Structured Query Language</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/sql.html#tcl",
+    "href": "content/sistemas/sql.html#tcl",
+    "title": "8  Structured Query Language",
+    "section": "8.3 TCL",
+    "text": "8.3 TCL\nLas transacciones nos obligan a declarar procesos en la propia base de datos de forma que podamos invocarlos como si de funciones se trataran. Esto permite a la base de datos realizar su labor y gestionar todas las operaciones de las transacciones tal y como se precisan.\n\nBEGIN TRANSACTION;\n\nINSERT INTO alumnos VALUES (4, 'María', 'Garcia');\n\nINSERT INTO cursa VALUES (4, 2), (4, 1);\n\nCOMMIT;\nEl COMMIT final se hace cargo de realizar toda la operación y en caso de fallo siempre podremos recurrir al ROLLBACK que deshace los cambios realizados al inicio de la transacción sin afectar a otros procesos del sistema.",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Structured Query Language</span>"
@@ -310,58 +332,168 @@
     ]
   },
   {
+    "objectID": "content/sistemas/dbms_analítica.html",
+    "href": "content/sistemas/dbms_analítica.html",
+    "title": "9  Base de datos analítica",
+    "section": "",
+    "text": "9.1 Ordenación de los datos\nSi bien es cierto que heredamos de los sistemas operacionales la estructura base, las necesidades de un sistema analítico son muy distintos.\nLas bases de datos operacionales para facilitar el acceso concurrente a los datos, ordenan estos en filas.\nEn los ficheros convencionales ordenados por filas la información la representaríamos así.\nMientras que las consultas analíticas precisan acceder a la información en columnas. Por ejemplo, si quisiéramos hacer un promedio de la edad de nuestros alumnos, solo necesitamos esa cuarta columna. Es decir, sabiendo qué número de filas tenemos solo debemos posicionarnos donde empieza la cuarta columna y leer los siguientes 2 datos, obviando todo lo anterior.\nDe forma que la ordenación columnar nos permite no tener que cargar la información innecesaria en la operación AVG(edad).\nEn el mundo de los sistemas de código abierto, Apache Parquet para el almacenamiento en disco y Apache Arrow para el mismo concepto en memoria se han convertido en un estándar.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Base de datos analítica</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/dbms_analítica.html#ordenación-de-los-datos",
+    "href": "content/sistemas/dbms_analítica.html#ordenación-de-los-datos",
+    "title": "9  Base de datos analítica",
+    "section": "",
+    "text": "id\nnombre\napellido\nedad\n\n\n\n\n1\nIraitz\nMontalbán\n18\n\n\n2\nJavier\nGarcia\n19\n\n\n\n\n\n1;Iraitz;Montalbán;18;2;Javier;Garcia;19\n\n\n\n1;2;Iraitz;Javier;Montalbán;Garcia;18;19",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Base de datos analítica</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/dbms_analítica.html#restricciones",
+    "href": "content/sistemas/dbms_analítica.html#restricciones",
+    "title": "9  Base de datos analítica",
+    "section": "9.2 Restricciones",
+    "text": "9.2 Restricciones\nPara el caso general no existen cuestiones como las restricciones de clave primaria y clave foránea, ya que el sistema origen es quien impone estas restricciones y el sistema analítico recoge la información tal y como este la provea.\nDel mismo modo, de cara a hacer las operaciones más rápidas, los índices son clave en los sistemas operacionales. Las bases de datos analíticas no presentan esta necesidad ya que solemos consumir la información en bloques y se asumen las latencias de estos procesos por no impacta a procesos de negocio. Si que tener una buena ordenación nos ayuda a no leer información que no vayamos a utilizar y aligerar la carga del proceso, de ahí que si sea común tener políticas de particionado.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Base de datos analítica</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/dbms_analítica.html#sistemas-comunes",
+    "href": "content/sistemas/dbms_analítica.html#sistemas-comunes",
+    "title": "9  Base de datos analítica",
+    "section": "9.3 Sistemas comunes",
+    "text": "9.3 Sistemas comunes\n\n9.3.1 Nube\n\nAzure Synpase SQL\nRedshift\nGoogle BigQuery\n\n\n\n9.3.2 Multinube\n\nSnowflake\nDatabricks\nMotherduck\n\n\n\n9.3.3 On-premise\n\nMicrosoft SQL Server\nApache Hadoop\nClickhouse\nDuckDB\n\n\n\n9.3.4 Motores de consulta\n\nTrino\nPinot\nApache Spark\nStardust\nDaft",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Base de datos analítica</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/arquitecturas.html",
+    "href": "content/sistemas/arquitecturas.html",
+    "title": "10  Elección de arquitecturas",
+    "section": "",
+    "text": "10.1 Top-down o bottom-up\nEs una fuente constante de debate pensar en si existe una mejor manera de hacer lo que hacemos, y cómo movemos los datos de un extremo al otro. Y siempre habrá nuevas piezas técnicas a descubrir que nos permitirán hacer las cosas mejor, pero la base, el servicio que ofrecemos a los consumidores de datos y la lógica tras nuestro modelo de datos debe perdurar ya que es un fiel reflejo de nuestra organización y esto no cambia tan frecuentemente. Ya lo decía Conway\nQuizás con un foco más operativo debido a los sistemas existentes, tanto Bill Inmon como Ralph Kimball se enfrentaron al reto de almacenar de forma efectiva toda la información que contiene una organización, pero a su vez presentar vistas específicas y cohesionadas que permitieran a los usuarios entender lo que los datos reflejaban sobre el funcionamiento de la empresa en áreas concretas.\nEl enfoque de Inmon abogaba por fijarnos en las fuentes y generar un sistema centralizado de datos al que luego poder destilar los recursos necesarios.\nflowchart LR\n    source1[\"ERP empresarial\"]\n    source2[\"Base de datos Logistica\"]\n\n    etl1[\"ETL\"]\n\n    dw[(\"Sistema informacional\")]\n\n    etl2[\"ETL\"]\n\n    datamart1[\"Data Mart Finanzas\"]\n    datamart2[\"Data Mart Operaciones\"]\n\n    source1 --- etl1\n    source2 --- etl1\n\n    etl1 --- dw\n\n    dw --- etl2\n\n    etl2 --- datamart1\n    etl2 --- datamart2\nMientras que la colección de Data Marts representan para Kimball el Data Warehouse, la pieza central. Desde las unidades de negocio podemos indicar las dimensiones y hechos a agregar que deberemos materializar en visiones concretas para cada unidad donde, entendemos, las dimensiones serán comunes dado que trabajamos en unidades de una empresa en una misma industria.\nflowchart LR\n    source1[\"ERP empresarial\"]\n    source2[\"Base de datos Logistica\"]\n\n    etl1[\"ETL\"]\n\n    subgraph dw [\"Sistema informacional\"]\n        datamart1[\"Data Mart Finanzas\"]\n        datamart2[\"Data Mart Operaciones\"]\n    end\n\n    source1 --- etl1\n    source2 --- etl1\n\n    etl1 --- dw\nEstas dos aproximaciones han sentado la base de lo que es necesario en un warehouse, tanto para el equipo que lo mantiene y quieren dar un buen servicio como paras los consumidores de datos que los necesitan para tener una operativa inteligente.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Elección de arquitecturas</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/arquitecturas.html#la-caja-fuerte",
+    "href": "content/sistemas/arquitecturas.html#la-caja-fuerte",
+    "title": "10  Elección de arquitecturas",
+    "section": "10.2 La caja fuerte",
+    "text": "10.2 La caja fuerte\nEl Data Vault, se plateó como una metodología más allá del propio sistema de modelado intermedio. Habíamos aprendido mucho sobre cómo nos comunicamos con los negocios y sus necesidades. Pero esto también nos daba una perspectiva de cómo la información debía ser promocionada hacia las capas de consumo.\n\n\n\nFases de madurez del dato en DV\n\n\nSabemos que debemos recibir información cruda de las fuentes, y esta información debe reposar al menos por un tiempo para poder ser entendida y gestionada. En el mejor caso, simplemente se integrará con las estructuras existentes. En el peor, deberemos alterar nuestro modelo para albergar estos nuevos datos e informar de su existencia a capas superiores. Es el área de aterrizaje de los datos o staging.\nUna vez entendidos los datos y su cohesión en los conceptos de negocio, formarán parte de la estructura base de nuestro sistema informacional. Quizás podamos aplicar algunas restricciones de negocio o validar la bondad de los datos recibidos. Todas estas fases son parte de una etapa intermedia que en el caso de data vault, forman el raw vault, con la información cruda ya estructurada; y el business vault donde ciertas reglas de negocio puedan ser aplicadas.\nFinalmente, el usuario debe ser abstraído de toda esta complejidad técnica. Una última capa pensada para la extracción de información, en un modelado en estrella o de tabla única, es donde la información resulta sencilla de consumir y con suerte disponemos de información adicional sobre cuándo fue actualizada por última vez, si algo ha cambiado en los datos, etc. Es la capa de consumo o business intelligence.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Elección de arquitecturas</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/arquitecturas.html#la-era-big-data",
+    "href": "content/sistemas/arquitecturas.html#la-era-big-data",
+    "title": "10  Elección de arquitecturas",
+    "section": "10.3 La era Big Data",
+    "text": "10.3 La era Big Data\nPara principios de los 2000s, varias empresas se enfrentaban a problemas relativos a la velocidad y variabilidad de los datos que venían de procedencias ajenas a la red empresarial: internet. El volumen 1 que debían de procesar bien al vuelo como en reposo, crecía exponencialmente. Y si añadimos a esto la necesidad de modelar al mismo ritmo debido a la variabilidad de los formatos (XML en gran medida en aquella época). Recordemos que los sistemas tabulares requerían de informar del esquema de la tabla incluyendo el tipo de dato de antemano, y cada cambio supone un quebradero de cabeza de gestión.\nYa en 1998, Carlo Strozzi había sugerido el uso de sistemas que no solo soportarán SQL. Es decir, que permitieran lo que conocemos como schema-on-read trasladando el problema de modelado a capas posteriores del sistema de forma que al menos, no perdiéramos información. En la misma medida, los equipos de Google y Yahoo! se encontraban en su pelea particular de cómo almacenar y procesar la información disponible en internet de manera económica y efectiva.\nUn par de trabajos del equipo de Google (Google File System y Map Reduce) motivaron la implementación de Mike Cafarella y Doug Cutting, Apache Hadoop un sistema que tuvo una adopción vertiginosa en la década de 2010, algo antes de que se desencadenara el movimiento a la nube.\nEste sistema fue de los primeros que ofrecía a las empresas un sistema desacoplado entre almacenamiento y computación, con un sistema de código abierto, lo cual lo hacía accesible a todo el mundo al coste de ser uno mismo quien mantiene este sistema organizado.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Elección de arquitecturas</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/arquitecturas.html#la-casa-del-lago",
+    "href": "content/sistemas/arquitecturas.html#la-casa-del-lago",
+    "title": "10  Elección de arquitecturas",
+    "section": "10.4 La casa del lago",
+    "text": "10.4 La casa del lago\nHadoop estaba basado en un sistema de ficheros, lo cual daba la versatilidad de almacenar lo que fuera necesario, sin embargo, consumir datos de esta fuente se volvía engorroso. Dado que los conocimientos de los equipos seguían centrándose en SQL y herramientas que podían realizar este tipo de consultas, los ingenieros de Facebook tomaron como referencia el trabajo del equipo de Google Dremel y crearon un sistema que permitía consultar información tabular en el sistema, Apache Hive. Simplemente catalogando cómo realizar la traducción tabla a fichero, estos sistemas abstraían a los usuarios de las complejidades del lago de datos empezando a vislumbrar lo que años más tarde el equipo de Databricks denominaría la casa del lago (o Data Lakehouse).",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Elección de arquitecturas</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/arquitecturas.html#ordenando-el-lago",
+    "href": "content/sistemas/arquitecturas.html#ordenando-el-lago",
+    "title": "10  Elección de arquitecturas",
+    "section": "10.5 Ordenando el lago",
+    "text": "10.5 Ordenando el lago\nTras la polvareda generada por la tumultuosa era de los clústeres Hadoop, la nube se abrió camino y con ello soluciones que haciendo uso de las tecnologías abiertas disponibles ofrecieron soluciones renovadas a las empresas. En cierta forma es como si hubiéramos reinventado los sistemas de gestión de base de datos cayendo en los mismos problemas que presentaban los sistemas originales. No es que no hubiera almacenamiento columnar antes de Apache Parquet o computación distribuida en memoria antes de Apache Spark, pero a veces tenemos que romper el status quo para apreciar el trabajo existente.\nDos grandes empresas salieron de esta época, Snowflake con su sistema de gestión de bases de datos tabulares que permitía una gestión desacoplada de almacenamiento y computo. Y Databricks, cuyo co-fundador es Matei Zaharia, autor principal del trabajo en Apache Spark2.\nEstas dos soluciones de algún modo han vuelto a enfocarse en ofrecer rendimiento y estructura a los sistemas de datos. Han incorporado necesidades como las de lanzar procesos de bajo nivel o permitir flexibilizar los tipos de datos (VARIANT o JSON) para albergar estructuras anidadas de datos\n{\n    \"persona\": {\n        \"nombre\": \"Iraitz\",\n        \"appelido\": \"Montalban\",\n        \"empresas\": \n            [\n                \"SDG Group\"\n                \"Iberdrola\",\n                \"panda Security\",\n                \"Tecnalia\"\n            ]\n        }\n    }\n}\npero se centran en disponer la información de forma tabular a sus consumidores. Databricks se ha encargado de acuñar varios términos como el Lakehouse para este tipo de flexibilización de la base de datos tradicional que incluye además capacidades operacionales; o incluso la arquitectura medallón3\n\n\n\nArquitectura medallón\n\n\nQue de algún modo, reinventa las tres capas base que ya veníamos empleando con otro nombre. Podríamos llamarlo la arquitectura del sentido común ya que sabemos que nuestras fuentes y nuestros consumidores vana tener distintas necesidades y únicamente nos estamos concediendo un hueco entre ambos para poder realizar nuestro trabajo y consolidar toda la información de la empresa de forma que sea manejable.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Elección de arquitecturas</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/arquitecturas.html#footnotes",
+    "href": "content/sistemas/arquitecturas.html#footnotes",
+    "title": "10  Elección de arquitecturas",
+    "section": "",
+    "text": "Con esta tercera V es como conocemos las tres Vs del Big Data.↩︎\nJunto con nombres como Ion Stoica↩︎\nDe su fuente oficial https://www.databricks.com/glossary/medallion-architecture↩︎",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Elección de arquitecturas</span>"
+    ]
+  },
+  {
     "objectID": "content/load/intro.html",
     "href": "content/load/intro.html",
-    "title": "9  Extracción",
+    "title": "11  Extracción",
     "section": "",
-    "text": "9.1 Bases de datos\nUno de los pasos primeros que deberemos hacer es conocer los datos a extraer y las características base de estos:\nDe modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.\nFrecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:\nMuchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.",
+    "text": "11.1 Bases de datos\nUno de los pasos primeros que deberemos hacer es conocer los datos a extraer y las características base de estos:\nDe modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.\nFrecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:\nMuchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#bases-de-datos",
     "href": "content/load/intro.html#bases-de-datos",
-    "title": "9  Extracción",
+    "title": "11  Extracción",
     "section": "",
     "text": "SQL: Sistemas de origen tabular (RDBMS) a los que podemos interrogar con sentencias SQL para extraer la información necesaria. Son sistemas de consulta por lo que a no ser que dispongan de un campo informando de la fecha de la información, es difícil gestionar posibles variaciones con respecto a las cargas anteriores sin almacenar en un sistema intermedio la información para comparar que fue cargado y qué es nuevo.\nNoSQL: Sistemas de origen no tabular que suelen disponer la información en formatos modernos, siendo JSON el más habitual. Esto obliga a identificar si el destino permite el registro de información de estructura variable o debemos darle un formato tabular antes de poder insertarla. Al igual que con las bases de datos tabulares, deberemos ver qué medios tenemos para poder identificar los registros sumados o que hayan variado desde la última consulta.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#apis",
     "href": "content/load/intro.html#apis",
-    "title": "9  Extracción",
-    "section": "9.2 APIs",
-    "text": "9.2 APIs\nUno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.",
+    "title": "11  Extracción",
+    "section": "11.2 APIs",
+    "text": "11.2 APIs\nUno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#colas",
     "href": "content/load/intro.html#colas",
-    "title": "9  Extracción",
-    "section": "9.3 Colas",
-    "text": "9.3 Colas\nLos sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este buffer que retiene los datos hasta ser consumidos o expiren.",
+    "title": "11  Extracción",
+    "section": "11.3 Colas",
+    "text": "11.3 Colas\nLos sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este buffer que retiene los datos hasta ser consumidos o expiren.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/transform/intro.html",
     "href": "content/transform/intro.html",
-    "title": "10  Transformación",
+    "title": "12  Transformación",
     "section": "",
     "text": "pendiente",
     "crumbs": [
       "Transformación de datos",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Transformación</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Transformación</span>"
     ]
   },
   {
@@ -377,23 +509,23 @@
   {
     "objectID": "content/explotacion/bi.html",
     "href": "content/explotacion/bi.html",
-    "title": "11  Inteligencia de negocio",
+    "title": "13  Inteligencia de negocio",
     "section": "",
     "text": "La inteligencia de negocio o Business Intelligence (BI) es sin duda uno de los recursos clave a la hora de conocer la actividad de nuestra empresa. Toda esa información que los datos ocultan, si la manipulamos de forma correcta y la presentamos de un modo lógico puede ayudarnos a determinar si estamos comprando de más, vendiendo de menos, si nuestras líneas de fabricación están siendo bien empleadas o si nuestros almacenes requieren una renovación del stock.",
     "crumbs": [
       "Explotación de los datos",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Inteligencia de negocio</span>"
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Inteligencia de negocio</span>"
     ]
   },
   {
     "objectID": "content/explotacion/ds.html",
     "href": "content/explotacion/ds.html",
-    "title": "12  Ciencia de datos",
+    "title": "14  Ciencia de datos",
     "section": "",
     "text": "pendiente",
     "crumbs": [
       "Explotación de los datos",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Ciencia de datos</span>"
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Ciencia de datos</span>"
     ]
   },
   {

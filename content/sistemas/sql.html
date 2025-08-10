@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/load/intro.html" rel="next">
+<link href="../../content/sistemas/dbms_analítica.html" rel="next">
 <link href="../../content/sistemas/rdbms_transaccional.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -249,6 +249,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/dbms_analítica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -263,7 +275,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
       </ul>
@@ -280,7 +292,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
       </ul>
@@ -297,13 +309,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -342,7 +354,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    
   <ul>
   <li><a href="#ddl" id="toc-ddl" class="nav-link active" data-scroll-target="#ddl"><span class="header-section-number">8.1</span> DDL</a></li>
-  <li><a href="#dml" id="toc-dml" class="nav-link" data-scroll-target="#dml"><span class="header-section-number">8.2</span> DML</a></li>
+  <li><a href="#dml" id="toc-dml" class="nav-link" data-scroll-target="#dml"><span class="header-section-number">8.2</span> DML</a>
+  <ul class="collapse">
+  <li><a href="#inserciones" id="toc-inserciones" class="nav-link" data-scroll-target="#inserciones"><span class="header-section-number">8.2.1</span> Inserciones</a></li>
+  <li><a href="#actualizaciones" id="toc-actualizaciones" class="nav-link" data-scroll-target="#actualizaciones"><span class="header-section-number">8.2.2</span> Actualizaciones</a></li>
+  <li><a href="#selección" id="toc-selección" class="nav-link" data-scroll-target="#selección"><span class="header-section-number">8.2.3</span> Selección</a></li>
+  <li><a href="#desnormalización" id="toc-desnormalización" class="nav-link" data-scroll-target="#desnormalización"><span class="header-section-number">8.2.4</span> Desnormalización</a></li>
+  </ul></li>
+  <li><a href="#tcl" id="toc-tcl" class="nav-link" data-scroll-target="#tcl"><span class="header-section-number">8.3</span> TCL</a></li>
   </ul>
 </nav>
     </div>
@@ -416,7 +435,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (id_alumno)</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Si, por ejemplo, seleccionamos <a href="https://www.sqlitetutorial.net/">SQLite</a> para nuestro ejemplo, podemos ver cómo resulta de forma práctica.</p>
-<div id="171af7e4" class="cell" data-execution_count="1">
+<div id="cf4228a3" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Conectamos con la base de datos chinook.db</span></span>
@@ -444,7 +463,7 @@ Advertencia
 </div>
 </div>
 <p>Y continuar ejecutando nuestra creación de tabla.</p>
-<div id="fd887af2" class="cell" data-execution_count="3">
+<div id="fc679f78" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># La creamos si no existe</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE IF NOT EXISTS alumnos (</span></span>
@@ -464,7 +483,7 @@ Advertencia
 </div>
 </div>
 <p>Hemos añadido la condición <code>IF NOT EXISTS</code> que nos permite crear una tabla solo si no existe. Si intentara crearla existiendo previamente, nos arrojará un error.</p>
-<div id="ec6b94b6" class="cell" data-execution_count="4">
+<div id="14030901" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># La creamos si no existe</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE alumnos (</span></span>
@@ -530,7 +549,7 @@ Advertencia
 </div>
 </div>
 </div>
-<div id="e5fc8659" class="cell" data-execution_count="5">
+<div id="211c52e0" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># La creamos si no existe</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE IF NOT EXISTS asignaturas (</span></span>
@@ -560,15 +579,17 @@ Advertencia
 <section id="dml" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="dml"><span class="header-section-number">8.2</span> DML</h2>
 <p>El lenguaje de manipulación de datos nos permite introducir información, alterarla, borrar y por último seleccionar o extraer información del sistema.</p>
+<section id="inserciones" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="inserciones"><span class="header-section-number">8.2.1</span> Inserciones</h3>
 <p>Insertamos datos de un alumno.</p>
-<div id="ffbda01e" class="cell" data-execution_count="6">
+<div id="a1601e12" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalban');</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)<span class="op">;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="2bf05cd5" class="cell" data-execution_count="7">
+<div id="9c97aa59" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalbán');</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES (1, 'Iraitz', 'Montalban');</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)<span class="op">;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <div class="ansi-escaped-output">
@@ -576,7 +597,7 @@ Advertencia
 <span class="ansi-red-fg">IntegrityError</span>                            Traceback (most recent call last)
 <span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[7]</span><span class="ansi-green-fg">, line 1</span>
 <span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">1</span> <span class="ansi-yellow-bg">cur</span><span class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">execute</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-fg ansi-yellow-bg">"""</span>
-<span class="ansi-green-fg">      2</span> <span class="ansi-yellow-fg ansi-yellow-bg">    INSERT INTO alumnos VALUES (1, </span><span class="ansi-yellow-fg ansi-yellow-bg">'</span><span class="ansi-yellow-fg ansi-yellow-bg">Iraitz</span><span class="ansi-yellow-fg ansi-yellow-bg">'</span><span class="ansi-yellow-fg ansi-yellow-bg">, </span><span class="ansi-yellow-fg ansi-yellow-bg">'</span><span class="ansi-yellow-fg ansi-yellow-bg">Montalbán</span><span class="ansi-yellow-fg ansi-yellow-bg">'</span><span class="ansi-yellow-fg ansi-yellow-bg">);</span>
+<span class="ansi-green-fg">      2</span> <span class="ansi-yellow-fg ansi-yellow-bg">    INSERT INTO alumnos VALUES (1, </span><span class="ansi-yellow-fg ansi-yellow-bg">'</span><span class="ansi-yellow-fg ansi-yellow-bg">Iraitz</span><span class="ansi-yellow-fg ansi-yellow-bg">'</span><span class="ansi-yellow-fg ansi-yellow-bg">, </span><span class="ansi-yellow-fg ansi-yellow-bg">'</span><span class="ansi-yellow-fg ansi-yellow-bg">Montalban</span><span class="ansi-yellow-fg ansi-yellow-bg">'</span><span class="ansi-yellow-fg ansi-yellow-bg">);</span>
 <span class="ansi-green-fg">      3</span> <span class="ansi-yellow-fg ansi-yellow-bg">"""</span><span class="ansi-yellow-bg">)</span>;
 
 <span class="ansi-red-fg">IntegrityError</span>: UNIQUE constraint failed: alumnos.id_alumno</pre>
@@ -584,7 +605,7 @@ Advertencia
 </div>
 </div>
 <p>Estas restricciones se extienden a las tablas con clave foránea, ya que podríamos estar matriculando a un alumno que no existe en una asignatura que no existe.</p>
-<div id="08664e0c" class="cell" data-execution_count="8">
+<div id="a38f6829" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO cursa VALUES (2, 1);</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)<span class="op">;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -602,6 +623,125 @@ Advertencia
 </div>
 </div>
 <p>Es una de las labores clave de los sistemas transaccionales, garantizar que el sistema responde a las <strong>lógicas de los procesos de negocio que hemos modelado</strong>.</p>
+</section>
+<section id="actualizaciones" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="actualizaciones"><span class="header-section-number">8.2.2</span> Actualizaciones</h3>
+<p>Podemos actualizar su información, donde la cláusula where permite filtrar y aislar qué fila deberemos actualizar.</p>
+<div id="c252df64" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="st">    UPDATE alumnos SET apellido = 'Montalbán' WHERE id_alumno = 1;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)<span class="op">;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="selección" class="level3" data-number="8.2.3">
+<h3 data-number="8.2.3" class="anchored" data-anchor-id="selección"><span class="header-section-number">8.2.3</span> Selección</h3>
+<p>Y extraer información de estas tablas, recordando que si traemos información de la fuente deberemos hacer un <code>fetch</code> para que la retorne a nuestro cliente.</p>
+<div id="0c2b1861" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT * </span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM alumnos</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).fetchall()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>[(1, 'Iraitz', 'Montalbán')]</code></pre>
+</div>
+</div>
+</section>
+<section id="desnormalización" class="level3" data-number="8.2.4">
+<h3 data-number="8.2.4" class="anchored" data-anchor-id="desnormalización"><span class="header-section-number">8.2.4</span> Desnormalización</h3>
+<p>Si contamos con información asociada deberemos juntarla para poder extraer los datos relevantes.</p>
+<div id="33f22d70" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nuevos alumnos</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES (2, 'Javier', 'Garcia'), (3, 'Miguel', 'Fernandez');</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)<span class="op">;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Nuevas asignaturas</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO asignaturas VALUES (1, 'Matemáticas'), (2, 'Historia'), (3, 'Biología');</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)<span class="op">;</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Matrículas</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO cursa VALUES (1, 2), (2, 3), (3, 3);</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)<span class="op">;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Por ejemplo, ¿qué alumnos cursan biología? No podemos saberlo de la tabla que almacena la relación.</p>
+<div id="1eb527b8" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT * </span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM cursa</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).fetchall()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>[(1, 2), (2, 3), (3, 3)]</code></pre>
+</div>
+</div>
+<p>Deberemos juntarla con la tabla que presenta la información de las asignaturas y filtrar por nombre.</p>
+<div id="1155a038" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT * </span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM cursa c</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="st">        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE asig.nombre = 'Biología'</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).fetchall()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>[(2, 3, 3, 'Biología'), (3, 3, 3, 'Biología')]</code></pre>
+</div>
+</div>
+<p>Y esta a su vez juntarla con los alumnos para obtener los datos de estos.</p>
+<div id="84a623bb" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT * </span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM cursa c</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="st">        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="st">        JOIN alumnos alum ON alum.id_alumno = c.id_alumno</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE asig.nombre = 'Biología'</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).fetchall()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>[(2, 3, 3, 'Biología', 2, 'Javier', 'Garcia'),
+ (3, 3, 3, 'Biología', 3, 'Miguel', 'Fernandez')]</code></pre>
+</div>
+</div>
+<p>Gracias a la estructura tabular tenemos las relaciones y los datos de nuestras entidades bien representados una vez que desnormalizamos y bien podemos seleccionar los atributos (columnas) que sean de interés.</p>
+<div id="5f422a9a" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT alum.nombre, alum.apellido</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM cursa c</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="st">        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">        JOIN alumnos alum ON alum.id_alumno = c.id_alumno</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE asig.nombre = 'Biología'</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).fetchall()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>[('Javier', 'Garcia'), ('Miguel', 'Fernandez')]</code></pre>
+</div>
+</div>
+<p>O incluso realizar agregaciones sobre estos datos.</p>
+<div id="c0e92848" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"""</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT asig.nombre, COUNT(alum.id_alumno) AS cuantos_alumnos</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM cursa c</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="st">        JOIN asignaturas asig ON asig.id_asignatura = c.id_asignatura</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="st">        JOIN alumnos alum ON alum.id_alumno = c.id_alumno</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE asig.nombre = 'Biología'</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="st">    GROUP BY asig.nombre</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).fetchall()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>[('Biología', 2)]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="tcl" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="tcl"><span class="header-section-number">8.3</span> TCL</h2>
+<p>Las transacciones nos obligan a declarar procesos en la propia base de datos de forma que podamos invocarlos como si de funciones se trataran. Esto permite a la base de datos realizar su labor y gestionar todas las operaciones de las transacciones tal y como se precisan.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span> <span class="kw">TRANSACTION</span>;</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> alumnos <span class="kw">VALUES</span> (<span class="dv">4</span>, <span class="st">'María'</span>, <span class="st">'Garcia'</span>);</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> cursa <span class="kw">VALUES</span> (<span class="dv">4</span>, <span class="dv">2</span>), (<span class="dv">4</span>, <span class="dv">1</span>);</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMIT</span>;</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>El <code>COMMIT</code> final se hace cargo de realizar toda la operación y en caso de fallo siempre podremos recurrir al <code>ROLLBACK</code> que deshace los cambios realizados al inicio de la transacción sin afectar a otros procesos del sistema.</p>
 
 
 </section>
@@ -1019,8 +1159,8 @@ Advertencia
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/load/intro.html" class="pagination-link" aria-label="Extracción">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Extracción</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/sistemas/dbms_analítica.html" class="pagination-link" aria-label="Base de datos analítica">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

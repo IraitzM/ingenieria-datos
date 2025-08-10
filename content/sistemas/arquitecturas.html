@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Formas normales – Ingeniería de datos</title>
+<title>10&nbsp; Elección de arquitecturas – Ingeniería de datos</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,8 +65,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/modelado/desnormalizar.html" rel="next">
-<link href="../../content/modelado/intro.html" rel="prev">
+<link href="../../content/load/intro.html" rel="next">
+<link href="../../content/sistemas/dbms_analítica.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -94,7 +129,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<meta property="og:title" content="2&nbsp; Formas normales – Ingeniería de datos">
+<meta property="og:title" content="10&nbsp; Elección de arquitecturas – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -111,7 +146,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/modelado/intro.html">Modelado de datos</a></li><li class="breadcrumb-item"><a href="../../content/modelado/formasnormales.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/arquitecturas.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -156,14 +191,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <div class="sidebar-item-container"> 
             <a href="../../content/modelado/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Modelado de datos</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
@@ -189,13 +224,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Sistemas gestores de datos</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
@@ -222,7 +257,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
   </div>
 </li>
@@ -318,9 +353,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#primera-forma-normal-1fn" id="toc-primera-forma-normal-1fn" class="nav-link active" data-scroll-target="#primera-forma-normal-1fn"><span class="header-section-number">2.1</span> Primera forma normal (1FN)</a></li>
-  <li><a href="#segunda-forma-normal-2fn" id="toc-segunda-forma-normal-2fn" class="nav-link" data-scroll-target="#segunda-forma-normal-2fn"><span class="header-section-number">2.2</span> Segunda forma normal (2FN)</a></li>
-  <li><a href="#tercera-forma-normal-3fn" id="toc-tercera-forma-normal-3fn" class="nav-link" data-scroll-target="#tercera-forma-normal-3fn"><span class="header-section-number">2.3</span> Tercera forma normal (3FN)</a></li>
+  <li><a href="#top-down-o-bottom-up" id="toc-top-down-o-bottom-up" class="nav-link active" data-scroll-target="#top-down-o-bottom-up"><span class="header-section-number">10.1</span> Top-down o bottom-up</a></li>
+  <li><a href="#la-caja-fuerte" id="toc-la-caja-fuerte" class="nav-link" data-scroll-target="#la-caja-fuerte"><span class="header-section-number">10.2</span> La caja fuerte</a></li>
+  <li><a href="#la-era-big-data" id="toc-la-era-big-data" class="nav-link" data-scroll-target="#la-era-big-data"><span class="header-section-number">10.3</span> La era Big Data</a></li>
+  <li><a href="#la-casa-del-lago" id="toc-la-casa-del-lago" class="nav-link" data-scroll-target="#la-casa-del-lago"><span class="header-section-number">10.4</span> La casa del lago</a></li>
+  <li><a href="#ordenando-el-lago" id="toc-ordenando-el-lago" class="nav-link" data-scroll-target="#ordenando-el-lago"><span class="header-section-number">10.5</span> Ordenando el lago</a></li>
   </ul>
 </nav>
     </div>
@@ -330,9 +367,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/modelado/intro.html">Modelado de datos</a></li><li class="breadcrumb-item"><a href="../../content/modelado/formasnormales.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/arquitecturas.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></h1>
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></h1>
 </div>
 
 
@@ -349,327 +386,138 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p>Cuando Edgar Codd diseño los sistemas de gestión de datos tabulares o RDBMS (<em>Relational Data Base Management Systems</em>) su planteamiento no cubría únicamente la necesidad de informar el esquema, si no de que este cubriera las necesidades de los <strong>procesos de negocio</strong>. De manera que estos sistemas fueran los garantes de que la base de datos cumpliera estas restricciones y siempre ofreciera una visión consistente de la información.</p>
-<p>Un sencillo ejemplo es pensar en una estructura de datos que almacena nuestro balance en cuenta. Si nuestro banco no permite que ese balance sea negativo, ninguna acción debería permitir que esto suceda a nivel del sistema que los almacena y gestiona. Codd se aseguró de diseñar un sistema que ofreciera esas capacidades a modo de <strong>restricción</strong>. Del mismo modo, no debería existir más de una persona con el mismo identificador único… De ahí es de donde nace el concepto de <strong>clave primaria</strong> que permite identificar unívocamente un registro en nuestra tabla.</p>
-<p>Las formas normales nacen precisamente de los trabajos de Codd como solución a algunos de los problemas que presentaban los sistemas iniciales. El planteamiento inicial es que los datos deben ser almacenados en tablas, con lo que podemos representar de forma visual nuestras <em>tablas</em> del siguiente modo.</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>id_alumno</th>
-<th>nombre</th>
-<th>apellido</th>
-<th>asignaturas</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>001</td>
-<td>Ana</td>
-<td>García</td>
-<td>Matemáticas, Física</td>
-</tr>
-<tr class="even">
-<td>002</td>
-<td>Luis</td>
-<td>Pérez</td>
-<td>Química, Biología</td>
-</tr>
-<tr class="odd">
-<td>003</td>
-<td>Marta</td>
-<td>López</td>
-<td>Historia, Inglés</td>
-</tr>
-</tbody>
-</table>
-<p><em>Ejemplo de una tabla sobre alumnos apuntados a asignaturas</em></p>
-<p>Solemos representar estas estructuras indicando la información de su esquema:</p>
-<ul>
-<li>Nombre de la estructura: CURSO</li>
-<li>Campos que contiene por nombre y tipo</li>
-</ul>
-<p>Esto genera una ilustración de <strong>entidad</strong> como esta. Una entidad que contiene distintos <strong>atributos</strong> que en el contexto tabular conocemos como <strong>columnas</strong> de la <strong>tabla</strong>.</p>
-<div class="cell" data-fig-width="6.5" data-layout-align="default">
+<p>Es una fuente constante de debate pensar en si existe una mejor manera de hacer lo que hacemos, y cómo movemos los datos de un extremo al otro. Y siempre habrá nuevas piezas técnicas a descubrir que nos permitirán hacer las cosas mejor, pero la base, el servicio que ofrecemos a los consumidores de datos y la lógica tras nuestro modelo de datos debe perdurar ya que es un fiel reflejo de nuestra organización y esto no cambia tan frecuentemente. Ya lo decía <a href="https://en.wikipedia.org/wiki/Melvin_Conway">Conway</a></p>
+<blockquote class="blockquote">
+<p>Las organizaciones que diseñan sistemas son un fiel reflejo de la comunicación en la misma.</p>
+</blockquote>
+<section id="top-down-o-bottom-up" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="top-down-o-bottom-up"><span class="header-section-number">10.1</span> Top-down o bottom-up</h2>
+<p>Quizás con un foco más operativo debido a los sistemas existentes, tanto Bill Inmon como Ralph Kimball se enfrentaron al reto de almacenar de forma efectiva toda la información que contiene una organización, pero a su vez presentar vistas específicas y cohesionadas que permitieran a los usuarios entender lo que los datos reflejaban sobre el funcionamiento de la empresa en áreas concretas.</p>
+<p>El enfoque de Inmon abogaba por fijarnos en las fuentes y generar un sistema centralizado de datos al que luego poder destilar los recursos necesarios.</p>
+<div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
-<pre class="mermaid mermaid-js">erDiagram
-    CURSO {
-        numero id_alumno
-        texto nombre
-        texto apellido
-        lista asignaturas
-    }
+<pre class="mermaid mermaid-js">flowchart LR
+    source1["ERP empresarial"]
+    source2["Base de datos Logistica"]
+
+    etl1["ETL"]
+
+    dw[("Sistema informacional")]
+
+    etl2["ETL"]
+
+    datamart1["Data Mart Finanzas"]
+    datamart2["Data Mart Operaciones"]
+
+    source1 --- etl1
+    source2 --- etl1
+
+    etl1 --- dw
+
+    dw --- etl2
+
+    etl2 --- datamart1
+    etl2 --- datamart2
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<section id="primera-forma-normal-1fn" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="primera-forma-normal-1fn"><span class="header-section-number">2.1</span> Primera forma normal (1FN)</h2>
-<p>La <strong>primera forma normal (1FN)</strong> establece que todos los valores de los atributos en una tabla deben ser atómicos, es decir, cada campo debe contener un solo valor y no listas o conjuntos. Esto implica eliminar grupos repetitivos y asegurar que cada columna almacene únicamente un dato por fila.</p>
-<p>Esto es una limitación de los sistemas de aquella época que los actuales no disponen, pero bien es cierto que si la información corresponde a una entidad relevante como son las asignaturas de una academia, con multiples interacción y datos relativos a distintas operaciones, bien se antoja que dispongan de su propia entidad como veremos más adelante.</p>
-<p><strong>Ventajas de la 1FN:</strong></p>
-<ul>
-<li>Facilita la consulta y manipulación de los datos.</li>
-<li>Evita la ambigüedad y redundancia en los registros.</li>
-<li>Permite una mejor organización y estructuración de la información.</li>
-</ul>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>id_alumno</th>
-<th>nombre</th>
-<th>apellido</th>
-<th>asignatura</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>001</td>
-<td>Ana</td>
-<td>García</td>
-<td>Matemáticas</td>
-</tr>
-<tr class="even">
-<td>001</td>
-<td>Ana</td>
-<td>García</td>
-<td>Física</td>
-</tr>
-<tr class="odd">
-<td>002</td>
-<td>Luis</td>
-<td>Pérez</td>
-<td>Química</td>
-</tr>
-<tr class="even">
-<td>002</td>
-<td>Luis</td>
-<td>Pérez</td>
-<td>Biología</td>
-</tr>
-<tr class="odd">
-<td>003</td>
-<td>Marta</td>
-<td>López</td>
-<td>Historia</td>
-</tr>
-<tr class="even">
-<td>003</td>
-<td>Marta</td>
-<td>López</td>
-<td>Inglés</td>
-</tr>
-</tbody>
-</table>
-<p><em>Ejemplo de una tabla en 1FN sobre alumnos apuntados a asignaturas</em></p>
-<p>Disponer de la información de este modo nos obliga a que cualquier cambio sobre los datos de los alumnos deba realizarse en varias filas. Resulta difícil ver qué concepto identifica la <strong>clave primaria</strong> en estos casos. ¿Un alumno en una asignatura? ¿Es la asignatura <em>Matemáticas</em> solo cursada por <em>Ana</em>?</p>
-<p>En nuestro caso, el nombre del campo <em>id_alumno</em> refiere a cada alumno pero esta información está por duplicado y no permite identificar filas concretas. Debemos separar conceptos, por un lado tenemos ALUMNOS y por el otro ASIGNATURAS.</p>
+<p>Mientras que la colección de Data Marts representan para Kimball el Data Warehouse, la pieza central. Desde las unidades de negocio podemos indicar las dimensiones y hechos a agregar que deberemos materializar en visiones concretas para cada unidad donde, entendemos, las dimensiones serán comunes dado que trabajamos en unidades de una empresa en una misma industria.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    source1["ERP empresarial"]
+    source2["Base de datos Logistica"]
+
+    etl1["ETL"]
+
+    subgraph dw ["Sistema informacional"]
+        datamart1["Data Mart Finanzas"]
+        datamart2["Data Mart Operaciones"]
+    end
+
+    source1 --- etl1
+    source2 --- etl1
+
+    etl1 --- dw
+
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Estas dos aproximaciones han sentado la base de lo que es necesario en un warehouse, tanto para el equipo que lo mantiene y quieren dar un buen servicio como paras los consumidores de datos que los necesitan para tener una operativa inteligente.</p>
 </section>
-<section id="segunda-forma-normal-2fn" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="segunda-forma-normal-2fn"><span class="header-section-number">2.2</span> Segunda forma normal (2FN)</h2>
-<p>La <strong>segunda forma normal (2FN)</strong> se alcanza cuando una tabla está en primera forma normal y, además, todos los atributos que no forman parte de la clave principal dependen completamente de ella, no solo de una parte de la clave si esta es <strong>compuesta</strong>. Existen situaciones donde un solo atributo no es suficiente para identificar unívocamente cada instancia. Por ejemplo, si realizamos una orden de venta, donde tenemos varios productos, la cantidad de producto que se vendió en cada orden de compra viene determinada por al dupla, ORDEN y PRODUCTO, solo conociendo a qué ORDEN y PRODUCTO nos referimos podemos determinar un valor de forma única de cantidad, descuento u otros conceptos asociados a ese caso particular.</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>id_venta</th>
-<th>id_producto</th>
-<th>cantidad</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>001</td>
-<td>001</td>
-<td>5</td>
-</tr>
-<tr class="even">
-<td>001</td>
-<td>002</td>
-<td>10</td>
-</tr>
-<tr class="odd">
-<td>002</td>
-<td>001</td>
-<td>7</td>
-</tr>
-</tbody>
-</table>
-<p><em>Ejemplo de evento de venta con cantidad de producto</em></p>
-<p>Esto implica eliminar dependencias parciales, dividiendo la información en varias tablas si es necesario.</p>
-<p><strong>Ventajas de la 2FN:</strong></p>
-<ul>
-<li>Reduce la redundancia de datos.</li>
-<li>Facilita la actualización y mantenimiento de la base de datos.</li>
-<li>Evita inconsistencias al modificar información relacionada.</li>
-</ul>
-<p>La segunda forma normal nos obliga a separar nuestra tabla en dos entidades separadas: <strong>alumnos</strong> y <strong>asignaturas</strong>. Esto tiene sentido ya que si somos una escuela, serán dos entidades relevantes que se relacionarán con otras entidades de forma individualizada. Por ejemplo, si añadiéramos una tercera entidad, <strong>profesores</strong>, esta tendrá relaciones específicas y concretas con las asignaturas y no con los alumnos directamente <em>a priori</em>.</p>
-<p>Para indicar las relaciones entre entidades solemos indicar conexiones entrantes y salientes de los dos esquemas.</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">erDiagram
-    ALUMNOS {
-        numero id_alumno
-        texto nombre
-        texto apellido
-    }
-    ASIGNATURAS {
-        numero id_asignatura
-        texto nombre
-    }
-</pre>
+<section id="la-caja-fuerte" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="la-caja-fuerte"><span class="header-section-number">10.2</span> La caja fuerte</h2>
+<p>El Data Vault, se plateó como una metodología más allá del propio sistema de modelado intermedio. Habíamos aprendido mucho sobre cómo nos comunicamos con los negocios y sus necesidades. Pero esto también nos daba una perspectiva de cómo la información debía ser promocionada hacia las capas de consumo.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.scalefree.com/wp-content/uploads/2024/03/Data-Vault-20-Architecture.png" class="img-fluid figure-img"></p>
+<figcaption>Fases de madurez del dato en DV</figcaption>
+</figure>
 </div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>Las relaciones varían dependiendo de la <strong>cardinalidad</strong> de las mismas. Es decir, como se relacionan los datos entre sí:</p>
-<ul>
-<li><strong>1-a-1</strong>: Una asignatura tiene solo un alumno y viceversa</li>
-<li><strong>1-a-muchos</strong>: Una asignatura tiene muchos alumnos, pero cada alumno solo tiene una asignatura</li>
-<li><strong>muchos-a-muchos</strong>: Las asignaturas tiene muchos alumnos y cada alumno puede estar en varias asignaturas.</li>
-</ul>
-<p><a href="https://es.wikipedia.org/wiki/Modelo_entidad-relaci%C3%B3n#Correspondencia_de_cardinalidades">Entrada wikipedia</a></p>
-<p>En nuestro ejemplo anterior la relación entre alumnos y asignaturas es muchos-a-muchos, lo cual requiere una tabla intermedia para que la relación entre ambas entidades no genere un volumen excesivo de datos al <a href="../../content/modelado/desnormalizar.html">desnormalizar</a> la información.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Desnormalizar
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Si bien es cierto que la normalización de los datos en estos términos nos permite una mejor gestión, casi seguro que el consumo de estos requerirá construir tablas donde se combine la información de alumnos, profesores y asignaturas, como bien pudiera ser un informe de carga de trabajo por profesor o de alumnos promedio por aula. Casi siempre la información la consumiremos de una forma distinta a la forzada para ser almacenada y gestionada.</p>
-</div>
-</div>
-<p>Para indicar el tipo de relación se emplean indicaciones visuales como el hecho de que la relación tenga como mínimo una relación existente (con el circulo se marca que pueda no existir dato asociado), o si la relación identifica a a las partes.</p>
-<p>Si queremos indicar que un alumno puede o no estar matriculado en muchas asignaturas, mientras que una asignatura debe tener solo un alumno (es una academia muy privada) lo indicaremos así:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">erDiagram
-    ALUMNOS ||--o{ ASIGNATURAS: matriculado
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>Mientras que si entendemos que para formar parte de la academia las asignaturas debe tener al menos un alumno (y pueden tener muchos) y cada alumno deberá tener al menos una asignatura (y puede matricularse en varias), lo haremos así:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">erDiagram
-    ALUMNOS }|--|{ ASIGNATURAS: matriculado
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
+<p>Sabemos que debemos recibir información cruda de las fuentes, y esta información debe reposar al menos por un tiempo para poder ser entendida y gestionada. En el mejor caso, simplemente se integrará con las estructuras existentes. En el peor, deberemos alterar nuestro modelo para albergar estos nuevos datos e informar de su existencia a capas superiores. Es el área de aterrizaje de los datos o <strong>staging</strong>.</p>
+<p>Una vez entendidos los datos y su cohesión en los conceptos de negocio, formarán parte de la estructura base de nuestro sistema informacional. Quizás podamos aplicar algunas restricciones de negocio o validar la bondad de los datos recibidos. Todas estas fases son parte de una etapa intermedia que en el caso de data vault, forman el <strong>raw vault</strong>, con la información cruda ya estructurada; y el <strong>business vault</strong> donde ciertas reglas de negocio puedan ser aplicadas.</p>
+<p>Finalmente, el usuario debe ser abstraído de toda esta complejidad técnica. Una última capa pensada para la extracción de información, en un modelado en <a href="../../content/modelado/modelado_analitico.html#modelado-dimensional">estrella</a> o de tabla única, es donde la información resulta sencilla de consumir y con suerte disponemos de información adicional sobre cuándo fue actualizada por última vez, si algo ha cambiado en los datos, etc. Es la capa de consumo o <strong>business intelligence</strong>.</p>
 </section>
-<section id="tercera-forma-normal-3fn" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="tercera-forma-normal-3fn"><span class="header-section-number">2.3</span> Tercera forma normal (3FN)</h2>
-<p>La <strong>tercera forma normal (3FN)</strong> se alcanza cuando una tabla está en segunda forma normal y, además, todos los atributos que no forman parte de la clave principal no dependen transitivamente de ella. Es decir, cada campo debe depender únicamente de la clave primaria y no de otros atributos no clave.</p>
-<p>Esto resuelve problemas como la redundancia y las dependencias indirectas, evitando que la modificación de un dato implique cambios en múltiples lugares y reduciendo el riesgo de inconsistencias. La 3FN facilita el mantenimiento y la integridad de la base de datos, asegurando que cada dato se almacene en un solo lugar y que las relaciones entre entidades sean claras y directas.</p>
-<p>Por ejemplo, bien pudiera ser que un mismo profesor imparta varias asignaturas, con lo que el identificador de la asignatura no identifica univocamente a nuestros profesores.</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">erDiagram
-    ALUMNOS {
-        numero id_alumno
-        texto nombre
-        texto apellido
-    }
-    ASIGNATURAS {
-        numero id_asignatura
-        texto nombre
-        texto profesor
-    }
-</pre>
+<section id="la-era-big-data" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="la-era-big-data"><span class="header-section-number">10.3</span> La era Big Data</h2>
+<p>Para principios de los 2000s, varias empresas se enfrentaban a problemas relativos a la <em>velocidad</em> y <em>variabilidad</em> de los datos que venían de procedencias ajenas a la red empresarial: internet. El <em>volumen</em> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> que debían de procesar bien al vuelo como en reposo, crecía exponencialmente. Y si añadimos a esto la necesidad de modelar al mismo ritmo debido a la variabilidad de los formatos (<a href="https://es.wikipedia.org/wiki/Extensible_Markup_Language">XML</a> en gran medida en aquella época). Recordemos que los sistemas tabulares requerían de informar del esquema de la tabla incluyendo el tipo de dato de antemano, y cada cambio supone un quebradero de cabeza de gestión.</p>
+<p>Ya en 1998, Carlo Strozzi había sugerido el uso de sistemas que <a href="https://en.wikipedia.org/wiki/NoSQL">no solo soportarán SQL</a>. Es decir, que permitieran lo que conocemos como <em>schema-on-read</em> trasladando el problema de modelado a capas posteriores del sistema de forma que al menos, no perdiéramos información. En la misma medida, los equipos de Google y Yahoo! se encontraban en su pelea particular de cómo almacenar y procesar la información disponible en internet de manera económica y efectiva.</p>
+<p>Un par de trabajos del equipo de Google (<a href="https://static.googleusercontent.com/media/research.google.com/es//archive/gfs-sosp2003.pdf">Google File System</a> y <a href="https://static.googleusercontent.com/media/research.google.com/es//archive/mapreduce-osdi04.pdf">Map Reduce</a>) motivaron la implementación de Mike Cafarella y Doug Cutting, <a href="https://hadoop.apache.org/">Apache Hadoop</a> un sistema que tuvo una adopción vertiginosa en la década de 2010, algo antes de que se desencadenara el movimiento a la nube.</p>
+<p>Este sistema fue de los primeros que ofrecía a las empresas un sistema desacoplado entre almacenamiento y computación, con un sistema de código abierto, lo cual lo hacía accesible a todo el mundo al coste de ser uno mismo quien mantiene este sistema organizado.</p>
+</section>
+<section id="la-casa-del-lago" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="la-casa-del-lago"><span class="header-section-number">10.4</span> La casa del lago</h2>
+<p>Hadoop estaba basado en un sistema de ficheros, lo cual daba la versatilidad de almacenar lo que fuera necesario, sin embargo, consumir datos de esta fuente se volvía engorroso. Dado que los conocimientos de los equipos seguían centrándose en SQL y herramientas que podían realizar este tipo de consultas, los ingenieros de Facebook tomaron como referencia el trabajo del equipo de Google <a href="https://static.googleusercontent.com/media/research.google.com/es//pubs/archive/36632.pdf">Dremel</a> y crearon un sistema que permitía consultar información tabular en el sistema, <a href="https://hive.apache.org/">Apache Hive</a>. Simplemente catalogando cómo realizar la traducción tabla a fichero, estos sistemas abstraían a los usuarios de las complejidades del <strong>lago de datos</strong> empezando a vislumbrar lo que años más tarde el equipo de Databricks denominaría <strong>la casa del lago</strong> (o Data Lakehouse).</p>
+</section>
+<section id="ordenando-el-lago" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="ordenando-el-lago"><span class="header-section-number">10.5</span> Ordenando el lago</h2>
+<p>Tras la polvareda generada por la tumultuosa era de los clústeres Hadoop, la nube se abrió camino y con ello soluciones que haciendo uso de las tecnologías abiertas disponibles ofrecieron soluciones renovadas a las empresas. En cierta forma es como si hubiéramos reinventado los sistemas de gestión de base de datos cayendo en los mismos problemas que presentaban los sistemas originales. No es que no hubiera almacenamiento columnar antes de <a href="https://parquet.apache.org/">Apache Parquet</a> o computación distribuida en memoria antes de <a href="https://spark.apache.org/">Apache Spark</a>, pero a veces tenemos que romper el <em>status quo</em> para apreciar el trabajo existente.</p>
+<p>Dos grandes empresas salieron de esta época, <a href="https://www.snowflake.com/es/">Snowflake</a> con su sistema de gestión de bases de datos tabulares que permitía una gestión desacoplada de almacenamiento y computo. Y Databricks, cuyo co-fundador es <a href="https://en.wikipedia.org/wiki/Matei_Zaharia">Matei Zaharia</a>, autor principal del trabajo en Apache Spark<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>Estas dos soluciones de algún modo han vuelto a enfocarse en ofrecer rendimiento y estructura a los sistemas de datos. Han incorporado necesidades como las de lanzar procesos de bajo nivel o permitir flexibilizar los tipos de datos (VARIANT o JSON) para albergar estructuras anidadas de datos</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"persona"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"nombre"</span><span class="fu">:</span> <span class="st">"Iraitz"</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"appelido"</span><span class="fu">:</span> <span class="st">"Montalban"</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"empresas"</span><span class="fu">:</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            <span class="ot">[</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">"SDG Group"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Iberdrola"</span><span class="ot">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">"panda Security"</span><span class="ot">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Tecnalia"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="ot">]</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>pero se centran en disponer la información de forma tabular a sus consumidores. Databricks se ha encargado de acuñar varios términos como el Lakehouse para este tipo de flexibilización de la base de datos tradicional que incluye además capacidades operacionales; o incluso la <strong>arquitectura medallón</strong><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.databricks.com/sites/default/files/inline-images/building-data-pipelines-with-delta-lake-120823.png" class="img-fluid figure-img"></p>
+<figcaption>Arquitectura medallón</figcaption>
+</figure>
 </div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>Esto merece separar este concepto en una entidad independiente con su propio identificador.</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">erDiagram
-    ALUMNOS {
-        numero id_alumno
-        texto nombre
-        texto apellido
-    }
-    ASIGNATURAS {
-        numero id_asignatura
-        texto nombre
-    }
-    PROFESORES {
-        numero id_profesor
-        texto nombre
-    }
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>Y posteriormente podremos unir las relaciones entre las entidades:</p>
-<ul>
-<li>Un alumno debe estar matriculado en al menos una asignatura</li>
-<li>Una asignatura debe tener al menos un alumno matriculado para ser cursada</li>
-<li>Un profesor puede dar multiples asignatura con la opción de no estar impartiendo ninguna</li>
-<li>Una asignatura solo puede ser impartida por un profesor</li>
-</ul>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">erDiagram
-    ALUMNOS {
-        numero id_alumno
-        texto nombre
-        texto apellido
-    }
-    ASIGNATURAS {
-        numero id_asignatura
-        texto nombre
-    }
-    PROFESORES {
-        numero id_profesor
-        texto nombre
-    }
-    ALUMNOS }|--|{ ASIGNATURAS: matriculado
-    PROFESORES ||--o{ ASIGNATURAS: imparte
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<p>Con este esquema claro podemos ver como debemos disponer la información para que nuestro sistema gestor de datos pueda contener la estructura tal y como necesitamos.</p>
+<p>Que de algún modo, reinventa las tres capas base que ya veníamos empleando con otro nombre. Podríamos llamarlo la <strong>arquitectura del sentido común</strong> ya que sabemos que nuestras fuentes y nuestros consumidores vana tener distintas necesidades y únicamente nos estamos concediendo un hueco entre ambos para poder realizar nuestro trabajo y consolidar toda la información de la empresa de forma que sea manejable.</p>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Con esta tercera V es como conocemos las tres Vs del Big Data.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Junto con nombres como <a href="https://en.wikipedia.org/wiki/Ion_Stoica">Ion Stoica</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>De su fuente oficial https://www.databricks.com/glossary/medallion-architecture<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -1074,13 +922,13 @@ Desnormalizar
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/modelado/intro.html" class="pagination-link" aria-label="Modelado de datos">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Modelado de datos</span>
+      <a href="../../content/sistemas/dbms_analítica.html" class="pagination-link" aria-label="Base de datos analítica">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/modelado/desnormalizar.html" class="pagination-link" aria-label="Desnormalizar">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/load/intro.html" class="pagination-link" aria-label="Extracción">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
