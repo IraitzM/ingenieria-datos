@@ -369,7 +369,7 @@
     "href": "content/sistemas/dbms_analítica.html#sistemas-comunes",
     "title": "9  Base de datos analítica",
     "section": "9.3 Sistemas comunes",
-    "text": "9.3 Sistemas comunes\n\n9.3.1 Nube\n\nAzure Synpase SQL\nRedshift\nGoogle BigQuery\n\n\n\n9.3.2 Multinube\n\nSnowflake\nDatabricks\nMotherduck\n\n\n\n9.3.3 On-premise\n\nMicrosoft SQL Server\nApache Hadoop\nClickhouse\nDuckDB\n\n\n\n9.3.4 Motores de consulta\n\nTrino\nPinot\nApache Spark\nStardust\nDaft",
+    "text": "9.3 Sistemas comunes\n\n9.3.1 Nube\n\nAzure Synpase SQL\nRedshift\nGoogle BigQuery\n\n\n\n9.3.2 Multinube\n\nSnowflake\nDatabricks\nMotherduck\n\n\n\n9.3.3 On-premise\n\nMicrosoft SQL Server\nApache Hadoop\nClickhouse\nDuckDB\nApache Doris\n\n\n\n9.3.4 Motores de consulta\n\nTrino\nPinot\nApache Spark\nStardust\nDaft",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Base de datos analítica</span>"
