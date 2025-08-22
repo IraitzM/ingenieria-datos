@@ -259,7 +259,18 @@
     "href": "content/sistemas/rdbms_transaccional.html",
     "title": "7  Base de datos operacional",
     "section": "",
-    "text": "7.1 Transacciones\nPara entender las capacidades de los sistemas empleados en tiempo de aplicación, debemos entender primero el concepto de las transacciones.\nCuando realizamos operaciones sobre una base de datos que presenta la información en estructuras normalizadas, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.\n¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.",
+    "text": "7.1 Índices\nPara entender las capacidades de los sistemas empleados en tiempo de aplicación, debemos entender primero algunos conceptos que permiten a estos sistemas operar de forma rápida pero manteniendo la coherencia entre operaciones. Pensemos que necesitamos plantear una web, un sistema con capas frontales de presentación de datos, servicios back-end de gestión de lógicas de negocio y un sistema de almacenamiento de datos.\nEn los últimos años, la gestión de la capa transaccional ha evolucionado significativamente. Tradicionalmente, los sistemas de bases de datos como DB2 o PostgreSQL se encargaban de controlar las transacciones, asegurando la integridad y coherencia de los datos mediante mecanismos internos. Sin embargo, con el auge de arquitecturas más complejas y distribuidas, esta responsabilidad ha pasado en gran medida a los frameworks de desarrollo liberando de esta carga al sistema de almacenamiento.\nFrameworks como Spring en Java, entre otros, permiten definir y gestionar transacciones directamente en la lógica de negocio, desacoplando el control transaccional del sistema de almacenamiento. Esto facilita la implementación de reglas de negocio más flexibles y adaptadas a las necesidades de cada aplicación, además de permitir la integración con múltiples fuentes de datos y servicios externos. Así, la capa transaccional se ha convertido en una parte fundamental de los frameworks modernos, proporcionando herramientas avanzadas para el manejo de la consistencia y la recuperación ante fallos.\nSi algo necesitamos en las aplicaciones es velocidad. ¿Cómo de rápido es buscar información en una tabla? Pues no demasiado. Aunque contemos con estructuras normalizadas que garantizan que cada cliente (por ejemplo) existe una sola vez en nuestra tabla, deberemos recorrerla para encontrar su registro. Podemos aliviar parte de esta búsqueda al igual que sucede en los libros, construyendo un índice que nos indique en que página o fila en nuestro caso se encuentra la información que necesitamos.\nLos índices son estructuras de datos que permiten a las bases de datos mantener un registro de los datos que se encuentran en la misma. Estos índices permiten a las bases de datos realizar operaciones de búsqueda más eficientes. En el caso de las bases de datos relacionales, los índices se almacenan en tablas aparte de las tablas de datos y dependiendo del algoritmo elegido tomará distinta forma.\nEl algoritmo B-tree se compone de la información de la columa (o columnas deseadas) construyendo un árbol balanceado que nos permite descartar los registros cuyos valores se encuentren por encima o debajo de nuestro valor de búsqueda.\nVeamos un ejemplo de cómo podríamos estructurar un índice B-tree que almacene números.\nComo vemos en la imagen, cada nuevo dato altera la estructura de forma que garantizamos que cada nodo raíz plantea dos caminos con valores mayores o menores al valor del nodo. Esto permite descartar de manera eficaz la mitad de la información en cada paso y obtener un rendimiento \\(\\mathcal{O}(\\log{n})\\) en promedio.\nExisten variantes como la B+ que es la que implementan sistemas como MySQL o PostgreSQL precisamente para acelerar las búsquedas almacenando la información en los nodos hoja (nodos terminales del árbol) organizados como una lista secuencial que permite realizar eficientemente bíusquedas de rangos.\nEs importante notar que debe construirse el índice explícitamente y que esto hace que las inserciones sean algo más lentas ya que además de insertar los datos, el sistema gestor de base de datos debe actualizar el índice. No podemos acelerar de un lado sin enlentecer de otro, pero en balance nos debería compensar. Por esto hace falta evaluar la necesidad de índices en cada caso.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Base de datos operacional</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/rdbms_transaccional.html#índices",
+    "href": "content/sistemas/rdbms_transaccional.html#índices",
+    "title": "7  Base de datos operacional",
+    "section": "",
+    "text": "Ejemplo de construcción de un árbol B-Tree",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Base de datos operacional</span>"
@@ -269,8 +280,8 @@
     "objectID": "content/sistemas/rdbms_transaccional.html#transacciones",
     "href": "content/sistemas/rdbms_transaccional.html#transacciones",
     "title": "7  Base de datos operacional",
-    "section": "",
-    "text": "El dinero sale de la cuenta origen\nEl dinero se inserta en la cuenta destinataria\n\n\n&lt;transacciones&gt;\n    &lt;operación&gt;El dinero sale de la cuenta origen&lt;/operación&gt;\n    &lt;operación&gt;El dinero se inserta en la cuenta destinataria&lt;/operación&gt;\n&lt;transacciones/&gt;\n\n7.1.1 ACID\nA este paquete podemos llamarlo transacción y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de sistemas transaccionales. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo ACID:\n\nAtomicidad: La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos\nConsistencia: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.\nIndependencia: El aislamiento de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento\nDurable: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.\n\nCon esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter analítico.\nEl hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.\n\n\n7.1.2 Usos\nPensemos que necesitamos plantear una web, un sistema con capas frontales de presentación de datos, servicios back-end de gestión de lógicas de negocio y un sistema de almacenamiento de datos.\n\n\n\n\n\nflowchart LR\n    df[(Base de datos)]\n    bend[Lógica de negocio]\n    fend[Capa visual]\n\n    df --- bend\n    bend --- fend\n\n\n\n\n\n\nEn los últimos años, la gestión de la capa transaccional ha evolucionado significativamente. Tradicionalmente, los sistemas de bases de datos como DB2 o PostgreSQL se encargaban de controlar las transacciones, asegurando la integridad y coherencia de los datos mediante mecanismos internos. Sin embargo, con el auge de arquitecturas más complejas y distribuidas, esta responsabilidad ha pasado en gran medida a los frameworks de desarrollo liberando de esta carga al sistema de almacenamiento.\nFrameworks como Spring en Java, entre otros, permiten definir y gestionar transacciones directamente en la lógica de negocio, desacoplando el control transaccional del sistema de almacenamiento. Esto facilita la implementación de reglas de negocio más flexibles y adaptadas a las necesidades de cada aplicación, además de permitir la integración con múltiples fuentes de datos y servicios externos. Así, la capa transaccional se ha convertido en una parte fundamental de los frameworks modernos, proporcionando herramientas avanzadas para el manejo de la consistencia y la recuperación ante fallos.\nLa base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar acabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores. Y muy posiblemente debamos conocer algo de SQL para poder interactuar con estos sistemas.",
+    "section": "7.2 Transacciones",
+    "text": "7.2 Transacciones\nCuando realizamos operaciones sobre una base de datos que presenta la información en estructuras normalizadas, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.\n\nEl dinero sale de la cuenta origen\nEl dinero se inserta en la cuenta destinataria\n\n¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.\n&lt;transacciones&gt;\n    &lt;operación&gt;El dinero sale de la cuenta origen&lt;/operación&gt;\n    &lt;operación&gt;El dinero se inserta en la cuenta destinataria&lt;/operación&gt;\n&lt;transacciones/&gt;\n\n7.2.1 ACID\nA este paquete podemos llamarlo transacción y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de sistemas transaccionales. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo ACID:\n\nAtomicidad: La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos\nConsistencia: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.\nIndependencia: El aislamiento de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento\nDurable: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.\n\nCon esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter analítico.\nEl hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.\nLa base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar a cabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores. Y muy posiblemente debamos conocer algo de SQL para poder interactuar con estos sistemas. Para ello deberemos profundizar en dos cuestiones clave: los índices y las transacciones.",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Base de datos operacional</span>"
@@ -336,7 +347,7 @@
     "href": "content/sistemas/dbms_analítica.html",
     "title": "9  Base de datos analítica",
     "section": "",
-    "text": "9.1 Ordenación de los datos\nSi bien es cierto que heredamos de los sistemas operacionales la estructura base, las necesidades de un sistema analítico son muy distintos.\nLas bases de datos operacionales para facilitar el acceso concurrente a los datos, ordenan estos en filas.\nEn los ficheros convencionales ordenados por filas la información la representaríamos así.\nMientras que las consultas analíticas precisan acceder a la información en columnas. Por ejemplo, si quisiéramos hacer un promedio de la edad de nuestros alumnos, solo necesitamos esa cuarta columna. Es decir, sabiendo qué número de filas tenemos solo debemos posicionarnos donde empieza la cuarta columna y leer los siguientes 2 datos, obviando todo lo anterior.\nDe forma que la ordenación columnar nos permite no tener que cargar la información innecesaria en la operación AVG(edad).\nEn el mundo de los sistemas de código abierto, Apache Parquet para el almacenamiento en disco y Apache Arrow para el mismo concepto en memoria se han convertido en un estándar.",
+    "text": "9.1 Ordenación de los datos\nSi bien es cierto que heredamos de los sistemas operacionales la estructura base, las necesidades de un sistema analítico son muy distintas. No se prima tanto la velocidad si no la capacidad de manejar y calcular usando grándes volúmenes de datos.\nLas bases de datos operacionales para facilitar el acceso concurrente a los datos, ordenan estos en filas a nivel de almacenamiento y acceso.\nEn los ficheros convencionales ordenados por filas la información la representaríamos así.\nMientras que las consultas analíticas precisan acceder a la información en columnas. Por ejemplo, si quisiéramos hacer un promedio de la edad de nuestros alumnos, solo necesitamos esa cuarta columna. Es decir, sabiendo qué número de filas tenemos solo debemos posicionarnos donde empieza la cuarta columna y leer los siguientes 2 datos, obviando todo lo anterior.\nDe forma que la ordenación columnar nos permite no tener que cargar la información innecesaria en la operación AVG(edad).\nEn el mundo de los sistemas de código abierto, Apache Parquet para el almacenamiento en disco y Apache Arrow para el mismo concepto en memoria se han convertido en un estándar.",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Base de datos analítica</span>"
@@ -358,7 +369,7 @@
     "href": "content/sistemas/dbms_analítica.html#restricciones",
     "title": "9  Base de datos analítica",
     "section": "9.2 Restricciones",
-    "text": "9.2 Restricciones\nPara el caso general no existen cuestiones como las restricciones de clave primaria y clave foránea, ya que el sistema origen es quien impone estas restricciones y el sistema analítico recoge la información tal y como este la provea.\nDel mismo modo, de cara a hacer las operaciones más rápidas, los índices son clave en los sistemas operacionales. Las bases de datos analíticas no presentan esta necesidad ya que solemos consumir la información en bloques y se asumen las latencias de estos procesos por no impacta a procesos de negocio. Si que tener una buena ordenación nos ayuda a no leer información que no vayamos a utilizar y aligerar la carga del proceso, de ahí que si sea común tener políticas de particionado.",
+    "text": "9.2 Restricciones\nPara el caso general no existen cuestiones como las restricciones de clave primaria y clave foránea, ya que el sistema origen es quien impone estas restricciones y el sistema analítico recoge la información tal y como este la provea.\nDel mismo modo, de cara a hacer las operaciones más rápidas, los índices son clave en los sistemas operacionales. Las bases de datos analíticas no presentan esta necesidad ya que solemos consumir la información en bloques y se asumen las latencias de estos procesos por no impacta a procesos de negocio. Tener una buena ordenación nos ayuda a no leer información que no vayamos a utilizar y aligerar la carga del proceso, de ahí que si sea común tener políticas de particionado.\n\n9.2.1 Particionado\nLa forma más sencilla de ver el particionado es con un ejemplo que emplee la fecha como parámetro de filtrado (cláusula WHERE). Si solo precisamos la información de 2025 en adelante, podemos buscar por cada registro cuales cumplen ese criterio. Podemos construir un índice que nos permita emplear solo esa información con el almacenamiento adicional y tiempos de inserción mayores como impacto. Sin embargo hay un modo quizás más sencillo entnediendo que la información ya viene de otros sistemas y actuamos sobre ella al ser ingestada. Podemos crear distintas estructuras (tablas, ficheros,…) con el sufijo _YYYY haciendo referencia al año, de forma que solo empleemos esas tablas en nuestro proceso. El particionado se refiere a componer estas estructuras que aunque abstraigan al usuario de estar consultando más de una tabla, tienen un efecto importante en el filtrado de información cuando este es indicado en algún cálculo.",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Base de datos analítica</span>"
@@ -369,7 +380,7 @@
     "href": "content/sistemas/dbms_analítica.html#sistemas-comunes",
     "title": "9  Base de datos analítica",
     "section": "9.3 Sistemas comunes",
-    "text": "9.3 Sistemas comunes\n\n9.3.1 Nube\n\nAzure Synpase SQL\nRedshift\nGoogle BigQuery\n\n\n\n9.3.2 Multinube\n\nSnowflake\nDatabricks\nMotherduck\n\n\n\n9.3.3 On-premise\n\nMicrosoft SQL Server\nApache Hadoop\nClickhouse\nDuckDB\nApache Doris\n\n\n\n9.3.4 Motores de consulta\n\nTrino\nPinot\nApache Spark\nStardust\nDaft",
+    "text": "9.3 Sistemas comunes\nTodos estos principios deben ser implementados por los proveedores y cada uno tendrá su filosofía de cómo deben realizarse estas acciones pero os dejamos un listado no exaustivo de tecnologías destinadas a sistemas analíticos que merece la pena explorar.\n\n9.3.1 Nube\nSistemas propietarios en las principales nubes.\n\nAzure Synpase SQL\nRedshift\nGoogle BigQuery\n\n\n\n9.3.2 Multinube\nSistemas que empleando recursos de infraestructura en el proveedor nube de elección, implementan su sistema gestor propietarios. Son sin duda las soluciones corporativas más demandadas en la actualdiad.\n\nSnowflake\nDatabricks\nMotherduck\n\n\n\n9.3.3 On-premise\nEstos sistemas permiten el despliegue en recursos nube o infraestructura propietaria, siendo en muchos casos una opción más asequible si se dispone de la madurez IT necesaria.\n\nMicrosoft SQL Server\nApache Hadoop\nClickhouse\nDuckDB\nApache Doris\n\n\n\n9.3.4 Motores de consulta\nSi disponemos de infraestructura escalable de almacenamiento, podemos emplear sistemas que únicamente nos den la capa de gestión y computación necesaria. Son particularmete útiles cuando empleamos formatos de almacenamiento columnar y abiero (Apache Parquet, CSV, JSON).\n\nTrino\nPinot\nApache Spark\nStarburst\nDaft\n\nLos sistemas de almacenamiento de forma paralela a los motores de consulta han evolucionado gracias a las tendencias sobre lagos de datos de la década de los 2010.",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Base de datos analítica</span>"
@@ -424,7 +435,7 @@
     "href": "content/sistemas/arquitecturas.html#ordenando-el-lago",
     "title": "10  Elección de arquitecturas",
     "section": "10.5 Ordenando el lago",
-    "text": "10.5 Ordenando el lago\nTras la polvareda generada por la tumultuosa era de los clústeres Hadoop, la nube se abrió camino y con ello soluciones que haciendo uso de las tecnologías abiertas disponibles ofrecieron soluciones renovadas a las empresas. En cierta forma es como si hubiéramos reinventado los sistemas de gestión de base de datos cayendo en los mismos problemas que presentaban los sistemas originales. No es que no hubiera almacenamiento columnar antes de Apache Parquet o computación distribuida en memoria antes de Apache Spark, pero a veces tenemos que romper el status quo para apreciar el trabajo existente.\nDos grandes empresas salieron de esta época, Snowflake con su sistema de gestión de bases de datos tabulares que permitía una gestión desacoplada de almacenamiento y computo. Y Databricks, cuyo co-fundador es Matei Zaharia, autor principal del trabajo en Apache Spark2.\nEstas dos soluciones de algún modo han vuelto a enfocarse en ofrecer rendimiento y estructura a los sistemas de datos. Han incorporado necesidades como las de lanzar procesos de bajo nivel o permitir flexibilizar los tipos de datos (VARIANT o JSON) para albergar estructuras anidadas de datos\n{\n    \"persona\": {\n        \"nombre\": \"Iraitz\",\n        \"appelido\": \"Montalban\",\n        \"empresas\": \n            [\n                \"SDG Group\"\n                \"Iberdrola\",\n                \"panda Security\",\n                \"Tecnalia\"\n            ]\n        }\n    }\n}\npero se centran en disponer la información de forma tabular a sus consumidores. Databricks se ha encargado de acuñar varios términos como el Lakehouse para este tipo de flexibilización de la base de datos tradicional que incluye además capacidades operacionales; o incluso la arquitectura medallón3\n\n\n\nArquitectura medallón\n\n\nQue de algún modo, reinventa las tres capas base que ya veníamos empleando con otro nombre. Podríamos llamarlo la arquitectura del sentido común ya que sabemos que nuestras fuentes y nuestros consumidores vana tener distintas necesidades y únicamente nos estamos concediendo un hueco entre ambos para poder realizar nuestro trabajo y consolidar toda la información de la empresa de forma que sea manejable.",
+    "text": "10.5 Ordenando el lago\nTras la polvareda generada por la tumultuosa era de los clústeres Hadoop, la nube se abrió camino y con ello soluciones que haciendo uso de las tecnologías abiertas disponibles ofrecieron soluciones renovadas a las empresas. En cierta forma es como si hubiéramos reinventado los sistemas de gestión de base de datos cayendo en los mismos problemas que presentaban los sistemas originales. No es que no hubiera almacenamiento columnar antes de Apache Parquet o computación distribuida en memoria antes de Apache Spark, pero a veces tenemos que romper el status quo para apreciar el trabajo existente.\nDos grandes empresas salieron de esta época, Snowflake con su sistema de gestión de bases de datos tabulares que permitía una gestión desacoplada de almacenamiento y computo. Y Databricks, cuyo co-fundador es Matei Zaharia, autor principal del trabajo en Apache Spark2.\nEstas dos soluciones de algún modo han vuelto a enfocarse en ofrecer rendimiento y estructura a los sistemas de datos. Han incorporado necesidades como las de lanzar procesos de bajo nivel o permitir flexibilizar los tipos de datos (VARIANT o JSON) para albergar estructuras anidadas de datos\n{\n    \"persona\": {\n        \"nombre\": \"Iraitz\",\n        \"appelido\": \"Montalban\",\n        \"empresas\": \n            [\n                \"SDG Group\"\n                \"Iberdrola\",\n                \"panda Security\",\n                \"Tecnalia\"\n            ]\n        }\n    }\n}\npero se centran en disponer la información de forma tabular a sus consumidores. Databricks se ha encargado de acuñar varios términos como el Lakehouse para este tipo de flexibilización de la base de datos tradicional que incluye además capacidades operacionales; o incluso la arquitectura medallón3\n\n\n\nArquitectura medallón\n\n\nQue de algún modo, reinventa las tres capas base que ya veníamos empleando con otro nombre. Podríamos llamarlo la arquitectura del sentido común ya que sabemos que nuestras fuentes y nuestros consumidores vana tener distintas necesidades y únicamente nos estamos concediendo un hueco entre ambos para poder realizar nuestro trabajo y consolidar toda la información de la empresa de forma que sea manejable.\nEs curioso cómo estos sistemas han evolucionado precisamente ofreciendo capacidades operacionales en las modalidades de arquitecturas mixtas gracias a los formatos abiertos de nueva generación.",
     "crumbs": [
       "Sistemas gestores de datos",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Elección de arquitecturas</span>"
@@ -442,58 +453,102 @@
     ]
   },
   {
+    "objectID": "content/sistemas/nuevos-formatos.html",
+    "href": "content/sistemas/nuevos-formatos.html",
+    "title": "11  Formatos abiertos",
+    "section": "",
+    "text": "11.1 Delta Lake\nLos sistemas analíticos se benefician de forma especial de formatos abiertos, interoperables y de almacenamiento columnar, como es el caso de Apache Spark. Trabajr con ficheros y carpetas nos permite de forma sencilla implementar particionado para filtrar de manera eficiente los ficheros que no son necesarios en las consultas.\nSin embargo, con la proliferación de sistemas en streaming o flujos de datos, se planteáron problemas propios. Por ejemplo, la modificación de registros resulta pesada, ya que debemos cargar los ficheros completos, alterar y reescribir su contenido. Recordemos que al estar ordenados en columnas, modificar un registro resulta pesado pero esto se debe a que asumímos no era necesario.\nMenos aún ofrecer capacidades ACID, pero ¿y si dos procesos quieren intervenir y alterar un mismo fichero? Los sistemas basados en ficheros son amigables a la adición (append) pero no tanto a la modificación.\nPosiblemente unos de los primeros en intentar dar respuesta a este problema fueron la amable gente de Databricks. Basado en el formato Parquet, Delta se presenta como un formato que permite:",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Formatos abiertos</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/nuevos-formatos.html#delta-lake",
+    "href": "content/sistemas/nuevos-formatos.html#delta-lake",
+    "title": "11  Formatos abiertos",
+    "section": "",
+    "text": "La modificación eficiente de registros manteniendo la información versionada\nOperación transaccional\nUnificación de las necesidades de flujos de datos (streaming) y por lotes (batch) tan común en arquitecruras lambda.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Formatos abiertos</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/nuevos-formatos.html#apache-hudi",
+    "href": "content/sistemas/nuevos-formatos.html#apache-hudi",
+    "title": "11  Formatos abiertos",
+    "section": "11.2 Apache Hudi",
+    "text": "11.2 Apache Hudi\nOnehouse\n\n11.2.1 Apache XTable\nXtable surge de la falta de consonancia entre proveedores y busca hacer interoperables todos los formatos.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Formatos abiertos</span>"
+    ]
+  },
+  {
+    "objectID": "content/sistemas/nuevos-formatos.html#apache-iceberg",
+    "href": "content/sistemas/nuevos-formatos.html#apache-iceberg",
+    "title": "11  Formatos abiertos",
+    "section": "11.3 Apache Iceberg",
+    "text": "11.3 Apache Iceberg\nTabular que fue adquirida por Databricks es el promotor principal de este formato que poco a poco se ha convertido en el estándar.",
+    "crumbs": [
+      "Sistemas gestores de datos",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Formatos abiertos</span>"
+    ]
+  },
+  {
     "objectID": "content/load/intro.html",
     "href": "content/load/intro.html",
-    "title": "11  Extracción",
+    "title": "12  Extracción",
     "section": "",
-    "text": "11.1 Bases de datos\nUno de los pasos primeros que deberemos hacer es conocer los datos a extraer y las características base de estos:\nDe modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.\nFrecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:\nMuchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.",
+    "text": "12.1 Bases de datos\nUno de los pasos primeros que deberemos hacer es conocer los datos a extraer y las características base de estos:\nDe modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.\nFrecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:\nMuchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#bases-de-datos",
     "href": "content/load/intro.html#bases-de-datos",
-    "title": "11  Extracción",
+    "title": "12  Extracción",
     "section": "",
     "text": "SQL: Sistemas de origen tabular (RDBMS) a los que podemos interrogar con sentencias SQL para extraer la información necesaria. Son sistemas de consulta por lo que a no ser que dispongan de un campo informando de la fecha de la información, es difícil gestionar posibles variaciones con respecto a las cargas anteriores sin almacenar en un sistema intermedio la información para comparar que fue cargado y qué es nuevo.\nNoSQL: Sistemas de origen no tabular que suelen disponer la información en formatos modernos, siendo JSON el más habitual. Esto obliga a identificar si el destino permite el registro de información de estructura variable o debemos darle un formato tabular antes de poder insertarla. Al igual que con las bases de datos tabulares, deberemos ver qué medios tenemos para poder identificar los registros sumados o que hayan variado desde la última consulta.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#apis",
     "href": "content/load/intro.html#apis",
-    "title": "11  Extracción",
-    "section": "11.2 APIs",
-    "text": "11.2 APIs\nUno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.",
+    "title": "12  Extracción",
+    "section": "12.2 APIs",
+    "text": "12.2 APIs\nUno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/load/intro.html#colas",
     "href": "content/load/intro.html#colas",
-    "title": "11  Extracción",
-    "section": "11.3 Colas",
-    "text": "11.3 Colas\nLos sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este buffer que retiene los datos hasta ser consumidos o expiren.",
+    "title": "12  Extracción",
+    "section": "12.3 Colas",
+    "text": "12.3 Colas\nLos sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este buffer que retiene los datos hasta ser consumidos o expiren.",
     "crumbs": [
       "Ingesta de datos",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extracción</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Extracción</span>"
     ]
   },
   {
     "objectID": "content/transform/intro.html",
     "href": "content/transform/intro.html",
-    "title": "12  Transformación",
+    "title": "13  Transformación",
     "section": "",
     "text": "pendiente",
     "crumbs": [
       "Transformación de datos",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Transformación</span>"
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Transformación</span>"
     ]
   },
   {
@@ -509,23 +564,23 @@
   {
     "objectID": "content/explotacion/bi.html",
     "href": "content/explotacion/bi.html",
-    "title": "13  Inteligencia de negocio",
+    "title": "14  Inteligencia de negocio",
     "section": "",
     "text": "La inteligencia de negocio o Business Intelligence (BI) es sin duda uno de los recursos clave a la hora de conocer la actividad de nuestra empresa. Toda esa información que los datos ocultan, si la manipulamos de forma correcta y la presentamos de un modo lógico puede ayudarnos a determinar si estamos comprando de más, vendiendo de menos, si nuestras líneas de fabricación están siendo bien empleadas o si nuestros almacenes requieren una renovación del stock.",
     "crumbs": [
       "Explotación de los datos",
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Inteligencia de negocio</span>"
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Inteligencia de negocio</span>"
     ]
   },
   {
     "objectID": "content/explotacion/ds.html",
     "href": "content/explotacion/ds.html",
-    "title": "14  Ciencia de datos",
+    "title": "15  Ciencia de datos",
     "section": "",
     "text": "pendiente",
     "crumbs": [
       "Explotación de los datos",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Ciencia de datos</span>"
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Ciencia de datos</span>"
     ]
   },
   {
