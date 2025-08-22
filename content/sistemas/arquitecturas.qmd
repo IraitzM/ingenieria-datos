@@ -113,6 +113,8 @@ pero se centran en disponer la información de forma tabular a sus consumidores.
 
 Que de algún modo, reinventa las tres capas base que ya veníamos empleando con otro nombre. Podríamos llamarlo la **arquitectura del sentido común** ya que sabemos que nuestras fuentes y nuestros consumidores vana  tener distintas necesidades y únicamente nos estamos concediendo un hueco entre ambos para poder realizar nuestro trabajo y consolidar toda la información de la empresa de forma que sea manejable.
 
+Es curioso cómo estos sistemas han evolucionado precisamente ofreciendo capacidades operacionales en las modalidades de arquitecturas mixtas gracias a los [formatos abiertos de nueva generación](./nuevos-formatos.qmd).
+
 
 [^1]: Con esta tercera V es como conocemos las tres Vs del Big Data.
 [^2]: Junto con nombres como [Ion Stoica](https://en.wikipedia.org/wiki/Ion_Stoica)

@@ -1,0 +1,31 @@
+# Formatos abiertos
+
+Los sistemas analíticos se benefician de forma especial de formatos abiertos, interoperables y de almacenamiento columnar, como es el caso de Apache Spark. Trabajr con ficheros y carpetas nos permite de forma sencilla implementar particionado para filtrar de manera eficiente los ficheros que no son necesarios en las consultas.
+
+Sin embargo, con la proliferación de sistemas en _streaming_ o flujos de datos, se planteáron problemas propios. Por ejemplo, la modificación de registros resulta pesada, ya que debemos cargar los ficheros completos, alterar y reescribir su contenido. Recordemos que al estar ordenados en columnas, modificar un registro resulta pesado pero esto se debe a que asumímos no era necesario.
+
+Menos aún ofrecer capacidades ACID, pero ¿y si dos procesos quieren intervenir y alterar un mismo fichero? Los sistemas basados en ficheros son amigables a la adición (_append_) pero no tanto a la modificación.
+
+## Delta Lake
+
+Posiblemente unos de los primeros en intentar dar respuesta a este problema fueron la amable gente de Databricks. Basado en el formato Parquet, [Delta](https://delta.io/) se presenta como un formato que permite:
+
+* La modificación eficiente de registros manteniendo la información versionada
+* Operación transaccional
+* Unificación de las necesidades de flujos de datos (_streaming_) y por lotes (_batch_) tan común en arquitecruras _lambda_.
+
+## Apache Hudi
+
+[Onehouse](https://www.onehouse.ai/)
+
+### Apache XTable
+
+[Xtable](https://xtable.apache.org/) surge de la falta de consonancia entre proveedores y busca hacer interoperables todos los formatos.
+
+## Apache Iceberg
+
+[Tabular](tabular.io) que fue adquirida por Databricks es el promotor principal de este formato que poco a poco se ha convertido en el estándar.
+
+# Sistemas de gestión
+
+Debido al mantenimiento que requieren estos sistemas, algo nada trivial, se han planteado soluciones como [Apache Amoro](https://amoro.apache.org/) que ayuda al menatnimiento de la capa de almacenamiento ofreciendo un canal de interacción unificado.

@@ -1,10 +1,11 @@
 # Base de datos analítica
 
-Si bien es cierto que heredamos de los sistemas operacionales la estructura base, las necesidades de un sistema analítico son muy distintos.
+Si bien es cierto que heredamos de los sistemas operacionales la estructura base,
+las necesidades de un sistema analítico son muy distintas. No se prima tanto la velocidad si no la capacidad de manejar y calcular usando grándes volúmenes de datos.
 
 ## Ordenación de los datos
 
-Las bases de datos operacionales para facilitar el acceso concurrente a los datos, ordenan estos en filas.
+Las bases de datos operacionales para facilitar el acceso concurrente a los datos, ordenan estos en filas a nivel de almacenamiento y acceso.
 
 | id|nombre  | apellido  | edad |
 |---|--------|-----------|----|
@@ -27,11 +28,21 @@ En el mundo de los sistemas de código abierto, [Apache Parquet](https://parquet
 
 Para el caso general no existen cuestiones como las restricciones de clave primaria y clave foránea, ya que el sistema origen es quien impone estas restricciones y el sistema analítico recoge la información tal y como este la provea.
 
-Del mismo modo, de cara a hacer las operaciones más rápidas, los `índices` son clave en los sistemas operacionales. Las bases de datos analíticas no presentan esta necesidad ya que solemos consumir la información en bloques y se asumen las latencias de estos procesos por no impacta  a procesos de negocio. Si que tener una buena ordenación nos ayuda a no leer información que no vayamos a utilizar y aligerar la carga del proceso, de ahí que si sea común tener políticas de `particionado`.
+Del mismo modo, de cara a hacer las operaciones más rápidas, los [índices](./rdbms_transaccional.qmd#Índices) son clave en los sistemas operacionales. Las bases de datos analíticas no presentan esta necesidad ya que solemos consumir la información en bloques y se asumen las latencias de estos procesos por no impacta a procesos de negocio.
+Tener una buena ordenación nos ayuda a no leer información que no vayamos a utilizar y aligerar la carga del proceso, de ahí que si sea común tener políticas de `particionado`.
+
+### Particionado
+
+La forma más sencilla de ver el particionado es con un ejemplo que emplee la fecha como parámetro de filtrado (cláusula `WHERE`). Si solo precisamos la información de 2025 en adelante, podemos buscar por cada registro cuales cumplen ese criterio. Podemos construir un índice que nos permita emplear solo esa información con el almacenamiento adicional y tiempos de inserción mayores como impacto.
+Sin embargo hay un modo quizás más sencillo entnediendo que la información ya viene de otros sistemas y actuamos sobre ella al ser ingestada. Podemos crear distintas estructuras (tablas, ficheros,...) con el sufijo `_YYYY` haciendo referencia al año, de forma que solo empleemos esas tablas en nuestro proceso. El particionado se refiere a componer estas estructuras que aunque abstraigan al usuario de estar consultando más de una tabla, tienen un efecto importante en el filtrado de información cuando este es indicado en algún cálculo.
 
 ## Sistemas comunes
 
+Todos estos principios deben ser implementados por los proveedores y cada uno tendrá su filosofía de cómo deben realizarse estas acciones pero os dejamos un listado no exaustivo de tecnologías destinadas a sistemas analíticos que merece la pena explorar.
+
 ### Nube
+
+Sistemas propietarios en las principales nubes.
 
 * Azure Synpase SQL
 * Redshift
@@ -39,11 +50,15 @@ Del mismo modo, de cara a hacer las operaciones más rápidas, los `índices` so
 
 ### Multinube
 
+Sistemas que empleando recursos de infraestructura en el proveedor nube de elección, implementan su sistema gestor propietarios. Son sin duda las soluciones corporativas más demandadas en la actualdiad.
+
 * Snowflake
 * Databricks
 * Motherduck
 
 ### On-premise
+
+Estos sistemas permiten el despliegue en recursos nube o infraestructura propietaria, siendo en muchos casos una opción más asequible si se dispone de la madurez IT necesaria.
 
 * Microsoft SQL Server
 * Apache Hadoop
@@ -53,8 +68,12 @@ Del mismo modo, de cara a hacer las operaciones más rápidas, los `índices` so
 
 ### Motores de consulta
 
+Si disponemos de infraestructura escalable de almacenamiento, podemos emplear sistemas que únicamente nos den la capa de gestión y computación necesaria. Son particularmete útiles cuando empleamos formatos de almacenamiento columnar y abiero (Apache Parquet, CSV, JSON).
+
 * Trino
 * Pinot
 * Apache Spark
-* Stardust
+* Starburst
 * Daft
+
+Los sistemas de almacenamiento de forma paralela a los motores de consulta han evolucionado gracias a las tendencias sobre [lagos de datos](./arquitecturas#ordenando-el-lago) de la década de los 2010.

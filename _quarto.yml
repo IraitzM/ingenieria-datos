@@ -45,6 +45,7 @@ book:
       - content/sistemas/sql.qmd
       - content/sistemas/dbms_analítica.qmd
       - content/sistemas/arquitecturas.qmd
+      - content/sistemas/nuevos-formatos.qmd
 
     - part: "Ingesta de datos"
       chapters:
