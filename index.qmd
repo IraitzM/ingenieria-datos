@@ -17,5 +17,6 @@ Tenéis muy buenos recursos online, aunque en inglés muchos:
 * Muchos recursos muy buenos por [Zach Wilson de DataExpert.io](https://github.com/DataExpert-io/data-engineer-handbook)
 * Data Engineering por [Karl Christian](https://karlchris.github.io/data-engineering/)
 * El gran curso de [Joe Reis en Deeplearning.ai](https://www.deeplearning.ai/courses/data-engineering/)
+* La biblia de los sistemas componibles [The Composable Codex](https://voltrondata.com/codex)
 
 Ahora toca digerir todo esto. Con suerte esta guía os puede asistir.
