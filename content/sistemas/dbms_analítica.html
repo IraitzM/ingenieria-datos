@@ -329,7 +329,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <li><a href="#sistemas-comunes" id="toc-sistemas-comunes" class="nav-link" data-scroll-target="#sistemas-comunes"><span class="header-section-number">9.3</span> Sistemas comunes</a>
   <ul class="collapse">
   <li><a href="#nube" id="toc-nube" class="nav-link" data-scroll-target="#nube"><span class="header-section-number">9.3.1</span> Nube</a></li>
-  <li><a href="#multinube" id="toc-multinube" class="nav-link" data-scroll-target="#multinube"><span class="header-section-number">9.3.2</span> Multinube</a></li>
+  <li><a href="#multi-nube" id="toc-multi-nube" class="nav-link" data-scroll-target="#multi-nube"><span class="header-section-number">9.3.2</span> Multi-nube</a></li>
   <li><a href="#on-premise" id="toc-on-premise" class="nav-link" data-scroll-target="#on-premise"><span class="header-section-number">9.3.3</span> On-premise</a></li>
   <li><a href="#motores-de-consulta" id="toc-motores-de-consulta" class="nav-link" data-scroll-target="#motores-de-consulta"><span class="header-section-number">9.3.4</span> Motores de consulta</a></li>
   </ul></li>
@@ -361,7 +361,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p>Si bien es cierto que heredamos de los sistemas operacionales la estructura base, las necesidades de un sistema analítico son muy distintas. No se prima tanto la velocidad si no la capacidad de manejar y calcular usando grándes volúmenes de datos.</p>
+<p>Si bien es cierto que heredamos de los sistemas operacionales la estructura base, las necesidades de un sistema analítico son muy distintas. No se prima tanto la velocidad si no la capacidad de manejar y calcular usando grandes volúmenes de datos.</p>
 <section id="ordenación-de-los-datos" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="ordenación-de-los-datos"><span class="header-section-number">9.1</span> Ordenación de los datos</h2>
 <p>Las bases de datos operacionales para facilitar el acceso concurrente a los datos, ordenan estos en filas a nivel de almacenamiento y acceso.</p>
@@ -406,12 +406,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Del mismo modo, de cara a hacer las operaciones más rápidas, los <a href="../../content/sistemas/rdbms_transaccional.html#Índices">índices</a> son clave en los sistemas operacionales. Las bases de datos analíticas no presentan esta necesidad ya que solemos consumir la información en bloques y se asumen las latencias de estos procesos por no impacta a procesos de negocio. Tener una buena ordenación nos ayuda a no leer información que no vayamos a utilizar y aligerar la carga del proceso, de ahí que si sea común tener políticas de <code>particionado</code>.</p>
 <section id="particionado" class="level3" data-number="9.2.1">
 <h3 data-number="9.2.1" class="anchored" data-anchor-id="particionado"><span class="header-section-number">9.2.1</span> Particionado</h3>
-<p>La forma más sencilla de ver el particionado es con un ejemplo que emplee la fecha como parámetro de filtrado (cláusula <code>WHERE</code>). Si solo precisamos la información de 2025 en adelante, podemos buscar por cada registro cuales cumplen ese criterio. Podemos construir un índice que nos permita emplear solo esa información con el almacenamiento adicional y tiempos de inserción mayores como impacto. Sin embargo hay un modo quizás más sencillo entnediendo que la información ya viene de otros sistemas y actuamos sobre ella al ser ingestada. Podemos crear distintas estructuras (tablas, ficheros,…) con el sufijo <code>_YYYY</code> haciendo referencia al año, de forma que solo empleemos esas tablas en nuestro proceso. El particionado se refiere a componer estas estructuras que aunque abstraigan al usuario de estar consultando más de una tabla, tienen un efecto importante en el filtrado de información cuando este es indicado en algún cálculo.</p>
+<p>La forma más sencilla de ver el particionado es con un ejemplo que emplee la fecha como parámetro de filtrado (cláusula <code>WHERE</code>). Si solo precisamos la información de 2025 en adelante, podemos buscar por cada registro cuales cumplen ese criterio. Podemos construir un índice que nos permita emplear solo esa información con el almacenamiento adicional y tiempos de inserción mayores como impacto. Sin embargo hay un modo quizás más sencillo entendiendo que la información ya viene de otros sistemas y actuamos sobre ella al ser ingestada. Podemos crear distintas estructuras (tablas, ficheros,…) con el sufijo <code>_YYYY</code> haciendo referencia al año, de forma que solo empleemos esas tablas en nuestro proceso. El particionado se refiere a componer estas estructuras que aunque abstraigan al usuario de estar consultando más de una tabla, tienen un efecto importante en el filtrado de información cuando este es indicado en algún cálculo.</p>
 </section>
 </section>
 <section id="sistemas-comunes" class="level2" data-number="9.3">
 <h2 data-number="9.3" class="anchored" data-anchor-id="sistemas-comunes"><span class="header-section-number">9.3</span> Sistemas comunes</h2>
-<p>Todos estos principios deben ser implementados por los proveedores y cada uno tendrá su filosofía de cómo deben realizarse estas acciones pero os dejamos un listado no exaustivo de tecnologías destinadas a sistemas analíticos que merece la pena explorar.</p>
+<p>Todos estos principios deben ser implementados por los proveedores y cada uno tendrá su filosofía de cómo deben realizarse estas acciones pero os dejamos un listado no exhaustivo de tecnologías destinadas a sistemas analíticos que merece la pena explorar.</p>
 <section id="nube" class="level3" data-number="9.3.1">
 <h3 data-number="9.3.1" class="anchored" data-anchor-id="nube"><span class="header-section-number">9.3.1</span> Nube</h3>
 <p>Sistemas propietarios en las principales nubes.</p>
@@ -421,9 +421,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>Google BigQuery</li>
 </ul>
 </section>
-<section id="multinube" class="level3" data-number="9.3.2">
-<h3 data-number="9.3.2" class="anchored" data-anchor-id="multinube"><span class="header-section-number">9.3.2</span> Multinube</h3>
-<p>Sistemas que empleando recursos de infraestructura en el proveedor nube de elección, implementan su sistema gestor propietarios. Son sin duda las soluciones corporativas más demandadas en la actualdiad.</p>
+<section id="multi-nube" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="multi-nube"><span class="header-section-number">9.3.2</span> Multi-nube</h3>
+<p>Sistemas que empleando recursos de infraestructura en el proveedor nube de elección, implementan su sistema gestor propietarios. Son sin duda las soluciones corporativas más demandadas en la actualidad.</p>
 <ul>
 <li>Snowflake</li>
 <li>Databricks</li>
@@ -443,7 +443,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </section>
 <section id="motores-de-consulta" class="level3" data-number="9.3.4">
 <h3 data-number="9.3.4" class="anchored" data-anchor-id="motores-de-consulta"><span class="header-section-number">9.3.4</span> Motores de consulta</h3>
-<p>Si disponemos de infraestructura escalable de almacenamiento, podemos emplear sistemas que únicamente nos den la capa de gestión y computación necesaria. Son particularmete útiles cuando empleamos formatos de almacenamiento columnar y abiero (Apache Parquet, CSV, JSON).</p>
+<p>Si disponemos de infraestructura escalable de almacenamiento, podemos emplear sistemas que únicamente nos den la capa de gestión y computación necesaria. Son particularmente útiles cuando empleamos formatos de almacenamiento columnar y abierto (Apache Parquet, CSV, JSON).</p>
 <ul>
 <li>Trino</li>
 <li>Pinot</li>

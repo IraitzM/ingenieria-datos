@@ -356,8 +356,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p>Los sistemas analíticos se benefician de forma especial de formatos abiertos, interoperables y de almacenamiento columnar, como es el caso de Apache Spark. Trabajr con ficheros y carpetas nos permite de forma sencilla implementar particionado para filtrar de manera eficiente los ficheros que no son necesarios en las consultas.</p>
-<p>Sin embargo, con la proliferación de sistemas en <em>streaming</em> o flujos de datos, se planteáron problemas propios. Por ejemplo, la modificación de registros resulta pesada, ya que debemos cargar los ficheros completos, alterar y reescribir su contenido. Recordemos que al estar ordenados en columnas, modificar un registro resulta pesado pero esto se debe a que asumímos no era necesario.</p>
+<p>Los sistemas analíticos se benefician de forma especial de formatos abiertos, interoperables y de almacenamiento columnar, como es el caso de Apache Spark. Trabajar con ficheros y carpetas nos permite de forma sencilla implementar particionado para filtrar de manera eficiente los ficheros que no son necesarios en las consultas.</p>
+<p>Sin embargo, con la proliferación de sistemas en <em>streaming</em> o flujos de datos, se plantearon problemas propios. Por ejemplo, la modificación de registros resulta pesada, ya que debemos cargar los ficheros completos, alterar y reescribir su contenido. Recordemos que al estar ordenados en columnas, modificar un registro resulta pesado pero esto se debe a que asumimos no era necesario.</p>
 <p>Menos aún ofrecer capacidades ACID, pero ¿y si dos procesos quieren intervenir y alterar un mismo fichero? Los sistemas basados en ficheros son amigables a la adición (<em>append</em>) pero no tanto a la modificación.</p>
 <section id="delta-lake" class="level2" data-number="11.1">
 <h2 data-number="11.1" class="anchored" data-anchor-id="delta-lake"><span class="header-section-number">11.1</span> Delta Lake</h2>
@@ -365,7 +365,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <ul>
 <li>La modificación eficiente de registros manteniendo la información versionada</li>
 <li>Operación transaccional</li>
-<li>Unificación de las necesidades de flujos de datos (<em>streaming</em>) y por lotes (<em>batch</em>) tan común en arquitecruras <em>lambda</em>.</li>
+<li>Unificación de las necesidades de flujos de datos (<em>streaming</em>) y por lotes (<em>batch</em>) tan común en arquitecturas <em>lambda</em>.</li>
 </ul>
 </section>
 <section id="apache-hudi" class="level2" data-number="11.2">
