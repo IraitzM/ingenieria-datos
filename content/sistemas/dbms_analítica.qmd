@@ -1,7 +1,7 @@
 # Base de datos analítica
 
 Si bien es cierto que heredamos de los sistemas operacionales la estructura base,
-las necesidades de un sistema analítico son muy distintas. No se prima tanto la velocidad si no la capacidad de manejar y calcular usando grándes volúmenes de datos.
+las necesidades de un sistema analítico son muy distintas. No se prima tanto la velocidad si no la capacidad de manejar y calcular usando grandes volúmenes de datos.
 
 ## Ordenación de los datos
 
@@ -34,11 +34,11 @@ Tener una buena ordenación nos ayuda a no leer información que no vayamos a ut
 ### Particionado
 
 La forma más sencilla de ver el particionado es con un ejemplo que emplee la fecha como parámetro de filtrado (cláusula `WHERE`). Si solo precisamos la información de 2025 en adelante, podemos buscar por cada registro cuales cumplen ese criterio. Podemos construir un índice que nos permita emplear solo esa información con el almacenamiento adicional y tiempos de inserción mayores como impacto.
-Sin embargo hay un modo quizás más sencillo entnediendo que la información ya viene de otros sistemas y actuamos sobre ella al ser ingestada. Podemos crear distintas estructuras (tablas, ficheros,...) con el sufijo `_YYYY` haciendo referencia al año, de forma que solo empleemos esas tablas en nuestro proceso. El particionado se refiere a componer estas estructuras que aunque abstraigan al usuario de estar consultando más de una tabla, tienen un efecto importante en el filtrado de información cuando este es indicado en algún cálculo.
+Sin embargo hay un modo quizás más sencillo entendiendo que la información ya viene de otros sistemas y actuamos sobre ella al ser ingestada. Podemos crear distintas estructuras (tablas, ficheros,...) con el sufijo `_YYYY` haciendo referencia al año, de forma que solo empleemos esas tablas en nuestro proceso. El particionado se refiere a componer estas estructuras que aunque abstraigan al usuario de estar consultando más de una tabla, tienen un efecto importante en el filtrado de información cuando este es indicado en algún cálculo.
 
 ## Sistemas comunes
 
-Todos estos principios deben ser implementados por los proveedores y cada uno tendrá su filosofía de cómo deben realizarse estas acciones pero os dejamos un listado no exaustivo de tecnologías destinadas a sistemas analíticos que merece la pena explorar.
+Todos estos principios deben ser implementados por los proveedores y cada uno tendrá su filosofía de cómo deben realizarse estas acciones pero os dejamos un listado no exhaustivo de tecnologías destinadas a sistemas analíticos que merece la pena explorar.
 
 ### Nube
 
@@ -48,9 +48,9 @@ Sistemas propietarios en las principales nubes.
 * Redshift
 * Google BigQuery
 
-### Multinube
+### Multi-nube
 
-Sistemas que empleando recursos de infraestructura en el proveedor nube de elección, implementan su sistema gestor propietarios. Son sin duda las soluciones corporativas más demandadas en la actualdiad.
+Sistemas que empleando recursos de infraestructura en el proveedor nube de elección, implementan su sistema gestor propietarios. Son sin duda las soluciones corporativas más demandadas en la actualidad.
 
 * Snowflake
 * Databricks
@@ -68,7 +68,7 @@ Estos sistemas permiten el despliegue en recursos nube o infraestructura propiet
 
 ### Motores de consulta
 
-Si disponemos de infraestructura escalable de almacenamiento, podemos emplear sistemas que únicamente nos den la capa de gestión y computación necesaria. Son particularmete útiles cuando empleamos formatos de almacenamiento columnar y abiero (Apache Parquet, CSV, JSON).
+Si disponemos de infraestructura escalable de almacenamiento, podemos emplear sistemas que únicamente nos den la capa de gestión y computación necesaria. Son particularmente útiles cuando empleamos formatos de almacenamiento columnar y abierto (Apache Parquet, CSV, JSON).
 
 * Trino
 * Pinot
