@@ -1,0 +1,227 @@
+# Patrones de carga
+
+Sabemos ya de dónde vienen los datos. Toca decidir cómo los traemos de forma que el proceso pueda repetirse cada día sin intervención humana, que es la diferencia real entre un script y una plataforma de datos.
+
+## De ETL a ELT
+
+Durante décadas el acrónimo fue **ETL**: extraer, transformar y cargar. El orden no era caprichoso. El almacén de datos era caro, tanto en disco como en cómputo, así que no tenía ningún sentido meter ahí datos que no fuéramos a usar. La transformación ocurría en un servidor intermedio, con herramientas dedicadas, y al destino solo llegaba el resultado ya limpio.
+
+```{mermaid}
+flowchart LR
+    o[("Origen")] --> e["Extraer"] --> t["Transformar"] --> l["Cargar"] --> d[("Almacén")]
+```
+
+Cuando el almacenamiento se abarató hasta ser casi irrelevante y el cómputo pasó a poder escalarse bajo demanda, el orden dejó de tener sentido. Hoy hablamos de **ELT**: extraer, cargar y transformar ya dentro del destino.
+
+```{mermaid}
+flowchart LR
+    o[("Origen")] --> e["Extraer"] --> l["Cargar"] --> d[("Almacén")] --> t["Transformar"]
+    t --> d
+```
+
+El cambio parece cosmético y no lo es en absoluto:
+
+* **El dato crudo se conserva**. Si dentro de un año descubrimos que la transformación tenía un error, podemos rehacerla porque el original sigue ahí. Con ETL, lo que se descartaba se perdía para siempre.
+* **La transformación se hace en SQL**, dentro del motor, con lo que deja de necesitar una herramienta especializada y pasa a estar al alcance de mucha más gente. Es exactamente el hueco que ocupa [dbt](../transform/intro.qmd).
+* **Se puede cargar antes de entender**. No necesitamos tener resuelto el modelado para empezar a acumular historia, algo impagable cuando la fuente es nueva.
+
+A cambio, acumulamos en el destino datos que quizá nunca se usen y trasladamos allí el coste de cómputo. Es un intercambio que hoy casi siempre sale a cuenta, y es la razón por la que esta parte del libro se llama _ingesta_ y no _ETL_: nuestro trabajo aquí es la **E** y la **L**, dejando la **T** para [la parte siguiente](../transform/intro.qmd).
+
+## Carga completa
+
+La estrategia más simple: cada ejecución trae toda la tabla y reemplaza lo que hubiera en destino.
+
+```sql
+TRUNCATE TABLE staging.alumnos;
+INSERT INTO staging.alumnos SELECT * FROM origen.alumnos;
+```
+
+Se subestima con demasiada facilidad. Tiene tres virtudes enormes:
+
+* Es **idempotente** por construcción, ejecutarla dos veces da el mismo resultado.
+* **Se autocorrige**, cualquier discrepancia acumulada desaparece en la siguiente carga.
+* **Detecta las bajas** sin esfuerzo, porque lo que ya no está en origen deja de estar en destino.
+
+Y un único defecto, que no escala. Mientras la tabla quepa en una ventana de carga razonable, la carga completa es la respuesta correcta y hay que resistirse a complicarla. La regla práctica: no optimices una carga que tarda dos minutos.
+
+:::{.callout-tip}
+# Reemplazar sin dejar el destino vacío
+
+`TRUNCATE` seguido de `INSERT` deja una ventana, quizá de minutos, en la que quien consulte la tabla la verá vacía o a medias. El patrón seguro es cargar en una tabla nueva y hacer el intercambio de nombres al final, que es una operación de catálogo instantánea. Las herramientas y formatos que veremos lo hacen por nosotros de forma transaccional.
+:::
+
+## Carga incremental
+
+Cuando la tabla ya no cabe en la ventana, solo queda traer lo que ha cambiado. Y para eso necesitamos una **marca de agua** (_watermark_): el valor máximo de la columna que usamos como referencia en la última ejecución, guardado en algún sitio para la siguiente.
+
+```{mermaid}
+flowchart LR
+    m[("Marca de agua<br/>2026-01-11 12:30")] --> c["SELECT ... WHERE actualizado > marca"]
+    o[("Origen")] --> c
+    c --> d[("Destino")]
+    c --> m2[("Nueva marca<br/>2026-01-12 10:00")]
+```
+
+Veámoslo funcionando. Preparamos primero una secretaría académica de juguete, con el mismo modelo que ya conocemos pero añadiendo el campo que nos va a servir de huella.
+
+```{python}
+#| echo: true
+#| output: true
+import sqlite3
+
+origen = sqlite3.connect(":memory:")
+origen.executescript("""
+    CREATE TABLE alumnos (
+        id_alumno INTEGER PRIMARY KEY,
+        nombre TEXT,
+        apellido TEXT,
+        actualizado TEXT
+    );
+    INSERT INTO alumnos VALUES
+        (1, 'Iraitz', 'Montalbán', '2026-01-10 09:00:00'),
+        (2, 'Javier', 'Garcia',    '2026-01-10 09:00:00'),
+        (3, 'Miguel', 'Fernandez', '2026-01-11 12:30:00');
+""")
+origen.execute("SELECT * FROM alumnos").fetchall()
+```
+
+Nuestro proceso de extracción mantiene una marca de agua y solo pide lo posterior a ella.
+
+```{python}
+#| echo: true
+#| output: true
+
+def extraer(conexion, marca):
+    """Devuelve los registros posteriores a la marca y la nueva marca."""
+    filas = conexion.execute(
+        "SELECT * FROM alumnos WHERE actualizado > ? ORDER BY actualizado",
+        (marca,),
+    ).fetchall()
+    nueva_marca = max((f[3] for f in filas), default=marca)
+    return filas, nueva_marca
+
+# Primera ejecución: partimos del principio de los tiempos
+marca = "1900-01-01 00:00:00"
+filas, marca = extraer(origen, marca)
+print(f"{len(filas)} registros | nueva marca: {marca}")
+```
+
+Si nadie toca el origen, la siguiente ejecución no trae nada. Que es justo lo que queremos.
+
+```{python}
+#| echo: true
+#| output: true
+filas, marca = extraer(origen, marca)
+print(f"{len(filas)} registros | nueva marca: {marca}")
+```
+
+Ahora se matricula una alumna nueva y otro corrige su apellido.
+
+```{python}
+#| echo: true
+#| output: true
+origen.executescript("""
+    INSERT INTO alumnos VALUES (4, 'María', 'Garcia', '2026-01-12 10:00:00');
+    UPDATE alumnos SET apellido = 'Fernández', actualizado = '2026-01-12 11:00:00'
+    WHERE id_alumno = 3;
+""")
+
+filas, marca = extraer(origen, marca)
+for f in filas:
+    print(f)
+print(f"nueva marca: {marca}")
+```
+
+Dos registros, no cuatro. Eso es una carga incremental, y cabe en veinte líneas.
+
+### Dónde se rompe
+
+El ejemplo anterior funciona porque nosotros controlamos el origen. En un sistema real hay que vigilar varias cosas:
+
+* **Registros que llegan tarde**. Si la marca es la fecha de la operación en lugar de la fecha de modificación, un apunte con fecha de ayer insertado hoy queda por debajo de la marca y no lo veremos nunca. Por eso se usa siempre la fecha de _modificación técnica_, no la fecha de negocio.
+* **Empates en la marca**. Si usamos `>` y varios registros comparten exactamente el mismo instante, podemos perder alguno; si usamos `>=`, reprocesamos el último lote. La segunda opción es preferible, porque duplicar es recuperable si la carga es idempotente y perder no lo es.
+* **Relojes distintos**. La marca la genera el origen y la evalúa el origen. En cuanto entra en juego el reloj de nuestro proceso, o varios servidores con desfase, aparecen huecos. Mejor no mezclar relojes.
+* **Las bajas siguen sin verse**. Insistimos: ninguna marca de agua detecta un `DELETE`.
+
+:::{.callout-note collapse="true"}
+# El borrado lógico
+
+La solución habitual desde el lado del origen es no borrar nunca de verdad, sino marcar el registro con un campo tipo `activo` o `borrado_en` y actualizar la fecha de modificación. Así la baja viaja como una modificación más y nuestra carga incremental la ve. Cuando podamos influir en el diseño del sistema origen, merece la pena pedirlo.
+:::
+
+## Cómo aterriza en destino
+
+Traído el lote, hay que decidir qué hacemos con él. Son tres opciones, y las herramientas de ingesta las llaman casi siempre por estos nombres:
+
+| Modo | Qué hace | Cuándo usarlo |
+|---|---|---|
+| `replace` | Vacía la tabla y escribe el lote | Carga completa, tablas pequeñas o maestros |
+| `append` | Añade el lote sin mirar lo que hay | Hechos inmutables: eventos, logs, transacciones |
+| `merge` | Actualiza los registros que ya existen e inserta los nuevos, según una clave | Entidades que cambian: alumnos, productos, clientes |
+
+: Modos de escritura en destino {tbl-colwidths="[15,45,40]"}
+
+`append` es el más barato y el más peligroso: si el lote se reprocesa, los registros se duplican. `merge`, también llamado _upsert_, es el que resuelve el caso más común y el que hace falta para nuestros alumnos, ya que un alumno que corrige su apellido debe actualizar su fila, no crear una segunda.
+
+Conviene notar que `merge` **pierde la historia**: al actualizar la fila, el apellido anterior desaparece. Si esa historia importa (y en un almacén de datos suele importar) hay que conservarla explícitamente, ya sea guardando todos los lotes en `append` y resolviendo el histórico en la transformación, ya sea con las dimensiones lentamente cambiantes que vimos en el [modelado analítico](../modelado/modelado_analitico.qmd) o con los satélites del [Data Vault](../sistemas/arquitecturas.qmd#la-caja-fuerte).
+
+## Change Data Capture
+
+Todo lo anterior consulta el estado actual del origen y deduce qué ha cambiado. El **CDC** hace lo contrario: lee el registro de transacciones que la base de datos ya escribe para poder recuperarse de una caída, y del que se puede reconstruir la secuencia exacta de operaciones.
+
+```{mermaid}
+flowchart LR
+    subgraph origen ["Base de datos origen"]
+        t[("Tablas")]
+        wal[["Registro de transacciones"]]
+        t -.->|"escribe"| wal
+    end
+    wal --> cdc["Conector CDC"]
+    cdc --> cola[["Cola de eventos"]]
+    cola --> dest[("Destino")]
+```
+
+Las ventajas son notables. Vemos **todas** las operaciones, incluidos los borrados; las vemos **en orden**; y no lanzamos ni una sola consulta contra las tablas, con lo que el impacto sobre el sistema origen es mínimo. Es la única técnica que da una réplica realmente fiel.
+
+El precio también lo es. Hay que tener acceso privilegiado al motor y convencer al equipo que lo administra; hay que desplegar y operar una pieza más ([Debezium](https://debezium.io/) es la referencia en el mundo abierto), normalmente acompañada de una cola; y el arranque inicial sigue necesitando una carga completa sobre la que aplicar después el flujo de cambios, con el consiguiente cuidado para no perder ni duplicar nada en la transición.
+
+La recomendación honesta: **empieza por carga completa, pasa a incremental cuando duela, y llega a CDC solo cuando lo incremental ya no baste**. Es un orden de complejidad creciente y saltar etapas se paga.
+
+## Idempotencia y reprocesos
+
+Un proceso es **idempotente** cuando ejecutarlo varias veces con la misma entrada deja el sistema en el mismo estado que ejecutarlo una sola vez. En ingesta no es un lujo académico, es la propiedad que permite dormir tranquilo, porque los reintentos son inevitables: la red falla a mitad de carga, alguien relanza el proceso sin mirar, el orquestador reprograma una tarea que creía muerta y en realidad seguía viva.
+
+Lo que hace idempotente a una carga:
+
+* **Una clave estable**. Sin una clave de negocio fiable no hay `merge` posible, y sin `merge` todo reintento duplica.
+* **Trabajar por particiones completas**. En lugar de "añade lo nuevo", pensar en "el día 12 de enero contiene exactamente estos registros". Recargar un día concreto se convierte entonces en reemplazar su partición, una operación segura y repetible.
+* **Escrituras transaccionales**. O se ve el lote entero o no se ve nada. Es justo lo que aportan los [formatos de tabla abiertos](../sistemas/nuevos-formatos.qmd) frente a un directorio de ficheros sueltos, y lo que aprovecharemos en la [capa de staging](staging.qmd).
+
+## Evolución del esquema
+
+El origen cambiará. Añadirán una columna, ampliarán un `VARCHAR`, convertirán un entero en decimal. La pregunta no es si va a pasar, sino qué queremos que haga nuestro proceso cuando pase.
+
+Las políticas razonables, de más permisiva a más estricta:
+
+* **Evolucionar**: la columna nueva se añade sola en destino. Cómodo para explorar, pero un renombrado en origen se traduce en dos columnas medio vacías y nadie se entera.
+* **Congelar**: se ignora todo lo que no estuviera declarado. La carga no se rompe, aunque estamos descartando datos en silencio.
+* **Fallar**: cualquier desviación detiene la carga y avisa. Molesto y correcto en las tablas críticas.
+
+Lo sensato es no aplicar la misma política en todas partes. En la capa de aterrizaje interesa evolucionar, porque el objetivo ahí es **no perder nada**; en las tablas que alimentan informes de dirección interesa fallar, porque el objetivo es **no mentir**. Veremos cómo se declara esto de forma explícita en las [herramientas de ingesta](herramientas.qmd#contratos-de-esquema).
+
+## Los metadatos de carga
+
+Por último, un detalle pequeño de implementar y que ahorra incontables horas: acompañar cada registro con información sobre su propia carga. Como mínimo, de dónde vino y cuándo llegó.
+
+```sql
+SELECT
+    ...,
+    'secretaria_academica'  AS _origen,
+    current_timestamp       AS _cargado_en,
+    '20260112_0300'         AS _id_carga
+FROM origen.alumnos
+```
+
+Con esos tres campos podemos responder sin adivinar a las preguntas que aparecen cuando algo va mal: cuándo se cargó esta fila, qué ejecución la trajo, qué registros entraron en el lote que dejó los números raros y cuáles hay que borrar para reprocesar. Las herramientas de ingesta añaden campos de este tipo por su cuenta, y en el [Data Vault](../sistemas/arquitecturas.qmd#la-caja-fuerte) son parte obligatoria del modelo bajo los nombres `load_date` y `record_source`.
+
+Con los patrones claros, veamos qué herramientas nos evitan escribir todo esto a mano.

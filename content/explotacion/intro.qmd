@@ -1,3 +1,55 @@
 # Explotación de los datos
 
-_pendiente_
+Hemos recorrido el camino entero. Extrajimos de los sistemas origen, aterrizamos en un lakehouse versionado, integramos en un vault que guarda la historia y presentamos un modelo en estrella listo para consultar.
+
+Y llegados aquí conviene una dosis de humildad: **nada de eso lo va a ver nadie**. La organización juzgará nuestro trabajo por lo que ocurre en esta última capa, la que se toca. Un almacén impecable con un cuadro de mando que da un número raro es, para quien lo mira, un almacén roto.
+
+Esta parte va de la última milla. Y tiene su propia clase de problemas, que no son de ingeniería sino de acuerdo.
+
+## Quién consume, y cómo
+
+La capa de consumo no tiene un único cliente. Tiene cuatro, y cada uno quiere algo distinto:
+
+* **Analistas de negocio**, que necesitan explorar: filtrar, agrupar, comparar con el mes pasado, bajar al detalle cuando algo llama la atención. Es el terreno de la [inteligencia de negocio](bi.qmd).
+* **Científicos de datos**, que necesitan el grano más fino posible y acceso programático, porque van a modelar. Es el terreno de la [ciencia de datos](ds.qmd).
+* **Aplicaciones**, que consumen métricas por API para mostrarlas dentro de un producto.
+* **Agentes y asistentes**, la incorporación reciente, que preguntan en lenguaje natural y necesitan saber qué significa cada cosa antes de responder.
+
+Los cuatro hacen, en el fondo, las mismas preguntas. Y ahí empieza el problema.
+
+## La métrica que da tres números
+
+Es la patología característica de esta capa y aparece en todas las organizaciones que llegan hasta aquí. La reunión en la que el director comercial dice que tenemos 4.000 alumnos, el de operaciones dice que 3.850 y el informe del consejo dice 4.120. Los tres números salen del mismo almacén y los tres están bien calculados.
+
+Lo que difiere no es el dato, es la **definición**. Uno cuenta a quien tiene matrícula vigente, otro excluye a los que se dieron de baja durante el curso, y el tercero incluye a los oyentes. Ninguno está equivocado; simplemente nadie escribió en ningún sitio qué significa *alumno*.
+
+```{mermaid}
+flowchart LR
+    dw[("Capa de consumo")]
+    dw --> c1["Cuadro de mando<br/>4.000"]
+    dw --> c2["Hoja de cálculo<br/>3.850"]
+    dw --> c3["Informe del consejo<br/>4.120"]
+    c1 --> r["Reunión"]
+    c2 --> r
+    c3 --> r
+    r --> d{"¿Cuál es<br/>el bueno?"}
+```
+
+Lo grave no es la discrepancia, es lo que provoca. En cuanto ocurre dos o tres veces, la organización deja de discutir sobre el negocio y empieza a discutir sobre los datos. Y a partir de ahí, cada área se construye su propio informe para no depender de nadie, con lo que el problema se multiplica en lugar de resolverse.
+
+:::{.callout-important}
+# El modelado no basta
+
+Podría pensarse que esto lo arregla la capa de consumo que construimos: si `dim_alumno` está bien hecha, ¿cómo puede haber tres números?
+
+Puede, porque el modelo dice **qué columnas hay**, no **qué preguntas son legítimas ni cómo se agregan**. Que exista una tabla de alumnos no impide que tres personas escriban tres `WHERE` distintos. Falta una capa más, y es de la que trata el capítulo siguiente.
+:::
+
+## Las dos piezas que faltan
+
+Para cerrar el ciclo hacen falta dos cosas, y conviene no confundirlas porque a menudo vienen en el mismo producto:
+
+* Una **capa semántica**, que traduce el modelo físico al vocabulario del negocio y define de una vez por todas qué es cada métrica. Es un acuerdo escrito en código.
+* Una **herramienta de explotación**, que presenta ese vocabulario de forma que alguien sin SQL pueda responder a sus propias preguntas.
+
+Empezamos por la primera, porque es la que decide si la segunda sirve de algo.

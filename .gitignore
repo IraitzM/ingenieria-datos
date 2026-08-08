@@ -4,3 +4,24 @@
 
 # Databases
 *.db
+
+# Artefactos generados por el capítulo de formatos abiertos
+content/sistemas/_lago_demo/
+
+# Artefactos generados por los capítulos de ingesta
+*.ducklake
+*.ducklake.wal
+*.sqlite
+content/load/lago/
+content/load/lago_dlt/
+
+# Estado local de dlt
+.dlt/
+content/load/_estado_dlt/
+
+# Artefactos generados por el proyecto dbt de ejemplo
+content/transform/academia/_ejecucion/
+content/transform/academia/logs/
+content/transform/academia/target/
+content/transform/academia/.user.yml
+content/transform/**/__pycache__/

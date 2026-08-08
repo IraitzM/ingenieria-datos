@@ -1,0 +1,325 @@
+# El raw vault
+
+El raw vault es la pieza donde los datos dejan de estar organizados por sistema origen y pasan a estarlo por **concepto de negocio**. Es también la que más resistencia genera cuando uno la ve por primera vez, porque el modelo resultante parece innecesariamente troceado.
+
+Conviene entonces empezar por el problema que resuelve, no por su forma.
+
+## El problema
+
+Supongamos que modelamos al alumno como una tabla con sus atributos, al estilo de un [modelo normalizado](../modelado/formasnormales.qmd) clásico. Todo va bien hasta que ocurre cualquiera de estas cosas, y todas ocurren:
+
+* Llega un segundo sistema origen, la plataforma de formación en línea, que también sabe cosas de los alumnos pero no las mismas.
+* El origen empieza a informar de un campo nuevo.
+* Alguien pregunta qué correo tenía un alumno el pasado marzo.
+* Un sistema deja de existir y hay que conservar lo que aportó.
+
+Con una tabla única, cada uno de esos casos obliga a alterar la estructura y a migrar lo existente. El Data Vault, que [ya presentamos](../sistemas/arquitecturas.qmd#la-caja-fuerte) como metodología, responde separando en tres piezas lo que normalmente va junto, en función de **con qué frecuencia cambia cada cosa**.
+
+## Las tres formas
+
+```{mermaid}
+erDiagram
+    HUB_ALUMNO {
+        hash hk_alumno PK
+        numero id_alumno
+        fecha load_date
+        texto record_source
+    }
+    SAT_ALUMNO {
+        hash hk_alumno FK
+        fecha load_date
+        hash hd_alumno
+        texto nombre
+        texto email
+    }
+    LINK_MATRICULA {
+        hash hk_matricula PK
+        hash hk_alumno FK
+        hash hk_asignatura FK
+        fecha load_date
+    }
+    HUB_ASIGNATURA {
+        hash hk_asignatura PK
+        numero id_asignatura
+        fecha load_date
+    }
+
+    HUB_ALUMNO ||--o{ SAT_ALUMNO : describe
+    HUB_ALUMNO ||--o{ LINK_MATRICULA : participa
+    HUB_ASIGNATURA ||--o{ LINK_MATRICULA : participa
+```
+
+* El **hub** guarda únicamente la lista de claves de negocio que existen. Nada más. Un alumno, una fila, para siempre.
+* El **enlace** (_link_) guarda que dos o más conceptos estuvieron relacionados. Un alumno cursa una asignatura.
+* El **satélite** guarda los atributos descriptivos y su historia. Cuando algo cambia, se añade una versión; no se pisa la anterior.
+
+La lógica de la separación es que cada pieza cambia a un ritmo distinto. Las claves de negocio son lo más estable que hay en una empresa; los atributos cambian a diario; las relaciones aparecen y desaparecen. Al separarlos, **añadir un origen nuevo o un atributo nuevo es añadir un satélite, no migrar una tabla**. Eso es todo lo que promete el Data Vault, y es bastante.
+
+:::{.callout-note}
+# El precio
+
+Nada de esto es gratis. Un modelo que en estrella serían tres tablas, aquí son ocho, y una consulta que respondía con un `JOIN` necesita cuatro. Por eso el Data Vault **nunca se expone al usuario final**: es una capa de integración e historia, no de consumo. La capa que verá el analista la construiremos en el [capítulo siguiente](business_vault.qmd).
+:::
+
+## Las claves hash
+
+Antes de construir nada hay que resolver una cuestión técnica: cómo se identifica una fila.
+
+La opción intuitiva sería usar la clave de negocio directamente. No sirve, porque las claves de negocio son de tipos distintos, a veces compuestas, y unir por texto largo es lento. La segunda opción, clásica en los almacenes de datos, es una clave secuencial generada al insertar. Tampoco sirve bien, porque obliga a **buscar la clave antes de insertar** cada satélite, lo que serializa las cargas.
+
+Data Vault 2.0 propone la tercera vía: la clave es el **hash de la clave de negocio**. Y con eso se gana algo que parece menor y no lo es en absoluto: la clave se puede calcular **sin consultar el almacén**. Todas las tablas pueden cargarse en paralelo, porque cada una calcula por su cuenta la misma clave a partir del mismo valor de origen.
+
+```{python}
+#| echo: false
+#| output: false
+import utilidades
+
+utilidades.usar("raw_vault")
+utilidades.crear_lago()
+```
+
+La macro que lo hace es de dos líneas, pero cada una tiene su porqué:
+
+```sql
+{% macro normalizar(columna) -%}
+    coalesce(nullif(upper(trim(cast({{ columna }} as varchar))), ''), '@@NULO@@')
+{%- endmacro %}
+
+{% macro hash_key(columnas) -%}
+    md5(concat_ws('||'
+        {%- for columna in columnas -%}
+        , {{ normalizar(columna) }}
+        {%- endfor -%}
+    ))
+{%- endmacro %}
+```
+
+La normalización no es cosmética. Sin `trim` y `upper`, los valores `1`, ` 1` y `1 ` producirían tres hashes distintos y tendríamos tres alumnos donde hay uno. El marcador para nulos evita que dos claves compuestas distintas colisionen. Y `concat_ws` con un separador que no aparece en los datos impide que `('ab','c')` y `('a','bc')` den el mismo resultado.
+
+:::{.callout-warning collapse="true"}
+# ¿Y las colisiones de MD5?
+
+La objeción es legítima: MD5 está roto criptográficamente y dos entradas distintas pueden producir el mismo hash. En la práctica, para el número de claves de negocio de una empresa, la probabilidad de colisión accidental es despreciable, y aquí no hay adversario buscándola a propósito.
+
+Aun así, la discusión existe y hay quien prefiere SHA-256, más caro en cómputo y almacenamiento. Lo que sí conviene es **decidirlo antes de empezar**: cambiar de algoritmo con el vault cargado implica recalcularlo entero.
+:::
+
+## El hub
+
+Con eso resuelto, el hub es casi decepcionante:
+
+```sql
+-- models/raw_vault/hub_alumno.sql
+
+with claves as (
+
+    select
+        hk_alumno,
+        id_alumno,
+        min(load_date)      as load_date,
+        min(record_source)  as record_source
+    from {{ ref('stg_alumnos') }}
+    group by hk_alumno, id_alumno
+
+)
+
+select * from claves
+{{ solo_nuevas_claves('hk_alumno') }}
+```
+
+Dos decisiones importantes en esas pocas líneas. El `min(load_date)` conserva **cuándo vimos esa clave por primera vez**, que es la información que aporta un hub. Y el filtro final, que es otra macro:
+
+```sql
+{% macro solo_nuevas_claves(clave) -%}
+    {%- if is_incremental() %}
+    where {{ clave }} not in (select {{ clave }} from {{ this }})
+    {%- endif %}
+{%- endmacro %}
+```
+
+El bloque `is_incremental()` solo se activa cuando la tabla ya existe. En la primera ejecución entra todo; en las siguientes, solo las claves que no estaban. Un hub **nunca actualiza ni borra**.
+
+## El enlace
+
+Mismo patrón, con una particularidad: su clave es el hash del conjunto de claves que relaciona.
+
+```sql
+-- models/prep/stg_matriculas.sql (extracto)
+
+select
+    {{ hash_key(['id_alumno', 'id_asignatura']) }}  as hk_matricula,
+    {{ hash_key('id_alumno') }}                     as hk_alumno,
+    {{ hash_key('id_asignatura') }}                 as hk_asignatura,
+    ...
+```
+
+Así la misma matrícula produce siempre la misma clave, sin consultar nada. El modelo del enlace es idéntico en forma al del hub.
+
+Conviene notar lo que **no** hace: si mañana esa matrícula desaparece del origen, el enlace sigue ahí. Un enlace registra que la relación existió, y borrarlo sería perder historia. Que la matrícula esté vigente o no es un atributo, y los atributos van en satélites.
+
+## El satélite
+
+Aquí está la única lógica no trivial del raw vault. Un satélite debe añadir una versión **solo si algo ha cambiado**, y para saberlo compara el `hashdiff` que calculamos en la preparación:
+
+```sql
+-- models/raw_vault/sat_alumno.sql
+
+with origen as (
+
+    select hk_alumno, hd_alumno, nombre, apellido, email, load_date, record_source
+    from {{ ref('stg_alumnos') }}
+
+)
+
+{% if is_incremental() %}
+, vigente as (
+
+    select hk_alumno, hd_alumno
+    from (
+        select
+            hk_alumno,
+            hd_alumno,
+            row_number() over (partition by hk_alumno order by load_date desc) as version
+        from {{ this }}
+    )
+    where version = 1
+
+)
+{% endif %}
+
+select origen.*
+from origen
+{% if is_incremental() %}
+left join vigente on vigente.hk_alumno = origen.hk_alumno
+where vigente.hk_alumno is null
+   or vigente.hd_alumno <> origen.hd_alumno
+{% endif %}
+```
+
+Se lee de corrido: coge la versión más reciente de cada clave que ya tenemos y deja pasar solo lo que es nuevo (`vigente.hk_alumno is null`) o lo que ha cambiado (`hd_alumno` distinto). Sin ese filtro, cada ejecución diaria añadiría una versión de todo y el satélite crecería sin aportar nada.
+
+:::{.callout-note collapse="true"}
+# ¿Y la fecha de fin?
+
+Muchas implementaciones añaden una columna `load_end_date` que se rellena al llegar una versión posterior, para poder filtrar por rango. Es cómodo de consultar y tiene un coste alto: obliga a **actualizar** la fila anterior, lo que rompe la propiedad de solo-inserción y complica las cargas en paralelo.
+
+La alternativa moderna, que es la que usamos, es no guardarla y calcularla al vuelo con una función de ventana cuando haga falta. Con motores columnares y tablas del tamaño habitual, sale más barato.
+:::
+
+## Cargando el vault
+
+Veámoslo funcionando. Partimos del aterrizaje tal y como lo dejó la ingesta el 10 de enero:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select id_alumno, nombre, email
+    from staging.alumnos
+    order by id_alumno
+""")
+```
+
+```{python}
+#| echo: true
+#| output: true
+print(utilidades.resumen(utilidades.dbt("run", "--select", "prep raw_vault")))
+```
+
+El hub tiene los tres alumnos y el satélite sus tres versiones:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select h.id_alumno, s.email, s.load_date
+    from main_raw_vault.hub_alumno h
+    join main_raw_vault.sat_alumno s using (hk_alumno)
+    order by h.id_alumno
+""")
+```
+
+### Segunda carga
+
+Dos días después, la ingesta vuelve a ejecutarse. Iraitz ha corregido su correo y María se ha matriculado:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.cargar(utilidades.CARGA_2)
+
+utilidades.consultar("""
+    select id_alumno, nombre, email
+    from staging.alumnos
+    order by id_alumno
+""")
+```
+
+Ojo a un detalle: en staging hay **cuatro filas**, el estado actual del origen. Nada más. La historia no está ahí.
+
+```{python}
+#| echo: true
+#| output: true
+print(utilidades.resumen(utilidades.dbt("run", "--select", "prep raw_vault")))
+```
+
+Y ahora lo que importa. El hub sigue teniendo una fila por alumno, con la fecha en que apareció cada uno:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select id_alumno, load_date as primera_vez
+    from main_raw_vault.hub_alumno
+    order by id_alumno
+""")
+```
+
+Mientras que el satélite ha guardado la historia:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select h.id_alumno, s.email, s.load_date
+    from main_raw_vault.sat_alumno s
+    join main_raw_vault.hub_alumno h using (hk_alumno)
+    order by h.id_alumno, s.load_date
+""")
+```
+
+Cinco filas, no ocho. Iraitz tiene dos versiones porque su correo cambió, María tiene una porque acaba de llegar, y Javier y Miguel siguen con una sola porque **no cambió nada suyo**. Eso es el `hashdiff` trabajando: sin él, la segunda carga habría duplicado los cuatro registros.
+
+Y con eso ya podemos responder a la pregunta que no podía responder staging:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select h.id_alumno, s.email
+    from main_raw_vault.sat_alumno s
+    join main_raw_vault.hub_alumno h using (hk_alumno)
+    where s.load_date <= timestamp '2026-01-11'
+      and h.id_alumno = 1
+""")
+```
+
+Qué correo tenía Iraitz el 11 de enero. El original, porque el cambio llegó el 12.
+
+## Probar el vault
+
+Las pruebas que importan en un raw vault son pocas y siempre las mismas:
+
+```{python}
+#| echo: true
+#| output: true
+print(utilidades.resumen(utilidades.dbt("test", "--select", "raw_vault"), utilidades.TESTS))
+```
+
+Se comprueba que la clave hash del hub es única y no nula, que las claves de los enlaces existen en sus hubs correspondientes, y que un satélite no tiene dos versiones con la misma fecha para la misma clave. Esa última es la que detectaría una carga ejecutada dos veces.
+
+## Lo que llevamos
+
+Con el raw vault cargado tenemos un registro histórico, integrado por concepto de negocio, al que se le pueden añadir orígenes y atributos sin migrar nada, y del que **no se ha borrado ni interpretado nada**.
+
+Lo que no tenemos es algo que un analista pueda usar. Para responder *cuántos alumnos activos hay* siguen faltando dos cosas: decidir qué significa activo, que es una regla blanda, y presentar el resultado en un modelo consumible. Es el [business vault y la capa de consumo](business_vault.qmd).

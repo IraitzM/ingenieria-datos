@@ -1,0 +1,256 @@
+# Business vault y consumo
+
+El raw vault guarda lo que pasó. Nadie ha interpretado nada todavía, y ese es justo su valor. Pero un almacén de datos que no interpreta no sirve a nadie: las preguntas del negocio están llenas de criterios.
+
+Aquí es donde entran las [reglas blandas](intro.qmd#reglas-duras-y-reglas-blandas), y con ellas dos capas más.
+
+```{python}
+#| echo: false
+#| output: false
+import utilidades
+
+utilidades.usar("business_vault")
+utilidades.crear_lago()
+utilidades.dbt("run", "--select", "prep raw_vault")
+utilidades.cargar(utilidades.CARGA_2)
+utilidades.dbt("run", "--select", "prep raw_vault")
+```
+
+## El business vault
+
+El business vault tiene una propiedad que conviene tener grabada: **es desechable**. Todo lo que contiene se puede calcular a partir del raw vault, así que se puede tirar y reconstruir entero cuando el criterio cambie. Esa es toda la ganancia de haber mantenido el raw vault libre de interpretaciones.
+
+Sus piezas más habituales son satélites calculados y tablas de apoyo al rendimiento.
+
+### Satélites calculados
+
+Un satélite del business vault tiene la misma forma que uno del raw vault, pero sus columnas son el resultado de aplicar una regla:
+
+```sql
+-- models/business_vault/sat_alumno_bv.sql
+
+select
+    hk_alumno,
+    hd_alumno,
+    load_date,
+    email,
+    nombre || ' ' || apellido                       as nombre_completo,
+    lower(split_part(email, '@', 2))                as dominio_email,
+    case
+        when lower(split_part(email, '@', 2)) = 'ejemplo.eus' then 'interno'
+        else 'externo'
+    end                                             as tipo_correo,
+    record_source
+from {{ ref('sat_alumno') }}
+```
+
+La clasificación entre correo interno y externo es una decisión de negocio: hoy el criterio es el dominio, mañana puede ser una lista de dominios permitidos. Al vivir aquí, cambiarla es editar el modelo y reconstruir; el histórico del raw vault no se toca.
+
+Nótese que este satélite **se materializa como tabla**, no como incremental. No hay que preservar nada, porque su historia es la del satélite del que deriva.
+
+### Tablas point-in-time
+
+El segundo tipo de pieza no aporta significado sino rendimiento. Ya vimos que consultar un satélite requiere una función de ventana para quedarse con la versión vigente, y que con varios satélites la consulta se complica rápido.
+
+Una tabla **PIT** (_point in time_) precalcula, para cada clave y cada instante relevante, qué versión de cada satélite estaba vigente:
+
+```sql
+-- models/business_vault/pit_alumno.sql
+
+with fechas as (
+
+    select distinct hk_alumno, load_date
+    from {{ ref('sat_alumno') }}
+
+)
+
+select
+    fechas.hk_alumno,
+    fechas.load_date        as fecha_foto,
+    max(sat.load_date)      as load_date_sat
+from fechas
+join {{ ref('sat_alumno') }} as sat
+  on sat.hk_alumno = fechas.hk_alumno
+ and sat.load_date <= fechas.load_date
+group by fechas.hk_alumno, fechas.load_date
+```
+
+Con ella, preguntar por el estado en una fecha se convierte en una unión por igualdad en lugar de una ventana:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.dbt("run", "--select", "business_vault")
+
+utilidades.consultar("""
+    select h.id_alumno, p.fecha_foto, s.email
+    from main_business_vault.pit_alumno p
+    join main_raw_vault.sat_alumno s
+      on s.hk_alumno = p.hk_alumno and s.load_date = p.load_date_sat
+    join main_raw_vault.hub_alumno h on h.hk_alumno = p.hk_alumno
+    where h.id_alumno = 1
+    order by p.fecha_foto
+""")
+```
+
+Ahí está la trayectoria completa de Iraitz: qué correo tenía en cada foto.
+
+:::{.callout-note collapse="true"}
+# Tablas puente
+
+El primo hermano de la PIT es la tabla **bridge**, que precalcula recorridos por varios enlaces. Si para responder una pregunta hay que atravesar tres enlaces y cuatro hubs, una bridge deja ese camino resuelto.
+
+Ambas son optimizaciones puras, y como tales conviene añadirlas cuando el problema de rendimiento sea real y medible, no por adelantado.
+:::
+
+## La capa de consumo
+
+Llegamos al final del recorrido. Y hay que decirlo claro: **el usuario no debe ver el vault jamás**. Nadie va a escribir una función de ventana para contar alumnos.
+
+La capa de consumo aplana todo lo anterior al [modelo dimensional](../modelado/modelado_analitico.qmd#modelado-dimensional) que ya conocemos, con nombres que el negocio reconoce y sin una sola clave hash a la vista.
+
+```{mermaid}
+flowchart TB
+    subgraph vault ["Vault"]
+        hub["hub_alumno"]
+        sat["sat_alumno"]
+        bv["sat_alumno_bv"]
+        link["link_matricula"]
+        hubs["hub_asignatura"]
+    end
+    subgraph estrella ["Capa de consumo"]
+        dim1["dim_alumno"]
+        fct["fct_matriculas"]
+        dim2["dim_asignatura"]
+    end
+    hub --> dim1
+    bv --> dim1
+    sat --> bv
+    link --> fct
+    hubs --> dim2
+    dim1 --- fct
+    dim2 --- fct
+```
+
+Una dimensión es el vault aplanado a la versión vigente:
+
+```sql
+-- models/marts/dim_alumno.sql
+
+with vigente as (
+
+    select
+        hk_alumno,
+        nombre_completo,
+        email,
+        dominio_email,
+        tipo_correo,
+        load_date,
+        row_number() over (partition by hk_alumno order by load_date desc) as version
+    from {{ ref('sat_alumno_bv') }}
+
+)
+
+select
+    hub.id_alumno               as alumno_id,
+    vigente.nombre_completo,
+    vigente.email,
+    vigente.dominio_email,
+    vigente.tipo_correo,
+    hub.load_date               as alta_en_almacen,
+    vigente.load_date           as ultima_modificacion
+from {{ ref('hub_alumno') }} as hub
+join vigente on vigente.hk_alumno = hub.hk_alumno
+where vigente.version = 1
+```
+
+Y una tabla de hechos es un enlace con las claves traducidas a las que el usuario reconoce:
+
+```sql
+-- models/marts/fct_matriculas.sql
+
+select
+    link.hk_matricula           as matricula_id,
+    hub_a.id_alumno             as alumno_id,
+    hub_s.id_asignatura         as asignatura_id,
+    link.load_date              as fecha_matricula,
+    link.record_source          as origen
+from {{ ref('link_matricula') }} as link
+join {{ ref('hub_alumno') }}     as hub_a on hub_a.hk_alumno = link.hk_alumno
+join {{ ref('hub_asignatura') }} as hub_s on hub_s.hk_asignatura = link.hk_asignatura
+```
+
+Construyamos el almacén entero de una vez:
+
+```{python}
+#| echo: true
+#| output: true
+print(utilidades.resumen(utilidades.dbt("build")))
+```
+
+Y comprobemos el resultado:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("select * from main_marts.dim_alumno order by alumno_id")
+```
+
+Ni claves hash, ni hashdiff, ni versiones. Cuatro alumnos con su información vigente y, de propina, dos fechas que responden a preguntas frecuentes: desde cuándo lo conocemos y cuándo cambió por última vez.
+
+Ahora sí, la pregunta del principio se responde con SQL de andar por casa:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select
+        a.asignatura,
+        count(*)                as matriculados,
+        string_agg(al.nombre_completo, ', ' order by al.nombre_completo) as alumnos
+    from main_marts.fct_matriculas f
+    join main_marts.dim_alumno     al on al.alumno_id = f.alumno_id
+    join main_marts.dim_asignatura a  on a.asignatura_id = f.asignatura_id
+    group by a.asignatura
+    order by matriculados desc
+""")
+```
+
+Compárese con la consulta equivalente sobre el vault, que necesitaba unir cuatro tablas y resolver una ventana. Esa diferencia es exactamente la razón de existir de esta capa.
+
+## El recorrido completo
+
+Merece la pena ver de un vistazo lo que ha pasado con un dato concreto. El correo de Iraitz entró en el sistema origen, aterrizó en staging, se hasheó en la preparación, se historificó en el satélite, se clasificó en el business vault y acabó aplanado en la dimensión:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select 'staging'       as capa, email        as valor, _cargado_en as fecha
+        from staging.alumnos where id_alumno = 1
+    union all
+    select 'raw vault',    s.email, s.load_date
+        from main_raw_vault.sat_alumno s
+        join main_raw_vault.hub_alumno h using (hk_alumno)
+        where h.id_alumno = 1
+    union all
+    select 'consumo',      d.email, d.ultima_modificacion
+        from main_marts.dim_alumno d where d.alumno_id = 1
+    order by fecha, capa
+""")
+```
+
+Dos filas en el raw vault frente a una en staging y una en consumo. Esa asimetría es todo el argumento del Data Vault en una tabla: **la historia vive en el medio**, porque los extremos no pueden guardarla. El origen solo conoce el presente y el consumo solo quiere el presente.
+
+## Qué hemos ganado
+
+Repasando la lista de problemas que planteábamos al [empezar la transformación](intro.qmd#la-tentación-del-atajo):
+
+* **Un origen nuevo** se integra añadiendo satélites a los hubs existentes, sin migrar nada.
+* **Un atributo nuevo** es una columna en un satélite, o un satélite más.
+* **Una regla que cambia** se edita en el business vault y se reconstruye, sin tocar el histórico.
+* **El estado en una fecha pasada** se responde con una consulta, no con una copia de seguridad.
+
+Y a un coste que conviene no esconder: más tablas, más SQL, y una capa que hay que mantener. Para un almacén de tres tablas y un origen, el Data Vault es un exceso evidente. La pregunta que decide no es cuántos datos hay, sino **cuántos orígenes van a acabar entrando y cuánto va a cambiar el negocio**.
+
+Con el almacén construido y una capa de consumo lista, queda ponerlo en manos de quien tiene las preguntas. Es la [explotación de los datos](../explotacion/intro.qmd).

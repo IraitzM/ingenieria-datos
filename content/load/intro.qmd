@@ -8,6 +8,43 @@ Uno de los pasos primeros que deberemos hacer es conocer los datos a extraer y l
 
 De modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.
 
+Conviene añadir una cuarta pregunta que suele olvidarse y que luego duele: **¿cómo sabremos qué ha cambiado desde la última vez?** Porque extraer un dato una vez es sencillo; extraerlo cada noche durante tres años sin duplicar, sin perder registros y sin fundir el sistema origen es justo el trabajo que vamos a describir en esta parte del libro.
+
+:::{.callout-note}
+# El hilo conductor
+
+A lo largo de esta parte seguiremos con el ejemplo de la [secretaría académica](../sistemas/sql.qmd) que ya modelamos: alumnos, asignaturas y matrículas. Ahora ese sistema transaccional deja de ser el destino de nuestro trabajo y pasa a ser **la fuente**, con todo lo que ello implica: no lo controlamos nosotros, no podemos sobrecargarlo y cambiará sin avisarnos.
+:::
+
+## ¿Quién empuja y quién tira?
+
+Antes de entrar en cada tipo de fuente, hay una decisión que condiciona todo lo demás. La extracción puede funcionar en dos sentidos:
+
+* **Pull (tiramos nosotros)**: nuestro proceso se conecta al origen cuando lo decide y pide los datos. Es el modelo más habitual porque nos deja el control de la cadencia, los reintentos y la ventana de datos. A cambio, necesitamos credenciales de acceso al sistema origen y cargamos con la responsabilidad de no molestar.
+* **Push (nos empujan)**: el sistema origen deposita la información en un lugar acordado (una cola, un bucket, un _webhook_) y nosotros la recogemos. Nos desacopla del origen y suele ser la única opción cuando el propietario del dato no nos va a dar acceso directo a su base de datos. A cambio, perdemos el control: si el origen deja de publicar, no nos enteramos hasta que alguien echa en falta un informe.
+
+```{mermaid}
+flowchart LR
+    subgraph pull ["Pull"]
+        direction LR
+        o1[("Origen")]
+        p1["Proceso de extracción"]
+        p1 -->|"1 - pide"| o1
+        o1 -->|"2 - responde"| p1
+    end
+
+    subgraph push ["Push"]
+        direction LR
+        o2[("Origen")]
+        b2["Zona acordada"]
+        p2["Proceso de extracción"]
+        o2 -->|"1 - publica"| b2
+        p2 -->|"2 - recoge"| b2
+    end
+```
+
+En la práctica una organización tendrá de las dos. Lo importante es tenerlo explícito, porque determina de quién es la culpa cuando faltan datos.
+
 ## Bases de datos
 
 Frecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:
@@ -17,10 +54,77 @@ Frecuentemente son las fuentes donde reside la información en una organización
 
 Muchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.
 
+### El pecado de consultar la producción
+
+Hay una tentación evidente: si los datos están en la base de datos del ERP, lanzo un `SELECT *` y listo. El problema es que esa base de datos está atendiendo a la vez las transacciones de la empresa, y una consulta analítica que recorre una tabla entera compite por los mismos recursos. Un `SELECT` mal medido a las 9 de la mañana puede dejar sin servicio a quien está facturando.
+
+Las salidas habituales, de menos a más elegante:
+
+* **Ventanas de baja actividad**, la clásica carga nocturna. Sencillo, pero se rompe en cuanto la empresa opera en varios husos horarios.
+* **Réplicas de solo lectura**, una copia del sistema origen dedicada a consultas. Es la opción sensata cuando existe presupuesto para ello.
+* **Leer el registro de transacciones** en lugar de las tablas, que es la base del CDC que veremos en el [siguiente capítulo](patrones.qmd#change-data-capture).
+
+### La huella del cambio
+
+Volviendo a la cuarta pregunta, lo que buscamos en una base de datos origen es alguna **huella** que nos permita reconstruir qué ha pasado desde nuestra última visita. Por orden de calidad:
+
+| Huella | Qué nos permite | Qué se nos escapa |
+|---|---|---|
+| Nada | Recargar todo cada vez | Todo, salvo la foto actual |
+| Clave autoincremental | Detectar altas | Modificaciones y bajas |
+| Fecha de modificación | Altas y modificaciones | Bajas, y los cambios si el campo no se actualiza siempre |
+| Registro de transacciones (CDC) | Altas, modificaciones y bajas, en orden | Poca cosa, a cambio de complejidad |
+
+: Mecanismos para detectar cambios en un origen tabular {tbl-colwidths="[22,39,39]"}
+
+Merece la pena insistir en las **bajas**: si un alumno se da de baja borrando su fila, ninguna consulta basada en fechas nos lo va a contar. Nuestro destino seguirá enseñando un alumno que ya no existe hasta que alguien lo note. Es el fallo silencioso más común en las cargas incrementales.
+
 ## APIs
 
-Uno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual. 
+Uno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.
+
+Ahora bien, una API no está pensada para volcar millones de registros, sino para responder preguntas pequeñas y frecuentes. Eso nos obliga a lidiar con una serie de peajes que, sumados, son la mayor parte del código de un extractor:
+
+* **Paginación**. Nadie nos va a devolver un millón de registros en una respuesta. Habrá páginas, y cada API las numera a su manera: por número de página, por desplazamiento, por cursor opaco, o por un enlace `next` en la propia respuesta. Es el punto donde más se equivoca uno escribiendo extractores a mano, y donde es fácil quedarse a mitad sin darse cuenta.
+* **Autenticación**. Desde una clave en la cabecera hasta OAuth con refresco de _token_, con la gracia añadida de que el _token_ puede caducar en mitad de una descarga larga.
+* **Límites de uso**. Casi todas imponen un número máximo de peticiones por minuto. Al pasarnos recibiremos un `429` y habrá que esperar, reintentando con una espera creciente (_exponential backoff_) en lugar de insistir sin más.
+* **Errores transitorios**. Un `503` no significa que no haya datos, significa que hay que volver a intentarlo. Distinguir el error que se reintenta del error que se propaga es un criterio de diseño, no un detalle.
+
+:::{.callout-warning}
+# Reintentar no es gratis
+
+Si reintentamos una petición que ya se había ejecutado en el origen podemos acabar con registros duplicados en destino. Por eso la extracción debe diseñarse pensando en la [idempotencia](patrones.qmd#idempotencia-y-reprocesos) desde el primer día: que ejecutar el mismo proceso dos veces deje el sistema en el mismo estado que ejecutarlo una.
+:::
+
+Esta lista es, no por casualidad, exactamente lo que resuelven por nosotros las [herramientas de ingesta](herramientas.qmd) que veremos más adelante.
 
 ## Colas
 
-Los sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este _buffer_ que retiene los datos hasta ser consumidos o expiren. 
+Los sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este _buffer_ que retiene los datos hasta ser consumidos o expiren.
+
+La particularidad de las colas es que el estado de la lectura vive en la propia cola: cada consumidor mantiene un **desplazamiento** (_offset_) que marca por dónde va. Eso nos regala la respuesta a la cuarta pregunta, ya no tenemos que averiguar qué ha cambiado porque la cola solo nos entrega lo que aún no hemos leído. A cambio heredamos dos problemas nuevos:
+
+* **La entrega suele ser _al menos una vez_**. Ante una caída, un mensaje ya procesado puede volver a entregarse. De nuevo, idempotencia.
+* **Los datos caducan**. Si nuestro proceso lleva dos días parado y la retención es de 24 horas, esos datos no están en ningún sitio. La cola es un buzón, no un archivo.
+
+Por eso el patrón habitual es volcar cuanto antes el contenido de la cola a un almacenamiento persistente, y hacer allí el trabajo. Es, en el fondo, la misma idea de la capa de aterrizaje que construiremos con [DuckLake](staging.qmd).
+
+## Ficheros
+
+Es la fuente menos glamurosa y probablemente la más extendida. Un CSV en un SFTP, un Excel que alguien deja en una carpeta compartida, una exportación diaria en Parquet a un bucket de S3. Sigue siendo, en muchas organizaciones, la forma real en la que los datos cruzan la frontera entre departamentos o entre empresas.
+
+Tiene ventajas nada despreciables: no toca el sistema origen, es fácil de auditar (el fichero está ahí, se puede volver a leer) y funciona entre organizaciones que jamás se darían acceso mutuo a sus bases de datos. Los inconvenientes son igual de conocidos:
+
+* **No hay esquema, o el que hay miente**. Un CSV no declara tipos. El campo que llevaba tres años siendo un número entero aparece un día con un valor `N/D` y todo lo que viene detrás se rompe.
+* **La codificación y los separadores**. El clásico fichero en `latin-1` con separador `;` porque se generó desde un Excel en español.
+* **¿Es completo? ¿Es nuevo?** Leer un fichero mientras se está escribiendo produce cargas a medias. Por eso se usan marcas de finalizado, nombres con marca temporal o escritura atómica mediante renombrado.
+
+Formatos como [Parquet](../sistemas/nuevos-formatos.qmd) resuelven buena parte de esto, ya que llevan el esquema y los tipos dentro del propio fichero, además de comprimir mucho mejor. Cuando podamos elegir el formato de intercambio, esa es la elección.
+
+## El contrato con el origen
+
+Casi todo lo que rompe una ingesta en producción no es un fallo técnico, es un cambio en el origen del que nadie nos avisó: una columna que se renombra, un campo que pasa de obligatorio a opcional, un identificador que se reutiliza. Escribir código defensivo ayuda, pero no sustituye a lo único que funciona de verdad, que es **acordar por escrito qué esperamos de la fuente**: qué campos son estables, cuál es la clave de negocio, con qué frecuencia se actualiza, qué pasa cuando se borra un registro y a quién se avisa antes de cambiar el esquema.
+
+Ese acuerdo tiene un nombre en la jerga actual, **contrato de datos** (_data contract_), y aunque suene a burocracia es lo que separa una plataforma que se mantiene sola de una que necesita a alguien apagando fuegos cada mañana. La parte técnica del contrato la podremos automatizar más adelante con los [contratos de esquema](herramientas.qmd#contratos-de-esquema) que ofrecen las herramientas de ingesta.
+
+Con las fuentes ya caracterizadas, toca decidir **cómo** traemos esos datos de forma repetible. Es lo que veremos en los [patrones de carga](patrones.qmd).

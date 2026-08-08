@@ -12,11 +12,11 @@ Por ello debemos de datos buena cuenta de las mejores prácticas a la hora de re
 
 Tenéis muy buenos recursos online, aunque en inglés muchos:
 
-* El [roadmap ideal](https://awesomedataengineering.com/) lleno de recursos de pago y gratuitos
+<!-- * El [roadmap ideal](https://awesomedataengineering.com/) lleno de recursos de pago y gratuitos-->
 * La [wiki](https://dataengineering.wiki/Index) del ingeniero de datos
 * Muchos recursos muy buenos por [Zach Wilson de DataExpert.io](https://github.com/DataExpert-io/data-engineer-handbook)
-* Data Engineering por [Karl Christian](https://karlchris.github.io/data-engineering/)
+<!-- * Data Engineering por [Karl Christian](https://karlchris.github.io/data-engineering/)-->
 * El gran curso de [Joe Reis en Deeplearning.ai](https://www.deeplearning.ai/courses/data-engineering/)
-* La biblia de los sistemas componibles [The Composable Codex](https://voltrondata.com/codex)
+<!-- * La biblia de los sistemas componibles [The Composable Codex](https://voltrondata.com/codex)-->
 
 Ahora toca digerir todo esto. Con suerte esta guía os puede asistir.

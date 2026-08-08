@@ -1,0 +1,79 @@
+# Del cuaderno a producción
+
+Tenemos el tablón. Alguien va a abrir un cuaderno, va a entrenar un modelo y va a obtener un resultado prometedor. Y entonces empieza la parte difícil, que no es la que la mayoría espera.
+
+Este último capítulo recorre dos evoluciones que van de la mano: la del **entorno** en el que se trabaja con datos, y la de la **infraestructura** que hace falta para que un modelo deje de ser un experimento.
+
+## El cuaderno y su techo
+
+El cuaderno de notas, [Jupyter](https://jupyter.org/) y sus descendientes, se ganó su sitio con razón. Permite alternar código, resultado y explicación, lo que encaja perfectamente con la naturaleza exploratoria del trabajo con datos: mirar, probar, corregir, volver a mirar.
+
+Sus límites también son conocidos y aparecen todos a la vez el día que algo funciona y hay que repetirlo:
+
+* **El estado oculto**. Las celdas se ejecutan en el orden que uno quiera, así que un cuaderno puede dar un resultado que nadie puede reproducir, ni siquiera su autor.
+* **Se versiona mal**. Por debajo es un JSON con las salidas incrustadas, con lo que una diferencia entre versiones resulta ilegible.
+* **No es un artefacto desplegable**. El paso de cuaderno a proceso en producción es una reescritura, y en esa reescritura se pierden cosas.
+
+La respuesta clásica ha sido siempre la misma, y sigue siendo válida: el cuaderno para explorar, y lo que sobreviva a la exploración se mueve a módulos con pruebas. Lo que ha cambiado es la herramienta con la que se hace ese movimiento.
+
+## El entorno se acerca a los datos
+
+Durante años el editor de código y el almacén de datos fueron dos mundos. El editor conocía la sintaxis de SQL pero no sabía **qué tablas existen**, así que autocompletaba a ciegas y uno descubría que la columna se llamaba de otro modo al ejecutar.
+
+La generación actual de entornos rompe esa separación conectándose al almacén. [nao](https://getnao.io/), de nao Labs, es probablemente el ejemplo más claro de la categoría: un editor derivado de Visual Studio Code cuyo asistente está enganchado al almacén, de forma que conoce el esquema real, las columnas y los datos antes de sugerir nada. Sobre esa base ofrece lo que uno esperaría: generar modelos de dbt y consultas, documentar, escribir pruebas, comparar el resultado de una consulta antes y después de un cambio, y ver qué se rompe aguas abajo apoyándose en el linaje.
+
+El detalle que importa no es que haya un asistente, que a estas alturas lo hay en todas partes, sino **de qué contexto dispone**. Un asistente sin acceso al esquema inventa nombres de columna con enorme convicción; con acceso al esquema, deja de hacerlo. Es exactamente el mismo argumento que veíamos al hablar de las [métricas para agentes](semantica.qmd#métricas-para-agentes) y del [catálogo de gobierno](../appendices/metadatado.qmd): lo que hace útil a un dato es el contexto que lo rodea, y eso vale igual para las personas que para las máquinas.
+
+:::{.callout-note}
+# Sobre las herramientas de esta categoría
+
+Es un terreno que se mueve muy deprisa y en el que conviene no casarse con nadie. La recomendación práctica que aguanta el paso del tiempo es evaluar estas herramientas por una pregunta concreta: **¿de dónde saca el contexto?** Si lo saca del esquema real, del linaje y de las definiciones de métricas, aporta. Si solo autocompleta texto, es un editor con adornos.
+
+Y una segunda, más prosaica: cuanto más de nuestro proyecto viva en ficheros de texto versionados, mejor funcionará cualquiera de ellas. Que es, casualmente, lo que llevamos haciendo todo el libro.
+:::
+
+## Cuando el modelo tiene que vivir
+
+Un modelo entrenado en un portátil no vale nada por sí mismo. Para que aporte, alguien tiene que ejecutarlo de forma recurrente sobre datos nuevos, y ahí aparece un conjunto de problemas que no son de ciencia de datos sino de ingeniería. Es lo que se agrupa bajo el nombre de **MLOps**.
+
+```{mermaid}
+flowchart LR
+    tab[("Tablón")] --> ent["Entrenamiento"]
+    ent --> reg[("Registro de<br/>modelos")]
+    reg --> serv["Servicio"]
+    fs[("Feature store")] --> ent
+    fs --> serv
+    serv --> mon["Monitorización"]
+    mon -.->|"deriva"| ent
+```
+
+Las piezas que aparecen siempre, con el problema real que resuelve cada una:
+
+* **Registro de modelos** (_model registry_). Un modelo es un artefacto binario con versión, métricas de validación, datos con los que se entrenó y un estado (en pruebas, en producción, retirado). Sin registro, la pregunta *qué versión está respondiendo ahora mismo* no tiene respuesta. [MLflow](https://mlflow.org/) es la referencia abierta.
+* **Almacén de variables** (_feature store_). Nace de un problema muy concreto que ya hemos tocado: la variable que se calcula al entrenar y la que se calcula al predecir **tienen que ser la misma**, y normalmente las escriben personas distintas en lenguajes distintos. Un feature store guarda la definición una sola vez y la sirve a ambos, además de resolver la consulta por fecha que vimos en el [tablón](ds.qmd#el-tablón-correcto-a-fecha). [Feast](https://feast.dev/) es la opción abierta más extendida.
+* **Monitorización**. Un modelo no falla con un error, falla degradándose: los datos de entrada dejan poco a poco de parecerse a los de entrenamiento. Detectar esa **deriva** es vigilar distribuciones, no excepciones.
+* **Reentrenamiento**, que cierra el ciclo y que en la práctica es un proceso más de los que orquestamos.
+
+:::{.callout-tip}
+# El feature store es un tablón con dos puertas
+
+Si el concepto resulta abstracto, esta es la forma corta de verlo. Un feature store sirve la misma variable de dos maneras: **por lotes y con fecha**, para construir conjuntos de entrenamiento correctos históricamente, y **al vuelo y con el valor actual**, para responder a una predicción en línea.
+
+La primera puerta es exactamente lo que hicimos a mano con los satélites. Por eso, en un stack analítico por lotes, la pregunta *¿necesitamos un feature store?* tiene con frecuencia la respuesta *todavía no*: hasta que no haya predicción en línea, un buen almacén con historia hace el mismo trabajo con menos piezas.
+:::
+
+## Dónde acaba nuestro trabajo
+
+Merece la pena cerrar delimitando, porque MLOps es una disciplina con entidad propia y este es un libro de ingeniería de datos.
+
+Del recorrido anterior, lo que es inequívocamente nuestro es la parte de abajo: que los datos que alimentan el entrenamiento y los que alimentan la predicción vengan del mismo sitio, estén correctamente fechados, sean reproducibles y estén documentados. El registro de modelos, el servicio y la monitorización de la deriva pertenecen a otro perfil, aunque en equipos pequeños acabe siendo la misma persona.
+
+Y hay una simetría que conviene notar, porque resume bastante bien todo el libro. Un modelo en producción es, al final, **otro consumidor más** de la capa de explotación. Tiene las mismas necesidades que un cuadro de mando: datos fiables, definiciones estables, historia consultable y alguien que avise cuando algo cambie río arriba. Nada de lo que hemos construido cambia porque el consumidor sea un algoritmo en lugar de una persona.
+
+## Cierre
+
+Hemos recorrido el ciclo completo. Empezamos con [Codd y el modelo tabular](../intro.qmd), pasamos por el [modelado](../modelado/intro.qmd) y los [sistemas que almacenan](../sistemas/intro.qmd), [extrajimos](../load/intro.qmd) de las fuentes y [aterrizamos](../load/staging.qmd) en un lakehouse abierto, [integramos](../transform/raw_vault.qmd) la historia en un vault y la [presentamos](../transform/business_vault.qmd) de forma consumible, y finalmente la hemos puesto en manos de quien tiene las preguntas.
+
+Si algo debería quedar de todo esto, no son las herramientas. DuckLake, dlt, dbt y Rill son buenas elecciones hoy y serán otras dentro de unos años, igual que Hadoop lo fue y dejó de serlo. Lo que permanece son las decisiones que hay debajo: guardar el dato crudo antes de interpretarlo, separar lo que el negocio decide de lo que el sistema impone, conservar la historia porque nadie sabe qué se preguntará mañana, y escribir las definiciones en algún sitio donde no puedan desactualizarse en silencio.
+
+Eso, y recordar que al final del último `SELECT` siempre hay una persona intentando tomar una decisión mejor.

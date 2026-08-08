@@ -1,0 +1,544 @@
+## Metadatado y catálogo {.appendix}
+
+Terminada la ingesta tenemos una capa de aterrizaje llena de tablas. Y aparece, inevitablemente, la pregunta incómoda: **¿quién sabe qué hay ahí dentro?**
+
+Al principio no es un problema, porque quien cargó los datos es quien los consulta y lo tiene todo en la cabeza. El problema llega cuando hay cuarenta tablas, tres personas y dos de ellas se incorporaron el mes pasado. Entonces empiezan las preguntas que ninguna consulta SQL responde: qué significa exactamente esta columna, de dónde sale esta tabla, a quién pregunto si el número me parece raro, puedo fiarme de este dato para el informe del comité.
+
+Los datos que responden a esas preguntas son los **metadatos**: datos sobre nuestros datos.
+
+## Las dos acepciones de catálogo
+
+Antes de nada conviene deshacer una ambigüedad que genera bastante confusión, porque la palabra _catálogo_ se usa para dos cosas distintas que operan en planos diferentes.
+
+Cuando en el capítulo de [la capa de aterrizaje](../load/staging.qmd) montamos DuckLake, dijimos que el catálogo era una base de datos SQL con los metadatos de las tablas. Ese es el **catálogo técnico**: sabe qué ficheros Parquet componen una tabla, qué columnas tiene, qué versiones existen y qué estadísticas ayudan a descartar ficheros en una consulta. Lo consume un motor, y sin él las consultas no funcionan.
+
+El **catálogo de gobierno** vive un piso más arriba y responde a otras preguntas: qué significa esta tabla en el lenguaje del negocio, quién es su responsable, de qué origen viene, qué calidad tiene, quién la usa y si alguien puede verla. Lo consumen personas, y sin él las consultas funcionan igual pero nadie sabe si el resultado es de fiar.
+
+```{mermaid}
+flowchart TB
+    subgraph gob ["Catálogo de gobierno"]
+        g["Glosario y dominios<br/>Propietarios y políticas<br/>Linaje y calidad<br/>Uso y conversaciones"]
+    end
+    subgraph tec ["Catálogo técnico"]
+        t["Esquemas y columnas<br/>Snapshots y ficheros<br/>Estadísticas"]
+    end
+    subgraph alm ["Almacenamiento"]
+        p[/"Parquet"/]
+    end
+    gob -->|"lee e indexa"| tec
+    tec -->|"apunta a"| alm
+    personas["Personas y agentes"] --> gob
+    motor["Motor de consulta"] --> tec
+```
+
+Son complementarios, no alternativos. DuckLake, [Apache Polaris](https://polaris.apache.org/), Unity Catalog o [Apache Gravitino](https://gravitino.apache.org/) juegan en la capa técnica; OpenMetadata y DataHub, en la de gobierno. Y esta última se alimenta, entre otras fuentes, de la primera.
+
+## Qué guarda un catálogo de gobierno
+
+Merece la pena separar las familias de metadatos, porque cada una se obtiene de forma distinta y tiene un coste de mantenimiento muy diferente:
+
+| Familia | Ejemplos | De dónde sale |
+|---|---|---|
+| Técnicos | Esquemas, tipos, tamaño, particiones | Automáticamente, del sistema |
+| Operativos | Última actualización, frecuencia, volumen por carga | Automáticamente, de los procesos |
+| De uso | Consultas más frecuentes, quién lee qué | Automáticamente, de los registros |
+| De linaje | Qué tabla alimenta a cuál, a nivel de columna | Semiautomático, del SQL y los procesos |
+| De calidad | Tests, perfiles, incidencias | Se declaran una vez, se ejecutan siempre |
+| De negocio | Glosario, definiciones, dominios | **A mano, por personas** |
+| De gobierno | Propietarios, clasificación, políticas, contratos | **A mano, por personas** |
+
+: Familias de metadatos y su origen
+
+Las dos últimas filas son las que dan valor real y las únicas que no se pueden automatizar. Es un patrón que conviene tener presente antes de elegir herramienta: la parte que una herramienta resuelve sola es la parte fácil.
+
+## OpenMetadata
+
+[OpenMetadata](https://open-metadata.org/) es hoy uno de los dos grandes proyectos abiertos de esta categoría, bajo licencia Apache 2.0. En 2026 ha reposicionado su discurso hacia lo que llaman la _capa de contexto abierta_, con el argumento de que un asistente o un agente que consulta datos necesita exactamente lo mismo que necesita una persona nueva en el equipo: saber qué significa cada cosa y si puede fiarse.
+
+Su base es un modelo de entidades definido con más de setecientos esquemas JSON, publicado como estándar abierto en [openmetadatastandards.org](https://openmetadatastandards.org/). Ese detalle importa más de lo que parece: el modelo está especificado con independencia del producto, con lo que los metadatos no quedan cautivos de la herramienta.
+
+Sobre ese modelo se articulan las piezas habituales:
+
+* **Activos de datos**: bases de datos, esquemas, tablas y columnas, pero también procesos, topics de mensajería, cuadros de mando, modelos de aprendizaje automático y APIs.
+* **Semántica**: glosarios, términos de negocio, métricas y clasificaciones, además de **dominios** y **productos de datos** para quien organice el trabajo al estilo _data mesh_ que ya mencionamos en los [nuevos paradigmas](../modelado/nuevos_paradigmas.qmd).
+* **Linaje** a nivel de tabla y **de columna**, que es la diferencia entre saber que un informe depende de una tabla y saber que la métrica de facturación depende de _esa_ columna concreta.
+* **Calidad**: casos de prueba, perfilado, comprobaciones de frescura e incidencias.
+* **Gobierno**: propietarios, equipos, roles, políticas y certificaciones.
+
+### Levantarlo
+
+Para trastear en local, la vía corta. Conviene saber de antemano que pide unos 6 GiB de memoria para Docker, porque no es una pieza ligera:
+
+```bash
+mkdir openmetadata-docker && cd openmetadata-docker
+
+# Descargar el docker-compose.yml de la última release desde
+# https://github.com/open-metadata/OpenMetadata/releases/latest
+
+docker compose -f docker-compose.yml up --detach
+```
+
+La interfaz queda en `http://localhost:8585`, con `admin@open-metadata.org` y contraseña `admin`. Para desmontarlo todo, `docker compose down --volumes`.
+
+Frente a DataHub, que necesita Kafka, una base de datos de grafos, Elasticsearch y una relacional, OpenMetadata se conforma con dos o tres piezas. Es la razón principal por la que suele ganar cuando el equipo es pequeño.
+
+### Alimentarlo
+
+Hay cuatro vías, y en un despliegue real acaban usándose todas:
+
+* **Conectores**, más de ciento treinta, que se conectan al sistema y extraen esquemas, perfiles y estadísticas de uso de forma programada.
+* **OpenLineage**, el [estándar abierto de linaje](https://openlineage.io/). OpenMetadata puede consumir eventos OpenLineage desde Kafka o Kinesis y traducirlos a su propio grafo, que es la forma de que el linaje lo reporten los propios procesos en lugar de deducirse.
+* **API REST y SDKs** de Python y TypeScript, para lo que no cubra ningún conector.
+* **Servidor MCP**, para que un asistente pueda consultar el catálogo como contexto. Es la novedad de esta generación de herramientas y encaja con la idea de que el catálogo deja de ser una web que nadie visita para convertirse en algo que se pregunta.
+
+### Contratos de datos
+
+Cuando hablábamos del [contrato con el origen](../load/intro.qmd#el-contrato-con-el-origen) decíamos que era lo único que evita de verdad que una ingesta se rompa por sorpresa. Ese acuerdo tiene desde hace poco un formato estándar: **ODCS** (_Open Data Contract Standard_), mantenido por el proyecto [Bitol](https://bitol.io/) bajo la Linux Foundation AI & Data, y que en su versión 3.1 añade relaciones entre propiedades, validación más estricta y acuerdos de nivel de servicio ejecutables.
+
+OpenMetadata soporta ODCS de forma nativa, lo que permite que el contrato deje de ser un documento en una carpeta compartida y pase a ser un artefacto verificable: se declara qué campos son obligatorios, qué reglas de calidad deben cumplirse y qué frescura se garantiza, y el propio catálogo comprueba si se está cumpliendo.
+
+## Encajarlo con nuestro stack
+
+Aquí toca ser honesto, porque es donde las guías de arquitectura suelen pintar una flecha y seguir adelante.
+
+:::{.callout-warning}
+# DuckDB y DuckLake no tienen conector nativo
+
+A día de hoy OpenMetadata **no incluye** un conector oficial para DuckDB ni para DuckLake. Existe algún conector comunitario y está documentada la vía de los [conectores personalizados](https://docs.open-metadata.org/latest/connectors/custom-connectors), que consiste en extender la clase `Source` del marco de ingesta, implementar el método `_iter` que va emitiendo peticiones de creación de entidades, empaquetarlo en la imagen de ingesta y darlo de alta como servicio de tipo _Custom_.
+
+Es perfectamente viable y es trabajo real. Conviene contarlo antes de dibujar la flecha.
+:::
+
+Tampoco es cierto, aunque se lea con frecuencia, que dlt publique automáticamente su linaje en OpenMetadata. Lo que existe es lo contrario: una fuente de dlt que **lee** metadatos de OpenMetadata para llevarlos a una base de datos. Para reportar linaje desde los procesos, la vía es OpenLineage o la API.
+
+Podríamos cerrar aquí con un "pues no encaja del todo" y dejarlo para más adelante. Pero sería pasar por alto lo importante: **las dos herramientas que ya usamos generan, cada una por su lado, casi todos los metadatos que un catálogo pediría**. Lo que falta no es información, es juntarla. Y eso sí está a nuestro alcance.
+
+## Trazabilidad de principio a fin con dlt y dbt
+
+El recorrido del dato en las partes anteriores tiene dos mitades y una costura:
+
+* De **origen a aterrizaje** manda [dlt](../load/herramientas.qmd), que sabe de qué sistema extrajo, qué esquema se encontró, cuándo cargó y con qué identificador de carga entró cada fila.
+* De **aterrizaje a consumo** manda [dbt](../transform/data_warehousing.qmd), que sabe qué modelo depende de cuál, cómo se materializa cada uno, qué pruebas pasa y qué dice su documentación.
+* La **costura** es la declaración de `source()` en dbt. Es literalmente el punto donde una herramienta deja de saber y empieza la otra.
+
+Ninguna de las dos ve la mitad de la otra, y esa es toda la brecha. Un catálogo comercial la cierra conectándose a ambas; vamos a cerrarla nosotros con los artefactos que ya se escriben en cada ejecución, sin instalar nada.
+
+Partimos del mismo ejemplo de la secretaría académica, esta vez con la ingesta real por delante: dlt extrae de la base de datos origen y aterriza en DuckLake, y dbt construye encima el vault y la capa de consumo.
+
+```{python}
+#| echo: false
+#| output: false
+import json
+import os
+import shutil
+import sqlite3
+import sys
+from datetime import datetime, timedelta
+
+import duckdb
+import pandas as pd
+
+sys.path.insert(0, os.path.abspath("../transform"))
+import utilidades
+
+utilidades.usar("metadatado")
+shutil.rmtree(utilidades.ESPACIO, ignore_errors=True)
+os.makedirs(utilidades.ESPACIO, exist_ok=True)
+
+# El origen simulado. La marca de carga es relativa al momento de compilar el
+# libro para que la comprobación de frescura tenga sentido en cualquier render.
+HACE_SEIS_HORAS = (datetime.now() - timedelta(hours=6)).strftime("%Y-%m-%d %H:%M:%S")
+ORIGEN = os.path.join(utilidades.ESPACIO, "secretaria.db")
+
+origen = sqlite3.connect(ORIGEN)
+origen.executescript(f"""
+    CREATE TABLE alumnos (
+        id_alumno INTEGER PRIMARY KEY, nombre TEXT, apellido TEXT,
+        email TEXT, _origen TEXT, _cargado_en TEXT);
+    CREATE TABLE asignaturas (
+        id_asignatura INTEGER PRIMARY KEY, nombre TEXT,
+        _origen TEXT, _cargado_en TEXT);
+    CREATE TABLE cursa (
+        id_alumno INTEGER, id_asignatura INTEGER,
+        _origen TEXT, _cargado_en TEXT);
+    INSERT INTO alumnos VALUES
+        (1,'Iraitz','Montalbán','iraitz@ejemplo.eus','secretaria','{HACE_SEIS_HORAS}'),
+        (2,'Javier','Garcia','javier@ejemplo.eus','secretaria','{HACE_SEIS_HORAS}'),
+        (3,'Miguel','Fernandez','miguel@ejemplo.eus','secretaria','{HACE_SEIS_HORAS}');
+    INSERT INTO asignaturas VALUES
+        (1,'Matemáticas','secretaria','{HACE_SEIS_HORAS}'),
+        (2,'Historia','secretaria','{HACE_SEIS_HORAS}'),
+        (3,'Biología','secretaria','{HACE_SEIS_HORAS}');
+    INSERT INTO cursa VALUES
+        (1,2,'secretaria','{HACE_SEIS_HORAS}'),
+        (2,3,'secretaria','{HACE_SEIS_HORAS}'),
+        (3,3,'secretaria','{HACE_SEIS_HORAS}');
+""")
+origen.commit()
+origen.close()
+```
+
+```{python}
+#| echo: true
+#| output: false
+import dlt
+from dlt.sources.sql_database import sql_database
+from dlt.destinations import ducklake
+from dlt.destinations.impl.ducklake.configuration import DuckLakeCredentials
+
+pipeline = dlt.pipeline(
+    pipeline_name="secretaria",
+    destination=ducklake(
+        credentials=DuckLakeCredentials(
+            ducklake_name="lago",
+            catalog=f"sqlite:///{utilidades.CATALOGO}",
+            storage=utilidades.DATOS,
+        )
+    ),
+    dataset_name="staging",
+    pipelines_dir=os.path.join(utilidades.ESPACIO, "_estado_dlt"),
+)
+
+info = pipeline.run(
+    sql_database(
+        credentials=f"sqlite:///{ORIGEN}",
+        table_names=["alumnos", "asignaturas", "cursa"],
+    ),
+    write_disposition="replace",
+)
+```
+
+### Lo que ya sabe dlt
+
+Junto a las tablas de datos, dlt deja en el **propio destino** tres tablas técnicas. Es un detalle que se pasa por alto y que aquí resulta decisivo: esos metadatos viajan dentro del mismo lakehouse, no en un servidor aparte que alguien pueda apagar.
+
+La primera es el registro de cargas.
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    SELECT load_id, schema_name, status, inserted_at
+    FROM staging._dlt_loads
+    ORDER BY inserted_at
+""")
+```
+
+Y ese identificador de carga viene estampado en cada fila, con lo que la pregunta "¿de qué ejecución salió este dato?" tiene respuesta exacta sin salir de SQL.
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    SELECT a.id_alumno, a.email, a._origen, a._dlt_load_id, c.inserted_at
+    FROM staging.alumnos a
+    JOIN staging._dlt_loads c ON a._dlt_load_id = c.load_id
+    ORDER BY a.id_alumno
+""")
+```
+
+La segunda tabla, `_dlt_version`, guarda como JSON el **esquema completo** tal y como dlt lo dedujo, con tipos, pistas y hasta el historial de versiones anteriores del esquema. Es exactamente el inventario que un conector de catálogo se dedicaría a extraer.
+
+```{python}
+#| echo: true
+#| output: true
+esquema = json.loads(
+    utilidades.consultar("""
+        SELECT schema FROM staging._dlt_version
+        ORDER BY version DESC LIMIT 1
+    """).iloc[0, 0]
+)
+
+pd.DataFrame(
+    [
+        (tabla, columna, propiedades["data_type"])
+        for tabla, definicion in esquema["tables"].items()
+        if not tabla.startswith("_dlt")
+        for columna, propiedades in definicion["columns"].items()
+    ],
+    columns=["tabla", "columna", "tipo"],
+).head(10)
+```
+
+La tercera, `_dlt_pipeline_state`, guarda el estado incremental, que es lo que hace que una segunda ejecución no vuelva a traerse lo que ya está.
+
+:::{.callout-tip}
+# Propagar el identificador de carga hasta el final
+
+Hay una mejora pequeña con un efecto desproporcionado. Data Vault ya reserva un campo para esto, `record_source`, y en los capítulos de transformación lo rellenábamos con el nombre del sistema origen. Si en la capa de preparación arrastramos también el identificador de carga de dlt:
+
+```sql
+-- models/prep/stg_alumnos.sql
+select
+    ...
+    _cargado_en                       as load_date,
+    _origen || '/' || _dlt_load_id    as record_source
+from {{ source('staging', 'alumnos') }}
+```
+
+entonces **cada fila del almacén, hasta la capa de consumo, sabe de qué ejecución de ingesta salió**. Ante un número raro en un cuadro de mando, el camino de vuelta hasta la carga concreta y su registro de errores es una consulta, no una investigación.
+:::
+
+### La costura: los sources de dbt
+
+La declaración de `source()` es donde las dos mitades se dan la mano, y merece algo más de cariño del que se le suele dar. Con dos líneas más en el YAML, dbt pasa a vigilar también lo que hace la ingesta:
+
+```yaml
+# models/prep/_sources.yml
+version: 2
+
+sources:
+  - name: staging
+    description: >
+      Capa de aterrizaje que dejó la parte de ingesta. Refleja el sistema
+      origen sin interpretar y no se modifica desde aquí.
+    schema: staging
+    loaded_at_field: "cast(_cargado_en as timestamp)"
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 72, period: hour}
+    tables:
+      - name: alumnos
+        description: Alumnos que constan en secretaría, sin interpretar.
+      - name: asignaturas
+        description: Catálogo de asignaturas ofertadas.
+      - name: cursa
+        description: Qué alumno cursa qué asignatura, la relación en crudo.
+```
+
+`loaded_at_field` apunta a la marca de tiempo que dejó la ingesta y convierte a dbt en vigilante de la frescura del origen:
+
+```{python}
+#| echo: true
+#| output: true
+print(utilidades.resumen(
+    utilidades.dbt("source", "freshness"),
+    ("PASS freshness", "WARN freshness", "ERROR STALE", "Finished running"),
+))
+```
+
+Esto es más importante de lo que parece. La mayoría de los incidentes de datos no son transformaciones mal escritas, son **cargas que dejaron de ejecutarse** y nadie se enteró. El cuadro de mando sigue funcionando, sigue mostrando números y los números son de hace tres semanas. Con `freshness` declarado, el propio dbt levanta la mano antes que el usuario.
+
+Construimos ahora el almacén completo encima.
+
+```{python}
+#| echo: true
+#| output: true
+print("\n".join(utilidadesv.resumen(utilidades.dbt("build")).splitlines()[-2:]))
+```
+
+### Lo que ya sabe dbt
+
+Cada ejecución de dbt escribe en `target/` un puñado de ficheros JSON que son, sin exagerar, el mejor catálogo técnico gratuito que hay:
+
+| Artefacto | Qué contiene |
+|---|---|
+| `manifest.json` | El proyecto entero: modelos, sources, pruebas, descripciones y el grafo de dependencias |
+| `run_results.json` | Qué se ejecutó en la última pasada, con qué estado y cuánto tardó |
+| `sources.json` | El resultado de la comprobación de frescura |
+| `catalog.json` | Columnas y tipos reales en el destino, tras `dbt docs generate` |
+
+: Artefactos que deja cada ejecución de dbt
+
+De ahí sale el inventario de activos sin preguntarle nada a la base de datos.
+
+```{python}
+#| echo: true
+#| output: true
+def artefacto(nombre):
+    with open(os.path.join(utilidades.ESPACIO, "target", nombre), encoding="utf-8") as f:
+        return json.load(f)
+
+manifest = artefacto("manifest.json")
+
+nombres, activos = {}, []
+
+for uid, fuente in manifest["sources"].items():
+    nombres[uid] = f"{fuente['schema']}.{fuente['name']}"
+    activos.append(("aterrizaje", nombres[uid], "dlt", "tabla", fuente["description"]))
+
+for uid, nodo in manifest["nodes"].items():
+    if nodo["resource_type"] != "model":
+        continue
+    nombres[uid] = f"{nodo['schema']}.{nodo['name']}"
+    activos.append((nodo["fqn"][1], nombres[uid], "dbt",
+                    nodo["config"]["materialized"], nodo["description"]))
+
+df_activos = pd.DataFrame(
+    activos, columns=["capa", "activo", "proceso", "forma", "descripcion"]
+)
+df_activos
+```
+
+Y el linaje sale de `parent_map`, que es el grafo de dependencias que dbt ya deduce de cada `ref()` y cada `source()`. Le añadimos por delante el tramo que conoce dlt, leyendo del esquema que dejó en el lago qué tablas trajo y de dónde:
+
+```{python}
+#| echo: true
+#| output: true
+aristas = [
+    (f"secretaria.{tabla}", f"staging.{tabla}", "dlt")
+    for tabla in esquema["tables"]
+    if not tabla.startswith("_dlt")
+]
+
+for uid, padres in manifest["parent_map"].items():
+    if uid in nombres:
+        aristas += [(nombres[p], nombres[uid], "dbt") for p in padres if p in nombres]
+
+df_linaje = pd.DataFrame(aristas, columns=["origen", "destino", "proceso"])
+df_linaje.head(8)
+```
+
+### El grafo completo
+
+Con esas dos piezas ya se puede dibujar el recorrido de principio a fin, desde la tabla del sistema origen hasta la dimensión que consume el cuadro de mando.
+
+```{python}
+#| echo: true
+#| output: asis
+def nodo_id(nombre):
+    return nombre.replace(".", "_")
+
+def etiqueta(nombre):
+    return nombre.replace("main_", "")
+
+print("```{mermaid}")
+print("flowchart LR")
+for arista in df_linaje.itertuples():
+    print(f"    {nodo_id(arista.origen)}[\"{etiqueta(arista.origen)}\"]"
+          f" --> {nodo_id(arista.destino)}[\"{etiqueta(arista.destino)}\"]")
+print("```")
+```
+
+Nadie ha dibujado ese diagrama a mano y nadie tendrá que actualizarlo: se regenera con cada ejecución, porque sale de los mismos artefactos que produce el trabajo. Es la propiedad que distingue un linaje útil de un documento de Visio.
+
+### Guardarlo donde vive el dato
+
+Un grafo en memoria sirve de poco. Como el destino es un lakehouse y escribir en él es trivial, el sitio natural para estos metadatos es el propio lago, en un esquema aparte:
+
+```{python}
+#| echo: true
+#| output: true
+con = duckdb.connect()
+con.sql("INSTALL ducklake; LOAD ducklake;")
+con.sql(f"ATTACH 'ducklake:sqlite:{utilidades.CATALOGO}' AS lago (DATA_PATH '{utilidades.DATOS}')")
+con.sql("USE lago")
+
+resultados = artefacto("run_results.json")
+df_ejecuciones = pd.DataFrame(
+    [(r["unique_id"].split(".")[-1], r["status"], round(r["execution_time"], 3))
+     for r in resultados["results"]],
+    columns=["nodo", "estado", "segundos"],
+)
+
+con.sql("CREATE SCHEMA IF NOT EXISTS meta")
+con.sql("CREATE OR REPLACE TABLE meta.activos AS SELECT * FROM df_activos")
+con.sql("CREATE OR REPLACE TABLE meta.linaje AS SELECT * FROM df_linaje")
+con.sql("CREATE OR REPLACE TABLE meta.ejecuciones AS SELECT * FROM df_ejecuciones")
+con.close()
+
+utilidades.consultar("""
+    SELECT capa, count(*) AS activos
+    FROM meta.activos GROUP BY capa ORDER BY activos DESC
+""")
+```
+
+A partir de aquí el catálogo se consulta con la misma herramienta con la que se consulta todo lo demás. La pregunta que de verdad se hace a diario, **qué se rompe si toco esta tabla**, es un `WITH RECURSIVE`:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    WITH RECURSIVE aguas_abajo(activo, salto) AS (
+        SELECT destino, 1 FROM meta.linaje WHERE origen = 'staging.alumnos'
+        UNION ALL
+        SELECT l.destino, a.salto + 1
+        FROM meta.linaje l JOIN aguas_abajo a ON l.origen = a.activo
+    )
+    SELECT salto, activo FROM aguas_abajo
+    ORDER BY salto, activo
+""")
+```
+
+Y como vive en el lago, se puede exponer en [Rill](../explotacion/bi.qmd) igual que cualquier otro dato, con un panel que enseñe qué cargas han fallado, qué tablas llevan más tiempo sin refrescarse y cuántos activos hay por capa. Un catálogo que no obliga a levantar ningún servicio.
+
+:::{.callout-warning}
+# Lo que esto no es
+
+Conviene ser preciso con lo que acabamos de construir, porque es fácil venderlo por más de lo que es.
+
+**Sí es**: un inventario de activos con su capa y su forma, el linaje a nivel de tabla de principio a fin, el registro de cada ejecución y de cada carga, y la frescura de los orígenes. Todo derivado, sin nada escrito a mano y sin nada que se pueda desactualizar en silencio.
+
+**No es**: linaje a nivel de columna, ni un glosario de negocio, ni control de permisos, ni un buscador para quien no sabe SQL, ni un sitio donde discutir sobre un dato. Todo eso es lo que justifica un catálogo de gobierno de verdad, y llegado el momento habrá que instalarlo.
+
+Lo que sí resuelve es la trampa habitual: montar el catálogo antes de tener los metadatos, y acabar con una herramienta cara enseñando fichas vacías.
+:::
+
+## Alternativas que cubren este stack
+
+Cuando lo anterior se quede corto, y se quedará en cuanto haya que escribir un glosario, estas son las opciones que encajan con DuckLake, dlt y dbt sin pelearse con ellas.
+
+| Opción | Cubre | Coste de entrada |
+|---|---|---|
+| **`dbt docs`** | Modelos, descripciones y grafo, en una web estática | Un comando |
+| **Metadatos en el lago** | Inventario, linaje de tabla y ejecuciones, consultable en SQL | Un cuaderno como el de arriba |
+| **OpenLineage y Marquez** | Linaje de ejecución de ambas mitades, en un servicio aparte | Un contenedor y un envoltorio |
+| **DataHub por artefactos** | Catálogo completo, alimentado desde `manifest.json` | Varias piezas de infraestructura |
+| **OpenMetadata** | Catálogo completo y contratos ODCS | Conector personalizado por escribir |
+
+: Opciones ordenadas por lo que cuesta empezar
+
+### dbt docs
+
+La opción que casi nadie usa y que sale gratis. `dbt docs generate` produce `catalog.json` con las columnas reales del destino y `dbt docs serve` levanta una web navegable con el grafo, las descripciones y el SQL compilado de cada modelo. Es un catálogo de verdad para la mitad de dbt, se publica como sitio estático en cualquier sitio y se actualiza en cada integración continua.
+
+Su límite es evidente: **empieza en el `source()`**. No sabe nada de la ingesta ni de los sistemas origen.
+
+### OpenLineage y Marquez
+
+Si lo que se busca es el linaje de las **ejecuciones** y no solo el de las definiciones, [OpenLineage](https://openlineage.io/) es el estándar que ya mencionábamos, y [Marquez](https://marquezproject.ai/) su implementación de referencia, bastante más ligera que un catálogo completo.
+
+Para dbt la integración está hecha: el paquete `openlineage-dbt` trae el envoltorio `dbt-ol`, que se usa en lugar de `dbt` y emite los eventos leyendo los mismos artefactos que hemos abierto antes.
+
+```bash
+pip install openlineage-dbt
+dbt-ol build --project-dir academia
+```
+
+Para dlt no hay envoltorio equivalente, así que la emisión se escribe a mano desde el propio proceso, usando el cliente de Python de OpenLineage y la información que devuelve `pipeline.run()`. Es un rato de trabajo, no un proyecto, y a cambio ambas mitades acaban reportando al mismo sitio y en un formato que cualquier catálogo posterior sabe leer.
+
+Es, con diferencia, la vía con mejor relación entre esfuerzo y opciones futuras: si mañana se instala OpenMetadata o DataHub, los dos consumen OpenLineage y el trabajo hecho se aprovecha entero.
+
+### DataHub y OpenMetadata por artefactos
+
+Aquí está el matiz que resuelve buena parte del problema del conector ausente. Ambos catálogos saben ingerir un proyecto de dbt **leyendo `manifest.json` y `catalog.json`** de un fichero o un bucket, sin conectarse a la base de datos. Eso significa que todo el almacén construido con dbt, con su linaje y su documentación, entra en el catálogo aunque el motor de debajo no tenga conector.
+
+La diferencia entre los dos importa en este punto. DataHub trata esa ingesta como una fuente independiente, con lo que un proyecto de dbt se cataloga por sí solo. OpenMetadata la plantea como un **enriquecimiento** de un servicio de base de datos que debe existir antes, con lo que se vuelve a necesitar el conector personalizado del que avisábamos. No es un impedimento, pero conviene saberlo antes de elegir por comodidad.
+
+Queda fuera en ambos casos la mitad de la ingesta, que es donde entra OpenLineage o la API.
+
+### Y si el catálogo técnico fuera otro
+
+Merece la pena apuntar una salida distinta para cuando el problema deje de ser doméstico. DuckLake es una elección excelente para empezar y para equipos pequeños, pero su ecosistema de integraciones es todavía joven. El día que el catálogo de gobierno sea un requisito duro y el equipo haya crecido, cambiar el catálogo técnico por [Apache Polaris](https://polaris.apache.org/) o [Unity Catalog](https://www.unitycatalog.io/) sobre Iceberg abre la puerta a los conectores que ya existen para todo.
+
+Y ese cambio es asumible precisamente por lo que veíamos en los [formatos abiertos](../sistemas/nuevos-formatos.qmd): los datos siguen siendo Parquet y los modelos de dbt no se enteran, porque lo único que cambia es la cadena de conexión del `profiles.yml`.
+
+## El panorama
+
+| Herramienta | Capa | Nota |
+|---|---|---|
+| [OpenMetadata](https://open-metadata.org/) | Gobierno | Arquitectura ligera, catálogo de conectores muy amplio, soporte de contratos ODCS |
+| [DataHub](https://datahub.com/) | Gobierno | Mayor comunidad y más funcionalidad de empresa, a costa de cuatro o cinco piezas de infraestructura |
+| [Amundsen](https://www.amundsen.io/) | Descubrimiento | Pionero en Lyft, hoy prácticamente sin mantenimiento |
+| [Marquez](https://marquezproject.ai/) | Linaje | Implementación de referencia de OpenLineage, sin pretensión de catálogo |
+| [Unity Catalog](https://www.unitycatalog.io/) | Técnico y gobierno | Abierto por Databricks; cubre también activos no estructurados |
+| [Apache Polaris](https://polaris.apache.org/) | Técnico | Catálogo REST, solo Iceberg |
+| [Apache Gravitino](https://gravitino.apache.org/) | Técnico | Federa varios catálogos y formatos |
+
+: Herramientas de catálogo y su capa
+
+## Lo que un catálogo no arregla
+
+Para cerrar, la advertencia que ahorra proyectos enteros. Un catálogo de datos es un espejo de la organización: si nadie asume la propiedad de las tablas, mostrará tablas sin propietario; si nadie escribe el glosario, tendrá un glosario vacío; y si se instala como proyecto técnico sin que nadie tenga la responsabilidad de mantenerlo, en seis meses será un inventario desactualizado en el que nadie confía, que es peor que no tener ninguno.
+
+Vuelve a valer aquí lo que decía [Conway](../sistemas/arquitecturas.qmd) sobre las organizaciones y sus sistemas. La herramienta hace fácil lo que ya se quiere hacer; no hace que se quiera hacer.

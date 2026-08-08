@@ -5,8 +5,12 @@ description = "Dependencias para la ejecución de código Python en la plataform
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "dbt-duckdb>=1.11.0",
+    "dlt[duckdb,parquet,sqlalchemy]>=1.29.1",
+    "duckdb>=1.5.5",
     "ipykernel>=6.30.1",
     "nbclient>=0.10.2",
     "nbformat>=5.10.4",
+    "pandas>=3.0.5",
     "pyyaml>=6.0.2",
 ]

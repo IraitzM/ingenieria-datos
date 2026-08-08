@@ -1,0 +1,430 @@
+# La capa de aterrizaje
+
+Los datos ya salen del origen. Queda la pregunta de dónde caen, y es una decisión con más consecuencias de las que parece.
+
+Cuando hablamos de la [caja fuerte](../sistemas/arquitecturas.qmd#la-caja-fuerte) decíamos que la información cruda debe reposar al menos por un tiempo para poder ser entendida y gestionada. Esa es la capa de **staging**, la zona de aterrizaje, el _bronze_ de la arquitectura medallón. Distintos nombres para la misma idea: un sitio donde el dato llega tal cual vino, sin interpretar.
+
+## Qué hace y qué no hace
+
+La regla que define esta capa es una sola: **aquí no se transforma nada**. Y es una regla que cuesta respetar, porque siempre hay una limpieza pequeña y evidente que uno estaría tentado de colar de paso. Si empezamos a normalizar mayúsculas, a convertir fechas o a descartar los registros que parecen erróneos, perdemos la única propiedad que hace valiosa a esta capa: que es un reflejo fiel del origen y que, cuando dentro de un año descubramos un error, podamos volver a ella y rehacer el trabajo.
+
+Lo que sí hacemos:
+
+* **Aterrizar** el dato con su estructura de origen, aceptando que evolucione.
+* **Anotar** cuándo llegó, de dónde y en qué carga. Los [metadatos](patrones.qmd#los-metadatos-de-carga) de siempre.
+* **Garantizar** que lo escrito es completo: o se ve el lote entero o no se ve nada.
+* **Conservar** durante un plazo definido, para poder reprocesar.
+
+Lo que no hacemos: aplicar reglas de negocio, deduplicar por criterios propios, unir tablas, renombrar campos a un vocabulario común. Todo eso pertenece a la [transformación](../transform/intro.qmd).
+
+:::{.callout-tip}
+# Staging no es un almacén temporal
+
+El nombre despista, porque en el ETL clásico el _staging area_ era una zona de paso que se vaciaba al terminar. En una arquitectura moderna, con almacenamiento barato, la capa de aterrizaje **se conserva**. Es lo que permite reconstruir todo lo que hay aguas abajo sin volver a molestar a los sistemas origen, y en más de una ocasión es el único sitio donde queda la historia de una fuente que ya ni existe.
+:::
+
+## Por qué un formato de tabla y no ficheros sueltos
+
+Podríamos aterrizar los datos escribiendo Parquet en carpetas y quedarnos tan anchos. De hecho es exactamente lo que hacían los lagos de datos de la era Hadoop, y ya vimos que [tenía sus problemas](../sistemas/nuevos-formatos.qmd): sin transacciones, dos procesos escribiendo a la vez se pisan; un lector puede ver un lote a medias; modificar registros obliga a reescribir ficheros enteros; y no hay forma de saber qué había ayer.
+
+Los formatos de tabla abiertos (Delta, Iceberg, Hudi) resolvieron esto añadiendo una capa de metadatos sobre los ficheros de datos. Con ellos obtenemos transaccionalidad, versionado y evolución de esquema sin renunciar a que el dato siga siendo Parquet en un bucket.
+
+## DuckLake
+
+Aquí es donde entra [DuckLake](https://ducklake.select/), y merece la pena entender la observación de la que parte, porque es de las que resultan obvias solo después de que alguien las diga.
+
+Iceberg y Delta guardan sus metadatos **en ficheros**, junto a los datos. Eso los hace autocontenidos, pero obliga a reconstruir el estado de una tabla leyendo una cadena de ficheros de manifiesto, y a resolver la concurrencia entre escritores mediante mecanismos externos. Con el tiempo, ambos formatos han acabado necesitando un catálogo con una base de datos detrás para funcionar bien.
+
+La propuesta de DuckLake es aceptarlo desde el principio: si de todas formas vamos a necesitar una base de datos transaccional para los metadatos, **usémosla para todos los metadatos**. Los datos siguen siendo Parquet abierto en el almacenamiento que queramos; el catálogo es un esquema SQL en cualquier motor tabular (SQLite, PostgreSQL, DuckDB, MySQL); y una transacción del lakehouse es, sencillamente, una transacción de esa base de datos.
+
+```{mermaid}
+flowchart TB
+    subgraph cat ["Catálogo (base de datos SQL)"]
+        m["Esquemas, tablas, columnas<br/>Snapshots y estadísticas<br/>Qué fichero contiene qué"]
+    end
+    subgraph alm ["Almacenamiento de objetos"]
+        p1[/"parquet"/]
+        p2[/"parquet"/]
+        p3[/"parquet"/]
+    end
+    cat -.->|"apunta a"| alm
+    motor["Motor de consulta"] --> cat
+    motor --> alm
+```
+
+La consecuencia práctica es que montar un lakehouse deja de ser un proyecto. Vamos a construir uno entero en este capítulo, con transacciones, viaje en el tiempo y evolución de esquema, y va a caber en unas pocas celdas.
+
+```{python}
+#| echo: false
+#| output: false
+import os
+import shutil
+
+# Partimos de cero para que el capítulo sea reproducible en cada render
+for ruta in ["lago", "catalogo.ducklake", "catalogo.ducklake.wal",
+             "lago_dlt", "catalogo_dlt.sqlite", "secretaria.db",
+             "_estado_dlt"]:
+    if os.path.isdir(ruta):
+        shutil.rmtree(ruta)
+    elif os.path.exists(ruta):
+        os.remove(ruta)
+```
+
+### Montar el lago
+
+Toda la ceremonia de instalación es esta:
+
+```{python}
+#| echo: true
+#| output: true
+import duckdb
+
+con = duckdb.connect()
+con.sql("INSTALL ducklake; LOAD ducklake;")
+
+# El catálogo será un fichero DuckDB y los datos irán a la carpeta lago/
+con.sql("ATTACH 'ducklake:catalogo.ducklake' AS lago (DATA_PATH 'lago/')")
+con.sql("USE lago")
+```
+
+Ya está. Eso es un lakehouse. En un entorno real cambiaríamos el catálogo por un PostgreSQL compartido y `DATA_PATH` por un `s3://`, pero ni una línea más de las que siguen tendría que cambiar.
+
+```{python}
+#| echo: false
+#| output: false
+# Para el ejemplo forzamos que los datos vayan siempre a Parquet
+# en lugar de quedarse embebidos en el catálogo (ver más abajo)
+con.sql("CALL lago.set_option('data_inlining_row_limit', 0)")
+```
+
+### La primera carga
+
+Creamos el esquema de aterrizaje y aterrizamos nuestros alumnos, con los metadatos de carga que ya sabemos que hay que poner.
+
+```{python}
+#| echo: true
+#| output: true
+con.sql("CREATE SCHEMA staging")
+
+con.sql("""
+    CREATE TABLE staging.alumnos (
+        id_alumno    INTEGER,
+        nombre       VARCHAR,
+        apellido     VARCHAR,
+        email        VARCHAR,
+        _origen      VARCHAR,
+        _cargado_en  TIMESTAMP
+    )
+""")
+
+con.sql("""
+    INSERT INTO staging.alumnos VALUES
+        (1, 'Iraitz', 'Montalbán', 'iraitz@ejemplo.eus', 'secretaria', now()),
+        (2, 'Javier', 'Garcia',    'javier@ejemplo.eus', 'secretaria', now()),
+        (3, 'Miguel', 'Fernandez', 'miguel@ejemplo.eus', 'secretaria', now())
+""")
+
+con.sql("SELECT id_alumno, nombre, email FROM staging.alumnos ORDER BY id_alumno").df()
+```
+
+Se consulta como cualquier base de datos, pero lo que hay debajo no es un fichero de base de datos. Miremos el disco:
+
+```{python}
+#| echo: true
+#| output: true
+for raiz, _, ficheros in os.walk("lago"):
+    for f in ficheros:
+        print(os.path.join(raiz, f))
+```
+
+Un fichero Parquet, en una ruta que refleja esquema y tabla. Cualquier motor que sepa leer Parquet puede leer ese fichero sin pedirle permiso a nadie, y ahí está la diferencia con un almacén propietario: **los datos no están secuestrados por el formato**.
+
+:::{.callout-note collapse="true"}
+# Datos embebidos en el catálogo
+
+DuckLake tiene una optimización llamada _data inlining_: si un lote es muy pequeño, en lugar de escribir un Parquet de unas pocas filas guarda los valores directamente en el catálogo, y los materializa a Parquet más adelante. Resuelve el clásico problema de los ficheros diminutos que sufren los lagos alimentados por flujos de datos frecuentes.
+
+En este capítulo lo hemos desactivado con `data_inlining_row_limit` para poder ver los ficheros desde la primera inserción. En producción interesa dejarlo activo y ejecutar `ducklake_flush_inlined_data` periódicamente.
+:::
+
+### La segunda carga
+
+Al día siguiente vuelve a ejecutarse la ingesta. Un alumno ha corregido su correo y hay una matrícula nueva.
+
+```{python}
+#| echo: true
+#| output: true
+con.sql("""
+    UPDATE staging.alumnos
+    SET email = 'iraitz.montalban@ejemplo.eus', _cargado_en = now()
+    WHERE id_alumno = 1
+""")
+
+con.sql("""
+    INSERT INTO staging.alumnos
+    VALUES (4, 'María', 'Garcia', 'maria@ejemplo.eus', 'secretaria', now())
+""")
+
+con.sql("SELECT id_alumno, nombre, email FROM staging.alumnos ORDER BY id_alumno").df()
+```
+
+Nótese que hemos hecho un `UPDATE` sobre datos almacenados en Parquet, que es un formato columnar pensado para no modificarse. El formato de tabla se encarga de traducir eso a escrituras de ficheros nuevos y anotaciones en el catálogo, sin que tengamos que saberlo.
+
+### El historial
+
+Cada operación ha dejado una versión. Y esas versiones son consultables:
+
+```{python}
+#| echo: true
+#| output: true
+con.sql("SELECT snapshot_id, snapshot_time, changes FROM lago.snapshots()").df()
+```
+
+Se lee la historia entera del lago: la creación del esquema, la de la tabla, la inserción inicial, la modificación (que internamente es un borrado más una inserción) y el alta de María.
+
+Y si tenemos las versiones, tenemos **viaje en el tiempo**. Así estaban las cosas en la versión 3, antes de la segunda carga:
+
+```{python}
+#| echo: true
+#| output: true
+con.sql("""
+    SELECT id_alumno, nombre, email
+    FROM staging.alumnos AT (VERSION => 3)
+    ORDER BY id_alumno
+""").df()
+```
+
+Cuatro alumnos ahora, tres entonces, y el correo antiguo de Iraitz intacto. Esto no es una copia de seguridad que alguien tuvo la precaución de hacer: es el estado natural de la tabla, disponible con una cláusula SQL.
+
+Podemos ir más lejos y preguntar directamente **qué cambió** entre dos versiones:
+
+```{python}
+#| echo: true
+#| output: true
+con.sql("USE lago.staging")
+con.sql("""
+    SELECT snapshot_id, change_type, id_alumno, email
+    FROM lago.table_changes('alumnos', 4, 5)
+    ORDER BY snapshot_id
+""").df()
+```
+
+Ahí está la modificación descompuesta en su imagen anterior y posterior, y el alta de María. Es, literalmente, un flujo de cambios como el que produciría un [CDC](patrones.qmd#change-data-capture), pero generado por el propio lakehouse sobre nuestra capa de aterrizaje. Aguas abajo, quien construya un satélite de Data Vault o una dimensión histórica puede consumir esto en lugar de recalcular diferencias.
+
+:::{.callout-tip}
+# Para qué sirve esto un martes cualquiera
+
+El viaje en el tiempo suena a curiosidad técnica hasta el día que hace falta. Los tres usos que aparecen solos:
+
+* **Depurar**: el informe de ayer daba otro número; comparar la tabla de ayer con la de hoy responde por qué en un minuto.
+* **Reprocesar**: una transformación con un error se puede volver a lanzar contra el estado exacto que tenían los datos cuando se ejecutó.
+* **Auditar**: demostrar qué contenía un dato en una fecha concreta, sin depender de que alguien guardara una copia.
+:::
+
+### Cuando el origen cambia el esquema
+
+Volvemos a la evolución del esquema, que decíamos que en esta capa debía ser permisiva. La secretaría empieza a registrar el teléfono:
+
+```{python}
+#| echo: true
+#| output: true
+con.sql("ALTER TABLE alumnos ADD COLUMN telefono VARCHAR")
+
+con.sql("""
+    UPDATE alumnos SET telefono = '600 000 001' WHERE id_alumno = 1
+""")
+
+con.sql("SELECT id_alumno, nombre, email, telefono FROM alumnos ORDER BY id_alumno").df()
+```
+
+La columna aparece, con valores nulos para lo que ya estaba cargado. Y lo interesante es que los ficheros Parquet antiguos **no se han reescrito**: el catálogo sabe que aquellos ficheros no tienen esa columna y la resuelve como nula al leerlos. Por eso añadir una columna es instantáneo aunque la tabla tenga mil millones de filas.
+
+Las versiones anteriores, además, siguen viéndose con el esquema que tenían entonces:
+
+```{python}
+#| echo: true
+#| output: true
+con.sql("SELECT * FROM alumnos AT (VERSION => 3) LIMIT 1").df().columns.tolist()
+```
+
+## Conectando la ingesta
+
+Hasta aquí hemos escrito el SQL a mano para ver la mecánica. En la práctica, quien escribe en esta capa es la [herramienta de ingesta](herramientas.qmd), y dlt sabe hablar DuckLake de forma nativa.
+
+Montamos primero una secretaría académica de la que extraer, esta vez en SQLite, para tener un origen de verdad:
+
+```{python}
+#| echo: true
+#| output: true
+import sqlite3
+
+origen = sqlite3.connect("secretaria.db")
+origen.executescript("""
+    CREATE TABLE alumnos (
+        id_alumno INTEGER PRIMARY KEY,
+        nombre TEXT,
+        apellido TEXT,
+        email TEXT,
+        actualizado TEXT
+    );
+    INSERT INTO alumnos VALUES
+        (1, 'Iraitz', 'Montalbán', 'iraitz@ejemplo.eus', '2026-01-10 09:00:00'),
+        (2, 'Javier', 'Garcia',    'javier@ejemplo.eus', '2026-01-10 09:00:00'),
+        (3, 'Miguel', 'Fernandez', 'miguel@ejemplo.eus', '2026-01-11 12:30:00');
+""")
+origen.commit()
+origen.execute("SELECT COUNT(*) FROM alumnos").fetchone()
+```
+
+Y declaramos el proceso completo: origen, destino y modo de escritura.
+
+```{python}
+#| echo: true
+#| output: false
+import dlt
+from dlt.sources.sql_database import sql_database
+from dlt.destinations import ducklake
+from dlt.destinations.impl.ducklake.configuration import DuckLakeCredentials
+
+destino = ducklake(
+    credentials=DuckLakeCredentials(
+        ducklake_name="lago",
+        catalog="sqlite:///catalogo_dlt.sqlite",
+        storage="lago_dlt",
+    )
+)
+
+fuente = sql_database(
+    credentials="sqlite:///secretaria.db",
+    table_names=["alumnos"],
+)
+
+pipeline = dlt.pipeline(
+    pipeline_name="secretaria",
+    destination=destino,
+    dataset_name="staging",
+    pipelines_dir="_estado_dlt",
+)
+
+info = pipeline.run(fuente, write_disposition="merge", primary_key="id_alumno")
+```
+
+:::{.callout-note collapse="true"}
+# Sobre `pipelines_dir`
+
+dlt guarda por defecto el estado local de cada proceso en `~/.dlt/pipelines`, fuera del proyecto, para que sobreviva entre ejecuciones. Aquí lo hemos redirigido a una carpeta local únicamente para que este capítulo se pueda reconstruir desde cero cada vez que se compila el libro. En un despliegue real interesa justo lo contrario: que ese estado persista, o mejor aún, apoyarse en el que dlt mantiene dentro del propio destino.
+:::
+
+```{python}
+#| echo: false
+#| output: true
+print(info)
+```
+
+Simulamos ahora un día más en la vida de la secretaría y volvemos a ejecutar **exactamente el mismo proceso**:
+
+```{python}
+#| echo: true
+#| output: false
+origen.executescript("""
+    UPDATE alumnos
+    SET email = 'iraitz.montalban@ejemplo.eus', actualizado = '2026-01-12 08:00:00'
+    WHERE id_alumno = 1;
+    INSERT INTO alumnos VALUES
+        (4, 'María', 'Garcia', 'maria@ejemplo.eus', '2026-01-12 10:00:00');
+""")
+origen.commit()
+
+info = pipeline.run(fuente, write_disposition="merge", primary_key="id_alumno")
+```
+
+```{python}
+#| echo: false
+#| output: true
+print(info)
+```
+
+Y comprobamos el resultado enganchándonos al lago desde fuera, con una conexión DuckDB limpia, para dejar claro que el dato no pertenece a la herramienta que lo escribió:
+
+```{python}
+#| echo: true
+#| output: true
+lector = duckdb.connect()
+lector.sql("INSTALL ducklake; LOAD ducklake;")
+lector.sql("ATTACH 'ducklake:sqlite:catalogo_dlt.sqlite' AS lago_dlt")
+
+lector.sql("""
+    SELECT id_alumno, nombre, email
+    FROM lago_dlt.staging.alumnos
+    ORDER BY id_alumno
+""").df()
+```
+
+El `merge` ha hecho su trabajo: el correo de Iraitz actualizado, María incorporada, y ni un duplicado. Veamos qué más ha dejado dlt por ahí:
+
+```{python}
+#| echo: true
+#| output: true
+lector.sql("""
+    SELECT table_schema, table_name
+    FROM information_schema.tables
+    WHERE table_catalog = 'lago_dlt'
+    ORDER BY table_schema, table_name
+""").df()
+```
+
+Junto a nuestra tabla aparecen las tablas técnicas que mencionábamos: el registro de cargas, el historial de esquemas y el estado incremental. Ese estado es el que hace que la tercera ejecución no vuelva a traerse lo que ya está.
+
+## Mantener el lago
+
+Una capa de aterrizaje que lleva dos años funcionando acumula dos problemas previsibles: muchas versiones antiguas y muchos ficheros pequeños. Ambos tienen su función de mantenimiento.
+
+```sql
+-- Compactar ficheros pequeños en otros de tamaño razonable
+CALL ducklake_merge_adjacent_files('lago');
+
+-- Materializar los datos que estuvieran embebidos en el catálogo
+CALL ducklake_flush_inlined_data('lago');
+
+-- Caducar versiones anteriores a una fecha (deja de haber viaje en el tiempo)
+CALL ducklake_expire_snapshots('lago', older_than => now() - INTERVAL 30 DAY);
+
+-- Borrar del almacenamiento los ficheros que ya no referencia nadie
+CALL ducklake_delete_orphaned_files('lago', older_than => now() - INTERVAL 7 DAY);
+```
+
+El orden importa: los ficheros no se pueden borrar hasta que ninguna versión viva los referencie, así que primero se caducan las versiones y después se limpian los huérfanos. Y conviene decidir la retención con criterio, porque `expire_snapshots` es lo que convierte el viaje en el tiempo en algo finito. Treinta días suele ser un punto de partida razonable para staging; en capas con requisitos de auditoría, bastante más.
+
+## Convenciones que ahorran disgustos
+
+Para cerrar, unas cuantas decisiones que conviene tomar una vez y aplicar en todas partes:
+
+* **Un esquema por sistema origen** (`staging_secretaria`, `staging_biblioteca`) en lugar de mezclarlo todo. Cuando haya dos tablas `alumnos` de dos sistemas distintos, y las habrá, el problema estará resuelto de antemano.
+* **Nombres de origen, no nombres bonitos**. Si en el ERP la tabla se llama `res_partner`, en staging se llama `res_partner`. El vocabulario de negocio se introduce en la transformación, y así el rastro hasta el origen es directo.
+* **Metadatos de carga sin excepción**, aunque el formato ya versione. El versionado dice cuándo se escribió la fila; los metadatos dicen de qué ejecución vino y de qué sistema.
+* **Particionar por fecha de carga** las tablas grandes, que es lo que hace barato reprocesar un día suelto.
+* **Nadie construye informes sobre staging**. En cuanto un cuadro de mando apunta directamente aquí, la capa deja de poder evolucionar con el origen y hemos perdido la razón de ser de tenerla.
+
+```{python}
+#| echo: false
+#| output: false
+con.close()
+lector.close()
+origen.close()
+```
+
+## ¿Y quién sabe que esto existe?
+
+Cerramos la ingesta con una pregunta que no es técnica. Tenemos los datos aterrizados, versionados y trazables. Sabemos de dónde vino cada fila y cuándo llegó, podemos reconstruir el pasado y tenemos el historial de cambios de cada tabla. Todo eso es cierto y todo eso lo sabemos **nosotros**.
+
+Dentro de seis meses, cuando la capa de aterrizaje tenga cuarenta tablas de cinco sistemas distintos, alguien que no estuvo en esta conversación va a abrir el lago y va a necesitar saber qué significa `cursa`, por qué hay dos tablas de alumnos, quién responde si los números no cuadran y si puede fiarse de lo que ve. Nada de lo que hemos construido en esta parte responde a eso.
+
+Es el terreno del **metadatado** y del catálogo de gobierno, con OpenMetadata como referencia abierta más habitual: glosario de negocio, propietarios, linaje a nivel de columna, reglas de calidad y contratos de datos en formato estándar. Le hemos dedicado [un apéndice completo](../appendices/metadatado.qmd), incluida la parte que no encaja del todo con un stack basado en DuckLake y cómo suplirla reconciliando lo que ya generan dlt y dbt, porque conviene saberlo antes de dibujar la flecha en el diagrama.
+
+Merece la pena leerlo ahora, con la ingesta fresca, porque buena parte de lo que un catálogo necesita saber lo hemos ido generando sin darnos cuenta: los metadatos de carga, el registro de ejecuciones de dlt y el historial de versiones de DuckLake son ya materia prima de linaje.
+
+## Lo que viene
+
+Con la materia prima en su sitio, toca darle forma. En la [transformación](../transform/intro.qmd) recorreremos el camino que ya anticipamos al hablar de [la caja fuerte](../sistemas/arquitecturas.qmd#la-caja-fuerte): convertir esta capa de aterrizaje en un **raw vault**, con los conceptos de negocio identificados en hubs, enlaces y satélites; aplicar después las reglas de negocio en el **business vault**; y presentar finalmente al usuario un modelo que pueda consumir sin saber nada de todo esto.
+
+Y lo haremos sobre las mismas dos piezas, con dbt orquestando las transformaciones en SQL y DuckLake sosteniendo el almacenamiento. Con una ventaja que ya hemos visto funcionando: `table_changes` nos entrega los cambios entre dos versiones sin tener que recalcularlos, que es justo lo que come un satélite.

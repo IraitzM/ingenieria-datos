@@ -1,31 +1,271 @@
 # Formatos abiertos
 
-Los sistemas analíticos se benefician de forma especial de formatos abiertos, interoperables y de almacenamiento columnar, como es el caso de Apache Spark. Trabajar con ficheros y carpetas nos permite de forma sencilla implementar particionado para filtrar de manera eficiente los ficheros que no son necesarios en las consultas.
+Los sistemas analíticos se benefician de forma especial de formatos abiertos, interoperables y de almacenamiento columnar, como es el caso de [Apache Parquet](https://parquet.apache.org/). Trabajar con ficheros y carpetas nos permite de forma sencilla implementar [particionado](./dbms_analítica.qmd#particionado) para filtrar de manera eficiente los ficheros que no son necesarios en las consultas.
 
-Sin embargo, con la proliferación de sistemas en _streaming_ o flujos de datos, se plantearon problemas propios. Por ejemplo, la modificación de registros resulta pesada, ya que debemos cargar los ficheros completos, alterar y reescribir su contenido. Recordemos que al estar ordenados en columnas, modificar un registro resulta pesado pero esto se debe a que asumimos no era necesario.
+Sin embargo, con la proliferación de sistemas en _streaming_ o flujos de datos, se plantearon problemas propios. Por ejemplo, la modificación de registros resulta pesada, ya que debemos cargar los ficheros completos, alterar y reescribir su contenido. Recordemos que al estar ordenados en columnas, modificar un registro resulta costoso, pero esto se debe a que asumimos que no era necesario.
 
 Menos aún ofrecer capacidades ACID, pero ¿y si dos procesos quieren intervenir y alterar un mismo fichero? Los sistemas basados en ficheros son amigables a la adición (_append_) pero no tanto a la modificación.
 
-## Delta Lake
+## El lago tal y como lo dejamos
 
-Posiblemente unos de los primeros en intentar dar respuesta a este problema fueron la amable gente de Databricks. Basado en el formato Parquet, [Delta](https://delta.io/) se presenta como un formato que permite:
+Vale la pena ver el problema en concreto, porque es de esos que se entienden mejor tocándolos. Montemos un lago mínimo: una tabla de matrículas escrita como Parquet particionado por año, exactamente lo que haría cualquier proceso de la era Hadoop.
 
-* La modificación eficiente de registros manteniendo la información versionada
-* Operación transaccional
-* Unificación de las necesidades de flujos de datos (_streaming_) y por lotes (_batch_) tan común en arquitecturas _lambda_.
+```{python}
+#| echo: true
+#| output: true
+import duckdb
+import pathlib
+import shutil
 
-## Apache Hudi
+shutil.rmtree("_lago_demo", ignore_errors=True)
+con = duckdb.connect()
 
-[Onehouse](https://www.onehouse.ai/)
+con.sql("""
+    CREATE TABLE matriculas AS
+    SELECT * FROM (VALUES
+        (1, 'Iraitz', 2024, 'confirmada'),
+        (2, 'Javier', 2024, 'confirmada'),
+        (3, 'Nerea',  2025, 'pendiente')
+    ) AS t(id, alumno, anio, estado)
+""")
+
+con.sql("""
+    COPY matriculas TO '_lago_demo'
+    (FORMAT PARQUET, PARTITION_BY (anio), OVERWRITE_OR_IGNORE)
+""")
+
+[str(p) for p in sorted(pathlib.Path("_lago_demo").rglob("*.parquet"))]
+```
+
+La tabla **es** ese árbol de carpetas, y consultarla consiste en listarlo y leer lo que haya dentro.
+
+```{python}
+#| echo: true
+#| output: true
+con.sql("""
+    SELECT * FROM read_parquet('_lago_demo/**/*.parquet', hive_partitioning = true)
+    ORDER BY id
+""").df()
+```
+
+Hasta aquí, todo bien. Ahora llega una corrección: Nerea confirma su matrícula. Como Parquet es inmutable, no hay un `UPDATE` posible. Lo que hay es leer el fichero entero, aplicar el cambio en memoria y sobrescribirlo.
+
+```{python}
+#| echo: true
+#| output: true
+con.sql("""
+    CREATE TABLE particion_2025 AS
+    SELECT id, alumno,
+           CASE WHEN id = 3 THEN 'confirmada' ELSE estado END AS estado
+    FROM read_parquet('_lago_demo/anio=2025/*.parquet')
+""")
+
+con.sql("""
+    COPY particion_2025 TO '_lago_demo/anio=2025/data_0.parquet' (FORMAT PARQUET)
+""")
+
+con.sql("""
+    SELECT * FROM read_parquet('_lago_demo/**/*.parquet', hive_partitioning = true)
+    ORDER BY id
+""").df()
+```
+
+El resultado es correcto, y esa es justamente la trampa: parece que funciona. Lo que no se ve es todo lo que ha dejado de cumplirse por el camino.
+
+* **No hay atomicidad**. Entre el borrado del fichero antiguo y la escritura del nuevo hay una ventana en la que la partición no existe. Si el proceso muere ahí, la tabla queda incompleta y nadie lo sabe.
+* **No hay aislamiento**. Un lector que llegue en ese instante verá una tabla a medias. Y si dos procesos escriben a la vez en la misma partición, el último gana y el trabajo del otro desaparece en silencio.
+* **No hay historia**. El estado anterior ya no existe. No podemos saber qué decía la tabla ayer, ni reproducir el informe que alguien generó la semana pasada.
+* **Listar es caro**. Averiguar qué ficheros componen la tabla exige recorrer el directorio. En un sistema de ficheros local es instantáneo; sobre almacenamiento de objetos, con decenas de miles de claves, es de las operaciones más lentas y caras que existen.
+* **El esquema es una convención**. Si un fichero trae una columna nueva y otro no, nadie arbitra. El motor de consulta hará lo que buenamente pueda.
+* **Los ficheros pequeños se acumulan**. Un proceso que escribe cada cinco minutos genera 288 ficheros al día por partición, y leer 288 ficheros diminutos cuesta mucho más que leer uno grande.
+
+```{python}
+#| echo: false
+#| output: false
+con.close()
+shutil.rmtree("_lago_demo", ignore_errors=True)
+```
+
+Ninguno de estos problemas es exótico. Son exactamente las garantías que un gestor de base de datos lleva ofreciendo desde los años setenta, y que perdimos al mudarnos a un lago de ficheros.
+
+## Qué añade un formato de tabla
+
+La idea que resuelve todo lo anterior cabe en una frase: **una tabla deja de ser una carpeta y pasa a ser una lista de ficheros**.
+
+En lugar de deducir el contenido de la tabla listando un directorio, se mantiene junto a los datos una capa de metadatos que dice, de forma explícita, qué ficheros componen la tabla en cada momento. Los datos siguen siendo Parquet corriente; lo que se añade es el índice que los organiza.
+
+```{mermaid}
+flowchart TB
+    cat["Catálogo<br/><i>apunta a la versión actual</i>"]
+
+    subgraph meta ["Capa de metadatos"]
+        v3["versión 3 (actual)"]
+        v2["versión 2"]
+        v1["versión 1"]
+        man["Manifiestos<br/><i>qué fichero, qué rangos,<br/>cuántas filas</i>"]
+    end
+
+    subgraph datos ["Almacenamiento de objetos"]
+        p1[/"parquet"/]
+        p2[/"parquet"/]
+        p3[/"parquet"/]
+        p4[/"parquet"/]
+    end
+
+    cat --> v3
+    v3 --> man
+    v2 -.-> man
+    v1 -.-> man
+    man --> p1 & p2 & p3 & p4
+```
+
+De esa indirección salen, casi por añadidura, todas las propiedades que echábamos en falta:
+
+* **Confirmación atómica**. Escribir consiste en dejar los Parquet nuevos en el almacenamiento (todavía invisibles, porque nadie los referencia) y después cambiar el puntero a la nueva versión. Esa última operación es única e indivisible: o se ve la versión anterior completa o la nueva completa, nunca una mezcla.
+* **Concurrencia optimista**. Dos escritores pueden trabajar en paralelo. Al confirmar, cada uno comprueba que la versión de la que partió sigue siendo la vigente; el que llega tarde reintenta sobre la versión nueva, y solo falla si el conflicto es real.
+* **Viaje en el tiempo**. Las versiones antiguas siguen siendo válidas mientras sus ficheros existan, así que consultar la tabla a fecha del mes pasado es indicar otro puntero.
+* **Poda por estadísticas**. Los manifiestos guardan, por fichero, los valores mínimo y máximo de cada columna. Filtrar por una columna que no es de partición ya no obliga a abrir todos los ficheros, basta con descartar los que no pueden contener el valor buscado.
+* **Evolución de esquema real**. Las columnas se identifican por un identificador interno y no por su posición o su nombre, de modo que renombrar, añadir o reordenar es una operación de metadatos que no toca un solo byte de datos.
+
+:::{.callout-note}
+# Lo importante es lo que no cambia
+
+Conviene insistir en esto porque es el motivo de que se llamen formatos abiertos: **los datos siguen siendo Parquet**. Lo que estos formatos añaden es la contabilidad. Si mañana la herramienta que usamos desaparece, los ficheros siguen ahí y siguen siendo legibles por cualquier cosa que sepa leer Parquet, que a estas alturas es todo.
+
+Es la diferencia esencial con un almacén propietario, donde el dato vive en un formato interno al que solo se accede a través del motor que lo escribió.
+:::
+
+### Borrar y actualizar: dos escuelas
+
+Queda pendiente cómo se materializa un borrado o una actualización, porque los ficheros Parquet siguen siendo inmutables. Hay dos estrategias, y todos los formatos acaban ofreciendo ambas.
+
+| | **Copy on write** | **Merge on read** |
+|---|---|---|
+| Al escribir | Se reescribe el fichero afectado completo | Se anota aparte qué filas quedan invalidadas |
+| Coste de escritura | Alto | Bajo |
+| Coste de lectura | Ninguno | Hay que combinar datos y marcas de borrado |
+| Encaja con | Cargas por lotes, tablas que se leen mucho | Flujos frecuentes, muchas modificaciones pequeñas |
+
+La segunda opción ha ido ganando terreno con los **vectores de borrado** (_deletion vectors_), que son mapas de bits compactos indicando qué posiciones de un fichero ya no cuentan. Marcar una fila como borrada pasa a costar unos pocos bytes en lugar de reescribir cientos de megas, a cambio de que la lectura tenga algo más de trabajo y de que la compactación posterior sea obligatoria.
+
+## Los tres formatos
+
+Tres proyectos llegaron a esta misma conclusión de forma independiente, cada uno resolviendo el problema que tenía delante.
+
+### Delta Lake
+
+Posiblemente unos de los primeros en intentar dar respuesta a este problema fueron la amable gente de Databricks. Basado en el formato Parquet, [Delta](https://delta.io/) mantiene un **registro de transacciones** en una carpeta `_delta_log/` junto a los datos: una secuencia de ficheros JSON numerados, cada uno describiendo qué ficheros se añaden y cuáles se retiran en esa transacción. La atomicidad sale de que solo un escritor puede crear el fichero con el siguiente número.
+
+Reconstruir el estado de la tabla es reproducir el registro desde el principio, algo que se vuelve lento tras miles de transacciones, así que periódicamente se consolida todo en un _checkpoint_ en Parquet a partir del cual se sigue leyendo.
+
+Sus señas de identidad:
+
+* La modificación eficiente de registros manteniendo la información versionada.
+* Operación transaccional.
+* Unificación de las necesidades de flujos de datos (_streaming_) y por lotes (_batch_), tan común en arquitecturas _lambda_.
+
+Es el formato nativo de Databricks y el que sostiene su [arquitectura medallón](./arquitecturas.qmd#la-casa-del-lago). Está donado a la Linux Foundation, aunque durante años la distancia entre lo que hacía la versión abierta y lo que hacía la de Databricks fue motivo de queja recurrente.
+
+### Apache Iceberg
+
+Nació en Netflix, de manos de Ryan Blue y Dan Weeks, para resolver un problema muy concreto: tablas con millones de particiones sobre S3 donde el simple hecho de listar directorios hacía inviable cualquier consulta. Se donó a la Apache Software Foundation en 2018.
+
+Su modelo de metadatos es un árbol en tres niveles (fichero de metadatos de la tabla, lista de manifiestos por versión, y manifiestos con las estadísticas de cada fichero de datos), lo que le permite planificar una consulta sin tocar el almacenamiento más que para leer unos pocos ficheros de metadatos.
+
+Dos ideas suyas merecen mención aparte:
+
+* **Particionado oculto**. En un lago clásico, si la tabla está particionada por `anio=2025/mes=03`, quien consulta tiene que acordarse de filtrar por esas columnas derivadas o se llevará una lectura completa por delante. Iceberg registra la transformación (`month(fecha_matricula)`) en los metadatos y la aplica sola cuando alguien filtra por `fecha_matricula`. El usuario no necesita saber cómo está particionada la tabla.
+* **Evolución de particionado**. Se puede cambiar el criterio de particionado de una tabla sin reescribirla. Los datos antiguos conservan el esquema de partición con el que se escribieron y los nuevos usan el actual, conviviendo en la misma tabla.
+
+[Tabular](https://tabular.io), la empresa fundada por sus creadores, fue adquirida por Databricks en 2024, movimiento que zanjó buena parte del debate sobre qué formato iba a acabar siendo el estándar de intercambio.
+
+### Apache Hudi
+
+[Hudi](https://hudi.apache.org/) (de _Hadoop Upserts Deletes and Incrementals_) salió de Uber, donde el problema no era analítico sino de ingesta: aplicar sobre el lago, cada pocos minutos, los cambios que llegaban de las bases de datos operacionales.
+
+Por eso su diseño gira alrededor de la **clave primaria**. Hudi mantiene un índice a nivel de registro que dice en qué fichero vive cada clave, lo que convierte el _upsert_ en una operación dirigida en lugar de en un cruce contra la tabla entera. Fue además quien acuñó los términos copy on write y merge on read, y quien primero ofreció **consultas incrementales**: pedirle a la tabla no su contenido, sino los cambios ocurridos entre dos instantes, que es exactamente lo que necesita alimentar una capa aguas abajo sin recalcularla.
+
+[Onehouse](https://www.onehouse.ai/), fundada por Vinoth Chandar, es el principal impulsor comercial del proyecto.
+
+:::{.callout-tip}
+# Un cuarto en discordia
+
+Merece una mención [Apache Paimon](https://paimon.apache.org/), surgido del proyecto Flink Table Store. Donde los tres anteriores parten de un mundo de lotes al que añaden capacidades de flujo, Paimon parte del flujo: organiza los datos en una estructura tipo LSM (la misma familia de estructuras que usan las bases de datos clave-valor), lo que le da actualizaciones a latencia muy baja. Si el caso de uso es fundamentalmente _streaming_ con Flink, es una opción a considerar seriamente.
+:::
+
+| | **Delta Lake** | **Apache Iceberg** | **Apache Hudi** |
+|---|---|---|---|
+| Origen | Databricks | Netflix | Uber |
+| Metadatos | Registro secuencial de transacciones | Árbol de manifiestos con estadísticas | Línea temporal e índice por clave |
+| Fuerte en | Integración con Spark y Databricks | Escala, motores heterogéneos, evolución | Ingesta incremental, _upserts_ |
+| Adopción | Ecosistema Databricks | Estándar de facto multi-motor | Nicho de ingesta de alta frecuencia |
+
+## El catálogo, la pieza que faltaba
+
+Queda un cabo suelto en el diagrama de antes. Si confirmar una transacción consiste en cambiar el puntero a la versión vigente, **alguien tiene que custodiar ese puntero** y garantizar que dos escritores no lo cambian a la vez. Sobre un sistema de ficheros esto se resuelve solo (crear un fichero es atómico), pero el almacenamiento de objetos no ofrece esa garantía de forma fiable. Ahí es donde entra el catálogo.
+
+Durante años ese papel lo hizo el **Hive Metastore**, heredado de la era Hadoop, con su base de datos relacional detrás y su protocolo Thrift. Funcionaba, pero arrastraba tantos años de decisiones ajenas que nadie lo defendía con entusiasmo.
+
+La respuesta ha sido especificar un **catálogo REST**: en lugar de que cada motor implemente la lógica de metadatos, el catálogo expone una API y se convierte en el árbitro único de las transacciones. Todo motor que hable ese protocolo puede leer y escribir la misma tabla con garantías. Las implementaciones más habituales:
+
+* [**Apache Polaris**](https://polaris.apache.org/), donado por Snowflake a la fundación Apache.
+* **Unity Catalog**, de Databricks, con su versión de código abierto.
+* **AWS Glue** y **S3 Tables**, la vía gestionada en esa nube.
+* [**Project Nessie**](https://projectnessie.org/), que añade una idea llamativa: ramas y fusiones al estilo de Git sobre el conjunto del lago, de modo que se puede probar una carga en una rama y publicarla de golpe.
+* [**Lakekeeper**](https://docs.lakekeeper.io/) o [**Apache Gravitino**](https://gravitino.apache.org/), alternativas abiertas más recientes, la segunda con vocación de federar varios catálogos heterogéneos.
+
+Que la discusión se haya desplazado del formato al catálogo no es casual. El formato es una especificación pública que cualquiera puede implementar; el catálogo es el punto por el que pasa todo el mundo, y por tanto donde se ejercen el gobierno, los permisos y, si nadie lo evita, el bloqueo de proveedor.
+
+## La tregua entre formatos
+
+Durante un tiempo la elección de formato se vivió como una apuesta irreversible. Hoy lo es bastante menos, por tres vías.
 
 ### Apache XTable
 
-[Xtable](https://xtable.apache.org/) surge de la falta de consonancia entre proveedores y busca hacer interoperables todos los formatos.
+[XTable](https://xtable.apache.org/) surge de la falta de consonancia entre proveedores y busca hacer interoperables todos los formatos. Su observación de partida es la que ya hemos repetido: si los ficheros de datos son los mismos Parquet en los tres casos, lo único que difiere son los metadatos, y **los metadatos se pueden traducir**. XTable genera los metadatos de Iceberg para una tabla que se escribió como Delta, o al revés, sin mover ni un byte de datos. Una misma tabla puede así presentarse en varios formatos a la vez.
 
-## Apache Iceberg
+### UniForm
 
-[Tabular](tabular.io) que fue adquirida por Databricks es el promotor principal de este formato que poco a poco se ha convertido en el estándar.
+Delta incorporó la misma idea de fábrica: una tabla declarada con **UniForm** escribe, junto a su registro de transacciones, los metadatos equivalentes de Iceberg. Para un motor que solo hable Iceberg, la tabla es una tabla Iceberg perfectamente normal.
 
-# Sistemas de gestión
+### La convergencia de las especificaciones
 
-Debido al mantenimiento que requieren estos sistemas, algo nada trivial, se han planteado soluciones como [Apache Amoro](https://amoro.apache.org/) que ayuda al menatnimiento de la capa de almacenamiento ofreciendo un canal de interacción unificado.
+Las tres especificaciones llevan varios años copiándose las buenas ideas. Los vectores de borrado, el tipo `VARIANT` para datos semiestructurados como los que veíamos al hablar de [arquitecturas](./arquitecturas.qmd#ordenando-el-lago), el linaje a nivel de fila o la ampliación de tipos sin reescritura han ido apareciendo en todas ellas. La versión 3 de la especificación de Iceberg y las últimas de Delta son, en lo esencial, muy parecidas.
+
+## El mantenimiento no es gratis
+
+Todo lo anterior tiene una contrapartida que se descubre tarde: una tabla en formato abierto **es un sistema que hay que operar**. No hay un proceso de fondo cuidándola salvo que alguien lo ponga.
+
+Las tareas son siempre las mismas cuatro, con distinto nombre según el formato:
+
+1. **Compactar**. Fusionar los ficheros pequeños que dejan las escrituras frecuentes en otros de tamaño razonable (unos cientos de megas es la regla habitual). Es el mantenimiento que más se nota en el tiempo de consulta.
+2. **Caducar versiones**. El viaje en el tiempo es finito por definición: mientras haya versiones vivas, sus ficheros no se pueden borrar. Fijar una retención es decidir cuánto pasado queremos poder consultar y cuánto almacenamiento estamos dispuestos a pagar por ello.
+3. **Limpiar huérfanos**. Ficheros que quedaron escritos por transacciones que fallaron y que ya no referencia ninguna versión. Ocupan y no sirven. El orden importa: primero se caducan versiones y después se limpian huérfanos, nunca al revés.
+4. **Reorganizar**. Reescribir manifiestos, recalcular estadísticas y, sobre todo, ordenar o agrupar los datos por las columnas por las que realmente se filtra, que es lo que hace que la poda por estadísticas funcione de verdad.
+
+Debido a que este mantenimiento no es nada trivial, se han planteado soluciones como [Apache Amoro](https://amoro.apache.org/), que se ocupa de la capa de almacenamiento ofreciendo un canal de interacción unificado y ejecutando estas tareas de forma autónoma. Las plataformas comerciales lo resuelven a su manera, y conviene saber que buena parte de lo que se paga en ellas es precisamente esto.
+
+:::{.callout-warning}
+# La factura escondida
+
+Un lago sin mantenimiento no falla, se degrada. Las consultas van tardando cada vez un poco más, el almacenamiento crece por encima de lo que justifican los datos vivos y nadie sabe exactamente por qué. Para cuando resulta evidente, hay millones de ficheros diminutos que compactar.
+
+Si se adopta un formato de tabla, el trabajo de mantenimiento se planifica el primer día, no cuando molesta.
+:::
+
+## Otra vuelta de tuerca
+
+Hay un detalle en todo lo que hemos visto que invita a una pregunta incómoda. Los tres formatos guardan sus metadatos **en ficheros**, lo que los hace autocontenidos y portables. Pero para resolver la concurrencia han acabado necesitando, todos, un catálogo con una base de datos transaccional detrás.
+
+Si de todas formas vamos a tener esa base de datos, ¿por qué seguir reconstruyendo el estado de la tabla leyendo cadenas de ficheros de manifiesto? Esa es la premisa de [DuckLake](https://ducklake.select/), y como es sobre lo que vamos a construir la [capa de aterrizaje](../load/staging.qmd), lo dejamos apuntado aquí y lo desarrollamos allí con las manos en el teclado.
+
+## Cómo elegir
+
+Para cerrar, y a riesgo de simplificar:
+
+* Si el ecosistema es **Databricks**, será Delta, y no hay mucho que decidir. Con UniForm activado si algo de fuera necesita leerlo.
+* Si conviven **varios motores** (Trino, Spark, Snowflake, DuckDB, Flink) y el objetivo es que ninguno sea el dueño de los datos, **Iceberg** es la apuesta con menos riesgo hoy, y la elección relevante pasa a ser el catálogo.
+* Si el caso dominante son **_upserts_ de alta frecuencia** desde sistemas operacionales, merece la pena mirar Hudi (o Paimon si el motor es Flink) antes de dar por hecho lo anterior.
+* Si el volumen es **moderado** y el equipo pequeño, la pregunta previa es si hace falta un lakehouse distribuido o basta con algo mucho más simple. Es una pregunta que casi nadie se hace y que ahorra bastante dinero cuando la respuesta es la segunda.
+
+En cualquiera de los casos, la garantía de fondo es la misma y es la que da nombre al capítulo: los datos son Parquet, están en un almacenamiento que controlamos nosotros y se pueden leer sin pedir permiso a nadie. Todo lo demás es reversible.

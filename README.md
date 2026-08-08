@@ -1,3 +1,3 @@
 # Ingeniería de datos
 
-Repositorio de ingeniería de dato sen Español.
+Repositorio de ingeniería de datos en Español.

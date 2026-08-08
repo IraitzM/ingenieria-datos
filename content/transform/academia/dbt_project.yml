@@ -1,0 +1,29 @@
+name: academia
+version: "1.0"
+profile: academia
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  # Fecha técnica de la ejecución. En Data Vault todo lo que entra en una misma
+  # ejecución comparte load_date, para que el histórico sea consistente.
+  fecha_carga: "{{ run_started_at }}"
+
+models:
+  academia:
+    prep:
+      +materialized: view
+      +schema: prep
+    raw_vault:
+      +materialized: incremental
+      +incremental_strategy: append
+      +schema: raw_vault
+    business_vault:
+      +materialized: table
+      +schema: business_vault
+    marts:
+      +materialized: table
+      +schema: marts

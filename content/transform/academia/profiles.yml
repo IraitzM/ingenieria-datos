@@ -1,0 +1,11 @@
+academia:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # El lakehouse DuckLake que dejó la parte de ingesta. La ruta llega por
+      # variable de entorno para no fijar rutas absolutas en el repositorio.
+      path: "ducklake:sqlite:{{ env_var('LAGO_CATALOGO') }}"
+      extensions:
+        - ducklake
+      threads: 1

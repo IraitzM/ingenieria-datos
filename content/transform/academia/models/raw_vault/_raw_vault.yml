@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: hub_alumno
+    description: Claves de negocio de los alumnos conocidos por el almacén.
+    columns:
+      - name: hk_alumno
+        description: Clave hash del alumno, calculada sobre la clave de negocio.
+        data_tests:
+          - unique
+          - not_null
+      - name: id_alumno
+        description: Clave de negocio en el sistema origen.
+        data_tests:
+          - unique
+          - not_null
+
+  - name: hub_asignatura
+    columns:
+      - name: hk_asignatura
+        data_tests: [unique, not_null]
+
+  - name: link_matricula
+    description: Relación entre un alumno y una asignatura que cursa.
+    columns:
+      - name: hk_matricula
+        data_tests: [unique, not_null]
+      - name: hk_alumno
+        description: Debe existir en el hub. Es la integridad referencial del vault.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('hub_alumno')
+                field: hk_alumno
+      - name: hk_asignatura
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('hub_asignatura')
+                field: hk_asignatura
+
+  - name: sat_alumno
+    description: Atributos descriptivos del alumno, con una versión por cambio.
+    data_tests:
+      - unique_combination:
+          arguments:
+            columnas: ["hk_alumno", "load_date"]
+    columns:
+      - name: hk_alumno
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('hub_alumno')
+                field: hk_alumno
+      - name: hd_alumno
+        description: Huella de los atributos. Si no cambia, no se añade versión.
+        data_tests: [not_null]

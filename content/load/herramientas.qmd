@@ -1,0 +1,227 @@
+# Herramientas de ingesta
+
+Si repasamos lo visto hasta ahora, la lista de cosas que hay que resolver para traer una tabla de un sitio a otro es incómodamente larga: paginar, autenticar, reintentar con espera creciente, respetar los límites de uso, inferir tipos, crear la tabla en destino, adaptarla cuando el esquema cambie, guardar la marca de agua, aplicar el `merge` y dejar constancia de qué se cargó.
+
+Nada de eso es interesante. Todo eso hay que hacerlo bien. Y lo peor es que hay que hacerlo **otra vez** con la siguiente fuente, y con la siguiente. Esa repetición es la que da sentido a una categoría entera de herramientas.
+
+## El panorama
+
+Conviene distinguir dos cosas que se confunden: el **conector** (el código que sabe hablar con Salesforce, con Postgres o con la API de Stripe) y la **plataforma** (lo que programa, monitoriza y gestiona credenciales). Cada herramienta reparte el peso de forma distinta.
+
+| Herramienta | Naturaleza | Nota |
+|---|---|---|
+| [Singer](https://www.singer.io/) / [Meltano](https://meltano.com/) | Especificación abierta de _taps_ y _targets_ + plataforma | Fue el estándar abierto de facto; catálogo amplio pero de calidad desigual |
+| [Airbyte](https://airbyte.com/) | Plataforma con interfaz gráfica, conectores en contenedores | Muchísimos conectores, requiere operar la plataforma |
+| [Fivetran](https://www.fivetran.com/) | Servicio gestionado, comercial | Se paga y funciona; coste por volumen que sorprende al crecer |
+| [Sling](https://slingdata.io/) | Utilidad de línea de comandos | Excelente para base de datos a base de datos, sin ceremonia |
+| [dlt](https://dlthub.com/) | Librería de Python | El proceso es código propio; sin plataforma que operar |
+
+: Herramientas habituales para la capa EL
+
+Vamos a centrarnos en **dlt** por una razón concreta: no es un servicio al que haya que conectarse ni un sistema que haya que desplegar, es una librería que se importa. Eso significa que un proceso de ingesta es un fichero de Python que vive en nuestro repositorio, se revisa en un _pull request_ y se ejecuta donde queramos. Encaja con la idea de que [el ingeniero de datos toma prestadas las prácticas del desarrollo de software](https://pydevtools.com/handbook/), y además hace que los ejemplos quepan en una página.
+
+## Los tres conceptos
+
+dlt tiene una API pequeña. Con entender tres nombres es suficiente:
+
+* **Recurso** (`resource`): una función de Python que produce registros, normalmente con `yield`. Se corresponde con una tabla en destino.
+* **Fuente** (`source`): una agrupación de recursos que comparten configuración, típicamente todas las tablas de un mismo sistema.
+* **Pipeline** (`pipeline`): quien coge una fuente, la normaliza y la escribe en un destino, llevando la cuenta del estado entre ejecuciones.
+
+```{mermaid}
+flowchart LR
+    subgraph fuente ["Fuente"]
+        r1["Recurso: alumnos"]
+        r2["Recurso: asignaturas"]
+        r3["Recurso: matriculas"]
+    end
+    fuente --> p["Pipeline"]
+    p --> e["Extraer"] --> n["Normalizar"] --> c["Cargar"]
+    c --> d[("Destino")]
+    p <-.->|"estado"| d
+```
+
+El caso mínimo, para hacerse una idea de la superficie de la API:
+
+```python
+import dlt
+
+@dlt.resource(name="alumnos")
+def alumnos():
+    yield {"id_alumno": 1, "nombre": "Iraitz", "apellido": "Montalbán"}
+    yield {"id_alumno": 2, "nombre": "Javier", "apellido": "Garcia"}
+
+pipeline = dlt.pipeline(
+    pipeline_name="secretaria",
+    destination="duckdb",
+    dataset_name="staging",
+)
+
+pipeline.run(alumnos())
+```
+
+Con eso ya tenemos una tabla `staging.alumnos` creada, tipada e insertada. No hemos escrito un `CREATE TABLE`, y ese es precisamente el punto.
+
+:::{.callout-note}
+# Normalizar
+
+El paso intermedio merece una mención. dlt aplana las estructuras anidadas por su cuenta: un campo con una lista de objetos se convierte en una tabla hija enlazada por una clave generada. Es la respuesta práctica a ese JSON con empresas anidadas que veíamos en el capítulo de [arquitecturas](../sistemas/arquitecturas.qmd#ordenando-el-lago), y evita tener que decidir el modelado antes de haber visto los datos.
+:::
+
+## Extraer de una base de datos
+
+Para nuestra secretaría académica, lo habitual será leer directamente de la base de datos. dlt trae una fuente preparada que refleja el esquema del origen.
+
+```python
+import dlt
+from dlt.sources.sql_database import sql_database
+
+fuente = sql_database(
+    credentials="postgresql://lector@servidor:5432/secretaria",
+    table_names=["alumnos", "asignaturas", "cursa"],
+)
+
+pipeline = dlt.pipeline(
+    pipeline_name="secretaria",
+    destination="duckdb",
+    dataset_name="staging",
+)
+
+pipeline.run(fuente, write_disposition="replace")
+```
+
+Eso es una carga completa de tres tablas. Para pasar a incremental basta con declarar la columna que hace de marca de agua y la clave sobre la que resolver el `merge`.
+
+```python
+fuente = sql_database(
+    credentials="postgresql://lector@servidor:5432/secretaria",
+    table_names=["alumnos"],
+).with_resources("alumnos")
+
+fuente.alumnos.apply_hints(
+    incremental=dlt.sources.incremental("actualizado"),
+    primary_key="id_alumno",
+    write_disposition="merge",
+)
+
+pipeline.run(fuente)
+```
+
+Todo el capítulo anterior (la marca de agua, dónde guardarla, cómo recuperarla en la siguiente ejecución, el `merge` por clave) cabe en esas tres líneas. El estado se persiste en el propio destino, en una tabla `_dlt_pipeline_state`, con lo que el proceso puede ejecutarse desde una máquina distinta cada vez sin perder el hilo.
+
+:::{.callout-warning}
+# Las credenciales no van en el código
+
+En los ejemplos aparecen cadenas de conexión completas por legibilidad. En un proyecto real van en `.dlt/secrets.toml` (fuera del control de versiones) o en variables de entorno, y dlt las resuelve sola. Una credencial de producción en un repositorio es un incidente de seguridad, no un descuido.
+:::
+
+## Extraer de una API
+
+Aquí es donde la herramienta se gana el sueldo. Toda la lista de peajes que enumerábamos en el [capítulo de extracción](intro.qmd#apis) se declara en lugar de programarse.
+
+```python
+import dlt
+from dlt.sources.rest_api import rest_api_source
+
+fuente = rest_api_source({
+    "client": {
+        "base_url": "https://api.universidad.example/v1/",
+        "auth": {
+            "type": "bearer",
+            "token": dlt.secrets["universidad_token"],
+        },
+        "paginator": {
+            "type": "json_link",
+            "next_url_path": "paging.next",
+        },
+    },
+    "resource_defaults": {
+        "write_disposition": "merge",
+        "primary_key": "id",
+    },
+    "resources": [
+        "asignaturas",
+        {
+            "name": "alumnos",
+            "endpoint": {
+                "path": "alumnos",
+                "params": {
+                    "actualizado_desde": {
+                        "type": "incremental",
+                        "cursor_path": "actualizado",
+                        "initial_value": "2026-01-01",
+                    },
+                },
+            },
+        },
+    ],
+})
+
+pipeline = dlt.pipeline(
+    pipeline_name="universidad_api",
+    destination="duckdb",
+    dataset_name="staging",
+)
+
+pipeline.run(fuente)
+```
+
+Merece la pena leer ese bloque despacio, porque cada clave sustituye a un problema real. El `paginator` recorre las páginas hasta el final. El `auth` mete el _token_ en cada petición. El `incremental` traduce la marca de agua a un parámetro de consulta y la actualiza al terminar. Los reintentos con espera creciente ante un `429` o un `503` están puestos por defecto. Escrito a mano, esto son doscientas líneas y varias sorpresas.
+
+## Ficheros
+
+Para el CSV en el SFTP o el Parquet en un bucket, el patrón es el mismo, con la particularidad de que conviene apoyarse en la fecha de modificación del fichero para no releer lo ya procesado.
+
+```python
+import dlt
+from dlt.sources.filesystem import filesystem, read_csv
+
+recurso = filesystem(
+    bucket_url="s3://datos-universidad/matriculas/",
+    file_glob="**/*.csv",
+) | read_csv()
+
+recurso.apply_hints(
+    incremental=dlt.sources.incremental("modification_date"),
+)
+
+pipeline = dlt.pipeline(
+    pipeline_name="matriculas_csv",
+    destination="duckdb",
+    dataset_name="staging",
+)
+
+pipeline.run(recurso.with_name("matriculas"))
+```
+
+## Contratos de esquema
+
+Vimos que la política ante un cambio de esquema no debía ser la misma en todas las capas. dlt permite declararla, y con bastante grano fino: qué hacer ante una tabla nueva, ante una columna nueva y ante un tipo que no encaja.
+
+```python
+pipeline.run(
+    fuente,
+    schema_contract={
+        "tables": "evolve",     # aceptamos tablas nuevas
+        "columns": "evolve",    # aceptamos columnas nuevas
+        "data_type": "freeze",  # pero un cambio de tipo detiene la carga
+    },
+)
+```
+
+Los tres valores posibles son `evolve` (adaptarse), `discard_row` o `discard_value` (descartar lo que no encaja) y `freeze` (detenerse con error). La combinación de arriba es un punto de partida razonable para una capa de aterrizaje: dejamos entrar todo lo nuevo, porque el objetivo es no perder información, pero nos plantamos si una columna que era numérica empieza a traer texto, porque eso no es crecimiento sino que algo se ha roto río arriba.
+
+## Lo que dlt añade a los datos
+
+Al cargar, dlt incorpora columnas técnicas que son exactamente los [metadatos de carga](patrones.qmd#los-metadatos-de-carga) que recomendábamos poner a mano:
+
+* `_dlt_id`, identificador único de la fila.
+* `_dlt_load_id`, identificador del lote de carga, que permite aislar o deshacer una ejecución concreta.
+
+Y mantiene además unas cuantas tablas propias en el destino: `_dlt_loads` con el registro de cada carga y su resultado, `_dlt_version` con la historia de versiones del esquema inferido, y `_dlt_pipeline_state` con el estado incremental. Ese conjunto es, en la práctica, la trazabilidad mínima de la capa de ingesta, y viene puesta sin pedirla.
+
+## Lo que una herramienta de ingesta no hace
+
+Para cerrar con expectativas ajustadas. dlt, o cualquiera de sus alternativas, resuelve el movimiento de datos. **No** decide qué es una entidad de negocio, no construye el modelo dimensional, no calcula métricas y no sabe si el dato es correcto. Todo eso es la [transformación](../transform/intro.qmd), y sigue siendo el trabajo con criterio.
+
+Lo que sí ha cambiado es que la parte mecánica ya no justifica un proyecto de seis meses. Con lo visto en este capítulo tenemos los datos saliendo del origen; queda decidir **dónde aterrizan** y con qué garantías, que es lo que construiremos a continuación con [DuckLake](staging.qmd).

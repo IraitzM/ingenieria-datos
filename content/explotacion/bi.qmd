@@ -1,3 +1,106 @@
 ## Inteligencia de negocio
 
 La inteligencia de negocio o _Business Intelligence_ (BI) es sin duda uno de los recursos clave a la hora de conocer la actividad de nuestra empresa. Toda esa información que los datos ocultan, si la manipulamos de forma correcta y la presentamos de un modo lógico puede ayudarnos a determinar si estamos comprando de más, vendiendo de menos, si nuestras líneas de fabricación están siendo bien empleadas o si nuestros almacenes requieren una renovación del stock.
+
+Lo que hace una herramienta de BI, por debajo, es más sencillo de lo que su precio suele sugerir: traduce clics en SQL, ejecuta ese SQL contra el almacén y dibuja el resultado. Todo el valor está en las tres decisiones que rodean ese ciclo: **quién define las métricas**, **dónde se ejecuta el cálculo** y **cómo se versiona lo que se construye**.
+
+## BI de clics y BI de código
+
+La división que más determina el día a día de un equipo de datos no es entre proveedores, sino entre dos filosofías.
+
+En el **BI de clics** los cuadros de mando se construyen arrastrando campos en una interfaz. La ventaja es evidente: cualquiera puede empezar sin ayuda. El coste aparece a los dos años, cuando hay trescientos informes, nadie sabe cuáles se usan, la misma métrica está definida de once formas distintas dentro de otros tantos ficheros binarios, y no hay forma de revisar un cambio antes de publicarlo.
+
+En el **BI de código** el cuadro de mando es un fichero de texto en el repositorio. Se revisa en un _pull request_, se despliega con el resto del proyecto y se puede diferenciar entre versiones. Cuesta más arrancar y escala infinitamente mejor. Es, además, coherente con todo lo que llevamos hecho: [dlt](../load/herramientas.qmd) es código, [dbt](../transform/data_warehousing.qmd) es código, y no tendría mucho sentido que la última capa dejara de serlo.
+
+## Rill
+
+[Rill](https://www.rilldata.com/) es una herramienta de BI de código abierto que encaja especialmente bien con el stack que hemos construido, y conviene explicar por qué antes de mirar la configuración.
+
+* **Habla DuckDB de forma nativa** y trae un [conector de DuckLake](https://docs.rilldata.com/developers/build/connectors/olap/ducklake). No ingiere nuestros datos ni los copia: empuja las consultas al lago directamente. Toda la arquitectura de las partes anteriores sigue siendo la única copia de la verdad.
+* **La capa semántica va incluida**, en los ficheros de métricas que vimos en el [capítulo anterior](semantica.qmd). No hay que operar una pieza más.
+* **Todo el proyecto es YAML y SQL** en un directorio, con lo que entra en el repositorio como cualquier otra cosa.
+* **Se ejecuta en local**, sin desplegar nada, lo que permite iterar sobre un cuadro de mando en segundos.
+* Su modelo de exploración prioriza el **detalle**: está pensado para que quien ve una anomalía pueda bajar hasta la fila que la causa sin pedir un informe nuevo.
+
+### Ponerlo en marcha
+
+```bash
+curl https://rill.sh | sh
+rill start academia
+```
+
+La interfaz queda en `http://localhost:9009`.
+
+### Conectarlo a nuestro lakehouse
+
+Dos ficheros. El conector, que es literalmente la misma sentencia `ATTACH` que usamos en el [capítulo de la capa de aterrizaje](../load/staging.qmd):
+
+```yaml
+# connectors/ducklake.yaml
+type: connector
+driver: duckdb
+attach: "'ducklake:sqlite:catalogo.sqlite' (DATA_PATH 'lago/')"
+```
+
+Y la declaración de que ese es el motor del proyecto:
+
+```yaml
+# rill.yaml
+olap_connector: ducklake
+```
+
+Con eso Rill ve las tablas que dbt dejó construidas, incluida `dim_alumno` y `fct_matriculas`. En producción bastaría con cambiar el catálogo por un PostgreSQL y el `DATA_PATH` por un bucket, sin tocar nada más:
+
+```yaml
+attach: "'ducklake:postgres:dbname=catalogo host={{ .env.PG_HOST }}' (DATA_PATH 's3://universidad/lago/')"
+```
+
+:::{.callout-note}
+# El círculo se cierra
+
+Merece la pena detenerse en lo que acaba de pasar. La misma cadena de conexión que escribió dlt al aterrizar los datos, que leyó dbt al construir el vault, es la que consulta la herramienta de BI.
+
+Ni una sola copia intermedia, ni un formato propietario en ningún punto del recorrido, y todos los datos siguen siendo ficheros Parquet que cualquier motor puede leer. Eso es lo que promete un lakehouse abierto, y no siempre se cumple.
+:::
+
+### Un cuadro de mando
+
+Sobre la métrica que definimos, un panel de exploración es otro fichero corto:
+
+```yaml
+# explores/alumnos.yaml
+version: 1
+type: explore
+display_name: "Alumnado"
+metrics_view: alumnos
+
+dimensions: "*"
+measures: "*"
+```
+
+Y ya está. La brevedad no es un truco del ejemplo: como las métricas y las dimensiones ya están definidas en la capa semántica, el cuadro de mando solo decide qué se expone y cómo se presenta.
+
+## El panorama
+
+Rill no es la única opción razonable, y la elección depende bastante del contexto.
+
+| Herramienta | Naturaleza | Cuándo encaja |
+|---|---|---|
+| [Rill](https://www.rilldata.com/) | Abierta, BI de código, DuckDB nativo | Stack DuckDB/DuckLake, exploración rápida, equipos que versionan |
+| [Evidence](https://evidence.dev/) | Abierta, informes en Markdown y SQL | Informes narrativos, publicación estática |
+| [Metabase](https://www.metabase.com/) | Abierta, orientada a clics | Autoservicio para gente no técnica, arranque rápido |
+| [Superset](https://superset.apache.org/) | Abierta, muy completa | Muchos usuarios y muchas fuentes, si hay quien la opere |
+| [Lightdash](https://www.lightdash.com/) | Abierta, sobre métricas de dbt | Si la capa semántica ya vive en dbt |
+| Power BI, Tableau, Looker | Comerciales | Cuando ya están implantadas, que suele ser el caso |
+
+: Herramientas de explotación habituales
+
+La observación honesta sobre la última fila: en la mayoría de organizaciones la herramienta de BI **ya está elegida** y no la elige el equipo de datos. Lo que sí se puede elegir, y es donde está el margen de maniobra real, es que las métricas vivan fuera de ella. Un almacén bien modelado con una capa semántica versionada sirve a Power BI igual de bien que a Rill, y sobrevive al día que la organización cambie de herramienta.
+
+## Lo que el BI no arregla
+
+Para cerrar, y en la misma línea que decíamos del [catálogo](../appendices/metadatado.qmd), conviene no depositar en la herramienta expectativas que no puede cumplir.
+
+Un cuadro de mando no convierte un dato malo en bueno, solo lo hace más visible y más fácil de propagar. No sustituye a la definición de las métricas: si no existe, cada informe inventará la suya con más comodidad que antes. Y no crea la costumbre de mirar los datos, que es en última instancia un asunto de cultura y no de software.
+
+Lo que sí hace, cuando lo anterior está en su sitio, es cerrar el ciclo: convertir en decisiones el trabajo de las cuatro partes anteriores de este libro. Que era, desde el principio, el objetivo de todo esto.

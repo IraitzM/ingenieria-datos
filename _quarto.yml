@@ -50,19 +50,28 @@ book:
     - part: "Ingesta de datos"
       chapters:
       - content/load/intro.qmd
+      - content/load/patrones.qmd
+      - content/load/herramientas.qmd
+      - content/load/staging.qmd
 
     - part: "Transformación de datos"
       chapters:
       - content/transform/intro.qmd
+      - content/transform/data_warehousing.qmd
+      - content/transform/raw_vault.qmd
+      - content/transform/business_vault.qmd
 
     - part: content/explotacion/intro.qmd
       chapters:
+      - content/explotacion/semantica.qmd
       - content/explotacion/bi.qmd
       - content/explotacion/ds.qmd
+      - content/explotacion/mlops.qmd
 
     - content/references.qmd
 
   appendices:
+    - content/appendices/metadatado.qmd
     - content/appendices/de_storybook.qmd
 
 bibliography: content/references.bib

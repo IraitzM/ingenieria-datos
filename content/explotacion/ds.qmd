@@ -1,3 +1,209 @@
-## Ciencia de datos
+# Ciencia de datos
 
-_pendiente_ 
+El analista de negocio y el científico de datos consumen el mismo almacén y no quieren lo mismo de él. Casi diría que quieren lo contrario.
+
+El [cuadro de mando](bi.qmd) presenta datos **agregados**, en **estado actual** y a través de una **interfaz**. Las tres cosas son un estorbo para quien va a entrenar un modelo, que necesita el grano más fino que exista, el estado **en el momento en que ocurrió**, y acceso **programático** porque su herramienta es un intérprete de Python, no un navegador.
+
+De ahí que la capa de consumo del almacén no sea una, sino dos. Y que la segunda tenga una trampa que cuesta cara.
+
+```{python}
+#| echo: false
+#| output: false
+import sys, os
+
+sys.path.insert(0, os.path.abspath("../transform"))
+import utilidades
+
+utilidades.usar("ds")
+utilidades.crear_lago()
+utilidades.dbt("run", "--select", "prep", "raw_vault")
+utilidades.cargar(utilidades.CARGA_2)
+utilidades.dbt("run", "--select", "prep", "raw_vault")
+utilidades.cargar(utilidades.CARGA_3)
+utilidades.dbt("run", "--select", "prep", "raw_vault")
+utilidades.cargar(utilidades.CARGA_4)
+utilidades.dbt("build")
+```
+
+## Acceso programático
+
+Empecemos por lo fácil, que además es una de las ventajas menos publicitadas de haber construido sobre formatos abiertos. Para leer el almacén desde Python no hace falta ningún servidor, ningún controlador propietario ni ninguna exportación:
+
+```{python}
+#| echo: true
+#| output: true
+import duckdb
+
+con = duckdb.connect()
+con.sql("INSTALL ducklake; LOAD ducklake;")
+con.sql(f"ATTACH 'ducklake:sqlite:{utilidades.CATALOGO}' AS lago")
+
+df = con.sql("SELECT * FROM lago.main_marts.dim_alumno").df()
+df
+```
+
+Eso ya es un `DataFrame` de pandas, listo para lo que venga. Y si el volumen no cabe en memoria, la misma conexión sirve para agregar en el motor y traer solo el resultado, o para entregar Arrow a cualquier librería que lo entienda.
+
+:::{.callout-note}
+# Sin copias no hay divergencia
+
+Merece la pena señalar lo que **no** ha ocurrido: no hemos exportado un CSV, no hemos montado una réplica y no hemos pedido a nadie un extracto. El científico de datos lee exactamente las mismas tablas que alimenta el cuadro de mando.
+
+Ese fue, históricamente, uno de los grandes focos de conflicto: el analista y el modelizador trabajando sobre copias distintas del mismo dato, tomadas en momentos distintos, y sorprendiéndose de no coincidir.
+:::
+
+```{python}
+#| echo: false
+#| output: false
+con.close()
+```
+
+## El tablón
+
+Los algoritmos de aprendizaje automático, salvo excepciones, esperan una matriz: **una fila por observación y una columna por variable**. No saben unir tablas ni entienden un modelo en estrella. Alguien tiene que aplanar.
+
+Ese aplanado tiene nombre propio en la jerga en castellano, el **tablón**, y en inglés se le llama _one big table_ o, cuando se construye para modelizar, _analytical base table_. Es la desnormalización llevada a su extremo, y por una vez está justificada: aquí no perseguimos integridad ni ahorro de espacio, perseguimos que un algoritmo pueda leerlo.
+
+Sobre el modelo en estrella que construimos, la versión sencilla es un `JOIN` y una agregación:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select
+        a.alumno_id,
+        a.nombre_completo,
+        a.tipo_correo,
+        a.dominio_email,
+        count(f.matricula_id)   as asignaturas
+    from main_marts.dim_alumno a
+    left join main_marts.fct_matriculas f on f.alumno_id = a.alumno_id
+    group by 1, 2, 3, 4
+    order by 1
+""")
+```
+
+Una fila por alumno, todas sus variables al lado. Eso es un tablón, y para muchos análisis descriptivos es exactamente lo que hace falta.
+
+:::{.callout-tip collapse="true"}
+# Tablón y estrella no compiten
+
+Es tentador preguntarse por qué no publicamos directamente el tablón y nos ahorramos la estrella. La respuesta es que resuelven problemas distintos.
+
+La estrella está pensada para **explorar**: permite cortar por cualquier dimensión sin decidir de antemano cuáles. El tablón está pensado para **una pregunta concreta**: fija el grano, fija las variables y no admite otra cosa. Un almacén suele tener una estrella y muchos tablones, cada uno construido para un modelo.
+:::
+
+## La trampa
+
+Y aquí llega el problema, que es el error más caro y más común en ciencia de datos aplicada.
+
+Supongamos que queremos predecir si un alumno acabará matriculándose, y entrenamos con la foto del **11 de enero**. El tablón de arriba parece servir: tiene alumnos y variables. Pero mírese con atención lo que contiene:
+
+* A **María**, que se dio de alta el día 12.
+* A **Nerea**, que se dio de alta el día 13.
+* El correo corregido de **Iraitz**, que no cambió hasta el día 12.
+
+Un modelo entrenado con eso está viendo el futuro. Aprenderá relaciones que el día 11 eran imposibles de conocer, dará unas métricas de validación estupendas y fracasará en producción, donde el futuro no está disponible. Es lo que se llama **fuga de información** (_data leakage_), y su rasgo más desagradable es que no produce ningún error: produce un modelo que parece muy bueno.
+
+La causa de fondo es que `dim_alumno`, como cualquier dimensión de consumo, guarda **el estado actual**. Para modelizar no sirve el estado actual, sino el que había en cada momento.
+
+## El tablón correcto a fecha
+
+Aquí es donde todo el trabajo de la [parte de transformación](../transform/raw_vault.qmd) empieza a pagar solo. Los satélites no guardan el estado actual: guardan **todos los estados con su fecha**. Y con eso se puede reconstruir la foto de cualquier día.
+
+La estructura cambia: ya no hay una fila por alumno, sino una fila por **alumno y fecha de observación**, con cada variable tal y como se conocía ese día.
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+with fechas as (
+    select unnest([timestamp '2026-01-11', timestamp '2026-01-14']) as fecha_obs
+),
+
+-- Solo los alumnos que ya existían en la fecha de observación
+existentes as (
+    select f.fecha_obs, h.hk_alumno, h.id_alumno
+    from fechas f
+    join main_raw_vault.hub_alumno h on h.load_date <= f.fecha_obs
+),
+
+-- La versión del satélite vigente en esa fecha, no la última
+atributos as (
+    select
+        e.fecha_obs,
+        e.id_alumno,
+        s.email,
+        row_number() over (
+            partition by e.fecha_obs, e.hk_alumno order by s.load_date desc
+        ) as version
+    from existentes e
+    join main_raw_vault.sat_alumno s
+      on s.hk_alumno = e.hk_alumno
+     and s.load_date <= e.fecha_obs
+)
+
+select fecha_obs, id_alumno, email
+from atributos
+where version = 1
+order by fecha_obs, id_alumno
+""")
+```
+
+Compárese con el tablón anterior. A fecha 11 de enero hay **tres** alumnos, no cinco, y el correo de Iraitz es el original. A fecha 14 aparecen los cinco y el correo ya está corregido. Eso es una foto honesta de lo que se sabía en cada momento.
+
+Las dos claves están en las condiciones, y ambas son fáciles de olvidar:
+
+* `h.load_date <= f.fecha_obs` en el hub descarta las **entidades que aún no existían**.
+* `s.load_date <= e.fecha_obs` combinado con el `row_number()` se queda con la versión **vigente entonces**, no con la última.
+
+:::{.callout-important}
+# El mejor argumento del Data Vault
+
+Si en algún momento de la [parte de transformación](../transform/intro.qmd) pareció que tanta tabla y tanto hash eran un exceso, este es el momento en que se justifican.
+
+Un almacén que solo guarda el estado actual **no puede** generar un conjunto de entrenamiento honesto, por mucho SQL que se le eche. La única salida es haber guardado la historia, y guardarla de forma que se pueda consultar por fecha es exactamente lo que hace un satélite.
+
+Es también el motivo por el que las [tablas point-in-time](../transform/business_vault.qmd#tablas-point-in-time) del business vault dejan de ser una optimización y pasan a ser una herramienta de trabajo: precalculan justo esta unión.
+:::
+
+## La variable objetivo
+
+Falta la otra mitad. Las variables predictoras miran hacia atrás desde la fecha de observación; la **variable objetivo** mira hacia adelante a propósito, porque es lo que queremos predecir.
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+with fechas as (
+    select unnest([timestamp '2026-01-11', timestamp '2026-01-14']) as fecha_obs
+),
+existentes as (
+    select f.fecha_obs, h.hk_alumno, h.id_alumno
+    from fechas f
+    join main_raw_vault.hub_alumno h on h.load_date <= f.fecha_obs
+)
+
+select
+    e.fecha_obs,
+    e.id_alumno,
+    -- objetivo: ¿se matriculó DESPUÉS de la fecha de observación?
+    max(case when l.load_date > e.fecha_obs then 1 else 0 end) as se_matricula
+from existentes e
+left join main_raw_vault.link_matricula l on l.hk_alumno = e.hk_alumno
+group by 1, 2
+order by 1, 2
+""")
+```
+
+Ahí está el único caso positivo, y se lee solo: el 14 de enero Nerea constaba de alta sin cursar nada, y acabó matriculándose después. Es exactamente la fila que queremos que el modelo aprenda a reconocer, y solo existe porque la hemos construido mirando el estado de aquel día y no el de hoy.
+
+La asimetría es deliberada y es la regla que ordena todo el proceso: **las predictoras nunca cruzan la fecha de observación, la objetivo siempre lo hace**. Escrito así parece obvio; en la práctica se incumple continuamente, casi siempre por construir el tablón desde una tabla de consumo en lugar de desde la historia.
+
+## Lo que le toca al ingeniero de datos
+
+Conviene delimitar responsabilidades, porque esta frontera se difumina con facilidad.
+
+Elegir el algoritmo, ajustar los hiperparámetros y validar el modelo **no** es trabajo del ingeniero de datos. Garantizar que el tablón sea reproducible, esté correctamente fechado y no filtre el futuro, **sí lo es**. Y no es un detalle menor: la mayoría de los modelos que fracasan al pasar a producción no fracasan por el algoritmo, fracasan porque el conjunto con el que se entrenaron no se parecía a lo que iban a ver.
+
+Con el tablón resuelto, queda mirar cómo evolucionan las herramientas de quien lo consume y qué ocurre cuando esos modelos hay que ponerlos a funcionar. Es el [último capítulo](mlops.qmd).

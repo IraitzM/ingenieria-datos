@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: staging
+    description: >
+      Capa de aterrizaje que dejó la parte de ingesta. Refleja el sistema
+      origen sin interpretar y no se modifica desde aquí.
+    schema: staging
+    # La marca de tiempo que deja la ingesta. Con ella dbt puede medir la
+    # frescura del origen sin salir del proyecto. Va con cast porque la
+    # herramienta de ingesta la aterriza tal y como venía del sistema origen.
+    loaded_at_field: "cast(_cargado_en as timestamp)"
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 72, period: hour}
+    tables:
+      - name: alumnos
+        description: Alumnos que constan en secretaría, sin interpretar.
+      - name: asignaturas
+        description: Catálogo de asignaturas ofertadas.
+      - name: cursa
+        description: Qué alumno cursa qué asignatura, la relación en crudo.

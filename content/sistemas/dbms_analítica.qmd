@@ -28,7 +28,7 @@ En el mundo de los sistemas de código abierto, [Apache Parquet](https://parquet
 
 Para el caso general no existen cuestiones como las restricciones de clave primaria y clave foránea, ya que el sistema origen es quien impone estas restricciones y el sistema analítico recoge la información tal y como este la provea.
 
-Del mismo modo, de cara a hacer las operaciones más rápidas, los [índices](./rdbms_transaccional.qmd#Índices) son clave en los sistemas operacionales. Las bases de datos analíticas no presentan esta necesidad ya que solemos consumir la información en bloques y se asumen las latencias de estos procesos por no impacta a procesos de negocio.
+Del mismo modo, de cara a hacer las operaciones más rápidas, los [índices](./rdbms_transaccional.qmd#índices) son clave en los sistemas operacionales. Las bases de datos analíticas no presentan esta necesidad ya que solemos consumir la información en bloques y se asumen las latencias de estos procesos por no impacta a procesos de negocio.
 Tener una buena ordenación nos ayuda a no leer información que no vayamos a utilizar y aligerar la carga del proceso, de ahí que si sea común tener políticas de `particionado`.
 
 ### Particionado

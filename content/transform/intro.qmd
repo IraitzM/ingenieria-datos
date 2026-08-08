@@ -1,3 +1,72 @@
 # Transformación
 
-_pendiente_
+Tenemos la capa de aterrizaje llena de tablas que son un reflejo fiel de los sistemas origen. Y ahí está exactamente el problema: son un reflejo fiel de los **sistemas origen**, no de la empresa.
+
+En staging, un alumno es una fila de la tabla `alumnos` de la secretaría. Si mañana la universidad se fusiona con otra, habrá dos tablas `alumnos` de dos sistemas distintos, con identificadores que se solapan y campos que no coinciden. La pregunta de negocio, en cambio, no ha cambiado ni un ápice: sigue siendo *cuántos alumnos tenemos*.
+
+Transformar es cerrar esa distancia. Pasar de las estructuras que impuso el sistema que generó el dato a las estructuras que responden a las preguntas de quien lo consume.
+
+## La tentación del atajo
+
+La ruta corta existe y es tentadora: escribir una consulta que vaya de staging directamente a la tabla que necesita el informe. Funciona. El primer día es imbatible.
+
+Lo que ocurre después es siempre lo mismo. Aparece un segundo informe que necesita casi lo mismo pero no exactamente, y se escribe una segunda consulta que repite el 80% de la primera. Aparece un tercer sistema origen y hay que tocar las dos. Alguien cambia la definición de *alumno activo* y hay que encontrar los once sitios donde estaba escrita. Y el día que alguien pregunta qué valor tenía ese campo en marzo, la respuesta es que no se sabe, porque se sobrescribió.
+
+```{mermaid}
+flowchart LR
+    subgraph mal ["Sin capa intermedia"]
+        s1[("staging")] --> i1["informe 1"]
+        s1 --> i2["informe 2"]
+        s1 --> i3["informe 3"]
+        s1 --> i4["informe 4"]
+    end
+```
+
+El coste de las consultas directas no está en escribirlas, está en mantenerlas. Por eso todas las metodologías serias de almacén de datos, desde Inmon hasta hoy, insisten en lo mismo: **hace falta una capa intermedia** que modele el negocio una sola vez, y sobre ella se construye todo lo demás.
+
+## Reglas duras y reglas blandas
+
+Antes de entrar en el cómo, conviene interiorizar una distinción que ordena todo lo que viene después, y que es probablemente la mejor idea que aportó el Data Vault.
+
+Las transformaciones se dividen en dos familias:
+
+* **Reglas duras** (_hard rules_): no interpretan el dato. Cambiar el tipo de una columna, partir un nombre completo en dos campos, normalizar mayúsculas, calcular un hash. Son reversibles en el sentido que importa: no destruyen información y no dependen de ninguna decisión de negocio.
+* **Reglas blandas** (_soft rules_): interpretan. Decidir que un alumno con matrícula anulada no cuenta como activo, unificar dos identificadores porque hemos determinado que son la misma persona, calcular el importe con un IVA concreto. Son opiniones sobre el negocio y **cambian con el tiempo**.
+
+La regla de oro se deduce sola: las reglas duras pueden aplicarse al entrar, las blandas no. Porque el día que el negocio cambie de opinión sobre qué es un alumno activo, y lo hará, queremos poder recalcular sin haber perdido nada.
+
+:::{.callout-important}
+# El criterio que ordena la arquitectura
+
+Si una transformación puede dar un resultado distinto dentro de dos años porque alguien cambie de criterio, **no debe aplicarse sobre el dato que guardamos**, sino sobre una capa que podamos rehacer.
+
+Casi todas las arquitecturas de datos por capas son, en el fondo, una forma de respetar esta frase.
+:::
+
+## El recorrido
+
+Aquello que anticipábamos al hablar de [la caja fuerte](../sistemas/arquitecturas.qmd#la-caja-fuerte) toma ahora forma concreta. Partimos del aterrizaje y llegamos al consumo pasando por dos escalones:
+
+```{mermaid}
+flowchart LR
+    stg[("staging")]
+    rv[("raw vault")]
+    bv[("business vault")]
+    marts[("consumo")]
+
+    stg -->|"reglas duras"| rv
+    rv -->|"reglas blandas"| bv
+    bv --> marts
+    rv --> marts
+    marts --> bi["Cuadros de mando<br/>y análisis"]
+```
+
+* El **raw vault** integra los datos de todos los orígenes en torno a los conceptos de negocio, sin interpretar nada. Es el registro histórico, y es inmutable: solo se añade.
+* El **business vault** aplica las reglas blandas. Se puede tirar y reconstruir entero desde el raw vault, que es justo lo que lo hace seguro.
+* La **capa de consumo** presenta el resultado en un modelo que un analista pueda usar sin saber nada de todo lo anterior, normalmente el [modelo dimensional](../modelado/modelado_analitico.qmd#modelado-dimensional) que ya conocemos.
+
+## Dónde ocurre
+
+Una última cuestión, ya resuelta por el camino. Cuando hablábamos del [paso de ETL a ELT](../load/patrones.qmd#de-etl-a-elt) decíamos que la transformación había dejado de necesitar una herramienta intermedia porque el motor del destino tiene cómputo de sobra. Eso es lo que vamos a explotar: **todo lo que viene es SQL ejecutándose dentro del propio lakehouse**, sin mover un solo dato fuera.
+
+Lo que sí necesitamos es algo que ponga orden en ese SQL: que sepa en qué orden ejecutar las consultas, que evite repetir código, que compruebe que el resultado es correcto y que documente qué hace cada pieza. Ese es el papel de [dbt](data_warehousing.qmd), por donde empezamos.

@@ -1,0 +1,170 @@
+# La capa semántica
+
+Una capa semántica es, despojada de marketing, **un diccionario ejecutable**. Traduce las tablas y columnas del almacén al vocabulario que usa la gente, y fija cómo se calcula cada métrica de forma que nadie tenga que volver a decidirlo.
+
+La palabra clave es *ejecutable*. Un glosario en el catálogo de gobierno dice qué significa *alumno activo*; una capa semántica **lo calcula**, y por tanto no puede desactualizarse sin que algo se rompa.
+
+```{python}
+#| echo: false
+#| output: false
+import sys, os
+
+sys.path.insert(0, os.path.abspath("../transform"))
+import utilidades
+
+utilidades.usar("explotacion")
+utilidades.crear_lago()
+utilidades.dbt("run", "--select", "prep", "raw_vault")
+utilidades.cargar(utilidades.CARGA_2)
+utilidades.dbt("run", "--select", "prep", "raw_vault")
+utilidades.cargar(utilidades.CARGA_3)
+utilidades.dbt("build")
+```
+
+## El problema, en concreto
+
+Partimos de la capa de consumo que dejamos construida en la [transformación](../transform/business_vault.qmd), con una carga más: Nerea se ha dado de alta en secretaría el día 13, pero todavía no ha elegido asignaturas.
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select alumno_id, nombre_completo, tipo_correo, alta_en_almacen
+    from main_marts.dim_alumno
+    order by alumno_id
+""")
+```
+
+Ahora dos personas responden a la misma pregunta, *cuántos alumnos tenemos*. La primera cuenta los que están en la dimensión:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("select count(*) as alumnos from main_marts.dim_alumno")
+```
+
+La segunda entiende que alumno es quien está matriculado en algo, y lo cuenta desde los hechos:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select count(distinct alumno_id) as alumnos
+    from main_marts.fct_matriculas
+""")
+```
+
+Y una tercera, que prepara el informe a fecha de cierre del día 11, filtra por los que ya constaban entonces:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    select count(*) as alumnos
+    from main_marts.dim_alumno
+    where alta_en_almacen <= timestamp '2026-01-11'
+""")
+```
+
+Tres consultas, tres números, cero errores. Y las tres son defendibles: Nerea está dada de alta pero no cursa nada, así que entra en la primera cuenta y no en la segunda; y ni ella ni María constaban el día 11, de ahí la tercera.
+
+Con cinco alumnos la discrepancia es anecdótica y se explica en un minuto. Con cuarenta mil es una reunión de dos horas en la que nadie tiene forma de demostrar que su número es el correcto.
+
+La conclusión incómoda es que **el modelo dimensional no protege de esto**. Hace las consultas fáciles de escribir, que es justo lo que permite escribir muchas y distintas.
+
+### Qué define una capa semántica
+
+Tres cosas, y siempre las mismas independientemente de la herramienta:
+
+* **Dimensiones**: por qué se puede cortar el dato. Asignatura, tipo de correo, curso.
+* **Medidas**: qué se puede calcular y **con qué expresión exacta**. Aquí es donde vive la definición de *alumno activo*, escrita una vez.
+* **Uniones y grano**: qué tablas se pueden combinar y a qué nivel de detalle, para que nadie sume un importe dos veces por unir mal.
+
+A partir de ahí, la herramienta de consumo no escribe SQL contra las tablas: pide *esta medida cortada por esta dimensión*, y la capa semántica genera el SQL. Que es exactamente la diferencia entre tener una definición y tener tres.
+
+```{mermaid}
+flowchart LR
+    dw[("Capa de consumo<br/>dim_alumno, fct_matriculas")]
+    sem["Capa semántica<br/>medidas y dimensiones"]
+    dw --> sem
+    sem --> bi["Cuadros de mando"]
+    sem --> api["API / aplicaciones"]
+    sem --> ag["Agentes"]
+    sem --> hoja["Hojas de cálculo"]
+```
+
+### Dónde vive
+
+Históricamente la capa semántica estuvo **dentro** de la herramienta de BI. El caso canónico es LookML, el lenguaje de Looker, que popularizó la idea de definir métricas en ficheros versionados. El problema evidente de esa ubicación es que las definiciones quedan cautivas: quien no use esa herramienta, no las tiene.
+
+De ahí que hayan aparecido cuatro ubicaciones posibles, y merece la pena saber cuál es cuál:
+
+| Dónde | Ejemplos | Consecuencia |
+|---|---|---|
+| En la herramienta de BI | LookML, métricas de Power BI, **métricas de Rill** | Cómodo e integrado; cautivo si es cerrado |
+| Como servicio aparte | [Cube](https://cube.dev/) | Sirve a varias herramientas por SQL, REST o MCP; una pieza más que operar |
+| Junto a las transformaciones | [dbt Semantic Layer](https://docs.getdbt.com/docs/build/about-metricflow) (MetricFlow) | Las métricas viven con los modelos que las alimentan |
+| En el propio almacén | Vistas semánticas de Snowflake, métricas de Databricks | Máximo rendimiento, máxima dependencia del proveedor |
+
+: Dónde puede vivir la capa semántica
+
+Para nuestro stack la respuesta natural es la primera, porque [Rill](bi.qmd) trae la capa semántica incluida y consulta directamente el lakehouse. Una métrica se declara así:
+
+```yaml
+# metrics/alumnos.yaml
+version: 1
+type: metrics_view
+model: dim_alumno
+timeseries: alta_en_almacen
+
+dimensions:
+  - column: tipo_correo
+    display_name: "Tipo de correo"
+  - column: dominio_email
+    display_name: "Dominio"
+
+measures:
+  - name: alumnos
+    expression: COUNT(*)
+    display_name: "Alumnos"
+    description: >
+      Alumnos dados de alta en secretaría, estén matriculados o no en alguna
+      asignatura. Para contar únicamente los que cursan algo, usar la medida
+      "alumnos matriculados" del panel de matrículas.
+```
+
+Ese campo `description` es la mitad del valor y se subestima constantemente. Nótese que resuelve por escrito **exactamente la ambigüedad** que acabamos de ver: dice qué cuenta esta medida, y remite a la otra para el caso contrario. Es el acuerdo que evita la reunión de las dos horas, y solo hay que tomarlo una vez.
+
+:::{.callout-tip}
+# La capa semántica no sustituye al modelado
+
+Conviene decirlo porque se vende lo contrario. Una capa semántica sobre un almacén mal modelado produce métricas rápidas y erróneas: si el grano de la tabla de hechos está mal, la definición más cuidada seguirá sumando dos veces.
+
+Se apoya en el trabajo de las partes anteriores, no lo reemplaza. En nuestro caso se apoya en un modelo en estrella construido sobre un vault que conserva la historia, y por eso puede permitirse ser tan corta.
+:::
+
+## Métricas para agentes
+
+Hay una razón nueva, y bastante fuerte, para tomarse esto en serio en 2026.
+
+Cuando quien pregunta es una persona, una definición ambigua produce una discusión. Cuando quien pregunta es un modelo de lenguaje con acceso al almacén, produce **SQL plausible y silenciosamente equivocado**. El agente no sabe que hay tres formas de contar alumnos: elegirá una, la ejecutará y presentará el resultado con total aplomo.
+
+Una capa semántica cambia el planteamiento: en lugar de dar al agente las tablas y confiar, se le da un conjunto acotado de medidas y dimensiones con sus definiciones. El agente elige entre métricas ya validadas en lugar de inventarse la agregación. Por eso prácticamente todas las herramientas de esta categoría han incorporado un servidor MCP, y por eso Rill se describe a sí mismo hoy como una herramienta de BI *para humanos y agentes*.
+
+Es, mirado con perspectiva, el mismo argumento del [catálogo de gobierno](../appendices/metadatado.qmd): lo que hace útil un dato es el contexto que lo acompaña.
+
+## Un estándar en camino
+
+El punto débil de todo esto es el de siempre: cada herramienta define las métricas en su propio dialecto, y migrar significa reescribirlas.
+
+Para resolverlo nació **OSI** (_Open Semantic Interchange_), un formato neutral para definir métricas impulsado inicialmente por dbt Labs y Snowflake, que en junio de 2026 entró en la incubadora de Apache con el nombre de **Apache Ossie**. Ya existen conversores para MetricFlow, GoodData, Salesforce y Apache Polaris.
+
+:::{.callout-warning}
+# Todavía no lo soporta ningún producto de forma nativa
+
+A día de hoy Ossie permite **convertir** definiciones entre formatos, pero ninguna herramienta lo consume directamente. Es una apuesta razonable de futuro y una mala base para una decisión de hoy.
+
+La recomendación práctica: elegir la herramienta por lo que hace ahora, y valorar como un plus que sus definiciones estén en YAML versionado, porque eso es lo que hará barata la conversión el día que haga falta.
+:::
+
+Con las métricas definidas, toca ponerlas delante de quien tiene las preguntas.

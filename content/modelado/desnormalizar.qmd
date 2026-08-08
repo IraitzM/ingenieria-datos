@@ -33,7 +33,7 @@ De forma que obtengamos como resultado...
 
 _Ejemplo de resultado con información agregada_
 
-En este ejemplo debemos relacionar los profesores con sus asignaturas impartidas y los alumnos que las cursan para así poder contabilizar, por profesor cuantos tienen. Si solo informamos del nombre puede ser que existan varios Javier, pero cada uno tendrá una relación bien definida con respecto a las asignaturas y alumnos asociados gracias a su [clave primaria](formasnormales.qmd#segunda-forma-normal-(2fn)).
+En este ejemplo debemos relacionar los profesores con sus asignaturas impartidas y los alumnos que las cursan para así poder contabilizar, por profesor cuantos tienen. Si solo informamos del nombre puede ser que existan varios Javier, pero cada uno tendrá una relación bien definida con respecto a las asignaturas y alumnos asociados gracias a su [clave primaria](formasnormales.qmd#segunda-forma-normal-2fn).
 
 ## Relación 1-a-1/n
 
