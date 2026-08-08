@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>12&nbsp; Extracción – Ingeniería de datos</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -30,7 +36,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/transform/intro.html" rel="next">
+<link href="../../content/load/patrones.html" rel="next">
 <link href="../../content/sistemas/nuevos-formatos.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -39,10 +45,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e7f3a12788663e0f4eda461cc946c84c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -57,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -89,6 +95,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <meta property="og:title" content="12&nbsp; Extracción – Ingeniería de datos">
@@ -246,6 +255,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -260,7 +287,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -276,14 +321,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -305,8 +362,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/metadatado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -321,9 +384,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#bases-de-datos" id="toc-bases-de-datos" class="nav-link active" data-scroll-target="#bases-de-datos"><span class="header-section-number">12.1</span> Bases de datos</a></li>
-  <li><a href="#apis" id="toc-apis" class="nav-link" data-scroll-target="#apis"><span class="header-section-number">12.2</span> APIs</a></li>
-  <li><a href="#colas" id="toc-colas" class="nav-link" data-scroll-target="#colas"><span class="header-section-number">12.3</span> Colas</a></li>
+  <li><a href="#quién-empuja-y-quién-tira" id="toc-quién-empuja-y-quién-tira" class="nav-link active" data-scroll-target="#quién-empuja-y-quién-tira"><span class="header-section-number">12.1</span> ¿Quién empuja y quién tira?</a></li>
+  <li><a href="#bases-de-datos" id="toc-bases-de-datos" class="nav-link" data-scroll-target="#bases-de-datos"><span class="header-section-number">12.2</span> Bases de datos</a>
+  <ul class="collapse">
+  <li><a href="#el-pecado-de-consultar-la-producción" id="toc-el-pecado-de-consultar-la-producción" class="nav-link" data-scroll-target="#el-pecado-de-consultar-la-producción"><span class="header-section-number">12.2.1</span> El pecado de consultar la producción</a></li>
+  <li><a href="#la-huella-del-cambio" id="toc-la-huella-del-cambio" class="nav-link" data-scroll-target="#la-huella-del-cambio"><span class="header-section-number">12.2.2</span> La huella del cambio</a></li>
+  </ul></li>
+  <li><a href="#apis" id="toc-apis" class="nav-link" data-scroll-target="#apis"><span class="header-section-number">12.3</span> APIs</a></li>
+  <li><a href="#colas" id="toc-colas" class="nav-link" data-scroll-target="#colas"><span class="header-section-number">12.4</span> Colas</a></li>
+  <li><a href="#ficheros" id="toc-ficheros" class="nav-link" data-scroll-target="#ficheros"><span class="header-section-number">12.5</span> Ficheros</a></li>
+  <li><a href="#el-contrato-con-el-origen" id="toc-el-contrato-con-el-origen" class="nav-link" data-scroll-target="#el-contrato-con-el-origen"><span class="header-section-number">12.6</span> El contrato con el origen</a></li>
   </ul>
 </nav>
     </div>
@@ -359,22 +429,169 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>Estructura de la información</li>
 </ul>
 <p>De modo que podamos plantear cómo esta información será recibida en el sistema destino y si es necesario realizar algún paso intermedio.</p>
-<section id="bases-de-datos" class="level2" data-number="12.1">
-<h2 data-number="12.1" class="anchored" data-anchor-id="bases-de-datos"><span class="header-section-number">12.1</span> Bases de datos</h2>
+<p>Conviene añadir una cuarta pregunta que suele olvidarse y que luego duele: <strong>¿cómo sabremos qué ha cambiado desde la última vez?</strong> Porque extraer un dato una vez es sencillo; extraerlo cada noche durante tres años sin duplicar, sin perder registros y sin fundir el sistema origen es justo el trabajo que vamos a describir en esta parte del libro.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>El hilo conductor
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A lo largo de esta parte seguiremos con el ejemplo de la <a href="../../content/sistemas/sql.html">secretaría académica</a> que ya modelamos: alumnos, asignaturas y matrículas. Ahora ese sistema transaccional deja de ser el destino de nuestro trabajo y pasa a ser <strong>la fuente</strong>, con todo lo que ello implica: no lo controlamos nosotros, no podemos sobrecargarlo y cambiará sin avisarnos.</p>
+</div>
+</div>
+<section id="quién-empuja-y-quién-tira" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="quién-empuja-y-quién-tira"><span class="header-section-number">12.1</span> ¿Quién empuja y quién tira?</h2>
+<p>Antes de entrar en cada tipo de fuente, hay una decisión que condiciona todo lo demás. La extracción puede funcionar en dos sentidos:</p>
+<ul>
+<li><strong>Pull (tiramos nosotros)</strong>: nuestro proceso se conecta al origen cuando lo decide y pide los datos. Es el modelo más habitual porque nos deja el control de la cadencia, los reintentos y la ventana de datos. A cambio, necesitamos credenciales de acceso al sistema origen y cargamos con la responsabilidad de no molestar.</li>
+<li><strong>Push (nos empujan)</strong>: el sistema origen deposita la información en un lugar acordado (una cola, un bucket, un <em>webhook</em>) y nosotros la recogemos. Nos desacopla del origen y suele ser la única opción cuando el propietario del dato no nos va a dar acceso directo a su base de datos. A cambio, perdemos el control: si el origen deja de publicar, no nos enteramos hasta que alguien echa en falta un informe.</li>
+</ul>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    subgraph pull ["Pull"]
+        direction LR
+        o1[("Origen")]
+        p1["Proceso de extracción"]
+        p1 --&gt;|"1 - pide"| o1
+        o1 --&gt;|"2 - responde"| p1
+    end
+
+    subgraph push ["Push"]
+        direction LR
+        o2[("Origen")]
+        b2["Zona acordada"]
+        p2["Proceso de extracción"]
+        o2 --&gt;|"1 - publica"| b2
+        p2 --&gt;|"2 - recoge"| b2
+    end
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>En la práctica una organización tendrá de las dos. Lo importante es tenerlo explícito, porque determina de quién es la culpa cuando faltan datos.</p>
+</section>
+<section id="bases-de-datos" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="bases-de-datos"><span class="header-section-number">12.2</span> Bases de datos</h2>
 <p>Frecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:</p>
 <ul>
 <li>SQL: Sistemas de origen tabular (RDBMS) a los que podemos interrogar con sentencias SQL para extraer la información necesaria. Son sistemas de consulta por lo que a no ser que dispongan de un campo informando de la fecha de la información, es difícil gestionar posibles variaciones con respecto a las cargas anteriores sin almacenar en un sistema intermedio la información para comparar que fue cargado y qué es nuevo.</li>
 <li>NoSQL: Sistemas de origen no tabular que suelen disponer la información en formatos <em>modernos</em>, siendo JSON el más habitual. Esto obliga a identificar si el destino permite el registro de información de estructura variable o debemos darle un formato tabular antes de poder insertarla. Al igual que con las bases de datos tabulares, deberemos ver qué medios tenemos para poder identificar los registros sumados o que hayan variado desde la última consulta.</li>
 </ul>
 <p>Muchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.</p>
+<section id="el-pecado-de-consultar-la-producción" class="level3" data-number="12.2.1">
+<h3 data-number="12.2.1" class="anchored" data-anchor-id="el-pecado-de-consultar-la-producción"><span class="header-section-number">12.2.1</span> El pecado de consultar la producción</h3>
+<p>Hay una tentación evidente: si los datos están en la base de datos del ERP, lanzo un <code>SELECT *</code> y listo. El problema es que esa base de datos está atendiendo a la vez las transacciones de la empresa, y una consulta analítica que recorre una tabla entera compite por los mismos recursos. Un <code>SELECT</code> mal medido a las 9 de la mañana puede dejar sin servicio a quien está facturando.</p>
+<p>Las salidas habituales, de menos a más elegante:</p>
+<ul>
+<li><strong>Ventanas de baja actividad</strong>, la clásica carga nocturna. Sencillo, pero se rompe en cuanto la empresa opera en varios husos horarios.</li>
+<li><strong>Réplicas de solo lectura</strong>, una copia del sistema origen dedicada a consultas. Es la opción sensata cuando existe presupuesto para ello.</li>
+<li><strong>Leer el registro de transacciones</strong> en lugar de las tablas, que es la base del CDC que veremos en el <a href="../../content/load/patrones.html#change-data-capture">siguiente capítulo</a>.</li>
+</ul>
 </section>
-<section id="apis" class="level2" data-number="12.2">
-<h2 data-number="12.2" class="anchored" data-anchor-id="apis"><span class="header-section-number">12.2</span> APIs</h2>
+<section id="la-huella-del-cambio" class="level3" data-number="12.2.2">
+<h3 data-number="12.2.2" class="anchored" data-anchor-id="la-huella-del-cambio"><span class="header-section-number">12.2.2</span> La huella del cambio</h3>
+<p>Volviendo a la cuarta pregunta, lo que buscamos en una base de datos origen es alguna <strong>huella</strong> que nos permita reconstruir qué ha pasado desde nuestra última visita. Por orden de calidad:</p>
+<table class="caption-top table">
+<caption>Mecanismos para detectar cambios en un origen tabular</caption>
+<colgroup>
+<col style="width: 22%">
+<col style="width: 39%">
+<col style="width: 39%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Huella</th>
+<th>Qué nos permite</th>
+<th>Qué se nos escapa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nada</td>
+<td>Recargar todo cada vez</td>
+<td>Todo, salvo la foto actual</td>
+</tr>
+<tr class="even">
+<td>Clave autoincremental</td>
+<td>Detectar altas</td>
+<td>Modificaciones y bajas</td>
+</tr>
+<tr class="odd">
+<td>Fecha de modificación</td>
+<td>Altas y modificaciones</td>
+<td>Bajas, y los cambios si el campo no se actualiza siempre</td>
+</tr>
+<tr class="even">
+<td>Registro de transacciones (CDC)</td>
+<td>Altas, modificaciones y bajas, en orden</td>
+<td>Poca cosa, a cambio de complejidad</td>
+</tr>
+</tbody>
+</table>
+<p>Merece la pena insistir en las <strong>bajas</strong>: si un alumno se da de baja borrando su fila, ninguna consulta basada en fechas nos lo va a contar. Nuestro destino seguirá enseñando un alumno que ya no existe hasta que alguien lo note. Es el fallo silencioso más común en las cargas incrementales.</p>
+</section>
+</section>
+<section id="apis" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="apis"><span class="header-section-number">12.3</span> APIs</h2>
 <p>Uno de los mecanismos más efectivos a la hora de interconectar sistemas remotos. Aunque originalmente van más orientados a disponer de un medio por el que invocar vía HTTP alguna acción qu bien pudiera ser una de nuestras operaciones CRUD (insertar, cambiar, borrar o mostrar), la capacidad de consulta hace que sea un recurso de consumo de activos de datos muy usual.</p>
+<p>Ahora bien, una API no está pensada para volcar millones de registros, sino para responder preguntas pequeñas y frecuentes. Eso nos obliga a lidiar con una serie de peajes que, sumados, son la mayor parte del código de un extractor:</p>
+<ul>
+<li><strong>Paginación</strong>. Nadie nos va a devolver un millón de registros en una respuesta. Habrá páginas, y cada API las numera a su manera: por número de página, por desplazamiento, por cursor opaco, o por un enlace <code>next</code> en la propia respuesta. Es el punto donde más se equivoca uno escribiendo extractores a mano, y donde es fácil quedarse a mitad sin darse cuenta.</li>
+<li><strong>Autenticación</strong>. Desde una clave en la cabecera hasta OAuth con refresco de <em>token</em>, con la gracia añadida de que el <em>token</em> puede caducar en mitad de una descarga larga.</li>
+<li><strong>Límites de uso</strong>. Casi todas imponen un número máximo de peticiones por minuto. Al pasarnos recibiremos un <code>429</code> y habrá que esperar, reintentando con una espera creciente (<em>exponential backoff</em>) en lugar de insistir sin más.</li>
+<li><strong>Errores transitorios</strong>. Un <code>503</code> no significa que no haya datos, significa que hay que volver a intentarlo. Distinguir el error que se reintenta del error que se propaga es un criterio de diseño, no un detalle.</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>Reintentar no es gratis
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si reintentamos una petición que ya se había ejecutado en el origen podemos acabar con registros duplicados en destino. Por eso la extracción debe diseñarse pensando en la <a href="../../content/load/patrones.html#idempotencia-y-reprocesos">idempotencia</a> desde el primer día: que ejecutar el mismo proceso dos veces deje el sistema en el mismo estado que ejecutarlo una.</p>
+</div>
+</div>
+<p>Esta lista es, no por casualidad, exactamente lo que resuelven por nosotros las <a href="../../content/load/herramientas.html">herramientas de ingesta</a> que veremos más adelante.</p>
 </section>
-<section id="colas" class="level2" data-number="12.3">
-<h2 data-number="12.3" class="anchored" data-anchor-id="colas"><span class="header-section-number">12.3</span> Colas</h2>
+<section id="colas" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="colas"><span class="header-section-number">12.4</span> Colas</h2>
 <p>Los sistemas de mensajería son un canal ideal cuando tenemos información en vuelo, ya que de manera natural sirven los datos que no hayan sido consumidos. Esos sistemas suelen tener mecanismos de buffer, con lo que la información expira pasado un tiempo pero nos permiten interconectar sistemas de generación constante como sensores o medios IoT con sistemas de cadencia de consulta menos frecuente. Además, nos permiten disponer de una arquitectura desacoplada de forma que cambios tanto en sistema origen como en el medio de consumo de datos pueden hacerse contando con este <em>buffer</em> que retiene los datos hasta ser consumidos o expiren.</p>
+<p>La particularidad de las colas es que el estado de la lectura vive en la propia cola: cada consumidor mantiene un <strong>desplazamiento</strong> (<em>offset</em>) que marca por dónde va. Eso nos regala la respuesta a la cuarta pregunta, ya no tenemos que averiguar qué ha cambiado porque la cola solo nos entrega lo que aún no hemos leído. A cambio heredamos dos problemas nuevos:</p>
+<ul>
+<li><strong>La entrega suele ser <em>al menos una vez</em></strong>. Ante una caída, un mensaje ya procesado puede volver a entregarse. De nuevo, idempotencia.</li>
+<li><strong>Los datos caducan</strong>. Si nuestro proceso lleva dos días parado y la retención es de 24 horas, esos datos no están en ningún sitio. La cola es un buzón, no un archivo.</li>
+</ul>
+<p>Por eso el patrón habitual es volcar cuanto antes el contenido de la cola a un almacenamiento persistente, y hacer allí el trabajo. Es, en el fondo, la misma idea de la capa de aterrizaje que construiremos con <a href="../../content/load/staging.html">DuckLake</a>.</p>
+</section>
+<section id="ficheros" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="ficheros"><span class="header-section-number">12.5</span> Ficheros</h2>
+<p>Es la fuente menos glamurosa y probablemente la más extendida. Un CSV en un SFTP, un Excel que alguien deja en una carpeta compartida, una exportación diaria en Parquet a un bucket de S3. Sigue siendo, en muchas organizaciones, la forma real en la que los datos cruzan la frontera entre departamentos o entre empresas.</p>
+<p>Tiene ventajas nada despreciables: no toca el sistema origen, es fácil de auditar (el fichero está ahí, se puede volver a leer) y funciona entre organizaciones que jamás se darían acceso mutuo a sus bases de datos. Los inconvenientes son igual de conocidos:</p>
+<ul>
+<li><strong>No hay esquema, o el que hay miente</strong>. Un CSV no declara tipos. El campo que llevaba tres años siendo un número entero aparece un día con un valor <code>N/D</code> y todo lo que viene detrás se rompe.</li>
+<li><strong>La codificación y los separadores</strong>. El clásico fichero en <code>latin-1</code> con separador <code>;</code> porque se generó desde un Excel en español.</li>
+<li><strong>¿Es completo? ¿Es nuevo?</strong> Leer un fichero mientras se está escribiendo produce cargas a medias. Por eso se usan marcas de finalizado, nombres con marca temporal o escritura atómica mediante renombrado.</li>
+</ul>
+<p>Formatos como <a href="../../content/sistemas/nuevos-formatos.html">Parquet</a> resuelven buena parte de esto, ya que llevan el esquema y los tipos dentro del propio fichero, además de comprimir mucho mejor. Cuando podamos elegir el formato de intercambio, esa es la elección.</p>
+</section>
+<section id="el-contrato-con-el-origen" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="el-contrato-con-el-origen"><span class="header-section-number">12.6</span> El contrato con el origen</h2>
+<p>Casi todo lo que rompe una ingesta en producción no es un fallo técnico, es un cambio en el origen del que nadie nos avisó: una columna que se renombra, un campo que pasa de obligatorio a opcional, un identificador que se reutiliza. Escribir código defensivo ayuda, pero no sustituye a lo único que funciona de verdad, que es <strong>acordar por escrito qué esperamos de la fuente</strong>: qué campos son estables, cuál es la clave de negocio, con qué frecuencia se actualiza, qué pasa cuando se borra un registro y a quién se avisa antes de cambiar el esquema.</p>
+<p>Ese acuerdo tiene un nombre en la jerga actual, <strong>contrato de datos</strong> (<em>data contract</em>), y aunque suene a burocracia es lo que separa una plataforma que se mantiene sola de una que necesita a alguien apagando fuegos cada mañana. La parte técnica del contrato la podremos automatizar más adelante con los <a href="../../content/load/herramientas.html#contratos-de-esquema">contratos de esquema</a> que ofrecen las herramientas de ingesta.</p>
+<p>Con las fuentes ya caracterizadas, toca decidir <strong>cómo</strong> traemos esos datos de forma repetible. Es lo que veremos en los <a href="../../content/load/patrones.html">patrones de carga</a>.</p>
 
 
 </section>
@@ -431,13 +648,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -786,8 +1004,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/transform/intro.html" class="pagination-link" aria-label="Transformación">
-        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/load/patrones.html" class="pagination-link" aria-label="Patrones de carga">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; Base de datos operacional – Ingeniería de datos</title>
+<title>14&nbsp; Herramientas de ingesta – Ingeniería de datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -71,8 +71,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/sistemas/sql.html" rel="next">
-<link href="../../content/sistemas/intro.html" rel="prev">
+<link href="../../content/load/staging.html" rel="next">
+<link href="../../content/load/patrones.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -134,37 +134,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<meta property="og:title" content="7&nbsp; Base de datos operacional – Ingeniería de datos">
+<meta property="og:title" content="14&nbsp; Herramientas de ingesta – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -181,7 +152,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/rdbms_transaccional.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/herramientas.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -259,13 +230,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
  <span class="menu-text">Sistemas gestores de datos</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
@@ -274,7 +245,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
@@ -306,13 +277,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Ingesta de datos</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
@@ -327,7 +298,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
   </div>
 </li>
@@ -448,11 +419,14 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#índices" id="toc-índices" class="nav-link active" data-scroll-target="#índices"><span class="header-section-number">7.1</span> Índices</a></li>
-  <li><a href="#transacciones" id="toc-transacciones" class="nav-link" data-scroll-target="#transacciones"><span class="header-section-number">7.2</span> Transacciones</a>
-  <ul class="collapse">
-  <li><a href="#acid" id="toc-acid" class="nav-link" data-scroll-target="#acid"><span class="header-section-number">7.2.1</span> ACID</a></li>
-  </ul></li>
+  <li><a href="#el-panorama" id="toc-el-panorama" class="nav-link active" data-scroll-target="#el-panorama"><span class="header-section-number">14.1</span> El panorama</a></li>
+  <li><a href="#los-tres-conceptos" id="toc-los-tres-conceptos" class="nav-link" data-scroll-target="#los-tres-conceptos"><span class="header-section-number">14.2</span> Los tres conceptos</a></li>
+  <li><a href="#extraer-de-una-base-de-datos" id="toc-extraer-de-una-base-de-datos" class="nav-link" data-scroll-target="#extraer-de-una-base-de-datos"><span class="header-section-number">14.3</span> Extraer de una base de datos</a></li>
+  <li><a href="#extraer-de-una-api" id="toc-extraer-de-una-api" class="nav-link" data-scroll-target="#extraer-de-una-api"><span class="header-section-number">14.4</span> Extraer de una API</a></li>
+  <li><a href="#ficheros" id="toc-ficheros" class="nav-link" data-scroll-target="#ficheros"><span class="header-section-number">14.5</span> Ficheros</a></li>
+  <li><a href="#contratos-de-esquema" id="toc-contratos-de-esquema" class="nav-link" data-scroll-target="#contratos-de-esquema"><span class="header-section-number">14.6</span> Contratos de esquema</a></li>
+  <li><a href="#lo-que-dlt-añade-a-los-datos" id="toc-lo-que-dlt-añade-a-los-datos" class="nav-link" data-scroll-target="#lo-que-dlt-añade-a-los-datos"><span class="header-section-number">14.7</span> Lo que dlt añade a los datos</a></li>
+  <li><a href="#lo-que-una-herramienta-de-ingesta-no-hace" id="toc-lo-que-una-herramienta-de-ingesta-no-hace" class="nav-link" data-scroll-target="#lo-que-una-herramienta-de-ingesta-no-hace"><span class="header-section-number">14.8</span> Lo que una herramienta de ingesta no hace</a></li>
   </ul>
 </nav>
     </div>
@@ -462,9 +436,9 @@ window.Quarto = {
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/rdbms_transaccional.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/herramientas.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></h1>
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></h1>
 </div>
 
 
@@ -481,70 +455,255 @@ window.Quarto = {
 </header>
 
 
-<p>Para entender las capacidades de los sistemas empleados en tiempo de aplicación, debemos entender primero algunos conceptos que permiten a estos sistemas operar de forma rápida pero manteniendo la coherencia entre operaciones. Pensemos que necesitamos plantear una web, un sistema con capas frontales de presentación de datos, servicios back-end de gestión de lógicas de negocio y un sistema de almacenamiento de datos.</p>
+<p>Si repasamos lo visto hasta ahora, la lista de cosas que hay que resolver para traer una tabla de un sitio a otro es incómodamente larga: paginar, autenticar, reintentar con espera creciente, respetar los límites de uso, inferir tipos, crear la tabla en destino, adaptarla cuando el esquema cambie, guardar la marca de agua, aplicar el <code>merge</code> y dejar constancia de qué se cargó.</p>
+<p>Nada de eso es interesante. Todo eso hay que hacerlo bien. Y lo peor es que hay que hacerlo <strong>otra vez</strong> con la siguiente fuente, y con la siguiente. Esa repetición es la que da sentido a una categoría entera de herramientas.</p>
+<section id="el-panorama" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="el-panorama"><span class="header-section-number">14.1</span> El panorama</h2>
+<p>Conviene distinguir dos cosas que se confunden: el <strong>conector</strong> (el código que sabe hablar con Salesforce, con Postgres o con la API de Stripe) y la <strong>plataforma</strong> (lo que programa, monitoriza y gestiona credenciales). Cada herramienta reparte el peso de forma distinta.</p>
+<table class="caption-top table">
+<caption>Herramientas habituales para la capa EL</caption>
+<thead>
+<tr class="header">
+<th>Herramienta</th>
+<th>Naturaleza</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.singer.io/">Singer</a> / <a href="https://meltano.com/">Meltano</a></td>
+<td>Especificación abierta de <em>taps</em> y <em>targets</em> + plataforma</td>
+<td>Fue el estándar abierto de facto; catálogo amplio pero de calidad desigual</td>
+</tr>
+<tr class="even">
+<td><a href="https://airbyte.com/">Airbyte</a></td>
+<td>Plataforma con interfaz gráfica, conectores en contenedores</td>
+<td>Muchísimos conectores, requiere operar la plataforma</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.fivetran.com/">Fivetran</a></td>
+<td>Servicio gestionado, comercial</td>
+<td>Se paga y funciona; coste por volumen que sorprende al crecer</td>
+</tr>
+<tr class="even">
+<td><a href="https://slingdata.io/">Sling</a></td>
+<td>Utilidad de línea de comandos</td>
+<td>Excelente para base de datos a base de datos, sin ceremonia</td>
+</tr>
+<tr class="odd">
+<td><a href="https://dlthub.com/">dlt</a></td>
+<td>Librería de Python</td>
+<td>El proceso es código propio; sin plataforma que operar</td>
+</tr>
+</tbody>
+</table>
+<p>Vamos a centrarnos en <strong>dlt</strong> por una razón concreta: no es un servicio al que haya que conectarse ni un sistema que haya que desplegar, es una librería que se importa. Eso significa que un proceso de ingesta es un fichero de Python que vive en nuestro repositorio, se revisa en un <em>pull request</em> y se ejecuta donde queramos. Encaja con la idea de que <a href="https://pydevtools.com/handbook/">el ingeniero de datos toma prestadas las prácticas del desarrollo de software</a>, y además hace que los ejemplos quepan en una página.</p>
+</section>
+<section id="los-tres-conceptos" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="los-tres-conceptos"><span class="header-section-number">14.2</span> Los tres conceptos</h2>
+<p>dlt tiene una API pequeña. Con entender tres nombres es suficiente:</p>
+<ul>
+<li><strong>Recurso</strong> (<code>resource</code>): una función de Python que produce registros, normalmente con <code>yield</code>. Se corresponde con una tabla en destino.</li>
+<li><strong>Fuente</strong> (<code>source</code>): una agrupación de recursos que comparten configuración, típicamente todas las tablas de un mismo sistema.</li>
+<li><strong>Pipeline</strong> (<code>pipeline</code>): quien coge una fuente, la normaliza y la escribe en un destino, llevando la cuenta del estado entre ejecuciones.</li>
+</ul>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-    df[(Base de datos)]
-    bend[Lógica de negocio]
-    fend[Capa visual]
-
-    df --- bend
-    bend --- fend
+    subgraph fuente ["Fuente"]
+        r1["Recurso: alumnos"]
+        r2["Recurso: asignaturas"]
+        r3["Recurso: matriculas"]
+    end
+    fuente --&gt; p["Pipeline"]
+    p --&gt; e["Extraer"] --&gt; n["Normalizar"] --&gt; c["Cargar"]
+    c --&gt; d[("Destino")]
+    p &lt;-.-&gt;|"estado"| d
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<p>En los últimos años, la gestión de la capa transaccional ha evolucionado significativamente. Tradicionalmente, los sistemas de bases de datos como DB2 o PostgreSQL se encargaban de controlar las transacciones, asegurando la integridad y coherencia de los datos mediante mecanismos internos. Sin embargo, con el auge de arquitecturas más complejas y distribuidas, esta responsabilidad ha pasado en gran medida a los frameworks de desarrollo liberando de esta carga al sistema de almacenamiento.</p>
-<p>Frameworks como <a href="https://spring.io/">Spring</a> en Java, entre otros, permiten definir y gestionar transacciones directamente en la lógica de negocio, desacoplando el control transaccional del sistema de almacenamiento. Esto facilita la implementación de reglas de negocio más flexibles y adaptadas a las necesidades de cada aplicación, además de permitir la integración con múltiples fuentes de datos y servicios externos. Así, la capa transaccional se ha convertido en una parte fundamental de los frameworks modernos, proporcionando herramientas avanzadas para el manejo de la consistencia y la recuperación ante fallos.</p>
-<section id="índices" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="índices"><span class="header-section-number">7.1</span> Índices</h2>
-<p>Si algo necesitamos en las aplicaciones es velocidad. ¿Cómo de rápido es buscar información en una tabla? Pues no demasiado. Aunque contemos con estructuras normalizadas que garantizan que cada <em>cliente</em> (por ejemplo) existe una sola vez en nuestra tabla, deberemos recorrerla para encontrar su registro. Podemos aliviar parte de esta búsqueda al igual que sucede en los libros, construyendo un índice que nos indique en que página o fila en nuestro caso se encuentra la información que necesitamos.</p>
-<p>Los índices son estructuras de datos que permiten a las bases de datos mantener un registro de los datos que se encuentran en la misma. Estos índices permiten a las bases de datos realizar operaciones de búsqueda más eficientes. En el caso de las bases de datos relacionales, los índices se almacenan en tablas aparte de las tablas de datos y dependiendo del algoritmo elegido tomará distinta forma.</p>
-<p>El algoritmo <a href="https://es.wikipedia.org/wiki/%C3%81rbol-B">B-tree</a> se compone de la información de la columna (o columnas deseadas) construyendo un árbol balanceado que nos permite descartar los registros cuyos valores se encuentren por encima o debajo de nuestro valor de búsqueda.</p>
-<p>Veamos un ejemplo de cómo podríamos estructurar un índice B-tree que almacene números.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/B_tree_insertion_example.png?20071128030550" class="img-fluid figure-img"></p>
-<figcaption>Ejemplo de construcción de un árbol B-Tree</figcaption>
-</figure>
+<p>El caso mínimo, para hacerse una idea de la superficie de la API:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dlt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">@dlt.resource</span>(name<span class="op">=</span><span class="st">"alumnos"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> alumnos():</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> {<span class="st">"id_alumno"</span>: <span class="dv">1</span>, <span class="st">"nombre"</span>: <span class="st">"Iraitz"</span>, <span class="st">"apellido"</span>: <span class="st">"Montalbán"</span>}</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> {<span class="st">"id_alumno"</span>: <span class="dv">2</span>, <span class="st">"nombre"</span>: <span class="st">"Javier"</span>, <span class="st">"apellido"</span>: <span class="st">"Garcia"</span>}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> dlt.pipeline(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    pipeline_name<span class="op">=</span><span class="st">"secretaria"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    destination<span class="op">=</span><span class="st">"duckdb"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    dataset_name<span class="op">=</span><span class="st">"staging"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>pipeline.run(alumnos())</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Con eso ya tenemos una tabla <code>staging.alumnos</code> creada, tipada e insertada. No hemos escrito un <code>CREATE TABLE</code>, y ese es precisamente el punto.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<p>Como vemos en la imagen, cada nuevo dato altera la estructura de forma que garantizamos que cada nodo raíz plantea dos caminos con valores mayores o menores al valor del nodo. Esto permite descartar de manera eficaz la mitad de la información en cada paso y obtener un rendimiento <span class="math inline">\(\mathcal{O}(\log{n})\)</span> en promedio.</p>
-<p>Existen variantes como la <strong>B+</strong> que es la que implementan sistemas como MySQL o PostgreSQL precisamente para acelerar las búsquedas almacenando la información en los nodos hoja (nodos terminales del árbol) organizados como una lista secuencial que permite realizar eficientemente búsquedas de rangos.</p>
-<p>Es importante notar que debe construirse el índice explícitamente y que esto hace que las inserciones sean algo más lentas ya que además de insertar los datos, el sistema gestor de base de datos debe actualizar el índice. No podemos acelerar de un lado sin enlentecer de otro, pero en balance nos debería compensar. Por esto hace falta evaluar la necesidad de índices en cada caso.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Normalizar
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El paso intermedio merece una mención. dlt aplana las estructuras anidadas por su cuenta: un campo con una lista de objetos se convierte en una tabla hija enlazada por una clave generada. Es la respuesta práctica a ese JSON con empresas anidadas que veíamos en el capítulo de <a href="../../content/sistemas/arquitecturas.html#ordenando-el-lago">arquitecturas</a>, y evita tener que decidir el modelado antes de haber visto los datos.</p>
+</div>
+</div>
 </section>
-<section id="transacciones" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="transacciones"><span class="header-section-number">7.2</span> Transacciones</h2>
-<p>Cuando realizamos operaciones sobre una base de datos que presenta la información en <a href="../../content/modelado/formasnormales.html">estructuras normalizadas</a>, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.</p>
-<ol type="1">
-<li>El dinero sale de la cuenta origen</li>
-<li>El dinero se inserta en la cuenta destinataria</li>
-</ol>
-<p>¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">transacciones</span>&gt;</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">operación</span>&gt;El dinero sale de la cuenta origen&lt;/<span class="kw">operación</span>&gt;</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">operación</span>&gt;El dinero se inserta en la cuenta destinataria&lt;/<span class="kw">operación</span>&gt;</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">transacciones</span>/&gt;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="acid" class="level3" data-number="7.2.1">
-<h3 data-number="7.2.1" class="anchored" data-anchor-id="acid"><span class="header-section-number">7.2.1</span> ACID</h3>
-<p>A este paquete podemos llamarlo <strong>transacción</strong> y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de <strong>sistemas transaccionales</strong>. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo <strong>ACID</strong>:</p>
+<section id="extraer-de-una-base-de-datos" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="extraer-de-una-base-de-datos"><span class="header-section-number">14.3</span> Extraer de una base de datos</h2>
+<p>Para nuestra secretaría académica, lo habitual será leer directamente de la base de datos. dlt trae una fuente preparada que refleja el esquema del origen.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dlt</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dlt.sources.sql_database <span class="im">import</span> sql_database</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>fuente <span class="op">=</span> sql_database(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    credentials<span class="op">=</span><span class="st">"postgresql://lector@servidor:5432/secretaria"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    table_names<span class="op">=</span>[<span class="st">"alumnos"</span>, <span class="st">"asignaturas"</span>, <span class="st">"cursa"</span>],</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> dlt.pipeline(</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    pipeline_name<span class="op">=</span><span class="st">"secretaria"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    destination<span class="op">=</span><span class="st">"duckdb"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    dataset_name<span class="op">=</span><span class="st">"staging"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>pipeline.run(fuente, write_disposition<span class="op">=</span><span class="st">"replace"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Eso es una carga completa de tres tablas. Para pasar a incremental basta con declarar la columna que hace de marca de agua y la clave sobre la que resolver el <code>merge</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fuente <span class="op">=</span> sql_database(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    credentials<span class="op">=</span><span class="st">"postgresql://lector@servidor:5432/secretaria"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    table_names<span class="op">=</span>[<span class="st">"alumnos"</span>],</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>).with_resources(<span class="st">"alumnos"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>fuente.alumnos.apply_hints(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    incremental<span class="op">=</span>dlt.sources.incremental(<span class="st">"actualizado"</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    primary_key<span class="op">=</span><span class="st">"id_alumno"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    write_disposition<span class="op">=</span><span class="st">"merge"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>pipeline.run(fuente)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Todo el capítulo anterior (la marca de agua, dónde guardarla, cómo recuperarla en la siguiente ejecución, el <code>merge</code> por clave) cabe en esas tres líneas. El estado se persiste en el propio destino, en una tabla <code>_dlt_pipeline_state</code>, con lo que el proceso puede ejecutarse desde una máquina distinta cada vez sin perder el hilo.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>Las credenciales no van en el código
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En los ejemplos aparecen cadenas de conexión completas por legibilidad. En un proyecto real van en <code>.dlt/secrets.toml</code> (fuera del control de versiones) o en variables de entorno, y dlt las resuelve sola. Una credencial de producción en un repositorio es un incidente de seguridad, no un descuido.</p>
+</div>
+</div>
+</section>
+<section id="extraer-de-una-api" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="extraer-de-una-api"><span class="header-section-number">14.4</span> Extraer de una API</h2>
+<p>Aquí es donde la herramienta se gana el sueldo. Toda la lista de peajes que enumerábamos en el <a href="../../content/load/intro.html#apis">capítulo de extracción</a> se declara en lugar de programarse.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dlt</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dlt.sources.rest_api <span class="im">import</span> rest_api_source</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fuente <span class="op">=</span> rest_api_source({</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"client"</span>: {</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"base_url"</span>: <span class="st">"https://api.universidad.example/v1/"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"auth"</span>: {</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"type"</span>: <span class="st">"bearer"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">"token"</span>: dlt.secrets[<span class="st">"universidad_token"</span>],</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"paginator"</span>: {</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"type"</span>: <span class="st">"json_link"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">"next_url_path"</span>: <span class="st">"paging.next"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"resource_defaults"</span>: {</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"write_disposition"</span>: <span class="st">"merge"</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"primary_key"</span>: <span class="st">"id"</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"resources"</span>: [</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"asignaturas"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">"name"</span>: <span class="st">"alumnos"</span>,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">"endpoint"</span>: {</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>                <span class="st">"path"</span>: <span class="st">"alumnos"</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>                <span class="st">"params"</span>: {</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"actualizado_desde"</span>: {</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"type"</span>: <span class="st">"incremental"</span>,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"cursor_path"</span>: <span class="st">"actualizado"</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"initial_value"</span>: <span class="st">"2026-01-01"</span>,</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>                    },</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>                },</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>            },</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> dlt.pipeline(</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    pipeline_name<span class="op">=</span><span class="st">"universidad_api"</span>,</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    destination<span class="op">=</span><span class="st">"duckdb"</span>,</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    dataset_name<span class="op">=</span><span class="st">"staging"</span>,</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>pipeline.run(fuente)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Merece la pena leer ese bloque despacio, porque cada clave sustituye a un problema real. El <code>paginator</code> recorre las páginas hasta el final. El <code>auth</code> mete el <em>token</em> en cada petición. El <code>incremental</code> traduce la marca de agua a un parámetro de consulta y la actualiza al terminar. Los reintentos con espera creciente ante un <code>429</code> o un <code>503</code> están puestos por defecto. Escrito a mano, esto son doscientas líneas y varias sorpresas.</p>
+</section>
+<section id="ficheros" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="ficheros"><span class="header-section-number">14.5</span> Ficheros</h2>
+<p>Para el CSV en el SFTP o el Parquet en un bucket, el patrón es el mismo, con la particularidad de que conviene apoyarse en la fecha de modificación del fichero para no releer lo ya procesado.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dlt</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dlt.sources.filesystem <span class="im">import</span> filesystem, read_csv</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>recurso <span class="op">=</span> filesystem(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    bucket_url<span class="op">=</span><span class="st">"s3://datos-universidad/matriculas/"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    file_glob<span class="op">=</span><span class="st">"**/*.csv"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>) <span class="op">|</span> read_csv()</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>recurso.apply_hints(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    incremental<span class="op">=</span>dlt.sources.incremental(<span class="st">"modification_date"</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> dlt.pipeline(</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    pipeline_name<span class="op">=</span><span class="st">"matriculas_csv"</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    destination<span class="op">=</span><span class="st">"duckdb"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    dataset_name<span class="op">=</span><span class="st">"staging"</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>pipeline.run(recurso.with_name(<span class="st">"matriculas"</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="contratos-de-esquema" class="level2" data-number="14.6">
+<h2 data-number="14.6" class="anchored" data-anchor-id="contratos-de-esquema"><span class="header-section-number">14.6</span> Contratos de esquema</h2>
+<p>Vimos que la política ante un cambio de esquema no debía ser la misma en todas las capas. dlt permite declararla, y con bastante grano fino: qué hacer ante una tabla nueva, ante una columna nueva y ante un tipo que no encaja.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pipeline.run(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    fuente,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    schema_contract<span class="op">=</span>{</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tables"</span>: <span class="st">"evolve"</span>,     <span class="co"># aceptamos tablas nuevas</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"columns"</span>: <span class="st">"evolve"</span>,    <span class="co"># aceptamos columnas nuevas</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"data_type"</span>: <span class="st">"freeze"</span>,  <span class="co"># pero un cambio de tipo detiene la carga</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Los tres valores posibles son <code>evolve</code> (adaptarse), <code>discard_row</code> o <code>discard_value</code> (descartar lo que no encaja) y <code>freeze</code> (detenerse con error). La combinación de arriba es un punto de partida razonable para una capa de aterrizaje: dejamos entrar todo lo nuevo, porque el objetivo es no perder información, pero nos plantamos si una columna que era numérica empieza a traer texto, porque eso no es crecimiento sino que algo se ha roto río arriba.</p>
+</section>
+<section id="lo-que-dlt-añade-a-los-datos" class="level2" data-number="14.7">
+<h2 data-number="14.7" class="anchored" data-anchor-id="lo-que-dlt-añade-a-los-datos"><span class="header-section-number">14.7</span> Lo que dlt añade a los datos</h2>
+<p>Al cargar, dlt incorpora columnas técnicas que son exactamente los <a href="../../content/load/patrones.html#los-metadatos-de-carga">metadatos de carga</a> que recomendábamos poner a mano:</p>
 <ul>
-<li><strong>Atomicidad</strong>: La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos</li>
-<li><strong>Consistencia</strong>: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.</li>
-<li><strong>Independencia</strong>: El aislamiento de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento</li>
-<li><strong>Durable</strong>: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.</li>
+<li><code>_dlt_id</code>, identificador único de la fila.</li>
+<li><code>_dlt_load_id</code>, identificador del lote de carga, que permite aislar o deshacer una ejecución concreta.</li>
 </ul>
-<p>Con esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter <strong>analítico</strong>.</p>
-<p>El hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.</p>
-<p>La base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar a cabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores. Y muy posiblemente debamos conocer algo de <a href="../../content/sistemas/sql.html">SQL</a> para poder interactuar con estos sistemas. Para ello deberemos profundizar en dos cuestiones clave: los índices y las transacciones.</p>
-
-
+<p>Y mantiene además unas cuantas tablas propias en el destino: <code>_dlt_loads</code> con el registro de cada carga y su resultado, <code>_dlt_version</code> con la historia de versiones del esquema inferido, y <code>_dlt_pipeline_state</code> con el estado incremental. Ese conjunto es, en la práctica, la trazabilidad mínima de la capa de ingesta, y viene puesta sin pedirla.</p>
 </section>
+<section id="lo-que-una-herramienta-de-ingesta-no-hace" class="level2" data-number="14.8">
+<h2 data-number="14.8" class="anchored" data-anchor-id="lo-que-una-herramienta-de-ingesta-no-hace"><span class="header-section-number">14.8</span> Lo que una herramienta de ingesta no hace</h2>
+<p>Para cerrar con expectativas ajustadas. dlt, o cualquiera de sus alternativas, resuelve el movimiento de datos. <strong>No</strong> decide qué es una entidad de negocio, no construye el modelo dimensional, no calcula métricas y no sabe si el dato es correcto. Todo eso es la <a href="../../content/transform/intro.html">transformación</a>, y sigue siendo el trabajo con criterio.</p>
+<p>Lo que sí ha cambiado es que la parte mecánica ya no justifica un proyecto de seis meses. Con lo visto en este capítulo tenemos los datos saliendo del origen; queda decidir <strong>dónde aterrizan</strong> y con qué garantías, que es lo que construiremos a continuación con <a href="../../content/load/staging.html">DuckLake</a>.</p>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -950,13 +1109,13 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/sistemas/intro.html" class="pagination-link" aria-label="Sistemas de gestión de datos">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span>
+      <a href="../../content/load/patrones.html" class="pagination-link" aria-label="Patrones de carga">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/sistemas/sql.html" class="pagination-link" aria-label="Structured Query Language">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/load/staging.html" class="pagination-link" aria-label="La capa de aterrizaje">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

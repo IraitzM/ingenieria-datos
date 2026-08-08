@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>15&nbsp; La capa de aterrizaje – Ingeniería de datos</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../content/transform/intro.html" rel="next">
+<link href="../../content/load/herramientas.html" rel="prev">
+<link href="../../cover.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-MXHDHE1HP5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MXHDHE1HP5');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PLKHBRCG');</script>
+<!-- End Google Tag Manager -->
+
+<meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<meta property="og:title" content="15&nbsp; La capa de aterrizaje – Ingeniería de datos">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
+<meta property="og:site_name" content="Ingeniería de datos">
+<meta property="og:image:height" content="1536">
+<meta property="og:image:width" content="1024">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/staging.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Ingeniería de datos</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/IraitzM/ingenieria-datos" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=|url|" title="LinkedIn" class="quarto-navigation-tool px-1" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prólogo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../content/modelado/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelado de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/modelado_analitico.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/nuevos_paradigmas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sistemas gestores de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/dbms_analítica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/nuevos-formatos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Ingesta de datos</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Transformación de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../content/explotacion/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Explotación de los datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referencias</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/metadatado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#qué-hace-y-qué-no-hace" id="toc-qué-hace-y-qué-no-hace" class="nav-link active" data-scroll-target="#qué-hace-y-qué-no-hace"><span class="header-section-number">15.1</span> Qué hace y qué no hace</a></li>
+  <li><a href="#por-qué-un-formato-de-tabla-y-no-ficheros-sueltos" id="toc-por-qué-un-formato-de-tabla-y-no-ficheros-sueltos" class="nav-link" data-scroll-target="#por-qué-un-formato-de-tabla-y-no-ficheros-sueltos"><span class="header-section-number">15.2</span> Por qué un formato de tabla y no ficheros sueltos</a></li>
+  <li><a href="#ducklake" id="toc-ducklake" class="nav-link" data-scroll-target="#ducklake"><span class="header-section-number">15.3</span> DuckLake</a>
+  <ul class="collapse">
+  <li><a href="#montar-el-lago" id="toc-montar-el-lago" class="nav-link" data-scroll-target="#montar-el-lago"><span class="header-section-number">15.3.1</span> Montar el lago</a></li>
+  <li><a href="#la-primera-carga" id="toc-la-primera-carga" class="nav-link" data-scroll-target="#la-primera-carga"><span class="header-section-number">15.3.2</span> La primera carga</a></li>
+  <li><a href="#la-segunda-carga" id="toc-la-segunda-carga" class="nav-link" data-scroll-target="#la-segunda-carga"><span class="header-section-number">15.3.3</span> La segunda carga</a></li>
+  <li><a href="#el-historial" id="toc-el-historial" class="nav-link" data-scroll-target="#el-historial"><span class="header-section-number">15.3.4</span> El historial</a></li>
+  <li><a href="#cuando-el-origen-cambia-el-esquema" id="toc-cuando-el-origen-cambia-el-esquema" class="nav-link" data-scroll-target="#cuando-el-origen-cambia-el-esquema"><span class="header-section-number">15.3.5</span> Cuando el origen cambia el esquema</a></li>
+  </ul></li>
+  <li><a href="#conectando-la-ingesta" id="toc-conectando-la-ingesta" class="nav-link" data-scroll-target="#conectando-la-ingesta"><span class="header-section-number">15.4</span> Conectando la ingesta</a></li>
+  <li><a href="#mantener-el-lago" id="toc-mantener-el-lago" class="nav-link" data-scroll-target="#mantener-el-lago"><span class="header-section-number">15.5</span> Mantener el lago</a></li>
+  <li><a href="#convenciones-que-ahorran-disgustos" id="toc-convenciones-que-ahorran-disgustos" class="nav-link" data-scroll-target="#convenciones-que-ahorran-disgustos"><span class="header-section-number">15.6</span> Convenciones que ahorran disgustos</a></li>
+  <li><a href="#y-quién-sabe-que-esto-existe" id="toc-y-quién-sabe-que-esto-existe" class="nav-link" data-scroll-target="#y-quién-sabe-que-esto-existe"><span class="header-section-number">15.7</span> ¿Y quién sabe que esto existe?</a></li>
+  <li><a href="#lo-que-viene" id="toc-lo-que-viene" class="nav-link" data-scroll-target="#lo-que-viene"><span class="header-section-number">15.8</span> Lo que viene</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/staging.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Los datos ya salen del origen. Queda la pregunta de dónde caen, y es una decisión con más consecuencias de las que parece.</p>
+<p>Cuando hablamos de la <a href="../../content/sistemas/arquitecturas.html#la-caja-fuerte">caja fuerte</a> decíamos que la información cruda debe reposar al menos por un tiempo para poder ser entendida y gestionada. Esa es la capa de <strong>staging</strong>, la zona de aterrizaje, el <em>bronze</em> de la arquitectura medallón. Distintos nombres para la misma idea: un sitio donde el dato llega tal cual vino, sin interpretar.</p>
+<section id="qué-hace-y-qué-no-hace" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="qué-hace-y-qué-no-hace"><span class="header-section-number">15.1</span> Qué hace y qué no hace</h2>
+<p>La regla que define esta capa es una sola: <strong>aquí no se transforma nada</strong>. Y es una regla que cuesta respetar, porque siempre hay una limpieza pequeña y evidente que uno estaría tentado de colar de paso. Si empezamos a normalizar mayúsculas, a convertir fechas o a descartar los registros que parecen erróneos, perdemos la única propiedad que hace valiosa a esta capa: que es un reflejo fiel del origen y que, cuando dentro de un año descubramos un error, podamos volver a ella y rehacer el trabajo.</p>
+<p>Lo que sí hacemos:</p>
+<ul>
+<li><strong>Aterrizar</strong> el dato con su estructura de origen, aceptando que evolucione.</li>
+<li><strong>Anotar</strong> cuándo llegó, de dónde y en qué carga. Los <a href="../../content/load/patrones.html#los-metadatos-de-carga">metadatos</a> de siempre.</li>
+<li><strong>Garantizar</strong> que lo escrito es completo: o se ve el lote entero o no se ve nada.</li>
+<li><strong>Conservar</strong> durante un plazo definido, para poder reprocesar.</li>
+</ul>
+<p>Lo que no hacemos: aplicar reglas de negocio, deduplicar por criterios propios, unir tablas, renombrar campos a un vocabulario común. Todo eso pertenece a la <a href="../../content/transform/intro.html">transformación</a>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Staging no es un almacén temporal
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El nombre despista, porque en el ETL clásico el <em>staging area</em> era una zona de paso que se vaciaba al terminar. En una arquitectura moderna, con almacenamiento barato, la capa de aterrizaje <strong>se conserva</strong>. Es lo que permite reconstruir todo lo que hay aguas abajo sin volver a molestar a los sistemas origen, y en más de una ocasión es el único sitio donde queda la historia de una fuente que ya ni existe.</p>
+</div>
+</div>
+</section>
+<section id="por-qué-un-formato-de-tabla-y-no-ficheros-sueltos" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="por-qué-un-formato-de-tabla-y-no-ficheros-sueltos"><span class="header-section-number">15.2</span> Por qué un formato de tabla y no ficheros sueltos</h2>
+<p>Podríamos aterrizar los datos escribiendo Parquet en carpetas y quedarnos tan anchos. De hecho es exactamente lo que hacían los lagos de datos de la era Hadoop, y ya vimos que <a href="../../content/sistemas/nuevos-formatos.html">tenía sus problemas</a>: sin transacciones, dos procesos escribiendo a la vez se pisan; un lector puede ver un lote a medias; modificar registros obliga a reescribir ficheros enteros; y no hay forma de saber qué había ayer.</p>
+<p>Los formatos de tabla abiertos (Delta, Iceberg, Hudi) resolvieron esto añadiendo una capa de metadatos sobre los ficheros de datos. Con ellos obtenemos transaccionalidad, versionado y evolución de esquema sin renunciar a que el dato siga siendo Parquet en un bucket.</p>
+</section>
+<section id="ducklake" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="ducklake"><span class="header-section-number">15.3</span> DuckLake</h2>
+<p>Aquí es donde entra <a href="https://ducklake.select/">DuckLake</a>, y merece la pena entender la observación de la que parte, porque es de las que resultan obvias solo después de que alguien las diga.</p>
+<p>Iceberg y Delta guardan sus metadatos <strong>en ficheros</strong>, junto a los datos. Eso los hace autocontenidos, pero obliga a reconstruir el estado de una tabla leyendo una cadena de ficheros de manifiesto, y a resolver la concurrencia entre escritores mediante mecanismos externos. Con el tiempo, ambos formatos han acabado necesitando un catálogo con una base de datos detrás para funcionar bien.</p>
+<p>La propuesta de DuckLake es aceptarlo desde el principio: si de todas formas vamos a necesitar una base de datos transaccional para los metadatos, <strong>usémosla para todos los metadatos</strong>. Los datos siguen siendo Parquet abierto en el almacenamiento que queramos; el catálogo es un esquema SQL en cualquier motor tabular (SQLite, PostgreSQL, DuckDB, MySQL); y una transacción del lakehouse es, sencillamente, una transacción de esa base de datos.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+    subgraph cat ["Catálogo (base de datos SQL)"]
+        m["Esquemas, tablas, columnas&lt;br/&gt;Snapshots y estadísticas&lt;br/&gt;Qué fichero contiene qué"]
+    end
+    subgraph alm ["Almacenamiento de objetos"]
+        p1[/"parquet"/]
+        p2[/"parquet"/]
+        p3[/"parquet"/]
+    end
+    cat -.-&gt;|"apunta a"| alm
+    motor["Motor de consulta"] --&gt; cat
+    motor --&gt; alm
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>La consecuencia práctica es que montar un lakehouse deja de ser un proyecto. Vamos a construir uno entero en este capítulo, con transacciones, viaje en el tiempo y evolución de esquema, y va a caber en unas pocas celdas.</p>
+<section id="montar-el-lago" class="level3" data-number="15.3.1">
+<h3 data-number="15.3.1" class="anchored" data-anchor-id="montar-el-lago"><span class="header-section-number">15.3.1</span> Montar el lago</h3>
+<p>Toda la ceremonia de instalación es esta:</p>
+<div id="c49116e4" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"INSTALL ducklake; LOAD ducklake;"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># El catálogo será un fichero DuckDB y los datos irán a la carpeta lago/</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"ATTACH 'ducklake:catalogo.ducklake' AS lago (DATA_PATH 'lago/')"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"USE lago"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Ya está. Eso es un lakehouse. En un entorno real cambiaríamos el catálogo por un PostgreSQL compartido y <code>DATA_PATH</code> por un <code>s3://</code>, pero ni una línea más de las que siguen tendría que cambiar.</p>
+</section>
+<section id="la-primera-carga" class="level3" data-number="15.3.2">
+<h3 data-number="15.3.2" class="anchored" data-anchor-id="la-primera-carga"><span class="header-section-number">15.3.2</span> La primera carga</h3>
+<p>Creamos el esquema de aterrizaje y aterrizamos nuestros alumnos, con los metadatos de carga que ya sabemos que hay que poner.</p>
+<div id="6328451b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"CREATE SCHEMA staging"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE staging.alumnos (</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">        id_alumno    INTEGER,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">        nombre       VARCHAR,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">        apellido     VARCHAR,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">        email        VARCHAR,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">        _origen      VARCHAR,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">        _cargado_en  TIMESTAMP</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">    )</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO staging.alumnos VALUES</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="st">        (1, 'Iraitz', 'Montalbán', 'iraitz@ejemplo.eus', 'secretaria', now()),</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="st">        (2, 'Javier', 'Garcia',    'javier@ejemplo.eus', 'secretaria', now()),</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="st">        (3, 'Miguel', 'Fernandez', 'miguel@ejemplo.eus', 'secretaria', now())</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"SELECT id_alumno, nombre, email FROM staging.alumnos ORDER BY id_alumno"</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id_alumno</th>
+<th data-quarto-table-cell-role="th">nombre</th>
+<th data-quarto-table-cell-role="th">email</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>Iraitz</td>
+<td>iraitz@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>Javier</td>
+<td>javier@ejemplo.eus</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>Miguel</td>
+<td>miguel@ejemplo.eus</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Se consulta como cualquier base de datos, pero lo que hay debajo no es un fichero de base de datos. Miremos el disco:</p>
+<div id="1eb476cd" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> raiz, _, ficheros <span class="kw">in</span> os.walk(<span class="st">"lago"</span>):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> ficheros:</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(os.path.join(raiz, f))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lago/staging/alumnos/ducklake-019fe0e1-eecc-71bf-a433-b8f9993cb1d9.parquet</code></pre>
+</div>
+</div>
+<p>Un fichero Parquet, en una ruta que refleja esquema y tabla. Cualquier motor que sepa leer Parquet puede leer ese fichero sin pedirle permiso a nadie, y ahí está la diferencia con un almacén propietario: <strong>los datos no están secuestrados por el formato</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Datos embebidos en el catálogo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>DuckLake tiene una optimización llamada <em>data inlining</em>: si un lote es muy pequeño, en lugar de escribir un Parquet de unas pocas filas guarda los valores directamente en el catálogo, y los materializa a Parquet más adelante. Resuelve el clásico problema de los ficheros diminutos que sufren los lagos alimentados por flujos de datos frecuentes.</p>
+<p>En este capítulo lo hemos desactivado con <code>data_inlining_row_limit</code> para poder ver los ficheros desde la primera inserción. En producción interesa dejarlo activo y ejecutar <code>ducklake_flush_inlined_data</code> periódicamente.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="la-segunda-carga" class="level3" data-number="15.3.3">
+<h3 data-number="15.3.3" class="anchored" data-anchor-id="la-segunda-carga"><span class="header-section-number">15.3.3</span> La segunda carga</h3>
+<p>Al día siguiente vuelve a ejecutarse la ingesta. Un alumno ha corregido su correo y hay una matrícula nueva.</p>
+<div id="eb77fb29" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st">    UPDATE staging.alumnos</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SET email = 'iraitz.montalban@ejemplo.eus', _cargado_en = now()</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE id_alumno = 1</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO staging.alumnos</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">    VALUES (4, 'María', 'Garcia', 'maria@ejemplo.eus', 'secretaria', now())</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"SELECT id_alumno, nombre, email FROM staging.alumnos ORDER BY id_alumno"</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id_alumno</th>
+<th data-quarto-table-cell-role="th">nombre</th>
+<th data-quarto-table-cell-role="th">email</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>Iraitz</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>Javier</td>
+<td>javier@ejemplo.eus</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>Miguel</td>
+<td>miguel@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>4</td>
+<td>María</td>
+<td>maria@ejemplo.eus</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Nótese que hemos hecho un <code>UPDATE</code> sobre datos almacenados en Parquet, que es un formato columnar pensado para no modificarse. El formato de tabla se encarga de traducir eso a escrituras de ficheros nuevos y anotaciones en el catálogo, sin que tengamos que saberlo.</p>
+</section>
+<section id="el-historial" class="level3" data-number="15.3.4">
+<h3 data-number="15.3.4" class="anchored" data-anchor-id="el-historial"><span class="header-section-number">15.3.4</span> El historial</h3>
+<p>Cada operación ha dejado una versión. Y esas versiones son consultables:</p>
+<div id="36950dea" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"SELECT snapshot_id, snapshot_time, changes FROM lago.snapshots()"</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">snapshot_id</th>
+<th data-quarto-table-cell-role="th">snapshot_time</th>
+<th data-quarto-table-cell-role="th">changes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>0</td>
+<td>2026-08-08 10:18:50.863891+00:00</td>
+<td>{'schemas_created': ['main']}</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>1</td>
+<td>2026-08-08 10:18:50.911988+00:00</td>
+<td>{'schemas_created': ['staging']}</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2</td>
+<td>2026-08-08 10:18:50.915971+00:00</td>
+<td>{'tables_created': ['staging.alumnos']}</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>3</td>
+<td>2026-08-08 10:18:50.942080+00:00</td>
+<td>{'tables_inserted_into': ['2']}</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>4</td>
+<td>2026-08-08 10:18:50.996375+00:00</td>
+<td>{'tables_inserted_into': ['2'], 'tables_delete...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>5</td>
+<td>2026-08-08 10:18:51.013599+00:00</td>
+<td>{'tables_inserted_into': ['2']}</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Se lee la historia entera del lago: la creación del esquema, la de la tabla, la inserción inicial, la modificación (que internamente es un borrado más una inserción) y el alta de María.</p>
+<p>Y si tenemos las versiones, tenemos <strong>viaje en el tiempo</strong>. Así estaban las cosas en la versión 3, antes de la segunda carga:</p>
+<div id="d74afac2" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT id_alumno, nombre, email</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM staging.alumnos AT (VERSION =&gt; 3)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY id_alumno</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id_alumno</th>
+<th data-quarto-table-cell-role="th">nombre</th>
+<th data-quarto-table-cell-role="th">email</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>Iraitz</td>
+<td>iraitz@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>Javier</td>
+<td>javier@ejemplo.eus</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>Miguel</td>
+<td>miguel@ejemplo.eus</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Cuatro alumnos ahora, tres entonces, y el correo antiguo de Iraitz intacto. Esto no es una copia de seguridad que alguien tuvo la precaución de hacer: es el estado natural de la tabla, disponible con una cláusula SQL.</p>
+<p>Podemos ir más lejos y preguntar directamente <strong>qué cambió</strong> entre dos versiones:</p>
+<div id="44ac19c3" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"USE lago.staging"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT snapshot_id, change_type, id_alumno, email</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM lago.table_changes('alumnos', 4, 5)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY snapshot_id</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">snapshot_id</th>
+<th data-quarto-table-cell-role="th">change_type</th>
+<th data-quarto-table-cell-role="th">id_alumno</th>
+<th data-quarto-table-cell-role="th">email</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>4</td>
+<td>update_postimage</td>
+<td>1</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>4</td>
+<td>update_preimage</td>
+<td>1</td>
+<td>iraitz@ejemplo.eus</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>5</td>
+<td>insert</td>
+<td>4</td>
+<td>maria@ejemplo.eus</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Ahí está la modificación descompuesta en su imagen anterior y posterior, y el alta de María. Es, literalmente, un flujo de cambios como el que produciría un <a href="../../content/load/patrones.html#change-data-capture">CDC</a>, pero generado por el propio lakehouse sobre nuestra capa de aterrizaje. Aguas abajo, quien construya un satélite de Data Vault o una dimensión histórica puede consumir esto en lugar de recalcular diferencias.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Para qué sirve esto un martes cualquiera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El viaje en el tiempo suena a curiosidad técnica hasta el día que hace falta. Los tres usos que aparecen solos:</p>
+<ul>
+<li><strong>Depurar</strong>: el informe de ayer daba otro número; comparar la tabla de ayer con la de hoy responde por qué en un minuto.</li>
+<li><strong>Reprocesar</strong>: una transformación con un error se puede volver a lanzar contra el estado exacto que tenían los datos cuando se ejecutó.</li>
+<li><strong>Auditar</strong>: demostrar qué contenía un dato en una fecha concreta, sin depender de que alguien guardara una copia.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="cuando-el-origen-cambia-el-esquema" class="level3" data-number="15.3.5">
+<h3 data-number="15.3.5" class="anchored" data-anchor-id="cuando-el-origen-cambia-el-esquema"><span class="header-section-number">15.3.5</span> Cuando el origen cambia el esquema</h3>
+<p>Volvemos a la evolución del esquema, que decíamos que en esta capa debía ser permisiva. La secretaría empieza a registrar el teléfono:</p>
+<div id="6fdadab6" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"ALTER TABLE alumnos ADD COLUMN telefono VARCHAR"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">    UPDATE alumnos SET telefono = '600 000 001' WHERE id_alumno = 1</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"SELECT id_alumno, nombre, email, telefono FROM alumnos ORDER BY id_alumno"</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id_alumno</th>
+<th data-quarto-table-cell-role="th">nombre</th>
+<th data-quarto-table-cell-role="th">email</th>
+<th data-quarto-table-cell-role="th">telefono</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>Iraitz</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+<td>600 000 001</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>Javier</td>
+<td>javier@ejemplo.eus</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>Miguel</td>
+<td>miguel@ejemplo.eus</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>4</td>
+<td>María</td>
+<td>maria@ejemplo.eus</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>La columna aparece, con valores nulos para lo que ya estaba cargado. Y lo interesante es que los ficheros Parquet antiguos <strong>no se han reescrito</strong>: el catálogo sabe que aquellos ficheros no tienen esa columna y la resuelve como nula al leerlos. Por eso añadir una columna es instantáneo aunque la tabla tenga mil millones de filas.</p>
+<p>Las versiones anteriores, además, siguen viéndose con el esquema que tenían entonces:</p>
+<div id="47b8d4f2" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"SELECT * FROM alumnos AT (VERSION =&gt; 3) LIMIT 1"</span>).df().columns.tolist()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>['id_alumno', 'nombre', 'apellido', 'email', '_origen', '_cargado_en']</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="conectando-la-ingesta" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="conectando-la-ingesta"><span class="header-section-number">15.4</span> Conectando la ingesta</h2>
+<p>Hasta aquí hemos escrito el SQL a mano para ver la mecánica. En la práctica, quien escribe en esta capa es la <a href="../../content/load/herramientas.html">herramienta de ingesta</a>, y dlt sabe hablar DuckLake de forma nativa.</p>
+<p>Montamos primero una secretaría académica de la que extraer, esta vez en SQLite, para tener un origen de verdad:</p>
+<div id="ee6b019d" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>origen <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">"secretaria.db"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>origen.executescript(<span class="st">"""</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE alumnos (</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="st">        id_alumno INTEGER PRIMARY KEY,</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="st">        nombre TEXT,</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="st">        apellido TEXT,</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="st">        email TEXT,</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="st">        actualizado TEXT</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="st">    );</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="st">        (1, 'Iraitz', 'Montalbán', 'iraitz@ejemplo.eus', '2026-01-10 09:00:00'),</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="st">        (2, 'Javier', 'Garcia',    'javier@ejemplo.eus', '2026-01-10 09:00:00'),</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="st">        (3, 'Miguel', 'Fernandez', 'miguel@ejemplo.eus', '2026-01-11 12:30:00');</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>origen.commit()</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>origen.execute(<span class="st">"SELECT COUNT(*) FROM alumnos"</span>).fetchone()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>(3,)</code></pre>
+</div>
+</div>
+<p>Y declaramos el proceso completo: origen, destino y modo de escritura.</p>
+<div id="99df9e51" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dlt</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dlt.sources.sql_database <span class="im">import</span> sql_database</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dlt.destinations <span class="im">import</span> ducklake</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dlt.destinations.impl.ducklake.configuration <span class="im">import</span> DuckLakeCredentials</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>destino <span class="op">=</span> ducklake(</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    credentials<span class="op">=</span>DuckLakeCredentials(</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        ducklake_name<span class="op">=</span><span class="st">"lago"</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        catalog<span class="op">=</span><span class="st">"sqlite:///catalogo_dlt.sqlite"</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        storage<span class="op">=</span><span class="st">"lago_dlt"</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>fuente <span class="op">=</span> sql_database(</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    credentials<span class="op">=</span><span class="st">"sqlite:///secretaria.db"</span>,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    table_names<span class="op">=</span>[<span class="st">"alumnos"</span>],</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> dlt.pipeline(</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    pipeline_name<span class="op">=</span><span class="st">"secretaria"</span>,</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    destination<span class="op">=</span>destino,</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    dataset_name<span class="op">=</span><span class="st">"staging"</span>,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    pipelines_dir<span class="op">=</span><span class="st">"_estado_dlt"</span>,</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> pipeline.run(fuente, write_disposition<span class="op">=</span><span class="st">"merge"</span>, primary_key<span class="op">=</span><span class="st">"id_alumno"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Sobre <code>pipelines_dir</code>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>dlt guarda por defecto el estado local de cada proceso en <code>~/.dlt/pipelines</code>, fuera del proyecto, para que sobreviva entre ejecuciones. Aquí lo hemos redirigido a una carpeta local únicamente para que este capítulo se pueda reconstruir desde cero cada vez que se compila el libro. En un despliegue real interesa justo lo contrario: que ese estado persista, o mejor aún, apoyarse en el que dlt mantiene dentro del propio destino.</p>
+</div>
+</div>
+</div>
+<div id="e44afc5c" class="cell" data-execution_count="14">
+<div class="cell-output cell-output-stdout">
+<pre><code>Pipeline secretaria load step completed in 1.29 seconds
+1 load package(s) were loaded to destination ducklake and into dataset staging
+The ducklake destination used lago@sqlite:////home/runner/work/ingenieria-datos/ingenieria-datos/content/load/catalogo_dlt.sqlite@file:///home/runner/work/ingenieria-datos/ingenieria-datos/content/load/lago_dlt location to store data
+Load package 1786184332.4737332 is LOADED and contains no failed jobs</code></pre>
+</div>
+</div>
+<p>Simulamos ahora un día más en la vida de la secretaría y volvemos a ejecutar <strong>exactamente el mismo proceso</strong>:</p>
+<div id="aab6b145" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>origen.executescript(<span class="st">"""</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="st">    UPDATE alumnos</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SET email = 'iraitz.montalban@ejemplo.eus', actualizado = '2026-01-12 08:00:00'</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE id_alumno = 1;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="st">        (4, 'María', 'Garcia', 'maria@ejemplo.eus', '2026-01-12 10:00:00');</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>origen.commit()</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> pipeline.run(fuente, write_disposition<span class="op">=</span><span class="st">"merge"</span>, primary_key<span class="op">=</span><span class="st">"id_alumno"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="067576a1" class="cell" data-execution_count="16">
+<div class="cell-output cell-output-stdout">
+<pre><code>Pipeline secretaria load step completed in 0.97 seconds
+1 load package(s) were loaded to destination ducklake and into dataset staging
+The ducklake destination used lago@sqlite:////home/runner/work/ingenieria-datos/ingenieria-datos/content/load/catalogo_dlt.sqlite@file:///home/runner/work/ingenieria-datos/ingenieria-datos/content/load/lago_dlt location to store data
+Load package 1786184333.9541757 is LOADED and contains no failed jobs</code></pre>
+</div>
+</div>
+<p>Y comprobamos el resultado enganchándonos al lago desde fuera, con una conexión DuckDB limpia, para dejar claro que el dato no pertenece a la herramienta que lo escribió:</p>
+<div id="b2208c1b" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>lector <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>lector.sql(<span class="st">"INSTALL ducklake; LOAD ducklake;"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>lector.sql(<span class="st">"ATTACH 'ducklake:sqlite:catalogo_dlt.sqlite' AS lago_dlt"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>lector.sql(<span class="st">"""</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT id_alumno, nombre, email</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM lago_dlt.staging.alumnos</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY id_alumno</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id_alumno</th>
+<th data-quarto-table-cell-role="th">nombre</th>
+<th data-quarto-table-cell-role="th">email</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>Iraitz</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>Javier</td>
+<td>javier@ejemplo.eus</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>Miguel</td>
+<td>miguel@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>4</td>
+<td>María</td>
+<td>maria@ejemplo.eus</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>El <code>merge</code> ha hecho su trabajo: el correo de Iraitz actualizado, María incorporada, y ni un duplicado. Veamos qué más ha dejado dlt por ahí:</p>
+<div id="6ea0b1e1" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>lector.sql(<span class="st">"""</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT table_schema, table_name</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM information_schema.tables</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE table_catalog = 'lago_dlt'</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY table_schema, table_name</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">table_schema</th>
+<th data-quarto-table-cell-role="th">table_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>staging</td>
+<td>_dlt_loads</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>staging</td>
+<td>_dlt_pipeline_state</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>staging</td>
+<td>_dlt_version</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>staging</td>
+<td>alumnos</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>staging_staging</td>
+<td>_dlt_version</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>staging_staging</td>
+<td>alumnos</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Junto a nuestra tabla aparecen las tablas técnicas que mencionábamos: el registro de cargas, el historial de esquemas y el estado incremental. Ese estado es el que hace que la tercera ejecución no vuelva a traerse lo que ya está.</p>
+</section>
+<section id="mantener-el-lago" class="level2" data-number="15.5">
+<h2 data-number="15.5" class="anchored" data-anchor-id="mantener-el-lago"><span class="header-section-number">15.5</span> Mantener el lago</h2>
+<p>Una capa de aterrizaje que lleva dos años funcionando acumula dos problemas previsibles: muchas versiones antiguas y muchos ficheros pequeños. Ambos tienen su función de mantenimiento.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Compactar ficheros pequeños en otros de tamaño razonable</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CALL</span> ducklake_merge_adjacent_files(<span class="st">'lago'</span>);</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- Materializar los datos que estuvieran embebidos en el catálogo</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CALL</span> ducklake_flush_inlined_data(<span class="st">'lago'</span>);</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- Caducar versiones anteriores a una fecha (deja de haber viaje en el tiempo)</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="kw">CALL</span> ducklake_expire_snapshots(<span class="st">'lago'</span>, older_than <span class="op">=&gt;</span> now() <span class="op">-</span> <span class="dt">INTERVAL</span> <span class="dv">30</span> <span class="dt">DAY</span>);</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">-- Borrar del almacenamiento los ficheros que ya no referencia nadie</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="kw">CALL</span> ducklake_delete_orphaned_files(<span class="st">'lago'</span>, older_than <span class="op">=&gt;</span> now() <span class="op">-</span> <span class="dt">INTERVAL</span> <span class="dv">7</span> <span class="dt">DAY</span>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>El orden importa: los ficheros no se pueden borrar hasta que ninguna versión viva los referencie, así que primero se caducan las versiones y después se limpian los huérfanos. Y conviene decidir la retención con criterio, porque <code>expire_snapshots</code> es lo que convierte el viaje en el tiempo en algo finito. Treinta días suele ser un punto de partida razonable para staging; en capas con requisitos de auditoría, bastante más.</p>
+</section>
+<section id="convenciones-que-ahorran-disgustos" class="level2" data-number="15.6">
+<h2 data-number="15.6" class="anchored" data-anchor-id="convenciones-que-ahorran-disgustos"><span class="header-section-number">15.6</span> Convenciones que ahorran disgustos</h2>
+<p>Para cerrar, unas cuantas decisiones que conviene tomar una vez y aplicar en todas partes:</p>
+<ul>
+<li><strong>Un esquema por sistema origen</strong> (<code>staging_secretaria</code>, <code>staging_biblioteca</code>) en lugar de mezclarlo todo. Cuando haya dos tablas <code>alumnos</code> de dos sistemas distintos, y las habrá, el problema estará resuelto de antemano.</li>
+<li><strong>Nombres de origen, no nombres bonitos</strong>. Si en el ERP la tabla se llama <code>res_partner</code>, en staging se llama <code>res_partner</code>. El vocabulario de negocio se introduce en la transformación, y así el rastro hasta el origen es directo.</li>
+<li><strong>Metadatos de carga sin excepción</strong>, aunque el formato ya versione. El versionado dice cuándo se escribió la fila; los metadatos dicen de qué ejecución vino y de qué sistema.</li>
+<li><strong>Particionar por fecha de carga</strong> las tablas grandes, que es lo que hace barato reprocesar un día suelto.</li>
+<li><strong>Nadie construye informes sobre staging</strong>. En cuanto un cuadro de mando apunta directamente aquí, la capa deja de poder evolucionar con el origen y hemos perdido la razón de ser de tenerla.</li>
+</ul>
+</section>
+<section id="y-quién-sabe-que-esto-existe" class="level2" data-number="15.7">
+<h2 data-number="15.7" class="anchored" data-anchor-id="y-quién-sabe-que-esto-existe"><span class="header-section-number">15.7</span> ¿Y quién sabe que esto existe?</h2>
+<p>Cerramos la ingesta con una pregunta que no es técnica. Tenemos los datos aterrizados, versionados y trazables. Sabemos de dónde vino cada fila y cuándo llegó, podemos reconstruir el pasado y tenemos el historial de cambios de cada tabla. Todo eso es cierto y todo eso lo sabemos <strong>nosotros</strong>.</p>
+<p>Dentro de seis meses, cuando la capa de aterrizaje tenga cuarenta tablas de cinco sistemas distintos, alguien que no estuvo en esta conversación va a abrir el lago y va a necesitar saber qué significa <code>cursa</code>, por qué hay dos tablas de alumnos, quién responde si los números no cuadran y si puede fiarse de lo que ve. Nada de lo que hemos construido en esta parte responde a eso.</p>
+<p>Es el terreno del <strong>metadatado</strong> y del catálogo de gobierno, con OpenMetadata como referencia abierta más habitual: glosario de negocio, propietarios, linaje a nivel de columna, reglas de calidad y contratos de datos en formato estándar. Le hemos dedicado <a href="../../content/appendices/metadatado.html">un apéndice completo</a>, incluida la parte que no encaja del todo con un stack basado en DuckLake y cómo suplirla reconciliando lo que ya generan dlt y dbt, porque conviene saberlo antes de dibujar la flecha en el diagrama.</p>
+<p>Merece la pena leerlo ahora, con la ingesta fresca, porque buena parte de lo que un catálogo necesita saber lo hemos ido generando sin darnos cuenta: los metadatos de carga, el registro de ejecuciones de dlt y el historial de versiones de DuckLake son ya materia prima de linaje.</p>
+</section>
+<section id="lo-que-viene" class="level2" data-number="15.8">
+<h2 data-number="15.8" class="anchored" data-anchor-id="lo-que-viene"><span class="header-section-number">15.8</span> Lo que viene</h2>
+<p>Con la materia prima en su sitio, toca darle forma. En la <a href="../../content/transform/intro.html">transformación</a> recorreremos el camino que ya anticipamos al hablar de <a href="../../content/sistemas/arquitecturas.html#la-caja-fuerte">la caja fuerte</a>: convertir esta capa de aterrizaje en un <strong>raw vault</strong>, con los conceptos de negocio identificados en hubs, enlaces y satélites; aplicar después las reglas de negocio en el <strong>business vault</strong>; y presentar finalmente al usuario un modelo que pueda consumir sin saber nada de todo esto.</p>
+<p>Y lo haremos sobre las mismas dos piezas, con dbt orquestando las transformaciones en SQL y DuckLake sosteniendo el almacenamiento. Con una ventaja que ya hemos visto funcionando: <code>table_changes</code> nos entrega los cambios entre dos versiones sin tener que recalcularlos, que es justo lo que come un satélite.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/iraitzm\.github\.io\/ingenieria-datos\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../content/load/herramientas.html" class="pagination-link" aria-label="Herramientas de ingesta">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../content/transform/intro.html" class="pagination-link" aria-label="Transformación">
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2025, Iraitz Montalbán</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/IraitzM">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/iraitzmontalban/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>11&nbsp; Formatos abiertos – Ingeniería de datos</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -20,10 +26,45 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -39,10 +80,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e7f3a12788663e0f4eda461cc946c84c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -57,7 +98,7 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -89,6 +130,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <meta property="og:title" content="11&nbsp; Formatos abiertos – Ingeniería de datos">
@@ -246,6 +293,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -260,7 +325,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -276,14 +359,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -305,8 +400,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/metadatado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -321,13 +422,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#delta-lake" id="toc-delta-lake" class="nav-link active" data-scroll-target="#delta-lake"><span class="header-section-number">11.1</span> Delta Lake</a></li>
-  <li><a href="#apache-hudi" id="toc-apache-hudi" class="nav-link" data-scroll-target="#apache-hudi"><span class="header-section-number">11.2</span> Apache Hudi</a>
+  <li><a href="#el-lago-tal-y-como-lo-dejamos" id="toc-el-lago-tal-y-como-lo-dejamos" class="nav-link active" data-scroll-target="#el-lago-tal-y-como-lo-dejamos"><span class="header-section-number">11.1</span> El lago tal y como lo dejamos</a></li>
+  <li><a href="#qué-añade-un-formato-de-tabla" id="toc-qué-añade-un-formato-de-tabla" class="nav-link" data-scroll-target="#qué-añade-un-formato-de-tabla"><span class="header-section-number">11.2</span> Qué añade un formato de tabla</a>
   <ul class="collapse">
-  <li><a href="#apache-xtable" id="toc-apache-xtable" class="nav-link" data-scroll-target="#apache-xtable"><span class="header-section-number">11.2.1</span> Apache XTable</a></li>
+  <li><a href="#borrar-y-actualizar-dos-escuelas" id="toc-borrar-y-actualizar-dos-escuelas" class="nav-link" data-scroll-target="#borrar-y-actualizar-dos-escuelas"><span class="header-section-number">11.2.1</span> Borrar y actualizar: dos escuelas</a></li>
   </ul></li>
-  <li><a href="#apache-iceberg" id="toc-apache-iceberg" class="nav-link" data-scroll-target="#apache-iceberg"><span class="header-section-number">11.3</span> Apache Iceberg</a></li>
-  <li><a href="#sistemas-de-gestión" id="toc-sistemas-de-gestión" class="nav-link" data-scroll-target="#sistemas-de-gestión"><span class="header-section-number">12</span> Sistemas de gestión</a></li>
+  <li><a href="#los-tres-formatos" id="toc-los-tres-formatos" class="nav-link" data-scroll-target="#los-tres-formatos"><span class="header-section-number">11.3</span> Los tres formatos</a>
+  <ul class="collapse">
+  <li><a href="#delta-lake" id="toc-delta-lake" class="nav-link" data-scroll-target="#delta-lake"><span class="header-section-number">11.3.1</span> Delta Lake</a></li>
+  <li><a href="#apache-iceberg" id="toc-apache-iceberg" class="nav-link" data-scroll-target="#apache-iceberg"><span class="header-section-number">11.3.2</span> Apache Iceberg</a></li>
+  <li><a href="#apache-hudi" id="toc-apache-hudi" class="nav-link" data-scroll-target="#apache-hudi"><span class="header-section-number">11.3.3</span> Apache Hudi</a></li>
+  </ul></li>
+  <li><a href="#el-catálogo-la-pieza-que-faltaba" id="toc-el-catálogo-la-pieza-que-faltaba" class="nav-link" data-scroll-target="#el-catálogo-la-pieza-que-faltaba"><span class="header-section-number">11.4</span> El catálogo, la pieza que faltaba</a></li>
+  <li><a href="#la-tregua-entre-formatos" id="toc-la-tregua-entre-formatos" class="nav-link" data-scroll-target="#la-tregua-entre-formatos"><span class="header-section-number">11.5</span> La tregua entre formatos</a>
+  <ul class="collapse">
+  <li><a href="#apache-xtable" id="toc-apache-xtable" class="nav-link" data-scroll-target="#apache-xtable"><span class="header-section-number">11.5.1</span> Apache XTable</a></li>
+  <li><a href="#uniform" id="toc-uniform" class="nav-link" data-scroll-target="#uniform"><span class="header-section-number">11.5.2</span> UniForm</a></li>
+  <li><a href="#la-convergencia-de-las-especificaciones" id="toc-la-convergencia-de-las-especificaciones" class="nav-link" data-scroll-target="#la-convergencia-de-las-especificaciones"><span class="header-section-number">11.5.3</span> La convergencia de las especificaciones</a></li>
+  </ul></li>
+  <li><a href="#el-mantenimiento-no-es-gratis" id="toc-el-mantenimiento-no-es-gratis" class="nav-link" data-scroll-target="#el-mantenimiento-no-es-gratis"><span class="header-section-number">11.6</span> El mantenimiento no es gratis</a></li>
+  <li><a href="#otra-vuelta-de-tuerca" id="toc-otra-vuelta-de-tuerca" class="nav-link" data-scroll-target="#otra-vuelta-de-tuerca"><span class="header-section-number">11.7</span> Otra vuelta de tuerca</a></li>
+  <li><a href="#cómo-elegir" id="toc-cómo-elegir" class="nav-link" data-scroll-target="#cómo-elegir"><span class="header-section-number">11.8</span> Cómo elegir</a></li>
   </ul>
 </nav>
     </div>
@@ -356,33 +471,417 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p>Los sistemas analíticos se benefician de forma especial de formatos abiertos, interoperables y de almacenamiento columnar, como es el caso de Apache Spark. Trabajar con ficheros y carpetas nos permite de forma sencilla implementar particionado para filtrar de manera eficiente los ficheros que no son necesarios en las consultas.</p>
-<p>Sin embargo, con la proliferación de sistemas en <em>streaming</em> o flujos de datos, se plantearon problemas propios. Por ejemplo, la modificación de registros resulta pesada, ya que debemos cargar los ficheros completos, alterar y reescribir su contenido. Recordemos que al estar ordenados en columnas, modificar un registro resulta pesado pero esto se debe a que asumimos no era necesario.</p>
+<p>Los sistemas analíticos se benefician de forma especial de formatos abiertos, interoperables y de almacenamiento columnar, como es el caso de <a href="https://parquet.apache.org/">Apache Parquet</a>. Trabajar con ficheros y carpetas nos permite de forma sencilla implementar <a href="../../content/sistemas/dbms_analítica.html#particionado">particionado</a> para filtrar de manera eficiente los ficheros que no son necesarios en las consultas.</p>
+<p>Sin embargo, con la proliferación de sistemas en <em>streaming</em> o flujos de datos, se plantearon problemas propios. Por ejemplo, la modificación de registros resulta pesada, ya que debemos cargar los ficheros completos, alterar y reescribir su contenido. Recordemos que al estar ordenados en columnas, modificar un registro resulta costoso, pero esto se debe a que asumimos que no era necesario.</p>
 <p>Menos aún ofrecer capacidades ACID, pero ¿y si dos procesos quieren intervenir y alterar un mismo fichero? Los sistemas basados en ficheros son amigables a la adición (<em>append</em>) pero no tanto a la modificación.</p>
-<section id="delta-lake" class="level2" data-number="11.1">
-<h2 data-number="11.1" class="anchored" data-anchor-id="delta-lake"><span class="header-section-number">11.1</span> Delta Lake</h2>
-<p>Posiblemente unos de los primeros en intentar dar respuesta a este problema fueron la amable gente de Databricks. Basado en el formato Parquet, <a href="https://delta.io/">Delta</a> se presenta como un formato que permite:</p>
+<section id="el-lago-tal-y-como-lo-dejamos" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="el-lago-tal-y-como-lo-dejamos"><span class="header-section-number">11.1</span> El lago tal y como lo dejamos</h2>
+<p>Vale la pena ver el problema en concreto, porque es de esos que se entienden mejor tocándolos. Montemos un lago mínimo: una tabla de matrículas escrita como Parquet particionado por año, exactamente lo que haría cualquier proceso de la era Hadoop.</p>
+<div id="57558d6d" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>shutil.rmtree(<span class="st">"_lago_demo"</span>, ignore_errors<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE matriculas AS</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT * FROM (VALUES</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">        (1, 'Iraitz', 2024, 'confirmada'),</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="st">        (2, 'Javier', 2024, 'confirmada'),</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="st">        (3, 'Nerea',  2025, 'pendiente')</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="st">    ) AS t(id, alumno, anio, estado)</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="st">    COPY matriculas TO '_lago_demo'</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="st">    (FORMAT PARQUET, PARTITION_BY (anio), OVERWRITE_OR_IGNORE)</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>[<span class="bu">str</span>(p) <span class="cf">for</span> p <span class="kw">in</span> <span class="bu">sorted</span>(pathlib.Path(<span class="st">"_lago_demo"</span>).rglob(<span class="st">"*.parquet"</span>))]</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>['_lago_demo/anio=2024/data_0.parquet', '_lago_demo/anio=2025/data_0.parquet']</code></pre>
+</div>
+</div>
+<p>La tabla <strong>es</strong> ese árbol de carpetas, y consultarla consiste en listarlo y leer lo que haya dentro.</p>
+<div id="b3d680ab" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT * FROM read_parquet('_lago_demo/**/*.parquet', hive_partitioning = true)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY id</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">alumno</th>
+<th data-quarto-table-cell-role="th">estado</th>
+<th data-quarto-table-cell-role="th">anio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>Iraitz</td>
+<td>confirmada</td>
+<td>2024</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>Javier</td>
+<td>confirmada</td>
+<td>2024</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>Nerea</td>
+<td>pendiente</td>
+<td>2025</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Hasta aquí, todo bien. Ahora llega una corrección: Nerea confirma su matrícula. Como Parquet es inmutable, no hay un <code>UPDATE</code> posible. Lo que hay es leer el fichero entero, aplicar el cambio en memoria y sobrescribirlo.</p>
+<div id="a0ca01c8" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE particion_2025 AS</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT id, alumno,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">           CASE WHEN id = 3 THEN 'confirmada' ELSE estado END AS estado</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM read_parquet('_lago_demo/anio=2025/*.parquet')</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">    COPY particion_2025 TO '_lago_demo/anio=2025/data_0.parquet' (FORMAT PARQUET)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT * FROM read_parquet('_lago_demo/**/*.parquet', hive_partitioning = true)</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY id</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">alumno</th>
+<th data-quarto-table-cell-role="th">estado</th>
+<th data-quarto-table-cell-role="th">anio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>Iraitz</td>
+<td>confirmada</td>
+<td>2024</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>Javier</td>
+<td>confirmada</td>
+<td>2024</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>Nerea</td>
+<td>confirmada</td>
+<td>2025</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>El resultado es correcto, y esa es justamente la trampa: parece que funciona. Lo que no se ve es todo lo que ha dejado de cumplirse por el camino.</p>
 <ul>
-<li>La modificación eficiente de registros manteniendo la información versionada</li>
-<li>Operación transaccional</li>
-<li>Unificación de las necesidades de flujos de datos (<em>streaming</em>) y por lotes (<em>batch</em>) tan común en arquitecturas <em>lambda</em>.</li>
+<li><strong>No hay atomicidad</strong>. Entre el borrado del fichero antiguo y la escritura del nuevo hay una ventana en la que la partición no existe. Si el proceso muere ahí, la tabla queda incompleta y nadie lo sabe.</li>
+<li><strong>No hay aislamiento</strong>. Un lector que llegue en ese instante verá una tabla a medias. Y si dos procesos escriben a la vez en la misma partición, el último gana y el trabajo del otro desaparece en silencio.</li>
+<li><strong>No hay historia</strong>. El estado anterior ya no existe. No podemos saber qué decía la tabla ayer, ni reproducir el informe que alguien generó la semana pasada.</li>
+<li><strong>Listar es caro</strong>. Averiguar qué ficheros componen la tabla exige recorrer el directorio. En un sistema de ficheros local es instantáneo; sobre almacenamiento de objetos, con decenas de miles de claves, es de las operaciones más lentas y caras que existen.</li>
+<li><strong>El esquema es una convención</strong>. Si un fichero trae una columna nueva y otro no, nadie arbitra. El motor de consulta hará lo que buenamente pueda.</li>
+<li><strong>Los ficheros pequeños se acumulan</strong>. Un proceso que escribe cada cinco minutos genera 288 ficheros al día por partición, y leer 288 ficheros diminutos cuesta mucho más que leer uno grande.</li>
 </ul>
+<p>Ninguno de estos problemas es exótico. Son exactamente las garantías que un gestor de base de datos lleva ofreciendo desde los años setenta, y que perdimos al mudarnos a un lago de ficheros.</p>
 </section>
-<section id="apache-hudi" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="apache-hudi"><span class="header-section-number">11.2</span> Apache Hudi</h2>
-<p><a href="https://www.onehouse.ai/">Onehouse</a></p>
-<section id="apache-xtable" class="level3" data-number="11.2.1">
-<h3 data-number="11.2.1" class="anchored" data-anchor-id="apache-xtable"><span class="header-section-number">11.2.1</span> Apache XTable</h3>
-<p><a href="https://xtable.apache.org/">Xtable</a> surge de la falta de consonancia entre proveedores y busca hacer interoperables todos los formatos.</p>
+<section id="qué-añade-un-formato-de-tabla" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="qué-añade-un-formato-de-tabla"><span class="header-section-number">11.2</span> Qué añade un formato de tabla</h2>
+<p>La idea que resuelve todo lo anterior cabe en una frase: <strong>una tabla deja de ser una carpeta y pasa a ser una lista de ficheros</strong>.</p>
+<p>En lugar de deducir el contenido de la tabla listando un directorio, se mantiene junto a los datos una capa de metadatos que dice, de forma explícita, qué ficheros componen la tabla en cada momento. Los datos siguen siendo Parquet corriente; lo que se añade es el índice que los organiza.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+    cat["Catálogo&lt;br/&gt;&lt;i&gt;apunta a la versión actual&lt;/i&gt;"]
+
+    subgraph meta ["Capa de metadatos"]
+        v3["versión 3 (actual)"]
+        v2["versión 2"]
+        v1["versión 1"]
+        man["Manifiestos&lt;br/&gt;&lt;i&gt;qué fichero, qué rangos,&lt;br/&gt;cuántas filas&lt;/i&gt;"]
+    end
+
+    subgraph datos ["Almacenamiento de objetos"]
+        p1[/"parquet"/]
+        p2[/"parquet"/]
+        p3[/"parquet"/]
+        p4[/"parquet"/]
+    end
+
+    cat --&gt; v3
+    v3 --&gt; man
+    v2 -.-&gt; man
+    v1 -.-&gt; man
+    man --&gt; p1 &amp; p2 &amp; p3 &amp; p4
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>De esa indirección salen, casi por añadidura, todas las propiedades que echábamos en falta:</p>
+<ul>
+<li><strong>Confirmación atómica</strong>. Escribir consiste en dejar los Parquet nuevos en el almacenamiento (todavía invisibles, porque nadie los referencia) y después cambiar el puntero a la nueva versión. Esa última operación es única e indivisible: o se ve la versión anterior completa o la nueva completa, nunca una mezcla.</li>
+<li><strong>Concurrencia optimista</strong>. Dos escritores pueden trabajar en paralelo. Al confirmar, cada uno comprueba que la versión de la que partió sigue siendo la vigente; el que llega tarde reintenta sobre la versión nueva, y solo falla si el conflicto es real.</li>
+<li><strong>Viaje en el tiempo</strong>. Las versiones antiguas siguen siendo válidas mientras sus ficheros existan, así que consultar la tabla a fecha del mes pasado es indicar otro puntero.</li>
+<li><strong>Poda por estadísticas</strong>. Los manifiestos guardan, por fichero, los valores mínimo y máximo de cada columna. Filtrar por una columna que no es de partición ya no obliga a abrir todos los ficheros, basta con descartar los que no pueden contener el valor buscado.</li>
+<li><strong>Evolución de esquema real</strong>. Las columnas se identifican por un identificador interno y no por su posición o su nombre, de modo que renombrar, añadir o reordenar es una operación de metadatos que no toca un solo byte de datos.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Lo importante es lo que no cambia
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Conviene insistir en esto porque es el motivo de que se llamen formatos abiertos: <strong>los datos siguen siendo Parquet</strong>. Lo que estos formatos añaden es la contabilidad. Si mañana la herramienta que usamos desaparece, los ficheros siguen ahí y siguen siendo legibles por cualquier cosa que sepa leer Parquet, que a estas alturas es todo.</p>
+<p>Es la diferencia esencial con un almacén propietario, donde el dato vive en un formato interno al que solo se accede a través del motor que lo escribió.</p>
+</div>
+</div>
+<section id="borrar-y-actualizar-dos-escuelas" class="level3" data-number="11.2.1">
+<h3 data-number="11.2.1" class="anchored" data-anchor-id="borrar-y-actualizar-dos-escuelas"><span class="header-section-number">11.2.1</span> Borrar y actualizar: dos escuelas</h3>
+<p>Queda pendiente cómo se materializa un borrado o una actualización, porque los ficheros Parquet siguen siendo inmutables. Hay dos estrategias, y todos los formatos acaban ofreciendo ambas.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Copy on write</strong></th>
+<th><strong>Merge on read</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Al escribir</td>
+<td>Se reescribe el fichero afectado completo</td>
+<td>Se anota aparte qué filas quedan invalidadas</td>
+</tr>
+<tr class="even">
+<td>Coste de escritura</td>
+<td>Alto</td>
+<td>Bajo</td>
+</tr>
+<tr class="odd">
+<td>Coste de lectura</td>
+<td>Ninguno</td>
+<td>Hay que combinar datos y marcas de borrado</td>
+</tr>
+<tr class="even">
+<td>Encaja con</td>
+<td>Cargas por lotes, tablas que se leen mucho</td>
+<td>Flujos frecuentes, muchas modificaciones pequeñas</td>
+</tr>
+</tbody>
+</table>
+<p>La segunda opción ha ido ganando terreno con los <strong>vectores de borrado</strong> (<em>deletion vectors</em>), que son mapas de bits compactos indicando qué posiciones de un fichero ya no cuentan. Marcar una fila como borrada pasa a costar unos pocos bytes en lugar de reescribir cientos de megas, a cambio de que la lectura tenga algo más de trabajo y de que la compactación posterior sea obligatoria.</p>
 </section>
 </section>
-<section id="apache-iceberg" class="level2" data-number="11.3">
-<h2 data-number="11.3" class="anchored" data-anchor-id="apache-iceberg"><span class="header-section-number">11.3</span> Apache Iceberg</h2>
-<p><a href="tabular.io">Tabular</a> que fue adquirida por Databricks es el promotor principal de este formato que poco a poco se ha convertido en el estándar.</p>
+<section id="los-tres-formatos" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="los-tres-formatos"><span class="header-section-number">11.3</span> Los tres formatos</h2>
+<p>Tres proyectos llegaron a esta misma conclusión de forma independiente, cada uno resolviendo el problema que tenía delante.</p>
+<section id="delta-lake" class="level3" data-number="11.3.1">
+<h3 data-number="11.3.1" class="anchored" data-anchor-id="delta-lake"><span class="header-section-number">11.3.1</span> Delta Lake</h3>
+<p>Posiblemente unos de los primeros en intentar dar respuesta a este problema fueron la amable gente de Databricks. Basado en el formato Parquet, <a href="https://delta.io/">Delta</a> mantiene un <strong>registro de transacciones</strong> en una carpeta <code>_delta_log/</code> junto a los datos: una secuencia de ficheros JSON numerados, cada uno describiendo qué ficheros se añaden y cuáles se retiran en esa transacción. La atomicidad sale de que solo un escritor puede crear el fichero con el siguiente número.</p>
+<p>Reconstruir el estado de la tabla es reproducir el registro desde el principio, algo que se vuelve lento tras miles de transacciones, así que periódicamente se consolida todo en un <em>checkpoint</em> en Parquet a partir del cual se sigue leyendo.</p>
+<p>Sus señas de identidad:</p>
+<ul>
+<li>La modificación eficiente de registros manteniendo la información versionada.</li>
+<li>Operación transaccional.</li>
+<li>Unificación de las necesidades de flujos de datos (<em>streaming</em>) y por lotes (<em>batch</em>), tan común en arquitecturas <em>lambda</em>.</li>
+</ul>
+<p>Es el formato nativo de Databricks y el que sostiene su <a href="../../content/sistemas/arquitecturas.html#la-casa-del-lago">arquitectura medallón</a>. Está donado a la Linux Foundation, aunque durante años la distancia entre lo que hacía la versión abierta y lo que hacía la de Databricks fue motivo de queja recurrente.</p>
 </section>
-<section id="sistemas-de-gestión" class="level1" data-number="12">
-<h1 data-number="12"><span class="header-section-number">12</span> Sistemas de gestión</h1>
-<p>Debido al mantenimiento que requieren estos sistemas, algo nada trivial, se han planteado soluciones como <a href="https://amoro.apache.org/">Apache Amoro</a> que ayuda al menatnimiento de la capa de almacenamiento ofreciendo un canal de interacción unificado.</p>
+<section id="apache-iceberg" class="level3" data-number="11.3.2">
+<h3 data-number="11.3.2" class="anchored" data-anchor-id="apache-iceberg"><span class="header-section-number">11.3.2</span> Apache Iceberg</h3>
+<p>Nació en Netflix, de manos de Ryan Blue y Dan Weeks, para resolver un problema muy concreto: tablas con millones de particiones sobre S3 donde el simple hecho de listar directorios hacía inviable cualquier consulta. Se donó a la Apache Software Foundation en 2018.</p>
+<p>Su modelo de metadatos es un árbol en tres niveles (fichero de metadatos de la tabla, lista de manifiestos por versión, y manifiestos con las estadísticas de cada fichero de datos), lo que le permite planificar una consulta sin tocar el almacenamiento más que para leer unos pocos ficheros de metadatos.</p>
+<p>Dos ideas suyas merecen mención aparte:</p>
+<ul>
+<li><strong>Particionado oculto</strong>. En un lago clásico, si la tabla está particionada por <code>anio=2025/mes=03</code>, quien consulta tiene que acordarse de filtrar por esas columnas derivadas o se llevará una lectura completa por delante. Iceberg registra la transformación (<code>month(fecha_matricula)</code>) en los metadatos y la aplica sola cuando alguien filtra por <code>fecha_matricula</code>. El usuario no necesita saber cómo está particionada la tabla.</li>
+<li><strong>Evolución de particionado</strong>. Se puede cambiar el criterio de particionado de una tabla sin reescribirla. Los datos antiguos conservan el esquema de partición con el que se escribieron y los nuevos usan el actual, conviviendo en la misma tabla.</li>
+</ul>
+<p><a href="https://tabular.io">Tabular</a>, la empresa fundada por sus creadores, fue adquirida por Databricks en 2024, movimiento que zanjó buena parte del debate sobre qué formato iba a acabar siendo el estándar de intercambio.</p>
+</section>
+<section id="apache-hudi" class="level3" data-number="11.3.3">
+<h3 data-number="11.3.3" class="anchored" data-anchor-id="apache-hudi"><span class="header-section-number">11.3.3</span> Apache Hudi</h3>
+<p><a href="https://hudi.apache.org/">Hudi</a> (de <em>Hadoop Upserts Deletes and Incrementals</em>) salió de Uber, donde el problema no era analítico sino de ingesta: aplicar sobre el lago, cada pocos minutos, los cambios que llegaban de las bases de datos operacionales.</p>
+<p>Por eso su diseño gira alrededor de la <strong>clave primaria</strong>. Hudi mantiene un índice a nivel de registro que dice en qué fichero vive cada clave, lo que convierte el <em>upsert</em> en una operación dirigida en lugar de en un cruce contra la tabla entera. Fue además quien acuñó los términos copy on write y merge on read, y quien primero ofreció <strong>consultas incrementales</strong>: pedirle a la tabla no su contenido, sino los cambios ocurridos entre dos instantes, que es exactamente lo que necesita alimentar una capa aguas abajo sin recalcularla.</p>
+<p><a href="https://www.onehouse.ai/">Onehouse</a>, fundada por Vinoth Chandar, es el principal impulsor comercial del proyecto.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Un cuarto en discordia
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Merece una mención <a href="https://paimon.apache.org/">Apache Paimon</a>, surgido del proyecto Flink Table Store. Donde los tres anteriores parten de un mundo de lotes al que añaden capacidades de flujo, Paimon parte del flujo: organiza los datos en una estructura tipo LSM (la misma familia de estructuras que usan las bases de datos clave-valor), lo que le da actualizaciones a latencia muy baja. Si el caso de uso es fundamentalmente <em>streaming</em> con Flink, es una opción a considerar seriamente.</p>
+</div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Delta Lake</strong></th>
+<th><strong>Apache Iceberg</strong></th>
+<th><strong>Apache Hudi</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Origen</td>
+<td>Databricks</td>
+<td>Netflix</td>
+<td>Uber</td>
+</tr>
+<tr class="even">
+<td>Metadatos</td>
+<td>Registro secuencial de transacciones</td>
+<td>Árbol de manifiestos con estadísticas</td>
+<td>Línea temporal e índice por clave</td>
+</tr>
+<tr class="odd">
+<td>Fuerte en</td>
+<td>Integración con Spark y Databricks</td>
+<td>Escala, motores heterogéneos, evolución</td>
+<td>Ingesta incremental, <em>upserts</em></td>
+</tr>
+<tr class="even">
+<td>Adopción</td>
+<td>Ecosistema Databricks</td>
+<td>Estándar de facto multi-motor</td>
+<td>Nicho de ingesta de alta frecuencia</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="el-catálogo-la-pieza-que-faltaba" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="el-catálogo-la-pieza-que-faltaba"><span class="header-section-number">11.4</span> El catálogo, la pieza que faltaba</h2>
+<p>Queda un cabo suelto en el diagrama de antes. Si confirmar una transacción consiste en cambiar el puntero a la versión vigente, <strong>alguien tiene que custodiar ese puntero</strong> y garantizar que dos escritores no lo cambian a la vez. Sobre un sistema de ficheros esto se resuelve solo (crear un fichero es atómico), pero el almacenamiento de objetos no ofrece esa garantía de forma fiable. Ahí es donde entra el catálogo.</p>
+<p>Durante años ese papel lo hizo el <strong>Hive Metastore</strong>, heredado de la era Hadoop, con su base de datos relacional detrás y su protocolo Thrift. Funcionaba, pero arrastraba tantos años de decisiones ajenas que nadie lo defendía con entusiasmo.</p>
+<p>La respuesta ha sido especificar un <strong>catálogo REST</strong>: en lugar de que cada motor implemente la lógica de metadatos, el catálogo expone una API y se convierte en el árbitro único de las transacciones. Todo motor que hable ese protocolo puede leer y escribir la misma tabla con garantías. Las implementaciones más habituales:</p>
+<ul>
+<li><a href="https://polaris.apache.org/"><strong>Apache Polaris</strong></a>, donado por Snowflake a la fundación Apache.</li>
+<li><strong>Unity Catalog</strong>, de Databricks, con su versión de código abierto.</li>
+<li><strong>AWS Glue</strong> y <strong>S3 Tables</strong>, la vía gestionada en esa nube.</li>
+<li><a href="https://projectnessie.org/"><strong>Project Nessie</strong></a>, que añade una idea llamativa: ramas y fusiones al estilo de Git sobre el conjunto del lago, de modo que se puede probar una carga en una rama y publicarla de golpe.</li>
+<li><a href="https://docs.lakekeeper.io/"><strong>Lakekeeper</strong></a> o <a href="https://gravitino.apache.org/"><strong>Apache Gravitino</strong></a>, alternativas abiertas más recientes, la segunda con vocación de federar varios catálogos heterogéneos.</li>
+</ul>
+<p>Que la discusión se haya desplazado del formato al catálogo no es casual. El formato es una especificación pública que cualquiera puede implementar; el catálogo es el punto por el que pasa todo el mundo, y por tanto donde se ejercen el gobierno, los permisos y, si nadie lo evita, el bloqueo de proveedor.</p>
+</section>
+<section id="la-tregua-entre-formatos" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="la-tregua-entre-formatos"><span class="header-section-number">11.5</span> La tregua entre formatos</h2>
+<p>Durante un tiempo la elección de formato se vivió como una apuesta irreversible. Hoy lo es bastante menos, por tres vías.</p>
+<section id="apache-xtable" class="level3" data-number="11.5.1">
+<h3 data-number="11.5.1" class="anchored" data-anchor-id="apache-xtable"><span class="header-section-number">11.5.1</span> Apache XTable</h3>
+<p><a href="https://xtable.apache.org/">XTable</a> surge de la falta de consonancia entre proveedores y busca hacer interoperables todos los formatos. Su observación de partida es la que ya hemos repetido: si los ficheros de datos son los mismos Parquet en los tres casos, lo único que difiere son los metadatos, y <strong>los metadatos se pueden traducir</strong>. XTable genera los metadatos de Iceberg para una tabla que se escribió como Delta, o al revés, sin mover ni un byte de datos. Una misma tabla puede así presentarse en varios formatos a la vez.</p>
+</section>
+<section id="uniform" class="level3" data-number="11.5.2">
+<h3 data-number="11.5.2" class="anchored" data-anchor-id="uniform"><span class="header-section-number">11.5.2</span> UniForm</h3>
+<p>Delta incorporó la misma idea de fábrica: una tabla declarada con <strong>UniForm</strong> escribe, junto a su registro de transacciones, los metadatos equivalentes de Iceberg. Para un motor que solo hable Iceberg, la tabla es una tabla Iceberg perfectamente normal.</p>
+</section>
+<section id="la-convergencia-de-las-especificaciones" class="level3" data-number="11.5.3">
+<h3 data-number="11.5.3" class="anchored" data-anchor-id="la-convergencia-de-las-especificaciones"><span class="header-section-number">11.5.3</span> La convergencia de las especificaciones</h3>
+<p>Las tres especificaciones llevan varios años copiándose las buenas ideas. Los vectores de borrado, el tipo <code>VARIANT</code> para datos semiestructurados como los que veíamos al hablar de <a href="../../content/sistemas/arquitecturas.html#ordenando-el-lago">arquitecturas</a>, el linaje a nivel de fila o la ampliación de tipos sin reescritura han ido apareciendo en todas ellas. La versión 3 de la especificación de Iceberg y las últimas de Delta son, en lo esencial, muy parecidas.</p>
+</section>
+</section>
+<section id="el-mantenimiento-no-es-gratis" class="level2" data-number="11.6">
+<h2 data-number="11.6" class="anchored" data-anchor-id="el-mantenimiento-no-es-gratis"><span class="header-section-number">11.6</span> El mantenimiento no es gratis</h2>
+<p>Todo lo anterior tiene una contrapartida que se descubre tarde: una tabla en formato abierto <strong>es un sistema que hay que operar</strong>. No hay un proceso de fondo cuidándola salvo que alguien lo ponga.</p>
+<p>Las tareas son siempre las mismas cuatro, con distinto nombre según el formato:</p>
+<ol type="1">
+<li><strong>Compactar</strong>. Fusionar los ficheros pequeños que dejan las escrituras frecuentes en otros de tamaño razonable (unos cientos de megas es la regla habitual). Es el mantenimiento que más se nota en el tiempo de consulta.</li>
+<li><strong>Caducar versiones</strong>. El viaje en el tiempo es finito por definición: mientras haya versiones vivas, sus ficheros no se pueden borrar. Fijar una retención es decidir cuánto pasado queremos poder consultar y cuánto almacenamiento estamos dispuestos a pagar por ello.</li>
+<li><strong>Limpiar huérfanos</strong>. Ficheros que quedaron escritos por transacciones que fallaron y que ya no referencia ninguna versión. Ocupan y no sirven. El orden importa: primero se caducan versiones y después se limpian huérfanos, nunca al revés.</li>
+<li><strong>Reorganizar</strong>. Reescribir manifiestos, recalcular estadísticas y, sobre todo, ordenar o agrupar los datos por las columnas por las que realmente se filtra, que es lo que hace que la poda por estadísticas funcione de verdad.</li>
+</ol>
+<p>Debido a que este mantenimiento no es nada trivial, se han planteado soluciones como <a href="https://amoro.apache.org/">Apache Amoro</a>, que se ocupa de la capa de almacenamiento ofreciendo un canal de interacción unificado y ejecutando estas tareas de forma autónoma. Las plataformas comerciales lo resuelven a su manera, y conviene saber que buena parte de lo que se paga en ellas es precisamente esto.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>La factura escondida
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Un lago sin mantenimiento no falla, se degrada. Las consultas van tardando cada vez un poco más, el almacenamiento crece por encima de lo que justifican los datos vivos y nadie sabe exactamente por qué. Para cuando resulta evidente, hay millones de ficheros diminutos que compactar.</p>
+<p>Si se adopta un formato de tabla, el trabajo de mantenimiento se planifica el primer día, no cuando molesta.</p>
+</div>
+</div>
+</section>
+<section id="otra-vuelta-de-tuerca" class="level2" data-number="11.7">
+<h2 data-number="11.7" class="anchored" data-anchor-id="otra-vuelta-de-tuerca"><span class="header-section-number">11.7</span> Otra vuelta de tuerca</h2>
+<p>Hay un detalle en todo lo que hemos visto que invita a una pregunta incómoda. Los tres formatos guardan sus metadatos <strong>en ficheros</strong>, lo que los hace autocontenidos y portables. Pero para resolver la concurrencia han acabado necesitando, todos, un catálogo con una base de datos transaccional detrás.</p>
+<p>Si de todas formas vamos a tener esa base de datos, ¿por qué seguir reconstruyendo el estado de la tabla leyendo cadenas de ficheros de manifiesto? Esa es la premisa de <a href="https://ducklake.select/">DuckLake</a>, y como es sobre lo que vamos a construir la <a href="../../content/load/staging.html">capa de aterrizaje</a>, lo dejamos apuntado aquí y lo desarrollamos allí con las manos en el teclado.</p>
+</section>
+<section id="cómo-elegir" class="level2" data-number="11.8">
+<h2 data-number="11.8" class="anchored" data-anchor-id="cómo-elegir"><span class="header-section-number">11.8</span> Cómo elegir</h2>
+<p>Para cerrar, y a riesgo de simplificar:</p>
+<ul>
+<li>Si el ecosistema es <strong>Databricks</strong>, será Delta, y no hay mucho que decidir. Con UniForm activado si algo de fuera necesita leerlo.</li>
+<li>Si conviven <strong>varios motores</strong> (Trino, Spark, Snowflake, DuckDB, Flink) y el objetivo es que ninguno sea el dueño de los datos, <strong>Iceberg</strong> es la apuesta con menos riesgo hoy, y la elección relevante pasa a ser el catálogo.</li>
+<li>Si el caso dominante son <strong><em>upserts</em> de alta frecuencia</strong> desde sistemas operacionales, merece la pena mirar Hudi (o Paimon si el motor es Flink) antes de dar por hecho lo anterior.</li>
+<li>Si el volumen es <strong>moderado</strong> y el equipo pequeño, la pregunta previa es si hace falta un lakehouse distribuido o basta con algo mucho más simple. Es una pregunta que casi nadie se hace y que ahorra bastante dinero cuando la respuesta es la segunda.</li>
+</ul>
+<p>En cualquiera de los casos, la garantía de fondo es la misma y es la que da nombre al capítulo: los datos son Parquet, están en un almacenamiento que controlamos nosotros y se pueden leer sin pedir permiso a nadie. Todo lo demás es reversible.</p>
 
 
 </section>
@@ -439,13 +938,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

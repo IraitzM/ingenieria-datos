@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; Base de datos operacional – Ingeniería de datos</title>
+<title>13&nbsp; Patrones de carga – Ingeniería de datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -71,8 +71,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/sistemas/sql.html" rel="next">
-<link href="../../content/sistemas/intro.html" rel="prev">
+<link href="../../content/load/herramientas.html" rel="next">
+<link href="../../content/load/intro.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -134,37 +134,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<meta property="og:title" content="7&nbsp; Base de datos operacional – Ingeniería de datos">
+<meta property="og:title" content="13&nbsp; Patrones de carga – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -181,7 +152,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/rdbms_transaccional.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/patrones.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -259,13 +230,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
  <span class="menu-text">Sistemas gestores de datos</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
@@ -274,7 +245,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
@@ -306,13 +277,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Ingesta de datos</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
@@ -321,7 +292,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
   </div>
 </li>
@@ -448,11 +419,17 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#índices" id="toc-índices" class="nav-link active" data-scroll-target="#índices"><span class="header-section-number">7.1</span> Índices</a></li>
-  <li><a href="#transacciones" id="toc-transacciones" class="nav-link" data-scroll-target="#transacciones"><span class="header-section-number">7.2</span> Transacciones</a>
+  <li><a href="#de-etl-a-elt" id="toc-de-etl-a-elt" class="nav-link active" data-scroll-target="#de-etl-a-elt"><span class="header-section-number">13.1</span> De ETL a ELT</a></li>
+  <li><a href="#carga-completa" id="toc-carga-completa" class="nav-link" data-scroll-target="#carga-completa"><span class="header-section-number">13.2</span> Carga completa</a></li>
+  <li><a href="#carga-incremental" id="toc-carga-incremental" class="nav-link" data-scroll-target="#carga-incremental"><span class="header-section-number">13.3</span> Carga incremental</a>
   <ul class="collapse">
-  <li><a href="#acid" id="toc-acid" class="nav-link" data-scroll-target="#acid"><span class="header-section-number">7.2.1</span> ACID</a></li>
+  <li><a href="#dónde-se-rompe" id="toc-dónde-se-rompe" class="nav-link" data-scroll-target="#dónde-se-rompe"><span class="header-section-number">13.3.1</span> Dónde se rompe</a></li>
   </ul></li>
+  <li><a href="#cómo-aterriza-en-destino" id="toc-cómo-aterriza-en-destino" class="nav-link" data-scroll-target="#cómo-aterriza-en-destino"><span class="header-section-number">13.4</span> Cómo aterriza en destino</a></li>
+  <li><a href="#change-data-capture" id="toc-change-data-capture" class="nav-link" data-scroll-target="#change-data-capture"><span class="header-section-number">13.5</span> Change Data Capture</a></li>
+  <li><a href="#idempotencia-y-reprocesos" id="toc-idempotencia-y-reprocesos" class="nav-link" data-scroll-target="#idempotencia-y-reprocesos"><span class="header-section-number">13.6</span> Idempotencia y reprocesos</a></li>
+  <li><a href="#evolución-del-esquema" id="toc-evolución-del-esquema" class="nav-link" data-scroll-target="#evolución-del-esquema"><span class="header-section-number">13.7</span> Evolución del esquema</a></li>
+  <li><a href="#los-metadatos-de-carga" id="toc-los-metadatos-de-carga" class="nav-link" data-scroll-target="#los-metadatos-de-carga"><span class="header-section-number">13.8</span> Los metadatos de carga</a></li>
   </ul>
 </nav>
     </div>
@@ -462,9 +439,9 @@ window.Quarto = {
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/rdbms_transaccional.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/patrones.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></h1>
+<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></h1>
 </div>
 
 
@@ -481,70 +458,287 @@ window.Quarto = {
 </header>
 
 
-<p>Para entender las capacidades de los sistemas empleados en tiempo de aplicación, debemos entender primero algunos conceptos que permiten a estos sistemas operar de forma rápida pero manteniendo la coherencia entre operaciones. Pensemos que necesitamos plantear una web, un sistema con capas frontales de presentación de datos, servicios back-end de gestión de lógicas de negocio y un sistema de almacenamiento de datos.</p>
+<p>Sabemos ya de dónde vienen los datos. Toca decidir cómo los traemos de forma que el proceso pueda repetirse cada día sin intervención humana, que es la diferencia real entre un script y una plataforma de datos.</p>
+<section id="de-etl-a-elt" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="de-etl-a-elt"><span class="header-section-number">13.1</span> De ETL a ELT</h2>
+<p>Durante décadas el acrónimo fue <strong>ETL</strong>: extraer, transformar y cargar. El orden no era caprichoso. El almacén de datos era caro, tanto en disco como en cómputo, así que no tenía ningún sentido meter ahí datos que no fuéramos a usar. La transformación ocurría en un servidor intermedio, con herramientas dedicadas, y al destino solo llegaba el resultado ya limpio.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-    df[(Base de datos)]
-    bend[Lógica de negocio]
-    fend[Capa visual]
-
-    df --- bend
-    bend --- fend
+    o[("Origen")] --&gt; e["Extraer"] --&gt; t["Transformar"] --&gt; l["Cargar"] --&gt; d[("Almacén")]
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<p>En los últimos años, la gestión de la capa transaccional ha evolucionado significativamente. Tradicionalmente, los sistemas de bases de datos como DB2 o PostgreSQL se encargaban de controlar las transacciones, asegurando la integridad y coherencia de los datos mediante mecanismos internos. Sin embargo, con el auge de arquitecturas más complejas y distribuidas, esta responsabilidad ha pasado en gran medida a los frameworks de desarrollo liberando de esta carga al sistema de almacenamiento.</p>
-<p>Frameworks como <a href="https://spring.io/">Spring</a> en Java, entre otros, permiten definir y gestionar transacciones directamente en la lógica de negocio, desacoplando el control transaccional del sistema de almacenamiento. Esto facilita la implementación de reglas de negocio más flexibles y adaptadas a las necesidades de cada aplicación, además de permitir la integración con múltiples fuentes de datos y servicios externos. Así, la capa transaccional se ha convertido en una parte fundamental de los frameworks modernos, proporcionando herramientas avanzadas para el manejo de la consistencia y la recuperación ante fallos.</p>
-<section id="índices" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="índices"><span class="header-section-number">7.1</span> Índices</h2>
-<p>Si algo necesitamos en las aplicaciones es velocidad. ¿Cómo de rápido es buscar información en una tabla? Pues no demasiado. Aunque contemos con estructuras normalizadas que garantizan que cada <em>cliente</em> (por ejemplo) existe una sola vez en nuestra tabla, deberemos recorrerla para encontrar su registro. Podemos aliviar parte de esta búsqueda al igual que sucede en los libros, construyendo un índice que nos indique en que página o fila en nuestro caso se encuentra la información que necesitamos.</p>
-<p>Los índices son estructuras de datos que permiten a las bases de datos mantener un registro de los datos que se encuentran en la misma. Estos índices permiten a las bases de datos realizar operaciones de búsqueda más eficientes. En el caso de las bases de datos relacionales, los índices se almacenan en tablas aparte de las tablas de datos y dependiendo del algoritmo elegido tomará distinta forma.</p>
-<p>El algoritmo <a href="https://es.wikipedia.org/wiki/%C3%81rbol-B">B-tree</a> se compone de la información de la columna (o columnas deseadas) construyendo un árbol balanceado que nos permite descartar los registros cuyos valores se encuentren por encima o debajo de nuestro valor de búsqueda.</p>
-<p>Veamos un ejemplo de cómo podríamos estructurar un índice B-tree que almacene números.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/B_tree_insertion_example.png?20071128030550" class="img-fluid figure-img"></p>
-<figcaption>Ejemplo de construcción de un árbol B-Tree</figcaption>
-</figure>
+<p>Cuando el almacenamiento se abarató hasta ser casi irrelevante y el cómputo pasó a poder escalarse bajo demanda, el orden dejó de tener sentido. Hoy hablamos de <strong>ELT</strong>: extraer, cargar y transformar ya dentro del destino.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    o[("Origen")] --&gt; e["Extraer"] --&gt; l["Cargar"] --&gt; d[("Almacén")] --&gt; t["Transformar"]
+    t --&gt; d
+</pre>
 </div>
-<p>Como vemos en la imagen, cada nuevo dato altera la estructura de forma que garantizamos que cada nodo raíz plantea dos caminos con valores mayores o menores al valor del nodo. Esto permite descartar de manera eficaz la mitad de la información en cada paso y obtener un rendimiento <span class="math inline">\(\mathcal{O}(\log{n})\)</span> en promedio.</p>
-<p>Existen variantes como la <strong>B+</strong> que es la que implementan sistemas como MySQL o PostgreSQL precisamente para acelerar las búsquedas almacenando la información en los nodos hoja (nodos terminales del árbol) organizados como una lista secuencial que permite realizar eficientemente búsquedas de rangos.</p>
-<p>Es importante notar que debe construirse el índice explícitamente y que esto hace que las inserciones sean algo más lentas ya que además de insertar los datos, el sistema gestor de base de datos debe actualizar el índice. No podemos acelerar de un lado sin enlentecer de otro, pero en balance nos debería compensar. Por esto hace falta evaluar la necesidad de índices en cada caso.</p>
-</section>
-<section id="transacciones" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="transacciones"><span class="header-section-number">7.2</span> Transacciones</h2>
-<p>Cuando realizamos operaciones sobre una base de datos que presenta la información en <a href="../../content/modelado/formasnormales.html">estructuras normalizadas</a>, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.</p>
-<ol type="1">
-<li>El dinero sale de la cuenta origen</li>
-<li>El dinero se inserta en la cuenta destinataria</li>
-</ol>
-<p>¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">transacciones</span>&gt;</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">operación</span>&gt;El dinero sale de la cuenta origen&lt;/<span class="kw">operación</span>&gt;</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">operación</span>&gt;El dinero se inserta en la cuenta destinataria&lt;/<span class="kw">operación</span>&gt;</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">transacciones</span>/&gt;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="acid" class="level3" data-number="7.2.1">
-<h3 data-number="7.2.1" class="anchored" data-anchor-id="acid"><span class="header-section-number">7.2.1</span> ACID</h3>
-<p>A este paquete podemos llamarlo <strong>transacción</strong> y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de <strong>sistemas transaccionales</strong>. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo <strong>ACID</strong>:</p>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>El cambio parece cosmético y no lo es en absoluto:</p>
 <ul>
-<li><strong>Atomicidad</strong>: La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos</li>
-<li><strong>Consistencia</strong>: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.</li>
-<li><strong>Independencia</strong>: El aislamiento de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento</li>
-<li><strong>Durable</strong>: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.</li>
+<li><strong>El dato crudo se conserva</strong>. Si dentro de un año descubrimos que la transformación tenía un error, podemos rehacerla porque el original sigue ahí. Con ETL, lo que se descartaba se perdía para siempre.</li>
+<li><strong>La transformación se hace en SQL</strong>, dentro del motor, con lo que deja de necesitar una herramienta especializada y pasa a estar al alcance de mucha más gente. Es exactamente el hueco que ocupa <a href="../../content/transform/intro.html">dbt</a>.</li>
+<li><strong>Se puede cargar antes de entender</strong>. No necesitamos tener resuelto el modelado para empezar a acumular historia, algo impagable cuando la fuente es nueva.</li>
 </ul>
-<p>Con esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter <strong>analítico</strong>.</p>
-<p>El hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.</p>
-<p>La base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar a cabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores. Y muy posiblemente debamos conocer algo de <a href="../../content/sistemas/sql.html">SQL</a> para poder interactuar con estos sistemas. Para ello deberemos profundizar en dos cuestiones clave: los índices y las transacciones.</p>
-
-
+<p>A cambio, acumulamos en el destino datos que quizá nunca se usen y trasladamos allí el coste de cómputo. Es un intercambio que hoy casi siempre sale a cuenta, y es la razón por la que esta parte del libro se llama <em>ingesta</em> y no <em>ETL</em>: nuestro trabajo aquí es la <strong>E</strong> y la <strong>L</strong>, dejando la <strong>T</strong> para <a href="../../content/transform/intro.html">la parte siguiente</a>.</p>
 </section>
+<section id="carga-completa" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="carga-completa"><span class="header-section-number">13.2</span> Carga completa</h2>
+<p>La estrategia más simple: cada ejecución trae toda la tabla y reemplaza lo que hubiera en destino.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">TRUNCATE</span> <span class="kw">TABLE</span> staging.alumnos;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> staging.alumnos <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> origen.alumnos;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Se subestima con demasiada facilidad. Tiene tres virtudes enormes:</p>
+<ul>
+<li>Es <strong>idempotente</strong> por construcción, ejecutarla dos veces da el mismo resultado.</li>
+<li><strong>Se autocorrige</strong>, cualquier discrepancia acumulada desaparece en la siguiente carga.</li>
+<li><strong>Detecta las bajas</strong> sin esfuerzo, porque lo que ya no está en origen deja de estar en destino.</li>
+</ul>
+<p>Y un único defecto, que no escala. Mientras la tabla quepa en una ventana de carga razonable, la carga completa es la respuesta correcta y hay que resistirse a complicarla. La regla práctica: no optimices una carga que tarda dos minutos.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Reemplazar sin dejar el destino vacío
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>TRUNCATE</code> seguido de <code>INSERT</code> deja una ventana, quizá de minutos, en la que quien consulte la tabla la verá vacía o a medias. El patrón seguro es cargar en una tabla nueva y hacer el intercambio de nombres al final, que es una operación de catálogo instantánea. Las herramientas y formatos que veremos lo hacen por nosotros de forma transaccional.</p>
+</div>
+</div>
+</section>
+<section id="carga-incremental" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="carga-incremental"><span class="header-section-number">13.3</span> Carga incremental</h2>
+<p>Cuando la tabla ya no cabe en la ventana, solo queda traer lo que ha cambiado. Y para eso necesitamos una <strong>marca de agua</strong> (<em>watermark</em>): el valor máximo de la columna que usamos como referencia en la última ejecución, guardado en algún sitio para la siguiente.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    m[("Marca de agua&lt;br/&gt;2026-01-11 12:30")] --&gt; c["SELECT ... WHERE actualizado &gt; marca"]
+    o[("Origen")] --&gt; c
+    c --&gt; d[("Destino")]
+    c --&gt; m2[("Nueva marca&lt;br/&gt;2026-01-12 10:00")]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Veámoslo funcionando. Preparamos primero una secretaría académica de juguete, con el mismo modelo que ya conocemos pero añadiendo el campo que nos va a servir de huella.</p>
+<div id="982f7375" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>origen <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">":memory:"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>origen.executescript(<span class="st">"""</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE alumnos (</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">        id_alumno INTEGER PRIMARY KEY,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">        nombre TEXT,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">        apellido TEXT,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">        actualizado TEXT</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">    );</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">        (1, 'Iraitz', 'Montalbán', '2026-01-10 09:00:00'),</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="st">        (2, 'Javier', 'Garcia',    '2026-01-10 09:00:00'),</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="st">        (3, 'Miguel', 'Fernandez', '2026-01-11 12:30:00');</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>origen.execute(<span class="st">"SELECT * FROM alumnos"</span>).fetchall()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>[(1, 'Iraitz', 'Montalbán', '2026-01-10 09:00:00'),
+ (2, 'Javier', 'Garcia', '2026-01-10 09:00:00'),
+ (3, 'Miguel', 'Fernandez', '2026-01-11 12:30:00')]</code></pre>
+</div>
+</div>
+<p>Nuestro proceso de extracción mantiene una marca de agua y solo pide lo posterior a ella.</p>
+<div id="4cdd644e" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extraer(conexion, marca):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Devuelve los registros posteriores a la marca y la nueva marca."""</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    filas <span class="op">=</span> conexion.execute(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"SELECT * FROM alumnos WHERE actualizado &gt; ? ORDER BY actualizado"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        (marca,),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    ).fetchall()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    nueva_marca <span class="op">=</span> <span class="bu">max</span>((f[<span class="dv">3</span>] <span class="cf">for</span> f <span class="kw">in</span> filas), default<span class="op">=</span>marca)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> filas, nueva_marca</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Primera ejecución: partimos del principio de los tiempos</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>marca <span class="op">=</span> <span class="st">"1900-01-01 00:00:00"</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>filas, marca <span class="op">=</span> extraer(origen, marca)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(filas)<span class="sc">}</span><span class="ss"> registros | nueva marca: </span><span class="sc">{</span>marca<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3 registros | nueva marca: 2026-01-11 12:30:00</code></pre>
+</div>
+</div>
+<p>Si nadie toca el origen, la siguiente ejecución no trae nada. Que es justo lo que queremos.</p>
+<div id="24112357" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>filas, marca <span class="op">=</span> extraer(origen, marca)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(filas)<span class="sc">}</span><span class="ss"> registros | nueva marca: </span><span class="sc">{</span>marca<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0 registros | nueva marca: 2026-01-11 12:30:00</code></pre>
+</div>
+</div>
+<p>Ahora se matricula una alumna nueva y otro corrige su apellido.</p>
+<div id="08dacdc7" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>origen.executescript(<span class="st">"""</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES (4, 'María', 'Garcia', '2026-01-12 10:00:00');</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">    UPDATE alumnos SET apellido = 'Fernández', actualizado = '2026-01-12 11:00:00'</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE id_alumno = 3;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>filas, marca <span class="op">=</span> extraer(origen, marca)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> filas:</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"nueva marca: </span><span class="sc">{</span>marca<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(4, 'María', 'Garcia', '2026-01-12 10:00:00')
+(3, 'Miguel', 'Fernández', '2026-01-12 11:00:00')
+nueva marca: 2026-01-12 11:00:00</code></pre>
+</div>
+</div>
+<p>Dos registros, no cuatro. Eso es una carga incremental, y cabe en veinte líneas.</p>
+<section id="dónde-se-rompe" class="level3" data-number="13.3.1">
+<h3 data-number="13.3.1" class="anchored" data-anchor-id="dónde-se-rompe"><span class="header-section-number">13.3.1</span> Dónde se rompe</h3>
+<p>El ejemplo anterior funciona porque nosotros controlamos el origen. En un sistema real hay que vigilar varias cosas:</p>
+<ul>
+<li><strong>Registros que llegan tarde</strong>. Si la marca es la fecha de la operación en lugar de la fecha de modificación, un apunte con fecha de ayer insertado hoy queda por debajo de la marca y no lo veremos nunca. Por eso se usa siempre la fecha de <em>modificación técnica</em>, no la fecha de negocio.</li>
+<li><strong>Empates en la marca</strong>. Si usamos <code>&gt;</code> y varios registros comparten exactamente el mismo instante, podemos perder alguno; si usamos <code>&gt;=</code>, reprocesamos el último lote. La segunda opción es preferible, porque duplicar es recuperable si la carga es idempotente y perder no lo es.</li>
+<li><strong>Relojes distintos</strong>. La marca la genera el origen y la evalúa el origen. En cuanto entra en juego el reloj de nuestro proceso, o varios servidores con desfase, aparecen huecos. Mejor no mezclar relojes.</li>
+<li><strong>Las bajas siguen sin verse</strong>. Insistimos: ninguna marca de agua detecta un <code>DELETE</code>.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>El borrado lógico
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>La solución habitual desde el lado del origen es no borrar nunca de verdad, sino marcar el registro con un campo tipo <code>activo</code> o <code>borrado_en</code> y actualizar la fecha de modificación. Así la baja viaja como una modificación más y nuestra carga incremental la ve. Cuando podamos influir en el diseño del sistema origen, merece la pena pedirlo.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="cómo-aterriza-en-destino" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="cómo-aterriza-en-destino"><span class="header-section-number">13.4</span> Cómo aterriza en destino</h2>
+<p>Traído el lote, hay que decidir qué hacemos con él. Son tres opciones, y las herramientas de ingesta las llaman casi siempre por estos nombres:</p>
+<table class="caption-top table">
+<caption>Modos de escritura en destino</caption>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 45%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modo</th>
+<th>Qué hace</th>
+<th>Cuándo usarlo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>replace</code></td>
+<td>Vacía la tabla y escribe el lote</td>
+<td>Carga completa, tablas pequeñas o maestros</td>
+</tr>
+<tr class="even">
+<td><code>append</code></td>
+<td>Añade el lote sin mirar lo que hay</td>
+<td>Hechos inmutables: eventos, logs, transacciones</td>
+</tr>
+<tr class="odd">
+<td><code>merge</code></td>
+<td>Actualiza los registros que ya existen e inserta los nuevos, según una clave</td>
+<td>Entidades que cambian: alumnos, productos, clientes</td>
+</tr>
+</tbody>
+</table>
+<p><code>append</code> es el más barato y el más peligroso: si el lote se reprocesa, los registros se duplican. <code>merge</code>, también llamado <em>upsert</em>, es el que resuelve el caso más común y el que hace falta para nuestros alumnos, ya que un alumno que corrige su apellido debe actualizar su fila, no crear una segunda.</p>
+<p>Conviene notar que <code>merge</code> <strong>pierde la historia</strong>: al actualizar la fila, el apellido anterior desaparece. Si esa historia importa (y en un almacén de datos suele importar) hay que conservarla explícitamente, ya sea guardando todos los lotes en <code>append</code> y resolviendo el histórico en la transformación, ya sea con las dimensiones lentamente cambiantes que vimos en el <a href="../../content/modelado/modelado_analitico.html">modelado analítico</a> o con los satélites del <a href="../../content/sistemas/arquitecturas.html#la-caja-fuerte">Data Vault</a>.</p>
+</section>
+<section id="change-data-capture" class="level2" data-number="13.5">
+<h2 data-number="13.5" class="anchored" data-anchor-id="change-data-capture"><span class="header-section-number">13.5</span> Change Data Capture</h2>
+<p>Todo lo anterior consulta el estado actual del origen y deduce qué ha cambiado. El <strong>CDC</strong> hace lo contrario: lee el registro de transacciones que la base de datos ya escribe para poder recuperarse de una caída, y del que se puede reconstruir la secuencia exacta de operaciones.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    subgraph origen ["Base de datos origen"]
+        t[("Tablas")]
+        wal[["Registro de transacciones"]]
+        t -.-&gt;|"escribe"| wal
+    end
+    wal --&gt; cdc["Conector CDC"]
+    cdc --&gt; cola[["Cola de eventos"]]
+    cola --&gt; dest[("Destino")]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Las ventajas son notables. Vemos <strong>todas</strong> las operaciones, incluidos los borrados; las vemos <strong>en orden</strong>; y no lanzamos ni una sola consulta contra las tablas, con lo que el impacto sobre el sistema origen es mínimo. Es la única técnica que da una réplica realmente fiel.</p>
+<p>El precio también lo es. Hay que tener acceso privilegiado al motor y convencer al equipo que lo administra; hay que desplegar y operar una pieza más (<a href="https://debezium.io/">Debezium</a> es la referencia en el mundo abierto), normalmente acompañada de una cola; y el arranque inicial sigue necesitando una carga completa sobre la que aplicar después el flujo de cambios, con el consiguiente cuidado para no perder ni duplicar nada en la transición.</p>
+<p>La recomendación honesta: <strong>empieza por carga completa, pasa a incremental cuando duela, y llega a CDC solo cuando lo incremental ya no baste</strong>. Es un orden de complejidad creciente y saltar etapas se paga.</p>
+</section>
+<section id="idempotencia-y-reprocesos" class="level2" data-number="13.6">
+<h2 data-number="13.6" class="anchored" data-anchor-id="idempotencia-y-reprocesos"><span class="header-section-number">13.6</span> Idempotencia y reprocesos</h2>
+<p>Un proceso es <strong>idempotente</strong> cuando ejecutarlo varias veces con la misma entrada deja el sistema en el mismo estado que ejecutarlo una sola vez. En ingesta no es un lujo académico, es la propiedad que permite dormir tranquilo, porque los reintentos son inevitables: la red falla a mitad de carga, alguien relanza el proceso sin mirar, el orquestador reprograma una tarea que creía muerta y en realidad seguía viva.</p>
+<p>Lo que hace idempotente a una carga:</p>
+<ul>
+<li><strong>Una clave estable</strong>. Sin una clave de negocio fiable no hay <code>merge</code> posible, y sin <code>merge</code> todo reintento duplica.</li>
+<li><strong>Trabajar por particiones completas</strong>. En lugar de “añade lo nuevo”, pensar en “el día 12 de enero contiene exactamente estos registros”. Recargar un día concreto se convierte entonces en reemplazar su partición, una operación segura y repetible.</li>
+<li><strong>Escrituras transaccionales</strong>. O se ve el lote entero o no se ve nada. Es justo lo que aportan los <a href="../../content/sistemas/nuevos-formatos.html">formatos de tabla abiertos</a> frente a un directorio de ficheros sueltos, y lo que aprovecharemos en la <a href="../../content/load/staging.html">capa de staging</a>.</li>
+</ul>
+</section>
+<section id="evolución-del-esquema" class="level2" data-number="13.7">
+<h2 data-number="13.7" class="anchored" data-anchor-id="evolución-del-esquema"><span class="header-section-number">13.7</span> Evolución del esquema</h2>
+<p>El origen cambiará. Añadirán una columna, ampliarán un <code>VARCHAR</code>, convertirán un entero en decimal. La pregunta no es si va a pasar, sino qué queremos que haga nuestro proceso cuando pase.</p>
+<p>Las políticas razonables, de más permisiva a más estricta:</p>
+<ul>
+<li><strong>Evolucionar</strong>: la columna nueva se añade sola en destino. Cómodo para explorar, pero un renombrado en origen se traduce en dos columnas medio vacías y nadie se entera.</li>
+<li><strong>Congelar</strong>: se ignora todo lo que no estuviera declarado. La carga no se rompe, aunque estamos descartando datos en silencio.</li>
+<li><strong>Fallar</strong>: cualquier desviación detiene la carga y avisa. Molesto y correcto en las tablas críticas.</li>
+</ul>
+<p>Lo sensato es no aplicar la misma política en todas partes. En la capa de aterrizaje interesa evolucionar, porque el objetivo ahí es <strong>no perder nada</strong>; en las tablas que alimentan informes de dirección interesa fallar, porque el objetivo es <strong>no mentir</strong>. Veremos cómo se declara esto de forma explícita en las <a href="../../content/load/herramientas.html#contratos-de-esquema">herramientas de ingesta</a>.</p>
+</section>
+<section id="los-metadatos-de-carga" class="level2" data-number="13.8">
+<h2 data-number="13.8" class="anchored" data-anchor-id="los-metadatos-de-carga"><span class="header-section-number">13.8</span> Los metadatos de carga</h2>
+<p>Por último, un detalle pequeño de implementar y que ahorra incontables horas: acompañar cada registro con información sobre su propia carga. Como mínimo, de dónde vino y cuándo llegó.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">..</span>.,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'secretaria_academica'</span>  <span class="kw">AS</span> _origen,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">current_timestamp</span>       <span class="kw">AS</span> _cargado_en,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'20260112_0300'</span>         <span class="kw">AS</span> _id_carga</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> origen.alumnos</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Con esos tres campos podemos responder sin adivinar a las preguntas que aparecen cuando algo va mal: cuándo se cargó esta fila, qué ejecución la trajo, qué registros entraron en el lote que dejó los números raros y cuáles hay que borrar para reprocesar. Las herramientas de ingesta añaden campos de este tipo por su cuenta, y en el <a href="../../content/sistemas/arquitecturas.html#la-caja-fuerte">Data Vault</a> son parte obligatoria del modelo bajo los nombres <code>load_date</code> y <code>record_source</code>.</p>
+<p>Con los patrones claros, veamos qué herramientas nos evitan escribir todo esto a mano.</p>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -950,13 +1144,13 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/sistemas/intro.html" class="pagination-link" aria-label="Sistemas de gestión de datos">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span>
+      <a href="../../content/load/intro.html" class="pagination-link" aria-label="Extracción">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/sistemas/sql.html" class="pagination-link" aria-label="Structured Query Language">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/load/herramientas.html" class="pagination-link" aria-label="Herramientas de ingesta">
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

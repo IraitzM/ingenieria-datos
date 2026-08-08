@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; Base de datos operacional – Ingeniería de datos</title>
+<title>19&nbsp; Business vault y consumo – Ingeniería de datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -64,15 +64,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/sistemas/sql.html" rel="next">
-<link href="../../content/sistemas/intro.html" rel="prev">
+<link href="../../content/explotacion/intro.html" rel="next">
+<link href="../../content/transform/raw_vault.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -133,38 +133,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
 <script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
-<meta property="og:title" content="7&nbsp; Base de datos operacional – Ingeniería de datos">
+<meta property="og:title" content="19&nbsp; Business vault y consumo – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -181,7 +155,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/rdbms_transaccional.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/transform/intro.html">Transformación de datos</a></li><li class="breadcrumb-item"><a href="../../content/transform/business_vault.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -259,13 +233,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
  <span class="menu-text">Sistemas gestores de datos</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
@@ -274,7 +248,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
@@ -341,13 +315,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Transformación de datos</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
@@ -368,7 +342,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
@@ -448,11 +422,14 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#índices" id="toc-índices" class="nav-link active" data-scroll-target="#índices"><span class="header-section-number">7.1</span> Índices</a></li>
-  <li><a href="#transacciones" id="toc-transacciones" class="nav-link" data-scroll-target="#transacciones"><span class="header-section-number">7.2</span> Transacciones</a>
+  <li><a href="#el-business-vault" id="toc-el-business-vault" class="nav-link active" data-scroll-target="#el-business-vault"><span class="header-section-number">19.1</span> El business vault</a>
   <ul class="collapse">
-  <li><a href="#acid" id="toc-acid" class="nav-link" data-scroll-target="#acid"><span class="header-section-number">7.2.1</span> ACID</a></li>
+  <li><a href="#satélites-calculados" id="toc-satélites-calculados" class="nav-link" data-scroll-target="#satélites-calculados"><span class="header-section-number">19.1.1</span> Satélites calculados</a></li>
+  <li><a href="#tablas-point-in-time" id="toc-tablas-point-in-time" class="nav-link" data-scroll-target="#tablas-point-in-time"><span class="header-section-number">19.1.2</span> Tablas point-in-time</a></li>
   </ul></li>
+  <li><a href="#la-capa-de-consumo" id="toc-la-capa-de-consumo" class="nav-link" data-scroll-target="#la-capa-de-consumo"><span class="header-section-number">19.2</span> La capa de consumo</a></li>
+  <li><a href="#el-recorrido-completo" id="toc-el-recorrido-completo" class="nav-link" data-scroll-target="#el-recorrido-completo"><span class="header-section-number">19.3</span> El recorrido completo</a></li>
+  <li><a href="#qué-hemos-ganado" id="toc-qué-hemos-ganado" class="nav-link" data-scroll-target="#qué-hemos-ganado"><span class="header-section-number">19.4</span> Qué hemos ganado</a></li>
   </ul>
 </nav>
     </div>
@@ -462,9 +439,9 @@ window.Quarto = {
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/rdbms_transaccional.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/transform/intro.html">Transformación de datos</a></li><li class="breadcrumb-item"><a href="../../content/transform/business_vault.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></h1>
+<h1 class="title"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></h1>
 </div>
 
 
@@ -481,70 +458,406 @@ window.Quarto = {
 </header>
 
 
-<p>Para entender las capacidades de los sistemas empleados en tiempo de aplicación, debemos entender primero algunos conceptos que permiten a estos sistemas operar de forma rápida pero manteniendo la coherencia entre operaciones. Pensemos que necesitamos plantear una web, un sistema con capas frontales de presentación de datos, servicios back-end de gestión de lógicas de negocio y un sistema de almacenamiento de datos.</p>
+<p>El raw vault guarda lo que pasó. Nadie ha interpretado nada todavía, y ese es justo su valor. Pero un almacén de datos que no interpreta no sirve a nadie: las preguntas del negocio están llenas de criterios.</p>
+<p>Aquí es donde entran las <a href="../../content/transform/intro.html#reglas-duras-y-reglas-blandas">reglas blandas</a>, y con ellas dos capas más.</p>
+<section id="el-business-vault" class="level2" data-number="19.1">
+<h2 data-number="19.1" class="anchored" data-anchor-id="el-business-vault"><span class="header-section-number">19.1</span> El business vault</h2>
+<p>El business vault tiene una propiedad que conviene tener grabada: <strong>es desechable</strong>. Todo lo que contiene se puede calcular a partir del raw vault, así que se puede tirar y reconstruir entero cuando el criterio cambie. Esa es toda la ganancia de haber mantenido el raw vault libre de interpretaciones.</p>
+<p>Sus piezas más habituales son satélites calculados y tablas de apoyo al rendimiento.</p>
+<section id="satélites-calculados" class="level3" data-number="19.1.1">
+<h3 data-number="19.1.1" class="anchored" data-anchor-id="satélites-calculados"><span class="header-section-number">19.1.1</span> Satélites calculados</h3>
+<p>Un satélite del business vault tiene la misma forma que uno del raw vault, pero sus columnas son el resultado de aplicar una regla:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- models/business_vault/sat_alumno_bv.sql</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    hk_alumno,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    hd_alumno,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    load_date,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    email,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    nombre <span class="op">||</span> <span class="st">' '</span> <span class="op">||</span> apellido                       <span class="kw">as</span> nombre_completo,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lower</span>(split_part(email, <span class="st">'@'</span>, <span class="dv">2</span>))                <span class="kw">as</span> dominio_email,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">when</span> <span class="fu">lower</span>(split_part(email, <span class="st">'@'</span>, <span class="dv">2</span>)) <span class="op">=</span> <span class="st">'ejemplo.eus'</span> <span class="cf">then</span> <span class="st">'interno'</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="st">'externo'</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span>                                             <span class="kw">as</span> tipo_correo,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    record_source</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> {{ <span class="fu">ref</span>(<span class="st">'sat_alumno'</span>) }}</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>La clasificación entre correo interno y externo es una decisión de negocio: hoy el criterio es el dominio, mañana puede ser una lista de dominios permitidos. Al vivir aquí, cambiarla es editar el modelo y reconstruir; el histórico del raw vault no se toca.</p>
+<p>Nótese que este satélite <strong>se materializa como tabla</strong>, no como incremental. No hay que preservar nada, porque su historia es la del satélite del que deriva.</p>
+</section>
+<section id="tablas-point-in-time" class="level3" data-number="19.1.2">
+<h3 data-number="19.1.2" class="anchored" data-anchor-id="tablas-point-in-time"><span class="header-section-number">19.1.2</span> Tablas point-in-time</h3>
+<p>El segundo tipo de pieza no aporta significado sino rendimiento. Ya vimos que consultar un satélite requiere una función de ventana para quedarse con la versión vigente, y que con varios satélites la consulta se complica rápido.</p>
+<p>Una tabla <strong>PIT</strong> (<em>point in time</em>) precalcula, para cada clave y cada instante relevante, qué versión de cada satélite estaba vigente:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- models/business_vault/pit_alumno.sql</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">with</span> fechas <span class="kw">as</span> (</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> <span class="kw">distinct</span> hk_alumno, load_date</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> {{ <span class="fu">ref</span>(<span class="st">'sat_alumno'</span>) }}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    fechas.hk_alumno,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    fechas.load_date        <span class="kw">as</span> fecha_foto,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">max</span>(sat.load_date)      <span class="kw">as</span> load_date_sat</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> fechas</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">join</span> {{ <span class="fu">ref</span>(<span class="st">'sat_alumno'</span>) }} <span class="kw">as</span> sat</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">on</span> sat.hk_alumno <span class="op">=</span> fechas.hk_alumno</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a> <span class="kw">and</span> sat.load_date <span class="op">&lt;=</span> fechas.load_date</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">group</span> <span class="kw">by</span> fechas.hk_alumno, fechas.load_date</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Con ella, preguntar por el estado en una fecha se convierte en una unión por igualdad en lugar de una ventana:</p>
+<div id="7ac8c07d" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>utilidades.dbt(<span class="st">"run"</span>, <span class="st">"--select"</span>, <span class="st">"business_vault"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">    select h.id_alumno, p.fecha_foto, s.email</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_business_vault.pit_alumno p</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="st">    join main_raw_vault.sat_alumno s</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="st">      on s.hk_alumno = p.hk_alumno and s.load_date = p.load_date_sat</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="st">    join main_raw_vault.hub_alumno h on h.hk_alumno = p.hk_alumno</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">    where h.id_alumno = 1</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">    order by p.fecha_foto</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id_alumno</th>
+<th data-quarto-table-cell-role="th">fecha_foto</th>
+<th data-quarto-table-cell-role="th">email</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>2026-01-10 03:00:00</td>
+<td>iraitz@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>1</td>
+<td>2026-01-12 03:00:00</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Ahí está la trayectoria completa de Iraitz: qué correo tenía en cada foto.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Tablas puente
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>El primo hermano de la PIT es la tabla <strong>bridge</strong>, que precalcula recorridos por varios enlaces. Si para responder una pregunta hay que atravesar tres enlaces y cuatro hubs, una bridge deja ese camino resuelto.</p>
+<p>Ambas son optimizaciones puras, y como tales conviene añadirlas cuando el problema de rendimiento sea real y medible, no por adelantado.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="la-capa-de-consumo" class="level2" data-number="19.2">
+<h2 data-number="19.2" class="anchored" data-anchor-id="la-capa-de-consumo"><span class="header-section-number">19.2</span> La capa de consumo</h2>
+<p>Llegamos al final del recorrido. Y hay que decirlo claro: <strong>el usuario no debe ver el vault jamás</strong>. Nadie va a escribir una función de ventana para contar alumnos.</p>
+<p>La capa de consumo aplana todo lo anterior al <a href="../../content/modelado/modelado_analitico.html#modelado-dimensional">modelo dimensional</a> que ya conocemos, con nombres que el negocio reconoce y sin una sola clave hash a la vista.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
-<pre class="mermaid mermaid-js">flowchart LR
-    df[(Base de datos)]
-    bend[Lógica de negocio]
-    fend[Capa visual]
-
-    df --- bend
-    bend --- fend
+<pre class="mermaid mermaid-js">flowchart TB
+    subgraph vault ["Vault"]
+        hub["hub_alumno"]
+        sat["sat_alumno"]
+        bv["sat_alumno_bv"]
+        link["link_matricula"]
+        hubs["hub_asignatura"]
+    end
+    subgraph estrella ["Capa de consumo"]
+        dim1["dim_alumno"]
+        fct["fct_matriculas"]
+        dim2["dim_asignatura"]
+    end
+    hub --&gt; dim1
+    bv --&gt; dim1
+    sat --&gt; bv
+    link --&gt; fct
+    hubs --&gt; dim2
+    dim1 --- fct
+    dim2 --- fct
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<p>En los últimos años, la gestión de la capa transaccional ha evolucionado significativamente. Tradicionalmente, los sistemas de bases de datos como DB2 o PostgreSQL se encargaban de controlar las transacciones, asegurando la integridad y coherencia de los datos mediante mecanismos internos. Sin embargo, con el auge de arquitecturas más complejas y distribuidas, esta responsabilidad ha pasado en gran medida a los frameworks de desarrollo liberando de esta carga al sistema de almacenamiento.</p>
-<p>Frameworks como <a href="https://spring.io/">Spring</a> en Java, entre otros, permiten definir y gestionar transacciones directamente en la lógica de negocio, desacoplando el control transaccional del sistema de almacenamiento. Esto facilita la implementación de reglas de negocio más flexibles y adaptadas a las necesidades de cada aplicación, además de permitir la integración con múltiples fuentes de datos y servicios externos. Así, la capa transaccional se ha convertido en una parte fundamental de los frameworks modernos, proporcionando herramientas avanzadas para el manejo de la consistencia y la recuperación ante fallos.</p>
-<section id="índices" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="índices"><span class="header-section-number">7.1</span> Índices</h2>
-<p>Si algo necesitamos en las aplicaciones es velocidad. ¿Cómo de rápido es buscar información en una tabla? Pues no demasiado. Aunque contemos con estructuras normalizadas que garantizan que cada <em>cliente</em> (por ejemplo) existe una sola vez en nuestra tabla, deberemos recorrerla para encontrar su registro. Podemos aliviar parte de esta búsqueda al igual que sucede en los libros, construyendo un índice que nos indique en que página o fila en nuestro caso se encuentra la información que necesitamos.</p>
-<p>Los índices son estructuras de datos que permiten a las bases de datos mantener un registro de los datos que se encuentran en la misma. Estos índices permiten a las bases de datos realizar operaciones de búsqueda más eficientes. En el caso de las bases de datos relacionales, los índices se almacenan en tablas aparte de las tablas de datos y dependiendo del algoritmo elegido tomará distinta forma.</p>
-<p>El algoritmo <a href="https://es.wikipedia.org/wiki/%C3%81rbol-B">B-tree</a> se compone de la información de la columna (o columnas deseadas) construyendo un árbol balanceado que nos permite descartar los registros cuyos valores se encuentren por encima o debajo de nuestro valor de búsqueda.</p>
-<p>Veamos un ejemplo de cómo podríamos estructurar un índice B-tree que almacene números.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/B_tree_insertion_example.png?20071128030550" class="img-fluid figure-img"></p>
-<figcaption>Ejemplo de construcción de un árbol B-Tree</figcaption>
-</figure>
+<p>Una dimensión es el vault aplanado a la versión vigente:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- models/marts/dim_alumno.sql</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">with</span> vigente <span class="kw">as</span> (</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        hk_alumno,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        nombre_completo,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        email,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        dominio_email,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        tipo_correo,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        load_date,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">row_number</span>() <span class="kw">over</span> (<span class="kw">partition</span> <span class="kw">by</span> hk_alumno <span class="kw">order</span> <span class="kw">by</span> load_date <span class="kw">desc</span>) <span class="kw">as</span> version</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> {{ <span class="fu">ref</span>(<span class="st">'sat_alumno_bv'</span>) }}</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    hub.id_alumno               <span class="kw">as</span> alumno_id,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    vigente.nombre_completo,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    vigente.email,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    vigente.dominio_email,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    vigente.tipo_correo,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    hub.load_date               <span class="kw">as</span> alta_en_almacen,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    vigente.load_date           <span class="kw">as</span> ultima_modificacion</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> {{ <span class="fu">ref</span>(<span class="st">'hub_alumno'</span>) }} <span class="kw">as</span> hub</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="kw">join</span> vigente <span class="kw">on</span> vigente.hk_alumno <span class="op">=</span> hub.hk_alumno</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="kw">where</span> vigente.version <span class="op">=</span> <span class="dv">1</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Y una tabla de hechos es un enlace con las claves traducidas a las que el usuario reconoce:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- models/marts/fct_matriculas.sql</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">link</span>.hk_matricula           <span class="kw">as</span> matricula_id,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    hub_a.id_alumno             <span class="kw">as</span> alumno_id,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    hub_s.id_asignatura         <span class="kw">as</span> asignatura_id,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">link</span>.load_date              <span class="kw">as</span> fecha_matricula,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">link</span>.record_source          <span class="kw">as</span> origen</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> {{ <span class="fu">ref</span>(<span class="st">'link_matricula'</span>) }} <span class="kw">as</span> <span class="kw">link</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">join</span> {{ <span class="fu">ref</span>(<span class="st">'hub_alumno'</span>) }}     <span class="kw">as</span> hub_a <span class="kw">on</span> hub_a.hk_alumno <span class="op">=</span> <span class="kw">link</span>.hk_alumno</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">join</span> {{ <span class="fu">ref</span>(<span class="st">'hub_asignatura'</span>) }} <span class="kw">as</span> hub_s <span class="kw">on</span> hub_s.hk_asignatura <span class="op">=</span> <span class="kw">link</span>.hk_asignatura</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Construyamos el almacén entero de una vez:</p>
+<div id="73b0ea7b" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(utilidades.resumen(utilidades.dbt(<span class="st">"build"</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1 of 27 OK created sql view model main_prep.stg_alumnos ........................ [OK in 0.14s]
+2 of 27 OK created sql view model main_prep.stg_asignaturas .................... [OK in 0.09s]
+3 of 27 OK created sql view model main_prep.stg_matriculas ..................... [OK in 0.09s]
+4 of 27 OK created sql incremental model main_raw_vault.hub_alumno ............. [OK in 0.17s]
+5 of 27 OK created sql incremental model main_raw_vault.sat_alumno ............. [OK in 0.06s]
+6 of 27 OK created sql incremental model main_raw_vault.hub_asignatura ......... [OK in 0.08s]
+7 of 27 OK created sql incremental model main_raw_vault.link_matricula ......... [OK in 0.07s]
+23 of 27 OK created sql table model main_business_vault.pit_alumno ............. [OK in 0.14s]
+24 of 27 OK created sql table model main_business_vault.sat_alumno_bv .......... [OK in 0.11s]
+25 of 27 OK created sql table model main_marts.dim_asignatura .................. [OK in 0.11s]
+26 of 27 OK created sql table model main_marts.fct_matriculas .................. [OK in 0.10s]
+27 of 27 OK created sql table model main_marts.dim_alumno ...................... [OK in 0.10s]
+Completed successfully
+Done. PASS=27 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=27</code></pre>
 </div>
-<p>Como vemos en la imagen, cada nuevo dato altera la estructura de forma que garantizamos que cada nodo raíz plantea dos caminos con valores mayores o menores al valor del nodo. Esto permite descartar de manera eficaz la mitad de la información en cada paso y obtener un rendimiento <span class="math inline">\(\mathcal{O}(\log{n})\)</span> en promedio.</p>
-<p>Existen variantes como la <strong>B+</strong> que es la que implementan sistemas como MySQL o PostgreSQL precisamente para acelerar las búsquedas almacenando la información en los nodos hoja (nodos terminales del árbol) organizados como una lista secuencial que permite realizar eficientemente búsquedas de rangos.</p>
-<p>Es importante notar que debe construirse el índice explícitamente y que esto hace que las inserciones sean algo más lentas ya que además de insertar los datos, el sistema gestor de base de datos debe actualizar el índice. No podemos acelerar de un lado sin enlentecer de otro, pero en balance nos debería compensar. Por esto hace falta evaluar la necesidad de índices en cada caso.</p>
+</div>
+<p>Y comprobemos el resultado:</p>
+<div id="d10f5727" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"select * from main_marts.dim_alumno order by alumno_id"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">alumno_id</th>
+<th data-quarto-table-cell-role="th">nombre_completo</th>
+<th data-quarto-table-cell-role="th">email</th>
+<th data-quarto-table-cell-role="th">dominio_email</th>
+<th data-quarto-table-cell-role="th">tipo_correo</th>
+<th data-quarto-table-cell-role="th">alta_en_almacen</th>
+<th data-quarto-table-cell-role="th">ultima_modificacion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>Iraitz Montalbán</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+<td>ejemplo.eus</td>
+<td>interno</td>
+<td>2026-01-10 03:00:00</td>
+<td>2026-01-12 03:00:00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>Javier Garcia</td>
+<td>javier@ejemplo.eus</td>
+<td>ejemplo.eus</td>
+<td>interno</td>
+<td>2026-01-10 03:00:00</td>
+<td>2026-01-10 03:00:00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>Miguel Fernandez</td>
+<td>miguel@ejemplo.eus</td>
+<td>ejemplo.eus</td>
+<td>interno</td>
+<td>2026-01-10 03:00:00</td>
+<td>2026-01-10 03:00:00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>4</td>
+<td>María Garcia</td>
+<td>maria@ejemplo.eus</td>
+<td>ejemplo.eus</td>
+<td>interno</td>
+<td>2026-01-12 03:00:00</td>
+<td>2026-01-12 03:00:00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Ni claves hash, ni hashdiff, ni versiones. Cuatro alumnos con su información vigente y, de propina, dos fechas que responden a preguntas frecuentes: desde cuándo lo conocemos y cuándo cambió por última vez.</p>
+<p>Ahora sí, la pregunta del principio se responde con SQL de andar por casa:</p>
+<div id="fb8765bf" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">        a.asignatura,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">        count(*)                as matriculados,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="st">        string_agg(al.nombre_completo, ', ' order by al.nombre_completo) as alumnos</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_marts.fct_matriculas f</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="st">    join main_marts.dim_alumno     al on al.alumno_id = f.alumno_id</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="st">    join main_marts.dim_asignatura a  on a.asignatura_id = f.asignatura_id</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="st">    group by a.asignatura</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">    order by matriculados desc</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">asignatura</th>
+<th data-quarto-table-cell-role="th">matriculados</th>
+<th data-quarto-table-cell-role="th">alumnos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Biología</td>
+<td>3</td>
+<td>Javier Garcia, María Garcia, Miguel Fernandez</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Historia</td>
+<td>1</td>
+<td>Iraitz Montalbán</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Compárese con la consulta equivalente sobre el vault, que necesitaba unir cuatro tablas y resolver una ventana. Esa diferencia es exactamente la razón de existir de esta capa.</p>
 </section>
-<section id="transacciones" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="transacciones"><span class="header-section-number">7.2</span> Transacciones</h2>
-<p>Cuando realizamos operaciones sobre una base de datos que presenta la información en <a href="../../content/modelado/formasnormales.html">estructuras normalizadas</a>, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.</p>
-<ol type="1">
-<li>El dinero sale de la cuenta origen</li>
-<li>El dinero se inserta en la cuenta destinataria</li>
-</ol>
-<p>¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">transacciones</span>&gt;</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">operación</span>&gt;El dinero sale de la cuenta origen&lt;/<span class="kw">operación</span>&gt;</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">operación</span>&gt;El dinero se inserta en la cuenta destinataria&lt;/<span class="kw">operación</span>&gt;</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">transacciones</span>/&gt;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="acid" class="level3" data-number="7.2.1">
-<h3 data-number="7.2.1" class="anchored" data-anchor-id="acid"><span class="header-section-number">7.2.1</span> ACID</h3>
-<p>A este paquete podemos llamarlo <strong>transacción</strong> y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de <strong>sistemas transaccionales</strong>. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo <strong>ACID</strong>:</p>
+<section id="el-recorrido-completo" class="level2" data-number="19.3">
+<h2 data-number="19.3" class="anchored" data-anchor-id="el-recorrido-completo"><span class="header-section-number">19.3</span> El recorrido completo</h2>
+<p>Merece la pena ver de un vistazo lo que ha pasado con un dato concreto. El correo de Iraitz entró en el sistema origen, aterrizó en staging, se hasheó en la preparación, se historificó en el satélite, se clasificó en el business vault y acabó aplanado en la dimensión:</p>
+<div id="922f0876" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select 'staging'       as capa, email        as valor, _cargado_en as fecha</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">        from staging.alumnos where id_alumno = 1</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">    union all</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="st">    select 'raw vault',    s.email, s.load_date</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st">        from main_raw_vault.sat_alumno s</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="st">        join main_raw_vault.hub_alumno h using (hk_alumno)</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="st">        where h.id_alumno = 1</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="st">    union all</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="st">    select 'consumo',      d.email, d.ultima_modificacion</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="st">        from main_marts.dim_alumno d where d.alumno_id = 1</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="st">    order by fecha, capa</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">capa</th>
+<th data-quarto-table-cell-role="th">valor</th>
+<th data-quarto-table-cell-role="th">fecha</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>raw vault</td>
+<td>iraitz@ejemplo.eus</td>
+<td>2026-01-10 03:00:00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>consumo</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+<td>2026-01-12 03:00:00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>raw vault</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+<td>2026-01-12 03:00:00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>staging</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+<td>2026-01-12 03:00:00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Dos filas en el raw vault frente a una en staging y una en consumo. Esa asimetría es todo el argumento del Data Vault en una tabla: <strong>la historia vive en el medio</strong>, porque los extremos no pueden guardarla. El origen solo conoce el presente y el consumo solo quiere el presente.</p>
+</section>
+<section id="qué-hemos-ganado" class="level2" data-number="19.4">
+<h2 data-number="19.4" class="anchored" data-anchor-id="qué-hemos-ganado"><span class="header-section-number">19.4</span> Qué hemos ganado</h2>
+<p>Repasando la lista de problemas que planteábamos al <a href="../../content/transform/intro.html#la-tentación-del-atajo">empezar la transformación</a>:</p>
 <ul>
-<li><strong>Atomicidad</strong>: La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos</li>
-<li><strong>Consistencia</strong>: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.</li>
-<li><strong>Independencia</strong>: El aislamiento de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento</li>
-<li><strong>Durable</strong>: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.</li>
+<li><strong>Un origen nuevo</strong> se integra añadiendo satélites a los hubs existentes, sin migrar nada.</li>
+<li><strong>Un atributo nuevo</strong> es una columna en un satélite, o un satélite más.</li>
+<li><strong>Una regla que cambia</strong> se edita en el business vault y se reconstruye, sin tocar el histórico.</li>
+<li><strong>El estado en una fecha pasada</strong> se responde con una consulta, no con una copia de seguridad.</li>
 </ul>
-<p>Con esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter <strong>analítico</strong>.</p>
-<p>El hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.</p>
-<p>La base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar a cabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores. Y muy posiblemente debamos conocer algo de <a href="../../content/sistemas/sql.html">SQL</a> para poder interactuar con estos sistemas. Para ello deberemos profundizar en dos cuestiones clave: los índices y las transacciones.</p>
+<p>Y a un coste que conviene no esconder: más tablas, más SQL, y una capa que hay que mantener. Para un almacén de tres tablas y un origen, el Data Vault es un exceso evidente. La pregunta que decide no es cuántos datos hay, sino <strong>cuántos orígenes van a acabar entrando y cuánto va a cambiar el negocio</strong>.</p>
+<p>Con el almacén construido y una capa de consumo lista, queda ponerlo en manos de quien tiene las preguntas. Es la <a href="../../content/explotacion/intro.html">explotación de los datos</a>.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -950,13 +1263,13 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/sistemas/intro.html" class="pagination-link" aria-label="Sistemas de gestión de datos">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span>
+      <a href="../../content/transform/raw_vault.html" class="pagination-link" aria-label="El raw vault">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/sistemas/sql.html" class="pagination-link" aria-label="Structured Query Language">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/explotacion/intro.html" class="pagination-link" aria-label="Explotación de los datos">
+        <span class="nav-page-text">Explotación de los datos</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

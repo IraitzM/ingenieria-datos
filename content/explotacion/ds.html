@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>15&nbsp; Ciencia de datos – Ingeniería de datos</title>
+<title>22&nbsp; Ciencia de datos – Ingeniería de datos</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -20,17 +26,52 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/references.html" rel="next">
+<link href="../../content/explotacion/mlops.html" rel="next">
 <link href="../../content/explotacion/bi.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -39,10 +80,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e7f3a12788663e0f4eda461cc946c84c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -57,7 +98,7 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -89,9 +130,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
-<meta property="og:title" content="15&nbsp; Ciencia de datos – Ingeniería de datos">
+<meta property="og:title" content="22&nbsp; Ciencia de datos – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -108,7 +152,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/ds.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/ds.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -246,6 +290,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -260,7 +322,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -276,14 +356,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -305,8 +397,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/metadatado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -316,8 +414,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#acceso-programático" id="toc-acceso-programático" class="nav-link active" data-scroll-target="#acceso-programático"><span class="header-section-number">22.1</span> Acceso programático</a></li>
+  <li><a href="#el-tablón" id="toc-el-tablón" class="nav-link" data-scroll-target="#el-tablón"><span class="header-section-number">22.2</span> El tablón</a></li>
+  <li><a href="#la-trampa" id="toc-la-trampa" class="nav-link" data-scroll-target="#la-trampa"><span class="header-section-number">22.3</span> La trampa</a></li>
+  <li><a href="#el-tablón-correcto-a-fecha" id="toc-el-tablón-correcto-a-fecha" class="nav-link" data-scroll-target="#el-tablón-correcto-a-fecha"><span class="header-section-number">22.4</span> El tablón correcto a fecha</a></li>
+  <li><a href="#la-variable-objetivo" id="toc-la-variable-objetivo" class="nav-link" data-scroll-target="#la-variable-objetivo"><span class="header-section-number">22.5</span> La variable objetivo</a></li>
+  <li><a href="#lo-que-le-toca-al-ingeniero-de-datos" id="toc-lo-que-le-toca-al-ingeniero-de-datos" class="nav-link" data-scroll-target="#lo-que-le-toca-al-ingeniero-de-datos"><span class="header-section-number">22.6</span> Lo que le toca al ingeniero de datos</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -325,9 +434,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/ds.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/ds.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></h1>
+<h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></h1>
 </div>
 
 
@@ -344,9 +453,452 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p><em>pendiente</em></p>
+<p>El analista de negocio y el científico de datos consumen el mismo almacén y no quieren lo mismo de él. Casi diría que quieren lo contrario.</p>
+<p>El <a href="../../content/explotacion/bi.html">cuadro de mando</a> presenta datos <strong>agregados</strong>, en <strong>estado actual</strong> y a través de una <strong>interfaz</strong>. Las tres cosas son un estorbo para quien va a entrenar un modelo, que necesita el grano más fino que exista, el estado <strong>en el momento en que ocurrió</strong>, y acceso <strong>programático</strong> porque su herramienta es un intérprete de Python, no un navegador.</p>
+<p>De ahí que la capa de consumo del almacén no sea una, sino dos. Y que la segunda tenga una trampa que cuesta cara.</p>
+<section id="acceso-programático" class="level2" data-number="22.1">
+<h2 data-number="22.1" class="anchored" data-anchor-id="acceso-programático"><span class="header-section-number">22.1</span> Acceso programático</h2>
+<p>Empecemos por lo fácil, que además es una de las ventajas menos publicitadas de haber construido sobre formatos abiertos. Para leer el almacén desde Python no hace falta ningún servidor, ningún controlador propietario ni ninguna exportación:</p>
+<div id="484dd994" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"INSTALL ducklake; LOAD ducklake;"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="ss">f"ATTACH 'ducklake:sqlite:</span><span class="sc">{</span>utilidades<span class="sc">.</span>CATALOGO<span class="sc">}</span><span class="ss">' AS lago"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> con.sql(<span class="st">"SELECT * FROM lago.main_marts.dim_alumno"</span>).df()</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
 
 
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">alumno_id</th>
+<th data-quarto-table-cell-role="th">nombre_completo</th>
+<th data-quarto-table-cell-role="th">email</th>
+<th data-quarto-table-cell-role="th">dominio_email</th>
+<th data-quarto-table-cell-role="th">tipo_correo</th>
+<th data-quarto-table-cell-role="th">alta_en_almacen</th>
+<th data-quarto-table-cell-role="th">ultima_modificacion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2</td>
+<td>Javier Garcia</td>
+<td>javier@ejemplo.eus</td>
+<td>ejemplo.eus</td>
+<td>interno</td>
+<td>2026-01-10 03:00:00</td>
+<td>2026-01-10 03:00:00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>3</td>
+<td>Miguel Fernandez</td>
+<td>miguel@ejemplo.eus</td>
+<td>ejemplo.eus</td>
+<td>interno</td>
+<td>2026-01-10 03:00:00</td>
+<td>2026-01-10 03:00:00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>1</td>
+<td>Iraitz Montalbán</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+<td>ejemplo.eus</td>
+<td>interno</td>
+<td>2026-01-10 03:00:00</td>
+<td>2026-01-12 03:00:00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>4</td>
+<td>María Garcia</td>
+<td>maria@ejemplo.eus</td>
+<td>ejemplo.eus</td>
+<td>interno</td>
+<td>2026-01-12 03:00:00</td>
+<td>2026-01-12 03:00:00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>5</td>
+<td>Nerea Aguirre</td>
+<td>nerea@ejemplo.eus</td>
+<td>ejemplo.eus</td>
+<td>interno</td>
+<td>2026-01-13 03:00:00</td>
+<td>2026-01-13 03:00:00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Eso ya es un <code>DataFrame</code> de pandas, listo para lo que venga. Y si el volumen no cabe en memoria, la misma conexión sirve para agregar en el motor y traer solo el resultado, o para entregar Arrow a cualquier librería que lo entienda.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Sin copias no hay divergencia
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Merece la pena señalar lo que <strong>no</strong> ha ocurrido: no hemos exportado un CSV, no hemos montado una réplica y no hemos pedido a nadie un extracto. El científico de datos lee exactamente las mismas tablas que alimenta el cuadro de mando.</p>
+<p>Ese fue, históricamente, uno de los grandes focos de conflicto: el analista y el modelizador trabajando sobre copias distintas del mismo dato, tomadas en momentos distintos, y sorprendiéndose de no coincidir.</p>
+</div>
+</div>
+</section>
+<section id="el-tablón" class="level2" data-number="22.2">
+<h2 data-number="22.2" class="anchored" data-anchor-id="el-tablón"><span class="header-section-number">22.2</span> El tablón</h2>
+<p>Los algoritmos de aprendizaje automático, salvo excepciones, esperan una matriz: <strong>una fila por observación y una columna por variable</strong>. No saben unir tablas ni entienden un modelo en estrella. Alguien tiene que aplanar.</p>
+<p>Ese aplanado tiene nombre propio en la jerga en castellano, el <strong>tablón</strong>, y en inglés se le llama <em>one big table</em> o, cuando se construye para modelizar, <em>analytical base table</em>. Es la desnormalización llevada a su extremo, y por una vez está justificada: aquí no perseguimos integridad ni ahorro de espacio, perseguimos que un algoritmo pueda leerlo.</p>
+<p>Sobre el modelo en estrella que construimos, la versión sencilla es un <code>JOIN</code> y una agregación:</p>
+<div id="40cb25dd" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">        a.alumno_id,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">        a.nombre_completo,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">        a.tipo_correo,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">        a.dominio_email,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">        count(f.matricula_id)   as asignaturas</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_marts.dim_alumno a</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">    left join main_marts.fct_matriculas f on f.alumno_id = a.alumno_id</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">    group by 1, 2, 3, 4</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">    order by 1</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">alumno_id</th>
+<th data-quarto-table-cell-role="th">nombre_completo</th>
+<th data-quarto-table-cell-role="th">tipo_correo</th>
+<th data-quarto-table-cell-role="th">dominio_email</th>
+<th data-quarto-table-cell-role="th">asignaturas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>Iraitz Montalbán</td>
+<td>interno</td>
+<td>ejemplo.eus</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>Javier Garcia</td>
+<td>interno</td>
+<td>ejemplo.eus</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>Miguel Fernandez</td>
+<td>interno</td>
+<td>ejemplo.eus</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>4</td>
+<td>María Garcia</td>
+<td>interno</td>
+<td>ejemplo.eus</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>5</td>
+<td>Nerea Aguirre</td>
+<td>interno</td>
+<td>ejemplo.eus</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Una fila por alumno, todas sus variables al lado. Eso es un tablón, y para muchos análisis descriptivos es exactamente lo que hace falta.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Tablón y estrella no compiten
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Es tentador preguntarse por qué no publicamos directamente el tablón y nos ahorramos la estrella. La respuesta es que resuelven problemas distintos.</p>
+<p>La estrella está pensada para <strong>explorar</strong>: permite cortar por cualquier dimensión sin decidir de antemano cuáles. El tablón está pensado para <strong>una pregunta concreta</strong>: fija el grano, fija las variables y no admite otra cosa. Un almacén suele tener una estrella y muchos tablones, cada uno construido para un modelo.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="la-trampa" class="level2" data-number="22.3">
+<h2 data-number="22.3" class="anchored" data-anchor-id="la-trampa"><span class="header-section-number">22.3</span> La trampa</h2>
+<p>Y aquí llega el problema, que es el error más caro y más común en ciencia de datos aplicada.</p>
+<p>Supongamos que queremos predecir si un alumno acabará matriculándose, y entrenamos con la foto del <strong>11 de enero</strong>. El tablón de arriba parece servir: tiene alumnos y variables. Pero mírese con atención lo que contiene:</p>
+<ul>
+<li>A <strong>María</strong>, que se dio de alta el día 12.</li>
+<li>A <strong>Nerea</strong>, que se dio de alta el día 13.</li>
+<li>El correo corregido de <strong>Iraitz</strong>, que no cambió hasta el día 12.</li>
+</ul>
+<p>Un modelo entrenado con eso está viendo el futuro. Aprenderá relaciones que el día 11 eran imposibles de conocer, dará unas métricas de validación estupendas y fracasará en producción, donde el futuro no está disponible. Es lo que se llama <strong>fuga de información</strong> (<em>data leakage</em>), y su rasgo más desagradable es que no produce ningún error: produce un modelo que parece muy bueno.</p>
+<p>La causa de fondo es que <code>dim_alumno</code>, como cualquier dimensión de consumo, guarda <strong>el estado actual</strong>. Para modelizar no sirve el estado actual, sino el que había en cada momento.</p>
+</section>
+<section id="el-tablón-correcto-a-fecha" class="level2" data-number="22.4">
+<h2 data-number="22.4" class="anchored" data-anchor-id="el-tablón-correcto-a-fecha"><span class="header-section-number">22.4</span> El tablón correcto a fecha</h2>
+<p>Aquí es donde todo el trabajo de la <a href="../../content/transform/raw_vault.html">parte de transformación</a> empieza a pagar solo. Los satélites no guardan el estado actual: guardan <strong>todos los estados con su fecha</strong>. Y con eso se puede reconstruir la foto de cualquier día.</p>
+<p>La estructura cambia: ya no hay una fila por alumno, sino una fila por <strong>alumno y fecha de observación</strong>, con cada variable tal y como se conocía ese día.</p>
+<div id="4a92f48a" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">with fechas as (</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">    select unnest([timestamp '2026-01-11', timestamp '2026-01-14']) as fecha_obs</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">),</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="st">-- Solo los alumnos que ya existían en la fecha de observación</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="st">existentes as (</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="st">    select f.fecha_obs, h.hk_alumno, h.id_alumno</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">    from fechas f</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">    join main_raw_vault.hub_alumno h on h.load_date &lt;= f.fecha_obs</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="st">),</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="st">-- La versión del satélite vigente en esa fecha, no la última</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="st">atributos as (</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="st">    select</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="st">        e.fecha_obs,</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="st">        e.id_alumno,</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="st">        s.email,</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="st">        row_number() over (</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="st">            partition by e.fecha_obs, e.hk_alumno order by s.load_date desc</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="st">        ) as version</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="st">    from existentes e</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="st">    join main_raw_vault.sat_alumno s</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="st">      on s.hk_alumno = e.hk_alumno</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="st">     and s.load_date &lt;= e.fecha_obs</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="st">)</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="st">select fecha_obs, id_alumno, email</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="st">from atributos</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="st">where version = 1</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="st">order by fecha_obs, id_alumno</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">fecha_obs</th>
+<th data-quarto-table-cell-role="th">id_alumno</th>
+<th data-quarto-table-cell-role="th">email</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2026-01-11</td>
+<td>1</td>
+<td>iraitz@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2026-01-11</td>
+<td>2</td>
+<td>javier@ejemplo.eus</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2026-01-11</td>
+<td>3</td>
+<td>miguel@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2026-01-14</td>
+<td>1</td>
+<td>iraitz.montalban@ejemplo.eus</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2026-01-14</td>
+<td>2</td>
+<td>javier@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>2026-01-14</td>
+<td>3</td>
+<td>miguel@ejemplo.eus</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>2026-01-14</td>
+<td>4</td>
+<td>maria@ejemplo.eus</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>2026-01-14</td>
+<td>5</td>
+<td>nerea@ejemplo.eus</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Compárese con el tablón anterior. A fecha 11 de enero hay <strong>tres</strong> alumnos, no cinco, y el correo de Iraitz es el original. A fecha 14 aparecen los cinco y el correo ya está corregido. Eso es una foto honesta de lo que se sabía en cada momento.</p>
+<p>Las dos claves están en las condiciones, y ambas son fáciles de olvidar:</p>
+<ul>
+<li><code>h.load_date &lt;= f.fecha_obs</code> en el hub descarta las <strong>entidades que aún no existían</strong>.</li>
+<li><code>s.load_date &lt;= e.fecha_obs</code> combinado con el <code>row_number()</code> se queda con la versión <strong>vigente entonces</strong>, no con la última.</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>El mejor argumento del Data Vault
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si en algún momento de la <a href="../../content/transform/intro.html">parte de transformación</a> pareció que tanta tabla y tanto hash eran un exceso, este es el momento en que se justifican.</p>
+<p>Un almacén que solo guarda el estado actual <strong>no puede</strong> generar un conjunto de entrenamiento honesto, por mucho SQL que se le eche. La única salida es haber guardado la historia, y guardarla de forma que se pueda consultar por fecha es exactamente lo que hace un satélite.</p>
+<p>Es también el motivo por el que las <a href="../../content/transform/business_vault.html#tablas-point-in-time">tablas point-in-time</a> del business vault dejan de ser una optimización y pasan a ser una herramienta de trabajo: precalculan justo esta unión.</p>
+</div>
+</div>
+</section>
+<section id="la-variable-objetivo" class="level2" data-number="22.5">
+<h2 data-number="22.5" class="anchored" data-anchor-id="la-variable-objetivo"><span class="header-section-number">22.5</span> La variable objetivo</h2>
+<p>Falta la otra mitad. Las variables predictoras miran hacia atrás desde la fecha de observación; la <strong>variable objetivo</strong> mira hacia adelante a propósito, porque es lo que queremos predecir.</p>
+<div id="bd1652df" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">with fechas as (</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">    select unnest([timestamp '2026-01-11', timestamp '2026-01-14']) as fecha_obs</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">),</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">existentes as (</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">    select f.fecha_obs, h.hk_alumno, h.id_alumno</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">    from fechas f</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">    join main_raw_vault.hub_alumno h on h.load_date &lt;= f.fecha_obs</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">select</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="st">    e.fecha_obs,</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="st">    e.id_alumno,</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="st">    -- objetivo: ¿se matriculó DESPUÉS de la fecha de observación?</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="st">    max(case when l.load_date &gt; e.fecha_obs then 1 else 0 end) as se_matricula</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="st">from existentes e</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="st">left join main_raw_vault.link_matricula l on l.hk_alumno = e.hk_alumno</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="st">group by 1, 2</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="st">order by 1, 2</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">fecha_obs</th>
+<th data-quarto-table-cell-role="th">id_alumno</th>
+<th data-quarto-table-cell-role="th">se_matricula</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2026-01-11</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2026-01-11</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2026-01-11</td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2026-01-14</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2026-01-14</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>2026-01-14</td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>2026-01-14</td>
+<td>4</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>2026-01-14</td>
+<td>5</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Ahí está el único caso positivo, y se lee solo: el 14 de enero Nerea constaba de alta sin cursar nada, y acabó matriculándose después. Es exactamente la fila que queremos que el modelo aprenda a reconocer, y solo existe porque la hemos construido mirando el estado de aquel día y no el de hoy.</p>
+<p>La asimetría es deliberada y es la regla que ordena todo el proceso: <strong>las predictoras nunca cruzan la fecha de observación, la objetivo siempre lo hace</strong>. Escrito así parece obvio; en la práctica se incumple continuamente, casi siempre por construir el tablón desde una tabla de consumo en lugar de desde la historia.</p>
+</section>
+<section id="lo-que-le-toca-al-ingeniero-de-datos" class="level2" data-number="22.6">
+<h2 data-number="22.6" class="anchored" data-anchor-id="lo-que-le-toca-al-ingeniero-de-datos"><span class="header-section-number">22.6</span> Lo que le toca al ingeniero de datos</h2>
+<p>Conviene delimitar responsabilidades, porque esta frontera se difumina con facilidad.</p>
+<p>Elegir el algoritmo, ajustar los hiperparámetros y validar el modelo <strong>no</strong> es trabajo del ingeniero de datos. Garantizar que el tablón sea reproducible, esté correctamente fechado y no filtre el futuro, <strong>sí lo es</strong>. Y no es un detalle menor: la mayoría de los modelos que fracasan al pasar a producción no fracasan por el algoritmo, fracasan porque el conjunto con el que se entrenaron no se parecía a lo que iban a ver.</p>
+<p>Con el tablón resuelto, queda mirar cómo evolucionan las herramientas de quien lo consume y qué ocurre cuando esos modelos hay que ponerlos a funcionar. Es el <a href="../../content/explotacion/mlops.html">último capítulo</a>.</p>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -400,13 +952,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -751,12 +1304,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../../content/explotacion/bi.html" class="pagination-link" aria-label="Inteligencia de negocio">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/references.html" class="pagination-link" aria-label="Referencias">
-        <span class="nav-page-text">Referencias</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/explotacion/mlops.html" class="pagination-link" aria-label="Del cuaderno a producción">
+        <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

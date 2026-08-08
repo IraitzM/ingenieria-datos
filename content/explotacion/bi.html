@@ -2,23 +2,64 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>14&nbsp; Inteligencia de negocio – Ingeniería de datos</title>
+<title>21&nbsp; Inteligencia de negocio – Ingeniería de datos</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -31,7 +72,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
 <link href="../../content/explotacion/ds.html" rel="next">
-<link href="../../content/explotacion/intro.html" rel="prev">
+<link href="../../content/explotacion/semantica.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -39,10 +80,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e7f3a12788663e0f4eda461cc946c84c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -57,7 +98,7 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -91,7 +132,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
 
 
-<meta property="og:title" content="14&nbsp; Inteligencia de negocio – Ingeniería de datos">
+<meta property="og:title" content="21&nbsp; Inteligencia de negocio – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -108,7 +149,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/bi.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/bi.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -246,6 +287,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -260,7 +319,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -276,14 +353,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -305,8 +394,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/metadatado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -316,8 +411,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#bi-de-clics-y-bi-de-código" id="toc-bi-de-clics-y-bi-de-código" class="nav-link active" data-scroll-target="#bi-de-clics-y-bi-de-código"><span class="header-section-number">21.1</span> BI de clics y BI de código</a></li>
+  <li><a href="#rill" id="toc-rill" class="nav-link" data-scroll-target="#rill"><span class="header-section-number">21.2</span> Rill</a>
+  <ul class="collapse">
+  <li><a href="#ponerlo-en-marcha" id="toc-ponerlo-en-marcha" class="nav-link" data-scroll-target="#ponerlo-en-marcha"><span class="header-section-number">21.2.1</span> Ponerlo en marcha</a></li>
+  <li><a href="#conectarlo-a-nuestro-lakehouse" id="toc-conectarlo-a-nuestro-lakehouse" class="nav-link" data-scroll-target="#conectarlo-a-nuestro-lakehouse"><span class="header-section-number">21.2.2</span> Conectarlo a nuestro lakehouse</a></li>
+  <li><a href="#un-cuadro-de-mando" id="toc-un-cuadro-de-mando" class="nav-link" data-scroll-target="#un-cuadro-de-mando"><span class="header-section-number">21.2.3</span> Un cuadro de mando</a></li>
+  </ul></li>
+  <li><a href="#el-panorama" id="toc-el-panorama" class="nav-link" data-scroll-target="#el-panorama"><span class="header-section-number">21.3</span> El panorama</a></li>
+  <li><a href="#lo-que-el-bi-no-arregla" id="toc-lo-que-el-bi-no-arregla" class="nav-link" data-scroll-target="#lo-que-el-bi-no-arregla"><span class="header-section-number">21.4</span> Lo que el BI no arregla</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -325,9 +434,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/bi.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/bi.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></h1>
+<h1 class="title"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></h1>
 </div>
 
 
@@ -345,8 +454,125 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 <p>La inteligencia de negocio o <em>Business Intelligence</em> (BI) es sin duda uno de los recursos clave a la hora de conocer la actividad de nuestra empresa. Toda esa información que los datos ocultan, si la manipulamos de forma correcta y la presentamos de un modo lógico puede ayudarnos a determinar si estamos comprando de más, vendiendo de menos, si nuestras líneas de fabricación están siendo bien empleadas o si nuestros almacenes requieren una renovación del stock.</p>
+<p>Lo que hace una herramienta de BI, por debajo, es más sencillo de lo que su precio suele sugerir: traduce clics en SQL, ejecuta ese SQL contra el almacén y dibuja el resultado. Todo el valor está en las tres decisiones que rodean ese ciclo: <strong>quién define las métricas</strong>, <strong>dónde se ejecuta el cálculo</strong> y <strong>cómo se versiona lo que se construye</strong>.</p>
+<section id="bi-de-clics-y-bi-de-código" class="level2" data-number="21.1">
+<h2 data-number="21.1" class="anchored" data-anchor-id="bi-de-clics-y-bi-de-código"><span class="header-section-number">21.1</span> BI de clics y BI de código</h2>
+<p>La división que más determina el día a día de un equipo de datos no es entre proveedores, sino entre dos filosofías.</p>
+<p>En el <strong>BI de clics</strong> los cuadros de mando se construyen arrastrando campos en una interfaz. La ventaja es evidente: cualquiera puede empezar sin ayuda. El coste aparece a los dos años, cuando hay trescientos informes, nadie sabe cuáles se usan, la misma métrica está definida de once formas distintas dentro de otros tantos ficheros binarios, y no hay forma de revisar un cambio antes de publicarlo.</p>
+<p>En el <strong>BI de código</strong> el cuadro de mando es un fichero de texto en el repositorio. Se revisa en un <em>pull request</em>, se despliega con el resto del proyecto y se puede diferenciar entre versiones. Cuesta más arrancar y escala infinitamente mejor. Es, además, coherente con todo lo que llevamos hecho: <a href="../../content/load/herramientas.html">dlt</a> es código, <a href="../../content/transform/data_warehousing.html">dbt</a> es código, y no tendría mucho sentido que la última capa dejara de serlo.</p>
+</section>
+<section id="rill" class="level2" data-number="21.2">
+<h2 data-number="21.2" class="anchored" data-anchor-id="rill"><span class="header-section-number">21.2</span> Rill</h2>
+<p><a href="https://www.rilldata.com/">Rill</a> es una herramienta de BI de código abierto que encaja especialmente bien con el stack que hemos construido, y conviene explicar por qué antes de mirar la configuración.</p>
+<ul>
+<li><strong>Habla DuckDB de forma nativa</strong> y trae un <a href="https://docs.rilldata.com/developers/build/connectors/olap/ducklake">conector de DuckLake</a>. No ingiere nuestros datos ni los copia: empuja las consultas al lago directamente. Toda la arquitectura de las partes anteriores sigue siendo la única copia de la verdad.</li>
+<li><strong>La capa semántica va incluida</strong>, en los ficheros de métricas que vimos en el <a href="../../content/explotacion/semantica.html">capítulo anterior</a>. No hay que operar una pieza más.</li>
+<li><strong>Todo el proyecto es YAML y SQL</strong> en un directorio, con lo que entra en el repositorio como cualquier otra cosa.</li>
+<li><strong>Se ejecuta en local</strong>, sin desplegar nada, lo que permite iterar sobre un cuadro de mando en segundos.</li>
+<li>Su modelo de exploración prioriza el <strong>detalle</strong>: está pensado para que quien ve una anomalía pueda bajar hasta la fila que la causa sin pedir un informe nuevo.</li>
+</ul>
+<section id="ponerlo-en-marcha" class="level3" data-number="21.2.1">
+<h3 data-number="21.2.1" class="anchored" data-anchor-id="ponerlo-en-marcha"><span class="header-section-number">21.2.1</span> Ponerlo en marcha</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> https://rill.sh <span class="kw">|</span> <span class="fu">sh</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rill</span> start academia</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>La interfaz queda en <code>http://localhost:9009</code>.</p>
+</section>
+<section id="conectarlo-a-nuestro-lakehouse" class="level3" data-number="21.2.2">
+<h3 data-number="21.2.2" class="anchored" data-anchor-id="conectarlo-a-nuestro-lakehouse"><span class="header-section-number">21.2.2</span> Conectarlo a nuestro lakehouse</h3>
+<p>Dos ficheros. El conector, que es literalmente la misma sentencia <code>ATTACH</code> que usamos en el <a href="../../content/load/staging.html">capítulo de la capa de aterrizaje</a>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># connectors/ducklake.yaml</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">type</span><span class="kw">:</span><span class="at"> connector</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">driver</span><span class="kw">:</span><span class="at"> duckdb</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span><span class="kw">:</span><span class="at"> </span><span class="st">"'ducklake:sqlite:catalogo.sqlite' (DATA_PATH 'lago/')"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Y la declaración de que ese es el motor del proyecto:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rill.yaml</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">olap_connector</span><span class="kw">:</span><span class="at"> ducklake</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Con eso Rill ve las tablas que dbt dejó construidas, incluida <code>dim_alumno</code> y <code>fct_matriculas</code>. En producción bastaría con cambiar el catálogo por un PostgreSQL y el <code>DATA_PATH</code> por un bucket, sin tocar nada más:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span><span class="kw">:</span><span class="at"> </span><span class="st">"'ducklake:postgres:dbname=catalogo host={{ .env.PG_HOST }}' (DATA_PATH 's3://universidad/lago/')"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>El círculo se cierra
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Merece la pena detenerse en lo que acaba de pasar. La misma cadena de conexión que escribió dlt al aterrizar los datos, que leyó dbt al construir el vault, es la que consulta la herramienta de BI.</p>
+<p>Ni una sola copia intermedia, ni un formato propietario en ningún punto del recorrido, y todos los datos siguen siendo ficheros Parquet que cualquier motor puede leer. Eso es lo que promete un lakehouse abierto, y no siempre se cumple.</p>
+</div>
+</div>
+</section>
+<section id="un-cuadro-de-mando" class="level3" data-number="21.2.3">
+<h3 data-number="21.2.3" class="anchored" data-anchor-id="un-cuadro-de-mando"><span class="header-section-number">21.2.3</span> Un cuadro de mando</h3>
+<p>Sobre la métrica que definimos, un panel de exploración es otro fichero corto:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># explores/alumnos.yaml</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">type</span><span class="kw">:</span><span class="at"> explore</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">display_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"Alumnado"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">metrics_view</span><span class="kw">:</span><span class="at"> alumnos</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dimensions</span><span class="kw">:</span><span class="at"> </span><span class="st">"*"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">measures</span><span class="kw">:</span><span class="at"> </span><span class="st">"*"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Y ya está. La brevedad no es un truco del ejemplo: como las métricas y las dimensiones ya están definidas en la capa semántica, el cuadro de mando solo decide qué se expone y cómo se presenta.</p>
+</section>
+</section>
+<section id="el-panorama" class="level2" data-number="21.3">
+<h2 data-number="21.3" class="anchored" data-anchor-id="el-panorama"><span class="header-section-number">21.3</span> El panorama</h2>
+<p>Rill no es la única opción razonable, y la elección depende bastante del contexto.</p>
+<table class="caption-top table">
+<caption>Herramientas de explotación habituales</caption>
+<thead>
+<tr class="header">
+<th>Herramienta</th>
+<th>Naturaleza</th>
+<th>Cuándo encaja</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.rilldata.com/">Rill</a></td>
+<td>Abierta, BI de código, DuckDB nativo</td>
+<td>Stack DuckDB/DuckLake, exploración rápida, equipos que versionan</td>
+</tr>
+<tr class="even">
+<td><a href="https://evidence.dev/">Evidence</a></td>
+<td>Abierta, informes en Markdown y SQL</td>
+<td>Informes narrativos, publicación estática</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.metabase.com/">Metabase</a></td>
+<td>Abierta, orientada a clics</td>
+<td>Autoservicio para gente no técnica, arranque rápido</td>
+</tr>
+<tr class="even">
+<td><a href="https://superset.apache.org/">Superset</a></td>
+<td>Abierta, muy completa</td>
+<td>Muchos usuarios y muchas fuentes, si hay quien la opere</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.lightdash.com/">Lightdash</a></td>
+<td>Abierta, sobre métricas de dbt</td>
+<td>Si la capa semántica ya vive en dbt</td>
+</tr>
+<tr class="even">
+<td>Power BI, Tableau, Looker</td>
+<td>Comerciales</td>
+<td>Cuando ya están implantadas, que suele ser el caso</td>
+</tr>
+</tbody>
+</table>
+<p>La observación honesta sobre la última fila: en la mayoría de organizaciones la herramienta de BI <strong>ya está elegida</strong> y no la elige el equipo de datos. Lo que sí se puede elegir, y es donde está el margen de maniobra real, es que las métricas vivan fuera de ella. Un almacén bien modelado con una capa semántica versionada sirve a Power BI igual de bien que a Rill, y sobrevive al día que la organización cambie de herramienta.</p>
+</section>
+<section id="lo-que-el-bi-no-arregla" class="level2" data-number="21.4">
+<h2 data-number="21.4" class="anchored" data-anchor-id="lo-que-el-bi-no-arregla"><span class="header-section-number">21.4</span> Lo que el BI no arregla</h2>
+<p>Para cerrar, y en la misma línea que decíamos del <a href="../../content/appendices/metadatado.html">catálogo</a>, conviene no depositar en la herramienta expectativas que no puede cumplir.</p>
+<p>Un cuadro de mando no convierte un dato malo en bueno, solo lo hace más visible y más fácil de propagar. No sustituye a la definición de las métricas: si no existe, cada informe inventará la suya con más comodidad que antes. Y no crea la costumbre de mirar los datos, que es en última instancia un asunto de cultura y no de software.</p>
+<p>Lo que sí hace, cuando lo anterior está en su sitio, es cerrar el ciclo: convertir en decisiones el trabajo de las cuatro partes anteriores de este libro. Que era, desde el principio, el objetivo de todo esto.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -400,13 +626,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -750,13 +977,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/explotacion/intro.html" class="pagination-link" aria-label="Explotación de los datos">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Explotación de los datos</span>
+      <a href="../../content/explotacion/semantica.html" class="pagination-link" aria-label="La capa semántica">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../../content/explotacion/ds.html" class="pagination-link" aria-label="Ciencia de datos">
-        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

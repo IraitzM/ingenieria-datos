@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Explotación de los datos – Ingeniería de datos</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -30,8 +36,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/explotacion/bi.html" rel="next">
-<link href="../../content/transform/intro.html" rel="prev">
+<link href="../../content/explotacion/semantica.html" rel="next">
+<link href="../../content/transform/business_vault.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -39,10 +45,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e7f3a12788663e0f4eda461cc946c84c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -57,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -89,6 +95,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <meta property="og:title" content="Explotación de los datos – Ingeniería de datos">
@@ -246,6 +255,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -260,7 +287,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -276,14 +321,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -305,8 +362,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/metadatado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -316,8 +379,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#quién-consume-y-cómo" id="toc-quién-consume-y-cómo" class="nav-link active" data-scroll-target="#quién-consume-y-cómo">Quién consume, y cómo</a></li>
+  <li><a href="#la-métrica-que-da-tres-números" id="toc-la-métrica-que-da-tres-números" class="nav-link" data-scroll-target="#la-métrica-que-da-tres-números">La métrica que da tres números</a></li>
+  <li><a href="#las-dos-piezas-que-faltan" id="toc-las-dos-piezas-que-faltan" class="nav-link" data-scroll-target="#las-dos-piezas-que-faltan">Las dos piezas que faltan</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -344,9 +415,71 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p><em>pendiente</em></p>
+<p>Hemos recorrido el camino entero. Extrajimos de los sistemas origen, aterrizamos en un lakehouse versionado, integramos en un vault que guarda la historia y presentamos un modelo en estrella listo para consultar.</p>
+<p>Y llegados aquí conviene una dosis de humildad: <strong>nada de eso lo va a ver nadie</strong>. La organización juzgará nuestro trabajo por lo que ocurre en esta última capa, la que se toca. Un almacén impecable con un cuadro de mando que da un número raro es, para quien lo mira, un almacén roto.</p>
+<p>Esta parte va de la última milla. Y tiene su propia clase de problemas, que no son de ingeniería sino de acuerdo.</p>
+<section id="quién-consume-y-cómo" class="level2">
+<h2 class="anchored" data-anchor-id="quién-consume-y-cómo">Quién consume, y cómo</h2>
+<p>La capa de consumo no tiene un único cliente. Tiene cuatro, y cada uno quiere algo distinto:</p>
+<ul>
+<li><strong>Analistas de negocio</strong>, que necesitan explorar: filtrar, agrupar, comparar con el mes pasado, bajar al detalle cuando algo llama la atención. Es el terreno de la <a href="../../content/explotacion/bi.html">inteligencia de negocio</a>.</li>
+<li><strong>Científicos de datos</strong>, que necesitan el grano más fino posible y acceso programático, porque van a modelar. Es el terreno de la <a href="../../content/explotacion/ds.html">ciencia de datos</a>.</li>
+<li><strong>Aplicaciones</strong>, que consumen métricas por API para mostrarlas dentro de un producto.</li>
+<li><strong>Agentes y asistentes</strong>, la incorporación reciente, que preguntan en lenguaje natural y necesitan saber qué significa cada cosa antes de responder.</li>
+</ul>
+<p>Los cuatro hacen, en el fondo, las mismas preguntas. Y ahí empieza el problema.</p>
+</section>
+<section id="la-métrica-que-da-tres-números" class="level2">
+<h2 class="anchored" data-anchor-id="la-métrica-que-da-tres-números">La métrica que da tres números</h2>
+<p>Es la patología característica de esta capa y aparece en todas las organizaciones que llegan hasta aquí. La reunión en la que el director comercial dice que tenemos 4.000 alumnos, el de operaciones dice que 3.850 y el informe del consejo dice 4.120. Los tres números salen del mismo almacén y los tres están bien calculados.</p>
+<p>Lo que difiere no es el dato, es la <strong>definición</strong>. Uno cuenta a quien tiene matrícula vigente, otro excluye a los que se dieron de baja durante el curso, y el tercero incluye a los oyentes. Ninguno está equivocado; simplemente nadie escribió en ningún sitio qué significa <em>alumno</em>.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    dw[("Capa de consumo")]
+    dw --&gt; c1["Cuadro de mando&lt;br/&gt;4.000"]
+    dw --&gt; c2["Hoja de cálculo&lt;br/&gt;3.850"]
+    dw --&gt; c3["Informe del consejo&lt;br/&gt;4.120"]
+    c1 --&gt; r["Reunión"]
+    c2 --&gt; r
+    c3 --&gt; r
+    r --&gt; d{"¿Cuál es&lt;br/&gt;el bueno?"}
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Lo grave no es la discrepancia, es lo que provoca. En cuanto ocurre dos o tres veces, la organización deja de discutir sobre el negocio y empieza a discutir sobre los datos. Y a partir de ahí, cada área se construye su propio informe para no depender de nadie, con lo que el problema se multiplica en lugar de resolverse.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>El modelado no basta
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Podría pensarse que esto lo arregla la capa de consumo que construimos: si <code>dim_alumno</code> está bien hecha, ¿cómo puede haber tres números?</p>
+<p>Puede, porque el modelo dice <strong>qué columnas hay</strong>, no <strong>qué preguntas son legítimas ni cómo se agregan</strong>. Que exista una tabla de alumnos no impide que tres personas escriban tres <code>WHERE</code> distintos. Falta una capa más, y es de la que trata el capítulo siguiente.</p>
+</div>
+</div>
+</section>
+<section id="las-dos-piezas-que-faltan" class="level2">
+<h2 class="anchored" data-anchor-id="las-dos-piezas-que-faltan">Las dos piezas que faltan</h2>
+<p>Para cerrar el ciclo hacen falta dos cosas, y conviene no confundirlas porque a menudo vienen en el mismo producto:</p>
+<ul>
+<li>Una <strong>capa semántica</strong>, que traduce el modelo físico al vocabulario del negocio y define de una vez por todas qué es cada métrica. Es un acuerdo escrito en código.</li>
+<li>Una <strong>herramienta de explotación</strong>, que presenta ese vocabulario de forma que alguien sin SQL pueda responder a sus propias preguntas.</li>
+</ul>
+<p>Empezamos por la primera, porque es la que decide si la segunda sirve de algo.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -400,13 +533,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -750,13 +884,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/transform/intro.html" class="pagination-link" aria-label="Transformación">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></span>
+      <a href="../../content/transform/business_vault.html" class="pagination-link" aria-label="Business vault y consumo">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/explotacion/bi.html" class="pagination-link" aria-label="Inteligencia de negocio">
-        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/explotacion/semantica.html" class="pagination-link" aria-label="La capa semántica">
+        <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

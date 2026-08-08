@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>13&nbsp; Transformación – Ingeniería de datos</title>
+<title>16&nbsp; Transformación – Ingeniería de datos</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -30,8 +36,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/explotacion/intro.html" rel="next">
-<link href="../../content/load/intro.html" rel="prev">
+<link href="../../content/transform/data_warehousing.html" rel="next">
+<link href="../../content/load/staging.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -39,10 +45,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e7f3a12788663e0f4eda461cc946c84c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -57,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "Sin resultados",
+    "search-no-results-text": "No se han encontrado resultados",
     "search-matching-documents-text": "documentos encontrados",
     "search-copy-link-title": "Copiar el enlace en la búsqueda",
     "search-hide-matches-text": "Ocultar resultados adicionales",
@@ -89,9 +95,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<meta property="og:title" content="13&nbsp; Transformación – Ingeniería de datos">
+<meta property="og:title" content="16&nbsp; Transformación – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -108,7 +117,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/transform/intro.html">Transformación de datos</a></li><li class="breadcrumb-item"><a href="../../content/transform/intro.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/transform/intro.html">Transformación de datos</a></li><li class="breadcrumb-item"><a href="../../content/transform/intro.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -246,6 +255,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -260,7 +287,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -276,14 +321,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -305,8 +362,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/metadatado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -316,8 +379,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#la-tentación-del-atajo" id="toc-la-tentación-del-atajo" class="nav-link active" data-scroll-target="#la-tentación-del-atajo"><span class="header-section-number">16.1</span> La tentación del atajo</a></li>
+  <li><a href="#reglas-duras-y-reglas-blandas" id="toc-reglas-duras-y-reglas-blandas" class="nav-link" data-scroll-target="#reglas-duras-y-reglas-blandas"><span class="header-section-number">16.2</span> Reglas duras y reglas blandas</a></li>
+  <li><a href="#el-recorrido" id="toc-el-recorrido" class="nav-link" data-scroll-target="#el-recorrido"><span class="header-section-number">16.3</span> El recorrido</a></li>
+  <li><a href="#dónde-ocurre" id="toc-dónde-ocurre" class="nav-link" data-scroll-target="#dónde-ocurre"><span class="header-section-number">16.4</span> Dónde ocurre</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -325,9 +397,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/transform/intro.html">Transformación de datos</a></li><li class="breadcrumb-item"><a href="../../content/transform/intro.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/transform/intro.html">Transformación de datos</a></li><li class="breadcrumb-item"><a href="../../content/transform/intro.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Transformación</span></h1>
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></h1>
 </div>
 
 
@@ -344,9 +416,95 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p><em>pendiente</em></p>
+<p>Tenemos la capa de aterrizaje llena de tablas que son un reflejo fiel de los sistemas origen. Y ahí está exactamente el problema: son un reflejo fiel de los <strong>sistemas origen</strong>, no de la empresa.</p>
+<p>En staging, un alumno es una fila de la tabla <code>alumnos</code> de la secretaría. Si mañana la universidad se fusiona con otra, habrá dos tablas <code>alumnos</code> de dos sistemas distintos, con identificadores que se solapan y campos que no coinciden. La pregunta de negocio, en cambio, no ha cambiado ni un ápice: sigue siendo <em>cuántos alumnos tenemos</em>.</p>
+<p>Transformar es cerrar esa distancia. Pasar de las estructuras que impuso el sistema que generó el dato a las estructuras que responden a las preguntas de quien lo consume.</p>
+<section id="la-tentación-del-atajo" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="la-tentación-del-atajo"><span class="header-section-number">16.1</span> La tentación del atajo</h2>
+<p>La ruta corta existe y es tentadora: escribir una consulta que vaya de staging directamente a la tabla que necesita el informe. Funciona. El primer día es imbatible.</p>
+<p>Lo que ocurre después es siempre lo mismo. Aparece un segundo informe que necesita casi lo mismo pero no exactamente, y se escribe una segunda consulta que repite el 80% de la primera. Aparece un tercer sistema origen y hay que tocar las dos. Alguien cambia la definición de <em>alumno activo</em> y hay que encontrar los once sitios donde estaba escrita. Y el día que alguien pregunta qué valor tenía ese campo en marzo, la respuesta es que no se sabe, porque se sobrescribió.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    subgraph mal ["Sin capa intermedia"]
+        s1[("staging")] --&gt; i1["informe 1"]
+        s1 --&gt; i2["informe 2"]
+        s1 --&gt; i3["informe 3"]
+        s1 --&gt; i4["informe 4"]
+    end
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>El coste de las consultas directas no está en escribirlas, está en mantenerlas. Por eso todas las metodologías serias de almacén de datos, desde Inmon hasta hoy, insisten en lo mismo: <strong>hace falta una capa intermedia</strong> que modele el negocio una sola vez, y sobre ella se construye todo lo demás.</p>
+</section>
+<section id="reglas-duras-y-reglas-blandas" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="reglas-duras-y-reglas-blandas"><span class="header-section-number">16.2</span> Reglas duras y reglas blandas</h2>
+<p>Antes de entrar en el cómo, conviene interiorizar una distinción que ordena todo lo que viene después, y que es probablemente la mejor idea que aportó el Data Vault.</p>
+<p>Las transformaciones se dividen en dos familias:</p>
+<ul>
+<li><strong>Reglas duras</strong> (<em>hard rules</em>): no interpretan el dato. Cambiar el tipo de una columna, partir un nombre completo en dos campos, normalizar mayúsculas, calcular un hash. Son reversibles en el sentido que importa: no destruyen información y no dependen de ninguna decisión de negocio.</li>
+<li><strong>Reglas blandas</strong> (<em>soft rules</em>): interpretan. Decidir que un alumno con matrícula anulada no cuenta como activo, unificar dos identificadores porque hemos determinado que son la misma persona, calcular el importe con un IVA concreto. Son opiniones sobre el negocio y <strong>cambian con el tiempo</strong>.</li>
+</ul>
+<p>La regla de oro se deduce sola: las reglas duras pueden aplicarse al entrar, las blandas no. Porque el día que el negocio cambie de opinión sobre qué es un alumno activo, y lo hará, queremos poder recalcular sin haber perdido nada.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>El criterio que ordena la arquitectura
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si una transformación puede dar un resultado distinto dentro de dos años porque alguien cambie de criterio, <strong>no debe aplicarse sobre el dato que guardamos</strong>, sino sobre una capa que podamos rehacer.</p>
+<p>Casi todas las arquitecturas de datos por capas son, en el fondo, una forma de respetar esta frase.</p>
+</div>
+</div>
+</section>
+<section id="el-recorrido" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="el-recorrido"><span class="header-section-number">16.3</span> El recorrido</h2>
+<p>Aquello que anticipábamos al hablar de <a href="../../content/sistemas/arquitecturas.html#la-caja-fuerte">la caja fuerte</a> toma ahora forma concreta. Partimos del aterrizaje y llegamos al consumo pasando por dos escalones:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    stg[("staging")]
+    rv[("raw vault")]
+    bv[("business vault")]
+    marts[("consumo")]
+
+    stg --&gt;|"reglas duras"| rv
+    rv --&gt;|"reglas blandas"| bv
+    bv --&gt; marts
+    rv --&gt; marts
+    marts --&gt; bi["Cuadros de mando&lt;br/&gt;y análisis"]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<ul>
+<li>El <strong>raw vault</strong> integra los datos de todos los orígenes en torno a los conceptos de negocio, sin interpretar nada. Es el registro histórico, y es inmutable: solo se añade.</li>
+<li>El <strong>business vault</strong> aplica las reglas blandas. Se puede tirar y reconstruir entero desde el raw vault, que es justo lo que lo hace seguro.</li>
+<li>La <strong>capa de consumo</strong> presenta el resultado en un modelo que un analista pueda usar sin saber nada de todo lo anterior, normalmente el <a href="../../content/modelado/modelado_analitico.html#modelado-dimensional">modelo dimensional</a> que ya conocemos.</li>
+</ul>
+</section>
+<section id="dónde-ocurre" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="dónde-ocurre"><span class="header-section-number">16.4</span> Dónde ocurre</h2>
+<p>Una última cuestión, ya resuelta por el camino. Cuando hablábamos del <a href="../../content/load/patrones.html#de-etl-a-elt">paso de ETL a ELT</a> decíamos que la transformación había dejado de necesitar una herramienta intermedia porque el motor del destino tiene cómputo de sobra. Eso es lo que vamos a explotar: <strong>todo lo que viene es SQL ejecutándose dentro del propio lakehouse</strong>, sin mover un solo dato fuera.</p>
+<p>Lo que sí necesitamos es algo que ponga orden en ese SQL: que sepa en qué orden ejecutar las consultas, que evite repetir código, que compruebe que el resultado es correcto y que documente qué hace cada pieza. Ese es el papel de <a href="../../content/transform/data_warehousing.html">dbt</a>, por donde empezamos.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -400,13 +558,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -750,13 +909,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/load/intro.html" class="pagination-link" aria-label="Extracción">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span>
+      <a href="../../content/load/staging.html" class="pagination-link" aria-label="La capa de aterrizaje">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/explotacion/intro.html" class="pagination-link" aria-label="Explotación de los datos">
-        <span class="nav-page-text">Explotación de los datos</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/transform/data_warehousing.html" class="pagination-link" aria-label="dbt sobre el lakehouse">
+        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

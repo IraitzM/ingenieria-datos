@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; Base de datos operacional – Ingeniería de datos</title>
+<title>23&nbsp; Del cuaderno a producción – Ingeniería de datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,41 +26,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -71,8 +36,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/sistemas/sql.html" rel="next">
-<link href="../../content/sistemas/intro.html" rel="prev">
+<link href="../../content/references.html" rel="next">
+<link href="../../content/explotacion/ds.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -134,37 +99,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<meta property="og:title" content="7&nbsp; Base de datos operacional – Ingeniería de datos">
+<meta property="og:title" content="23&nbsp; Del cuaderno a producción – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -181,7 +117,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/rdbms_transaccional.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/mlops.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -259,13 +195,13 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
  <span class="menu-text">Sistemas gestores de datos</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
@@ -274,7 +210,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
@@ -378,11 +314,11 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a href="../../content/explotacion/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Explotación de los datos</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar sección">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
@@ -403,7 +339,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
@@ -448,11 +384,11 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#índices" id="toc-índices" class="nav-link active" data-scroll-target="#índices"><span class="header-section-number">7.1</span> Índices</a></li>
-  <li><a href="#transacciones" id="toc-transacciones" class="nav-link" data-scroll-target="#transacciones"><span class="header-section-number">7.2</span> Transacciones</a>
-  <ul class="collapse">
-  <li><a href="#acid" id="toc-acid" class="nav-link" data-scroll-target="#acid"><span class="header-section-number">7.2.1</span> ACID</a></li>
-  </ul></li>
+  <li><a href="#el-cuaderno-y-su-techo" id="toc-el-cuaderno-y-su-techo" class="nav-link active" data-scroll-target="#el-cuaderno-y-su-techo"><span class="header-section-number">23.1</span> El cuaderno y su techo</a></li>
+  <li><a href="#el-entorno-se-acerca-a-los-datos" id="toc-el-entorno-se-acerca-a-los-datos" class="nav-link" data-scroll-target="#el-entorno-se-acerca-a-los-datos"><span class="header-section-number">23.2</span> El entorno se acerca a los datos</a></li>
+  <li><a href="#cuando-el-modelo-tiene-que-vivir" id="toc-cuando-el-modelo-tiene-que-vivir" class="nav-link" data-scroll-target="#cuando-el-modelo-tiene-que-vivir"><span class="header-section-number">23.3</span> Cuando el modelo tiene que vivir</a></li>
+  <li><a href="#dónde-acaba-nuestro-trabajo" id="toc-dónde-acaba-nuestro-trabajo" class="nav-link" data-scroll-target="#dónde-acaba-nuestro-trabajo"><span class="header-section-number">23.4</span> Dónde acaba nuestro trabajo</a></li>
+  <li><a href="#cierre" id="toc-cierre" class="nav-link" data-scroll-target="#cierre"><span class="header-section-number">23.5</span> Cierre</a></li>
   </ul>
 </nav>
     </div>
@@ -462,9 +398,9 @@ window.Quarto = {
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/rdbms_transaccional.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/mlops.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></h1>
+<h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></h1>
 </div>
 
 
@@ -481,70 +417,96 @@ window.Quarto = {
 </header>
 
 
-<p>Para entender las capacidades de los sistemas empleados en tiempo de aplicación, debemos entender primero algunos conceptos que permiten a estos sistemas operar de forma rápida pero manteniendo la coherencia entre operaciones. Pensemos que necesitamos plantear una web, un sistema con capas frontales de presentación de datos, servicios back-end de gestión de lógicas de negocio y un sistema de almacenamiento de datos.</p>
+<p>Tenemos el tablón. Alguien va a abrir un cuaderno, va a entrenar un modelo y va a obtener un resultado prometedor. Y entonces empieza la parte difícil, que no es la que la mayoría espera.</p>
+<p>Este último capítulo recorre dos evoluciones que van de la mano: la del <strong>entorno</strong> en el que se trabaja con datos, y la de la <strong>infraestructura</strong> que hace falta para que un modelo deje de ser un experimento.</p>
+<section id="el-cuaderno-y-su-techo" class="level2" data-number="23.1">
+<h2 data-number="23.1" class="anchored" data-anchor-id="el-cuaderno-y-su-techo"><span class="header-section-number">23.1</span> El cuaderno y su techo</h2>
+<p>El cuaderno de notas, <a href="https://jupyter.org/">Jupyter</a> y sus descendientes, se ganó su sitio con razón. Permite alternar código, resultado y explicación, lo que encaja perfectamente con la naturaleza exploratoria del trabajo con datos: mirar, probar, corregir, volver a mirar.</p>
+<p>Sus límites también son conocidos y aparecen todos a la vez el día que algo funciona y hay que repetirlo:</p>
+<ul>
+<li><strong>El estado oculto</strong>. Las celdas se ejecutan en el orden que uno quiera, así que un cuaderno puede dar un resultado que nadie puede reproducir, ni siquiera su autor.</li>
+<li><strong>Se versiona mal</strong>. Por debajo es un JSON con las salidas incrustadas, con lo que una diferencia entre versiones resulta ilegible.</li>
+<li><strong>No es un artefacto desplegable</strong>. El paso de cuaderno a proceso en producción es una reescritura, y en esa reescritura se pierden cosas.</li>
+</ul>
+<p>La respuesta clásica ha sido siempre la misma, y sigue siendo válida: el cuaderno para explorar, y lo que sobreviva a la exploración se mueve a módulos con pruebas. Lo que ha cambiado es la herramienta con la que se hace ese movimiento.</p>
+</section>
+<section id="el-entorno-se-acerca-a-los-datos" class="level2" data-number="23.2">
+<h2 data-number="23.2" class="anchored" data-anchor-id="el-entorno-se-acerca-a-los-datos"><span class="header-section-number">23.2</span> El entorno se acerca a los datos</h2>
+<p>Durante años el editor de código y el almacén de datos fueron dos mundos. El editor conocía la sintaxis de SQL pero no sabía <strong>qué tablas existen</strong>, así que autocompletaba a ciegas y uno descubría que la columna se llamaba de otro modo al ejecutar.</p>
+<p>La generación actual de entornos rompe esa separación conectándose al almacén. <a href="https://getnao.io/">nao</a>, de nao Labs, es probablemente el ejemplo más claro de la categoría: un editor derivado de Visual Studio Code cuyo asistente está enganchado al almacén, de forma que conoce el esquema real, las columnas y los datos antes de sugerir nada. Sobre esa base ofrece lo que uno esperaría: generar modelos de dbt y consultas, documentar, escribir pruebas, comparar el resultado de una consulta antes y después de un cambio, y ver qué se rompe aguas abajo apoyándose en el linaje.</p>
+<p>El detalle que importa no es que haya un asistente, que a estas alturas lo hay en todas partes, sino <strong>de qué contexto dispone</strong>. Un asistente sin acceso al esquema inventa nombres de columna con enorme convicción; con acceso al esquema, deja de hacerlo. Es exactamente el mismo argumento que veíamos al hablar de las <a href="../../content/explotacion/semantica.html#métricas-para-agentes">métricas para agentes</a> y del <a href="../../content/appendices/metadatado.html">catálogo de gobierno</a>: lo que hace útil a un dato es el contexto que lo rodea, y eso vale igual para las personas que para las máquinas.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Sobre las herramientas de esta categoría
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Es un terreno que se mueve muy deprisa y en el que conviene no casarse con nadie. La recomendación práctica que aguanta el paso del tiempo es evaluar estas herramientas por una pregunta concreta: <strong>¿de dónde saca el contexto?</strong> Si lo saca del esquema real, del linaje y de las definiciones de métricas, aporta. Si solo autocompleta texto, es un editor con adornos.</p>
+<p>Y una segunda, más prosaica: cuanto más de nuestro proyecto viva en ficheros de texto versionados, mejor funcionará cualquiera de ellas. Que es, casualmente, lo que llevamos haciendo todo el libro.</p>
+</div>
+</div>
+</section>
+<section id="cuando-el-modelo-tiene-que-vivir" class="level2" data-number="23.3">
+<h2 data-number="23.3" class="anchored" data-anchor-id="cuando-el-modelo-tiene-que-vivir"><span class="header-section-number">23.3</span> Cuando el modelo tiene que vivir</h2>
+<p>Un modelo entrenado en un portátil no vale nada por sí mismo. Para que aporte, alguien tiene que ejecutarlo de forma recurrente sobre datos nuevos, y ahí aparece un conjunto de problemas que no son de ciencia de datos sino de ingeniería. Es lo que se agrupa bajo el nombre de <strong>MLOps</strong>.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-    df[(Base de datos)]
-    bend[Lógica de negocio]
-    fend[Capa visual]
-
-    df --- bend
-    bend --- fend
+    tab[("Tablón")] --&gt; ent["Entrenamiento"]
+    ent --&gt; reg[("Registro de&lt;br/&gt;modelos")]
+    reg --&gt; serv["Servicio"]
+    fs[("Feature store")] --&gt; ent
+    fs --&gt; serv
+    serv --&gt; mon["Monitorización"]
+    mon -.-&gt;|"deriva"| ent
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
-<p>En los últimos años, la gestión de la capa transaccional ha evolucionado significativamente. Tradicionalmente, los sistemas de bases de datos como DB2 o PostgreSQL se encargaban de controlar las transacciones, asegurando la integridad y coherencia de los datos mediante mecanismos internos. Sin embargo, con el auge de arquitecturas más complejas y distribuidas, esta responsabilidad ha pasado en gran medida a los frameworks de desarrollo liberando de esta carga al sistema de almacenamiento.</p>
-<p>Frameworks como <a href="https://spring.io/">Spring</a> en Java, entre otros, permiten definir y gestionar transacciones directamente en la lógica de negocio, desacoplando el control transaccional del sistema de almacenamiento. Esto facilita la implementación de reglas de negocio más flexibles y adaptadas a las necesidades de cada aplicación, además de permitir la integración con múltiples fuentes de datos y servicios externos. Así, la capa transaccional se ha convertido en una parte fundamental de los frameworks modernos, proporcionando herramientas avanzadas para el manejo de la consistencia y la recuperación ante fallos.</p>
-<section id="índices" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="índices"><span class="header-section-number">7.1</span> Índices</h2>
-<p>Si algo necesitamos en las aplicaciones es velocidad. ¿Cómo de rápido es buscar información en una tabla? Pues no demasiado. Aunque contemos con estructuras normalizadas que garantizan que cada <em>cliente</em> (por ejemplo) existe una sola vez en nuestra tabla, deberemos recorrerla para encontrar su registro. Podemos aliviar parte de esta búsqueda al igual que sucede en los libros, construyendo un índice que nos indique en que página o fila en nuestro caso se encuentra la información que necesitamos.</p>
-<p>Los índices son estructuras de datos que permiten a las bases de datos mantener un registro de los datos que se encuentran en la misma. Estos índices permiten a las bases de datos realizar operaciones de búsqueda más eficientes. En el caso de las bases de datos relacionales, los índices se almacenan en tablas aparte de las tablas de datos y dependiendo del algoritmo elegido tomará distinta forma.</p>
-<p>El algoritmo <a href="https://es.wikipedia.org/wiki/%C3%81rbol-B">B-tree</a> se compone de la información de la columna (o columnas deseadas) construyendo un árbol balanceado que nos permite descartar los registros cuyos valores se encuentren por encima o debajo de nuestro valor de búsqueda.</p>
-<p>Veamos un ejemplo de cómo podríamos estructurar un índice B-tree que almacene números.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/B_tree_insertion_example.png?20071128030550" class="img-fluid figure-img"></p>
-<figcaption>Ejemplo de construcción de un árbol B-Tree</figcaption>
-</figure>
-</div>
-<p>Como vemos en la imagen, cada nuevo dato altera la estructura de forma que garantizamos que cada nodo raíz plantea dos caminos con valores mayores o menores al valor del nodo. Esto permite descartar de manera eficaz la mitad de la información en cada paso y obtener un rendimiento <span class="math inline">\(\mathcal{O}(\log{n})\)</span> en promedio.</p>
-<p>Existen variantes como la <strong>B+</strong> que es la que implementan sistemas como MySQL o PostgreSQL precisamente para acelerar las búsquedas almacenando la información en los nodos hoja (nodos terminales del árbol) organizados como una lista secuencial que permite realizar eficientemente búsquedas de rangos.</p>
-<p>Es importante notar que debe construirse el índice explícitamente y que esto hace que las inserciones sean algo más lentas ya que además de insertar los datos, el sistema gestor de base de datos debe actualizar el índice. No podemos acelerar de un lado sin enlentecer de otro, pero en balance nos debería compensar. Por esto hace falta evaluar la necesidad de índices en cada caso.</p>
-</section>
-<section id="transacciones" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="transacciones"><span class="header-section-number">7.2</span> Transacciones</h2>
-<p>Cuando realizamos operaciones sobre una base de datos que presenta la información en <a href="../../content/modelado/formasnormales.html">estructuras normalizadas</a>, casi de forma segura deberemos realizar más de una operación sobre estas estructuras. Esto obliga a que si una de esas acciones produjera un error debamos considerar todo el paquete de operaciones nulo. Pensad en el ejercicio de hacer una trasferencia bancaria.</p>
-<ol type="1">
-<li>El dinero sale de la cuenta origen</li>
-<li>El dinero se inserta en la cuenta destinataria</li>
-</ol>
-<p>¿Y si pasara algo en medio? Un corte, un fallo… ¿Puede ser que el dinero desaparezca del sistema? En lo que a datos se refiere podría suceder pero en la realidad sabemos que el dinero presenta un concepto de que no se volatiliza de tal modo. Es decir, que habiendo identificado el fallo en la segunda operación, deberíamos invalidar la primera y hacer que el balance se muestre como al inicio. Para ello, podemos enviar nuestras operaciones como de un paquete se tratara y la base de datos se encarga de que así suceda.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">transacciones</span>&gt;</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">operación</span>&gt;El dinero sale de la cuenta origen&lt;/<span class="kw">operación</span>&gt;</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">operación</span>&gt;El dinero se inserta en la cuenta destinataria&lt;/<span class="kw">operación</span>&gt;</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">transacciones</span>/&gt;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="acid" class="level3" data-number="7.2.1">
-<h3 data-number="7.2.1" class="anchored" data-anchor-id="acid"><span class="header-section-number">7.2.1</span> ACID</h3>
-<p>A este paquete podemos llamarlo <strong>transacción</strong> y los sistemas capaces de gestionar estos paquetes los conocemos con el nombre de <strong>sistemas transaccionales</strong>. Estos sistemas suelen además cubrir una serie de requisitos que se conocen bajo el acrónimo <strong>ACID</strong>:</p>
+<p>Las piezas que aparecen siempre, con el problema real que resuelve cada una:</p>
 <ul>
-<li><strong>Atomicidad</strong>: La Atomicidad asegura que una transacción se complete de forma completa o no se realice en absoluto, es decir, todos los pasos deben ejecutarse correctamente o se revierten todos</li>
-<li><strong>Consistencia</strong>: La Consistencia garantiza que una transacción mantenga la base de datos en un estado válido, cumpliendo con las reglas de integridad definidas.</li>
-<li><strong>Independencia</strong>: El aislamiento de operaciones asegura que las transacciones concurrentes se ejecuten de forma independiente, evitando que se afecten mutuamente, lo que previene problemas como la doble reserva de un asiento</li>
-<li><strong>Durable</strong>: La Durabilidad garantiza que una vez que una transacción se ha confirmado, sus cambios persistirán incluso en caso de fallos del sistema, almacenándose de forma permanente en disco.</li>
+<li><strong>Registro de modelos</strong> (<em>model registry</em>). Un modelo es un artefacto binario con versión, métricas de validación, datos con los que se entrenó y un estado (en pruebas, en producción, retirado). Sin registro, la pregunta <em>qué versión está respondiendo ahora mismo</em> no tiene respuesta. <a href="https://mlflow.org/">MLflow</a> es la referencia abierta.</li>
+<li><strong>Almacén de variables</strong> (<em>feature store</em>). Nace de un problema muy concreto que ya hemos tocado: la variable que se calcula al entrenar y la que se calcula al predecir <strong>tienen que ser la misma</strong>, y normalmente las escriben personas distintas en lenguajes distintos. Un feature store guarda la definición una sola vez y la sirve a ambos, además de resolver la consulta por fecha que vimos en el <a href="../../content/explotacion/ds.html#el-tablón-correcto-a-fecha">tablón</a>. <a href="https://feast.dev/">Feast</a> es la opción abierta más extendida.</li>
+<li><strong>Monitorización</strong>. Un modelo no falla con un error, falla degradándose: los datos de entrada dejan poco a poco de parecerse a los de entrenamiento. Detectar esa <strong>deriva</strong> es vigilar distribuciones, no excepciones.</li>
+<li><strong>Reentrenamiento</strong>, que cierra el ciclo y que en la práctica es un proceso más de los que orquestamos.</li>
 </ul>
-<p>Con esos mínimos, podemos montar un sistema bien robusto que garantice que la actuación digital se realiza conforme a cómo precisamos. Sin embargo, ¿es necesario que nuestros sistemas cumplan con estos requisitos siempre? No, en muchas empresas, precisamente para no afectar a la operativa de estos sistemas pero poder interrogarlos con dudas de carácter analítico e integrar información de otras fuentes (externas o internas) se disponen de plataformas secundarias que no precisan de estas restricciones ya que no hay sistemas críticos que operen sobre estas. Solo se usan con un carácter <strong>analítico</strong>.</p>
-<p>El hecho de cambiar el enfoque nos permite prescindir de algunas restricciones relativas a las relaciones y otras restricciones de los sistemas transaccionales que no es necesario estén presenten en los sistemas analíticos, cambiando por completo el enfoque del sistema.</p>
-<p>La base de datos operacional es el sistema pensado para dar soporte a las aplicaciones que serán empleadas por agentes o usuarios para llevar a cabo el proceso de negocio que ocupe. Por lo tanto, serán la fuente de información de donde deberemos recibir los datos para nuestros análisis posteriores. Y muy posiblemente debamos conocer algo de <a href="../../content/sistemas/sql.html">SQL</a> para poder interactuar con estos sistemas. Para ello deberemos profundizar en dos cuestiones clave: los índices y las transacciones.</p>
-
-
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>El feature store es un tablón con dos puertas
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si el concepto resulta abstracto, esta es la forma corta de verlo. Un feature store sirve la misma variable de dos maneras: <strong>por lotes y con fecha</strong>, para construir conjuntos de entrenamiento correctos históricamente, y <strong>al vuelo y con el valor actual</strong>, para responder a una predicción en línea.</p>
+<p>La primera puerta es exactamente lo que hicimos a mano con los satélites. Por eso, en un stack analítico por lotes, la pregunta <em>¿necesitamos un feature store?</em> tiene con frecuencia la respuesta <em>todavía no</em>: hasta que no haya predicción en línea, un buen almacén con historia hace el mismo trabajo con menos piezas.</p>
+</div>
+</div>
 </section>
+<section id="dónde-acaba-nuestro-trabajo" class="level2" data-number="23.4">
+<h2 data-number="23.4" class="anchored" data-anchor-id="dónde-acaba-nuestro-trabajo"><span class="header-section-number">23.4</span> Dónde acaba nuestro trabajo</h2>
+<p>Merece la pena cerrar delimitando, porque MLOps es una disciplina con entidad propia y este es un libro de ingeniería de datos.</p>
+<p>Del recorrido anterior, lo que es inequívocamente nuestro es la parte de abajo: que los datos que alimentan el entrenamiento y los que alimentan la predicción vengan del mismo sitio, estén correctamente fechados, sean reproducibles y estén documentados. El registro de modelos, el servicio y la monitorización de la deriva pertenecen a otro perfil, aunque en equipos pequeños acabe siendo la misma persona.</p>
+<p>Y hay una simetría que conviene notar, porque resume bastante bien todo el libro. Un modelo en producción es, al final, <strong>otro consumidor más</strong> de la capa de explotación. Tiene las mismas necesidades que un cuadro de mando: datos fiables, definiciones estables, historia consultable y alguien que avise cuando algo cambie río arriba. Nada de lo que hemos construido cambia porque el consumidor sea un algoritmo en lugar de una persona.</p>
+</section>
+<section id="cierre" class="level2" data-number="23.5">
+<h2 data-number="23.5" class="anchored" data-anchor-id="cierre"><span class="header-section-number">23.5</span> Cierre</h2>
+<p>Hemos recorrido el ciclo completo. Empezamos con <a href="../../content/intro.html">Codd y el modelo tabular</a>, pasamos por el <a href="../../content/modelado/intro.html">modelado</a> y los <a href="../../content/sistemas/intro.html">sistemas que almacenan</a>, <a href="../../content/load/intro.html">extrajimos</a> de las fuentes y <a href="../../content/load/staging.html">aterrizamos</a> en un lakehouse abierto, <a href="../../content/transform/raw_vault.html">integramos</a> la historia en un vault y la <a href="../../content/transform/business_vault.html">presentamos</a> de forma consumible, y finalmente la hemos puesto en manos de quien tiene las preguntas.</p>
+<p>Si algo debería quedar de todo esto, no son las herramientas. DuckLake, dlt, dbt y Rill son buenas elecciones hoy y serán otras dentro de unos años, igual que Hadoop lo fue y dejó de serlo. Lo que permanece son las decisiones que hay debajo: guardar el dato crudo antes de interpretarlo, separar lo que el negocio decide de lo que el sistema impone, conservar la historia porque nadie sabe qué se preguntará mañana, y escribir las definiciones en algún sitio donde no puedan desactualizarse en silencio.</p>
+<p>Eso, y recordar que al final del último <code>SELECT</code> siempre hay una persona intentando tomar una decisión mejor.</p>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -950,13 +912,13 @@ window.Quarto = {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/sistemas/intro.html" class="pagination-link" aria-label="Sistemas de gestión de datos">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span>
+      <a href="../../content/explotacion/ds.html" class="pagination-link" aria-label="Ciencia de datos">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/sistemas/sql.html" class="pagination-link" aria-label="Structured Query Language">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/references.html" class="pagination-link" aria-label="Referencias">
+        <span class="nav-page-text">Referencias</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
