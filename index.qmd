@@ -6,7 +6,7 @@ Ah, y barato a poder ser. Todo un reto.
 
 Nuestro posición como ingenieros de datos está en el epicentro de la acción dada la relevancia que han tomado los campos de la ciencia de datos e inteligencia artificial. Además, el ámbito corporativo necesita de ciertas garantías para poder dar cumplimiento al marco regulatorio cuando se trata de datos de carácter personal o con impacto a usuarios.
 
-Por ello debemos de datos buena cuenta de las mejores prácticas a la hora de realizar nuestra tarea.
+Por ello, debemos de darnos buena cuenta de las mejores prácticas a la hora de realizar nuestra tarea.
 
 ## Referencias
 
