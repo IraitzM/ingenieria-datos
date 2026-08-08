@@ -324,7 +324,7 @@ Construimos ahora el almacén completo encima.
 ```{python}
 #| echo: true
 #| output: true
-print("\n".join(utilidadesv.resumen(utilidades.dbt("build")).splitlines()[-2:]))
+print("\n".join(utilidades.resumen(utilidades.dbt("build")).splitlines()[-2:]))
 ```
 
 ### Lo que ya sabe dbt
