@@ -8,6 +8,7 @@ dependencies = [
     "dbt-duckdb>=1.11.0",
     "dlt[duckdb,parquet,sqlalchemy]>=1.29.1",
     "duckdb>=1.5.5",
+    "ibis-framework[duckdb]>=12.0.0",
     "ipykernel>=6.30.1",
     "nbclient>=0.10.2",
     "nbformat>=5.10.4",

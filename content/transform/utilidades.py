@@ -34,6 +34,7 @@ def usar(nombre):
     CATALOGO = os.path.join(ESPACIO, "catalogo.sqlite")
     DATOS = os.path.join(ESPACIO, "lago")
 
+
 # Primera carga: lo que la ingesta dejó en staging el 10 de enero
 CARGA_1 = {
     "fecha": "2026-01-10 03:00:00",
@@ -158,9 +159,12 @@ def dbt(*argumentos):
             ejecutable,
             "--no-use-colors",
             *argumentos,
-            "--project-dir", PROYECTO,
-            "--target-path", os.path.join(ESPACIO, "target"),
-            "--log-path", os.path.join(ESPACIO, "logs"),
+            "--project-dir",
+            PROYECTO,
+            "--target-path",
+            os.path.join(ESPACIO, "target"),
+            "--log-path",
+            os.path.join(ESPACIO, "logs"),
         ],
         capture_output=True,
         text=True,

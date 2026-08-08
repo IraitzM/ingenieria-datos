@@ -12,90 +12,257 @@ En el **BI de clics** los cuadros de mando se construyen arrastrando campos en u
 
 En el **BI de código** el cuadro de mando es un fichero de texto en el repositorio. Se revisa en un _pull request_, se despliega con el resto del proyecto y se puede diferenciar entre versiones. Cuesta más arrancar y escala infinitamente mejor. Es, además, coherente con todo lo que llevamos hecho: [dlt](../load/herramientas.qmd) es código, [dbt](../transform/data_warehousing.qmd) es código, y no tendría mucho sentido que la última capa dejara de serlo.
 
-## Rill
+```{python}
+#| echo: false
+#| output: false
+import sys, os
 
-[Rill](https://www.rilldata.com/) es una herramienta de BI de código abierto que encaja especialmente bien con el stack que hemos construido, y conviene explicar por qué antes de mirar la configuración.
+sys.path.insert(0, os.path.abspath("../transform"))
+import utilidades
 
-* **Habla DuckDB de forma nativa** y trae un [conector de DuckLake](https://docs.rilldata.com/developers/build/connectors/olap/ducklake). No ingiere nuestros datos ni los copia: empuja las consultas al lago directamente. Toda la arquitectura de las partes anteriores sigue siendo la única copia de la verdad.
-* **La capa semántica va incluida**, en los ficheros de métricas que vimos en el [capítulo anterior](semantica.qmd). No hay que operar una pieza más.
-* **Todo el proyecto es YAML y SQL** en un directorio, con lo que entra en el repositorio como cualquier otra cosa.
-* **Se ejecuta en local**, sin desplegar nada, lo que permite iterar sobre un cuadro de mando en segundos.
-* Su modelo de exploración prioriza el **detalle**: está pensado para que quien ve una anomalía pueda bajar hasta la fila que la causa sin pedir un informe nuevo.
+utilidades.usar("bi")
+utilidades.crear_lago()
+utilidades.dbt("run", "--select", "prep", "raw_vault")
+utilidades.cargar(utilidades.CARGA_2)
+utilidades.dbt("run", "--select", "prep", "raw_vault")
+utilidades.cargar(utilidades.CARGA_3)
+utilidades.dbt("build")
+```
+
+## Evidence
+
+[Evidence](https://evidence.dev/) lleva el BI de código hasta su conclusión lógica: **un informe es un fichero Markdown con consultas SQL dentro**. No hay lienzo, no hay arrastrar y soltar, no hay fichero binario. Se escribe el texto que explica lo que se está mirando, se intercala la consulta que lo sostiene y se colocan los componentes que dibujan el resultado.
+
+Encaja con este stack por cuatro motivos:
+
+* **Habla DuckDB de forma nativa**, que es exactamente el motor sobre el que hemos construido todo lo demás.
+* **La salida es un sitio estático**. El resultado de compilar un proyecto de Evidence es HTML, que se publica en cualquier sitio y no necesita servidor ni base de datos detrás. Es, literalmente, la misma mecánica con la que se publica este libro.
+* **El informe es narrativo**. Un cuadro de mando cuenta un número; un informe de Evidence cuenta por qué ese número es el que es, con el texto y el dato en el mismo fichero y sin posibilidad de que uno se desactualice respecto al otro.
+* **Todo es texto plano** y por tanto versionable, revisable y diferenciable.
 
 ### Ponerlo en marcha
 
 ```bash
-curl https://rill.sh | sh
-rill start academia
+npx degit evidence-dev/template academia-informes
+cd academia-informes
+npm install
+npm run sources   # ejecuta las consultas contra el origen
+npm run dev       # levanta el sitio en http://localhost:3000
 ```
 
-La interfaz queda en `http://localhost:9009`.
-
-### Conectarlo a nuestro lakehouse
-
-Dos ficheros. El conector, que es literalmente la misma sentencia `ATTACH` que usamos en el [capítulo de la capa de aterrizaje](../load/staging.qmd):
+El origen se declara en un fichero por conexión:
 
 ```yaml
-# connectors/ducklake.yaml
-type: connector
-driver: duckdb
-attach: "'ducklake:sqlite:catalogo.sqlite' (DATA_PATH 'lago/')"
+# sources/lago/connection.yaml
+name: lago
+type: duckdb
+options:
+  filename: consumo.duckdb
 ```
 
-Y la declaración de que ese es el motor del proyecto:
+:::{.callout-warning}
+# El punto flojo de esta combinación
 
-```yaml
-# rill.yaml
-olap_connector: ducklake
-```
+Conviene decirlo con claridad. Evidence habla DuckDB, pero **no habla DuckLake directamente**: su conector espera un fichero de base de datos, no una sentencia `ATTACH` con la extensión cargada.
 
-Con eso Rill ve las tablas que dbt dejó construidas, incluida `dim_alumno` y `fct_matriculas`. En producción bastaría con cambiar el catálogo por un PostgreSQL y el `DATA_PATH` por un bucket, sin tocar nada más:
+Hay dos salidas razonables y ninguna es dramática. La primera es dejar que dbt materialice **también** la capa de consumo en un fichero DuckDB local, que es un modelo más en el proyecto y pesa lo que pesen unas cuantas dimensiones. La segunda es generar ese fichero como paso previo a `npm run sources`, con un script de tres líneas que adjunta el lago y copia las tablas de `marts`.
 
-```yaml
-attach: "'ducklake:postgres:dbname=catalogo host={{ .env.PG_HOST }}' (DATA_PATH 's3://universidad/lago/')"
-```
-
-:::{.callout-note}
-# El círculo se cierra
-
-Merece la pena detenerse en lo que acaba de pasar. La misma cadena de conexión que escribió dlt al aterrizar los datos, que leyó dbt al construir el vault, es la que consulta la herramienta de BI.
-
-Ni una sola copia intermedia, ni un formato propietario en ningún punto del recorrido, y todos los datos siguen siendo ficheros Parquet que cualquier motor puede leer. Eso es lo que promete un lakehouse abierto, y no siempre se cumple.
+Es el precio de usar la herramienta más joven del cuadro. Si esto molesta, [Rill](../appendices/rill.qmd) tiene conector nativo de DuckLake y consulta el lago sin copia intermedia; le hemos dedicado un apéndice.
 :::
 
-### Un cuadro de mando
+### Una página
 
-Sobre la métrica que definimos, un panel de exploración es otro fichero corto:
+Así se escribe un informe completo. Nótese que el bloque SQL tiene nombre (`matriculas_por_asignatura`) y que los componentes lo consumen por ese nombre:
 
-```yaml
-# explores/alumnos.yaml
-version: 1
-type: explore
-display_name: "Alumnado"
-metrics_view: alumnos
+````markdown
+---
+title: Alumnado del curso
+---
 
-dimensions: "*"
-measures: "*"
+Los datos salen de la capa de consumo del almacén y se actualizan con cada
+ejecución de la ingesta.
+
+```sql alumnos
+select count(*) as alumnos from marts.dim_alumno
 ```
 
-Y ya está. La brevedad no es un truco del ejemplo: como las métricas y las dimensiones ya están definidas en la capa semántica, el cuadro de mando solo decide qué se expone y cómo se presenta.
+Ahora mismo hay <Value data={alumnos} column=alumnos /> alumnos dados de alta.
+
+```sql matriculas_por_asignatura
+select
+    s.asignatura,
+    count(*) as matriculas
+from marts.fct_matriculas f
+join marts.dim_asignatura s on s.asignatura_id = f.asignatura_id
+group by 1
+order by 2 desc
+```
+
+<BarChart
+    data={matriculas_por_asignatura}
+    x=asignatura
+    y=matriculas
+    title="Matrículas por asignatura"
+/>
+````
+
+Ese `<Value>` incrustado en mitad de una frase es la idea entera de Evidence. El texto no dice "hay cinco alumnos" y se queda desfasado la semana que viene: dice el número que devuelve la consulta, siempre.
+
+### El resultado
+
+Compilar lo anterior produce un panel como este. Lo que sigue está calculado con las mismas consultas contra el mismo lakehouse, pero dibujado con las herramientas del propio libro, porque Evidence necesita Node para compilar y no queremos esa dependencia solo para una figura.
+
+```{python}
+#| echo: false
+#| output: asis
+from IPython.display import HTML, display
+
+resumen = utilidades.consultar("""
+    select
+        (select count(*) from main_marts.dim_alumno) as alumnos,
+        (select count(*) from main_marts.fct_matriculas) as matriculas,
+        (select count(*) from main_marts.dim_asignatura) as asignaturas,
+        (select count(*) from main_marts.dim_alumno a
+         where not exists (select 1 from main_marts.fct_matriculas f
+                           where f.alumno_id = a.alumno_id)) as sin_matricula
+""").iloc[0]
+
+por_asignatura = utilidades.consultar("""
+    select s.asignatura, count(f.matricula_id) as matriculas
+    from main_marts.dim_asignatura s
+    left join main_marts.fct_matriculas f on f.asignatura_id = s.asignatura_id
+    group by 1 order by 2 desc, 1
+""")
+
+por_dia = utilidades.consultar("""
+    select strftime(fecha_matricula, '%Y-%m-%d') as dia, count(*) as matriculas
+    from main_marts.fct_matriculas group by 1 order by 1
+""")
+
+
+def tarjeta(valor, etiqueta, matiz=""):
+    return (f'<div class="kpi{matiz}"><span class="kpi-valor">{valor}</span>'
+            f'<span class="kpi-etiqueta">{etiqueta}</span></div>')
+
+
+def barras(datos, etiqueta, valor):
+    tope = max(datos[valor]) or 1
+    filas = []
+    for fila in datos.itertuples(index=False):
+        nombre = getattr(fila, etiqueta)
+        cuenta = getattr(fila, valor)
+        ancho = 100 * cuenta / tope
+        filas.append(
+            f'<div class="barra"><span class="barra-nombre">{nombre}</span>'
+            f'<span class="barra-pista"><span class="barra-relleno"'
+            f' style="width:{ancho:.0f}%"></span></span>'
+            f'<span class="barra-valor">{cuenta}</span></div>'
+        )
+    return "".join(filas)
+
+
+panel = f"""
+<style>
+.panel {{ border: 1px solid #ddd8ea; border-radius: 10px; padding: 1.1rem 1.3rem;
+          background: #fcfbfe; margin: 1.5rem 0; }}
+.panel h4 {{ margin: 1.2rem 0 .6rem; font-size: .95rem; font-weight: 600;
+             color: #332757; }}
+.panel-titulo {{ font-size: 1.05rem; font-weight: 600; color: #332757;
+                 margin-bottom: .2rem; }}
+.panel-pie {{ font-size: .78rem; color: #767d8c; margin-top: 1rem; }}
+.kpis {{ display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .9rem; }}
+.kpi {{ flex: 1 1 110px; background: #e6ddf5; border: 1px solid #cfc2ec;
+        border-radius: 8px; padding: .6rem .8rem; display: flex;
+        flex-direction: column; }}
+.kpi.aviso {{ background: #fae3c8; border-color: #eccba1; }}
+.kpi-valor {{ font-size: 1.7rem; font-weight: 600; color: #332757;
+              line-height: 1.1; }}
+.kpi.aviso .kpi-valor {{ color: #573809; }}
+.kpi-etiqueta {{ font-size: .74rem; color: #4a505e; text-transform: uppercase;
+                 letter-spacing: .04em; }}
+.barra {{ display: flex; align-items: center; gap: .6rem; margin: .3rem 0;
+          font-size: .85rem; }}
+.barra-nombre {{ flex: 0 0 8.5rem; color: #1f2430; }}
+.barra-pista {{ flex: 1 1 auto; background: #efecf7; border-radius: 4px;
+                height: 1.1rem; overflow: hidden; }}
+.barra-relleno {{ display: block; height: 100%; background: #7457bd;
+                  border-radius: 4px; }}
+.barra-valor {{ flex: 0 0 2rem; text-align: right; color: #4a505e;
+                font-variant-numeric: tabular-nums; }}
+</style>
+
+<div class="panel">
+  <div class="panel-titulo">Alumnado del curso</div>
+  <div class="kpis">
+    {tarjeta(resumen.alumnos, "Alumnos")}
+    {tarjeta(resumen.matriculas, "Matrículas")}
+    {tarjeta(resumen.asignaturas, "Asignaturas")}
+    {tarjeta(resumen.sin_matricula, "Sin matricular", " aviso")}
+  </div>
+  <h4>Matrículas por asignatura</h4>
+  {barras(por_asignatura, "asignatura", "matriculas")}
+  <h4>Matrículas por día de carga</h4>
+  {barras(por_dia, "dia", "matriculas")}
+  <div class="panel-pie">Fuente: marts.dim_alumno, marts.fct_matriculas,
+  marts.dim_asignatura del lakehouse. Sin copias intermedias.</div>
+</div>
+"""
+
+display(HTML(panel))
+```
+
+Dos detalles de ese panel no están ahí por decoración.
+
+La **tarjeta ámbar** es exactamente la ambigüedad que discutíamos en el [capítulo anterior](semantica.qmd): según se cuenten los alumnos por la dimensión o por los hechos, el panel dice cinco o cuatro. Que ambas cifras aparezcan juntas y con nombres distintos es lo que evita la reunión de las dos horas.
+
+Y **Matemáticas aparece con cero**. Es el error más repetido de un cuadro de mando: la consulta natural cruza los hechos con la dimensión y, al hacerlo, la asignatura sin matrículas desaparece del gráfico. Nadie la echa de menos, porque no se ve lo que no está. Basta con partir de la dimensión y cruzar hacia los hechos (`left join` en lugar de `join`) para que el vacío sea visible, que es justo la información que alguien necesitaba.
+
+## Lightdash
+
+Hay un segundo enfoque que merece la pena conocer, sobre todo si el problema no es publicar informes sino **dar autoservicio** a gente que no va a escribir SQL.
+
+[Lightdash](https://www.lightdash.com/) se conecta directamente al proyecto de dbt y toma de ahí su modelo: las tablas son los modelos, y las métricas son las que estén declaradas en el YAML de dbt. No hay que redefinir nada, porque la [capa semántica](semantica.qmd) ya vive donde vive el código.
+
+```yaml
+# models/marts/_marts.yml
+models:
+  - name: fct_matriculas
+    meta:
+      metrics:
+        matriculas:
+          type: count
+          label: "Matrículas"
+          description: "Matrículas registradas, una por alumno y asignatura."
+```
+
+Esa métrica aparece sola en la interfaz, y quien explore no puede inventarse otra forma de contar. Es la propiedad que lo distingue del BI de clics clásico: **la interfaz es de clics, pero las definiciones son de código**.
+
+A cambio, es un servicio que hay que desplegar y operar, con su base de datos propia. Para un equipo pequeño es una pieza más de infraestructura; para uno con cincuenta consumidores de datos, es justo lo que hace falta.
 
 ## El panorama
 
-Rill no es la única opción razonable, y la elección depende bastante del contexto.
-
 | Herramienta | Naturaleza | Cuándo encaja |
 |---|---|---|
-| [Rill](https://www.rilldata.com/) | Abierta, BI de código, DuckDB nativo | Stack DuckDB/DuckLake, exploración rápida, equipos que versionan |
-| [Evidence](https://evidence.dev/) | Abierta, informes en Markdown y SQL | Informes narrativos, publicación estática |
+| [Evidence](https://evidence.dev/) | Abierta, informes en Markdown y SQL | Informes narrativos, publicación estática, equipos que versionan |
+| [Rill](https://www.rilldata.com/) | Abierta, exploración, DuckDB nativo | Stack DuckDB/DuckLake, análisis interactivo, capa semántica incluida |
+| [Lightdash](https://www.lightdash.com/) | Abierta, sobre métricas de dbt | Autoservicio cuando la semántica ya vive en dbt |
 | [Metabase](https://www.metabase.com/) | Abierta, orientada a clics | Autoservicio para gente no técnica, arranque rápido |
 | [Superset](https://superset.apache.org/) | Abierta, muy completa | Muchos usuarios y muchas fuentes, si hay quien la opere |
-| [Lightdash](https://www.lightdash.com/) | Abierta, sobre métricas de dbt | Si la capa semántica ya vive en dbt |
 | Power BI, Tableau, Looker | Comerciales | Cuando ya están implantadas, que suele ser el caso |
 
 : Herramientas de explotación habituales
 
-La observación honesta sobre la última fila: en la mayoría de organizaciones la herramienta de BI **ya está elegida** y no la elige el equipo de datos. Lo que sí se puede elegir, y es donde está el margen de maniobra real, es que las métricas vivan fuera de ella. Un almacén bien modelado con una capa semántica versionada sirve a Power BI igual de bien que a Rill, y sobrevive al día que la organización cambie de herramienta.
+Las tres primeras se reparten el trabajo bastante bien y no compiten tanto como parece: **Evidence** publica lo que hay que contar, **Rill** sirve para averiguar qué está pasando y **Lightdash** para que otros se lo pregunten solos.
+
+La observación honesta sobre la última fila: en la mayoría de organizaciones la herramienta de BI **ya está elegida** y no la elige el equipo de datos. Lo que sí se puede elegir, y es donde está el margen de maniobra real, es que las métricas vivan fuera de ella. Un almacén bien modelado con una capa semántica versionada sirve a Power BI igual de bien que a Evidence, y sobrevive al día que la organización cambie de herramienta.
+
+:::{.callout-note}
+# El círculo se cierra
+
+Merece la pena detenerse en lo que acaba de pasar. La misma cadena de conexión que escribió dlt al aterrizar los datos, que leyó dbt al construir el vault, es la que alimenta el panel de ahí arriba.
+
+Ni una sola copia intermedia, ni un formato propietario en ningún punto del recorrido, y todos los datos siguen siendo ficheros Parquet que cualquier motor puede leer. Eso es lo que promete un lakehouse abierto, y no siempre se cumple.
+:::
 
 ## Lo que el BI no arregla
 

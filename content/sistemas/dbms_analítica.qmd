@@ -22,6 +22,8 @@ Mientras que las consultas analíticas precisan acceder a la información en col
 
 De forma que la ordenación columnar nos permite no tener que cargar la información innecesaria en la operación `AVG(edad)`.
 
+La idea no es nueva: el trabajo sobre C-Store [@stonebraker2005cstore] ya defendía en 2005 que un gestor pensado para lectura debía almacenar por columnas, y de ahí desciende buena parte de los sistemas actuales.
+
 En el mundo de los sistemas de código abierto, [Apache Parquet](https://parquet.apache.org/) para el almacenamiento en disco y [Apache Arrow](https://arrow.apache.org/) para el mismo concepto en memoria se han convertido en un estándar.
 
 ## Restricciones
@@ -63,7 +65,7 @@ Estos sistemas permiten el despliegue en recursos nube o infraestructura propiet
 * Microsoft SQL Server
 * Apache Hadoop
 * Clickhouse
-* DuckDB
+* DuckDB [@raasveldt2019duckdb]
 * Apache Doris
 
 ### Motores de consulta

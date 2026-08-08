@@ -33,6 +33,12 @@ flowchart LR
     c2 --> r
     c3 --> r
     r --> d{"¿Cuál es<br/>el bueno?"}
+
+    %% Paleta por bloque del libro
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class dw transformacion
+    class c1,c2,c3 explotacion
 ```
 
 Lo grave no es la discrepancia, es lo que provoca. En cuanto ocurre dos o tres veces, la organización deja de discutir sobre el negocio y empieza a discutir sobre los datos. Y a partir de ahí, cada área se construye su propio informe para no depender de nadie, con lo que el problema se multiplica en lugar de resolverse.

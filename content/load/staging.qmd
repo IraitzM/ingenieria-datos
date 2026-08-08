@@ -50,6 +50,14 @@ flowchart TB
     cat -.->|"apunta a"| alm
     motor["Motor de consulta"] --> cat
     motor --> alm
+
+    %% Paleta por bloque del libro
+    classDef meta fill:#d9efec,stroke:#3a8f8a,stroke-width:1.5px,color:#0f3f3c
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    class m meta
+    class p1,p2,p3 almacen
+    class motor transformacion
 ```
 
 La consecuencia práctica es que montar un lakehouse deja de ser un proyecto. Vamos a construir uno entero en este capítulo, con transacciones, viaje en el tiempo y evolución de esquema, y va a caber en unas pocas celdas.

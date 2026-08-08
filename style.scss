@@ -3,6 +3,22 @@
 $primary: #80c0dd !default;
 $font-size-root: 18px !default;
 
+/* Diagramas -----------------------------------------------------
+   Base neutra y de alto contraste. El color con significado lo ponen
+   los classDef de cada diagrama (carga, transformación y explotación),
+   así que aquí interesa que el punto de partida no compita con ellos. */
+
+$mermaid-bg-color: transparent !default;
+$mermaid-node-bg-color: #f2f3f6 !default;
+$mermaid-node-fg-color: #8a91a0 !default;
+$mermaid-fg-color: #1f2430 !default;
+$mermaid-fg-color--lighter: #4a505e !default;
+$mermaid-fg-color--lightest: #767d8c !default;
+$mermaid-edge-color: #596070 !default;
+$mermaid-label-bg-color: #ffffff !default;
+$mermaid-label-fg-color: #1f2430 !default;
+$mermaid-font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !default;
+
 /*-- scss:rules --*/
 
 .sidebar-title {
@@ -57,10 +73,27 @@ pre {
   background-image: linear-gradient(160deg,#f8f8f8 0,#f1f1f1 100%);
 }
 
-/* Mermaid blocks styling */
+/* Diagramas ------------------------------------------------------ */
+
 svg.mermaid-js {
-  background: #e3f2fd;
-  font-family: 'Fira Mono', 'Consolas', monospace;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
-  color: #0d47a1; // dark blue
+  background: transparent;
+  max-width: 100%;
+}
+
+/* Un poco de aire alrededor y separación del texto */
+pre.mermaid, div.cell-output-display > svg.mermaid-js {
+  margin: 1.5rem 0;
+}
+
+/* Las etiquetas de las aristas quedan ilegibles sobre las líneas si no
+   se les pone fondo propio */
+svg.mermaid-js .edgeLabel {
+  background-color: #ffffff;
+  padding: 1px 3px;
+}
+
+/* Los títulos de los subgrafos compiten con los nodos si van a igual peso */
+svg.mermaid-js .cluster-label {
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }

@@ -1,4 +1,4 @@
-# Introducción
+# Introducción {.unnumbered}
 
 Este libro pretende ser una guía sencilla con referencias al estado de la cuestión y herramientas en boga. Hablaremos de:
 
@@ -58,7 +58,35 @@ No existía internet además y una vez salíamos del dominio de la empresa no se
 
 Estos sistemas gestionaban tanto los datos que los empleados iban registrando así como las acciones que se realizaban sobre estos con rutinas que reflejan la operativa de la compañía: procesos de compra, transferencias bancarias, facturación de servicios y contabilidad general, entre otros.
 
-Son los que conocemos como [sistemas centrales de datos](sistemas/intro) y gran parte de este trabajo se lo debemos a una persona en concreto, [Edgar Frank Codd](https://es.wikipedia.org/wiki/Edgar_Frank_Codd), y su trabajo en este ámbito titulado _Un modelo tabular[^1] de datos para grandes bancos de datos compartidos_ [@codd1970relational].
+Son los que conocemos como [sistemas centrales de datos](sistemas/intro) y gran parte de este trabajo se lo debemos a una persona en concreto, [Edgar Frank Codd](https://es.wikipedia.org/wiki/Edgar_Frank_Codd), y su trabajo en este ámbito titulado _Un modelo tabular[^1] de datos para grandes bancos de datos compartidos_ [@codd1970relational]. Para quien quiera acompañar este libro con dos lecturas de referencia, _Designing Data-Intensive Applications_ [@kleppmann2017designing] cubre los fundamentos de los sistemas que hay debajo, y _Fundamentals of Data Engineering_ [@reis2022fundamentals] el oficio en su conjunto.
+
+:::{.callout-note}
+# Cómo leer los diagramas
+
+A lo largo del libro los diagramas siguen siempre el mismo código de color, que se corresponde con las tres grandes partes del recorrido del dato. Merece la pena echarle un vistazo ahora para no tener que descifrarlo sobre la marcha.
+
+```{mermaid}
+flowchart LR
+    o["Sistemas origen"] --> c["Ingesta"] --> t["Transformación"] --> e["Explotación"]
+    m["Metadatos"] -.-> t
+    a[("Almacenamiento")] -.-> t
+
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef meta fill:#d9efec,stroke:#3a8f8a,stroke-width:1.5px,color:#0f3f3c
+    class o origen
+    class c carga
+    class t transformacion
+    class e explotacion
+    class a almacen
+    class m meta
+```
+
+En gris lo que no controlamos, los sistemas de los que bebemos. En ámbar la **ingesta**, en verde la **transformación** y en violeta la **explotación**, que son las tres partes centrales del libro. En azul el almacenamiento y en verde azulado los metadatos, que acompañan a todo lo demás.
+:::
 
 :::{.callout-tip collapse="true"}
 # Mainframe y COBOL

@@ -58,6 +58,68 @@ Ese fue, históricamente, uno de los grandes focos de conflicto: el analista y e
 con.close()
 ```
 
+### Cuando SQL no es la herramienta
+
+Hay, sin embargo, una fricción real en lo anterior. Quien viene de pandas piensa en transformaciones encadenadas, no en una consulta de treinta líneas, y acaba haciendo lo previsible: `SELECT *`, traérselo todo a memoria y transformar en Python. Funciona hasta que la tabla no cabe, que es siempre justo después de que el análisis se vuelva interesante.
+
+[Ibis](https://ibis-project.org/) resuelve esa fricción por el otro lado. Ofrece una API de dataframes muy parecida a la de pandas, pero **no ejecuta nada**: construye una expresión y la compila al SQL del motor que haya debajo. El cálculo ocurre donde están los datos y a Python solo vuelve el resultado.
+
+```{python}
+#| echo: true
+#| output: true
+import ibis
+
+con = ibis.duckdb.connect()
+con.raw_sql("INSTALL ducklake; LOAD ducklake;")
+con.raw_sql(f"ATTACH 'ducklake:sqlite:{utilidades.CATALOGO}' AS lago")
+
+alumnos = con.table("dim_alumno", database=("lago", "main_marts"))
+matriculas = con.table("fct_matriculas", database=("lago", "main_marts"))
+
+tablon = (
+    alumnos.left_join(matriculas, "alumno_id")
+    .group_by([alumnos.alumno_id, alumnos.nombre_completo, alumnos.tipo_correo])
+    .aggregate(asignaturas=matriculas.matricula_id.count())
+    .order_by("alumno_id")
+)
+
+tablon.to_pandas()
+```
+
+Eso se lee como pandas y se comporta como SQL. La prueba está en que la expresión sabe enseñar en qué se ha traducido:
+
+```{python}
+#| echo: true
+#| output: true
+print(ibis.to_sql(tablon))
+```
+
+Ni un solo dato ha salido del lago hasta el `to_pandas()` final, y lo que ha salido es el resultado ya agregado. Con una tabla de cinco filas da igual; con una de quinientos millones es la diferencia entre que el análisis sea posible o no lo sea.
+
+Tres cosas lo hacen interesante más allá de la comodidad:
+
+* **La ejecución es perezosa**. Se pueden encadenar veinte transformaciones y ninguna se ejecuta hasta que se pide el resultado, con lo que el motor optimiza el conjunto y no cada paso.
+* **El mismo código sirve para otro motor**. La expresión se compila a DuckDB, PostgreSQL, Snowflake, BigQuery, Spark o Polars sin tocarla. Es, en el plano del análisis, la misma promesa de portabilidad que perseguíamos con los [formatos abiertos](../sistemas/nuevos-formatos.qmd) en el plano del almacenamiento.
+* **Devuelve Arrow de forma nativa**, con lo que el paso a las librerías de modelado no pasa por una conversión cara.
+
+:::{.callout-tip}
+# Cuándo SQL y cuándo Ibis
+
+No es una elección de bando y conviene no vivirla así.
+
+**SQL** para lo que va a vivir en el almacén y lo va a leer alguien más: los modelos de dbt, las definiciones de métricas, todo lo que pertenece al proyecto. Es el lenguaje común, lo entiende todo el equipo y no depende de la versión de una librería.
+
+**Ibis** para el trabajo exploratorio y para lo que se construye desde Python: preparar variables, iterar sobre un tablón, encadenar pasos que en SQL serían subconsultas anidadas ilegibles. Y muy en particular, para el código de preparación que tiene que ejecutarse igual en el portátil que sobre el motor de producción.
+
+Lo que no conviene es lo tercero: reimplementar en Ibis lógica de negocio que ya está en dbt. Eso son dos definiciones de lo mismo, y ya sabemos cómo acaba.
+:::
+
+```{python}
+#| echo: false
+#| output: false
+con.disconnect()
+```
+
 ## El tablón
 
 Los algoritmos de aprendizaje automático, salvo excepciones, esperan una matriz: **una fila por observación y una columna por variable**. No saben unir tablas ni entienden un modelo en estrella. Alguien tiene que aplanar.

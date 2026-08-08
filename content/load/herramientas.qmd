@@ -39,6 +39,14 @@ flowchart LR
     p --> e["Extraer"] --> n["Normalizar"] --> c["Cargar"]
     c --> d[("Destino")]
     p <-.->|"estado"| d
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class r1,r2,r3 origen
+    class p,e,n,c carga
+    class d almacen
 ```
 
 El caso mínimo, para hacerse una idea de la superficie de la API:

@@ -41,6 +41,14 @@ flowchart LR
         o2 -->|"1 - publica"| b2
         p2 -->|"2 - recoge"| b2
     end
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class o1,o2 origen
+    class p1,p2 carga
+    class b2 almacen
 ```
 
 En la práctica una organización tendrá de las dos. Lo importante es tenerlo explícito, porque determina de quién es la culpa cuando faltan datos.
@@ -49,8 +57,8 @@ En la práctica una organización tendrá de las dos. Lo importante es tenerlo e
 
 Frecuentemente son las fuentes donde reside la información en una organización. Suelen adherirse a protocolos concretos como y devolver la información en una estructura similar a la de gestión interna. Existen dos grandes familias:
 
-* SQL: Sistemas de origen tabular (RDBMS) a los que podemos interrogar con sentencias SQL para extraer la información necesaria. Son sistemas de consulta por lo que a no ser que dispongan de un campo informando de la fecha de la información, es difícil gestionar posibles variaciones con respecto a las cargas anteriores sin almacenar en un sistema intermedio la información para comparar que fue cargado y qué es nuevo.
-* NoSQL: Sistemas de origen no tabular que suelen disponer la información en formatos _modernos_, siendo JSON el más habitual. Esto obliga a identificar si el destino permite el registro de información de estructura variable o debemos darle un formato tabular antes de poder insertarla. Al igual que con las bases de datos tabulares, deberemos ver qué medios tenemos para poder identificar los registros sumados o que hayan variado desde la última consulta.
+* **SQL**: Sistemas de origen tabular (RDBMS) a los que podemos interrogar con sentencias SQL para extraer la información necesaria. Son sistemas de consulta por lo que a no ser que dispongan de un campo informando de la fecha de la información, es difícil gestionar posibles variaciones con respecto a las cargas anteriores sin almacenar en un sistema intermedio la información para comparar que fue cargado y qué es nuevo.
+* **NoSQL**: Sistemas de origen no tabular que suelen disponer la información en formatos _modernos_, siendo JSON el más habitual. Esto obliga a identificar si el destino permite el registro de información de estructura variable o debemos darle un formato tabular antes de poder insertarla. Al igual que con las bases de datos tabulares, deberemos ver qué medios tenemos para poder identificar los registros sumados o que hayan variado desde la última consulta.
 
 Muchas de las bases de datos de nueva generación también exponen APIs de forma que podemos realizar las consultas siguiendo un protocolo HTTP de comunicación.
 

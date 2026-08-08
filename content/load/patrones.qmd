@@ -4,11 +4,21 @@ Sabemos ya de dónde vienen los datos. Toca decidir cómo los traemos de forma q
 
 ## De ETL a ELT
 
-Durante décadas el acrónimo fue **ETL**: extraer, transformar y cargar. El orden no era caprichoso. El almacén de datos era caro, tanto en disco como en cómputo, así que no tenía ningún sentido meter ahí datos que no fuéramos a usar. La transformación ocurría en un servidor intermedio, con herramientas dedicadas, y al destino solo llegaba el resultado ya limpio.
+Durante décadas el acrónimo fue **ETL**: extraer, transformar y cargar, con toda una disciplina detrás que Kimball y su equipo documentaron en su día hasta el último detalle [@kimball2008etl]. El orden no era caprichoso. El almacén de datos era caro, tanto en disco como en cómputo, así que no tenía ningún sentido meter ahí datos que no fuéramos a usar. La transformación ocurría en un servidor intermedio, con herramientas dedicadas, y al destino solo llegaba el resultado ya limpio.
 
 ```{mermaid}
 flowchart LR
     o[("Origen")] --> e["Extraer"] --> t["Transformar"] --> l["Cargar"] --> d[("Almacén")]
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class o origen
+    class e,l carga
+    class t transformacion
+    class d almacen
 ```
 
 Cuando el almacenamiento se abarató hasta ser casi irrelevante y el cómputo pasó a poder escalarse bajo demanda, el orden dejó de tener sentido. Hoy hablamos de **ELT**: extraer, cargar y transformar ya dentro del destino.
@@ -17,6 +27,16 @@ Cuando el almacenamiento se abarató hasta ser casi irrelevante y el cómputo pa
 flowchart LR
     o[("Origen")] --> e["Extraer"] --> l["Cargar"] --> d[("Almacén")] --> t["Transformar"]
     t --> d
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class o origen
+    class e,l carga
+    class t transformacion
+    class d almacen
 ```
 
 El cambio parece cosmético y no lo es en absoluto:
@@ -60,6 +80,14 @@ flowchart LR
     o[("Origen")] --> c
     c --> d[("Destino")]
     c --> m2[("Nueva marca<br/>2026-01-12 10:00")]
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class o origen
+    class c,m,m2 carga
+    class d almacen
 ```
 
 Veámoslo funcionando. Preparamos primero una secretaría académica de juguete, con el mismo modelo que ya conocemos pero añadiendo el campo que nos va a servir de huella.
@@ -179,6 +207,14 @@ flowchart LR
     wal --> cdc["Conector CDC"]
     cdc --> cola[["Cola de eventos"]]
     cola --> dest[("Destino")]
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class t,wal origen
+    class cdc,cola carga
+    class dest almacen
 ```
 
 Las ventajas son notables. Vemos **todas** las operaciones, incluidos los borrados; las vemos **en orden**; y no lanzamos ni una sola consulta contra las tablas, con lo que el impacto sobre el sistema origen es mínimo. Es la única técnica que da una réplica realmente fiel.

@@ -130,6 +130,12 @@ flowchart TB
     hubs --> dim2
     dim1 --- fct
     dim2 --- fct
+
+    %% Paleta por bloque del libro
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class hub,sat,bv,link,hubs transformacion
+    class dim1,fct,dim2 explotacion
 ```
 
 Una dimensión es el vault aplanado a la versión vigente:

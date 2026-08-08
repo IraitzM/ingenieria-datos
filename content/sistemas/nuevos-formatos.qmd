@@ -117,6 +117,12 @@ flowchart TB
     v2 -.-> man
     v1 -.-> man
     man --> p1 & p2 & p3 & p4
+
+    %% Paleta por bloque del libro
+    classDef meta fill:#d9efec,stroke:#3a8f8a,stroke-width:1.5px,color:#0f3f3c
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class cat,v3,v2,v1,man meta
+    class p1,p2,p3,p4 almacen
 ```
 
 De esa indirección salen, casi por añadidura, todas las propiedades que echábamos en falta:
@@ -154,7 +160,7 @@ Tres proyectos llegaron a esta misma conclusión de forma independiente, cada un
 
 ### Delta Lake
 
-Posiblemente unos de los primeros en intentar dar respuesta a este problema fueron la amable gente de Databricks. Basado en el formato Parquet, [Delta](https://delta.io/) mantiene un **registro de transacciones** en una carpeta `_delta_log/` junto a los datos: una secuencia de ficheros JSON numerados, cada uno describiendo qué ficheros se añaden y cuáles se retiran en esa transacción. La atomicidad sale de que solo un escritor puede crear el fichero con el siguiente número.
+Posiblemente unos de los primeros en intentar dar respuesta a este problema fueron la amable gente de Databricks. Basado en el formato Parquet, [Delta](https://delta.io/) [@armbrust2020delta] mantiene un **registro de transacciones** en una carpeta `_delta_log/` junto a los datos: una secuencia de ficheros JSON numerados, cada uno describiendo qué ficheros se añaden y cuáles se retiran en esa transacción. La atomicidad sale de que solo un escritor puede crear el fichero con el siguiente número.
 
 Reconstruir el estado de la tabla es reproducir el registro desde el principio, algo que se vuelve lento tras miles de transacciones, así que periódicamente se consolida todo en un _checkpoint_ en Parquet a partir del cual se sigue leyendo.
 
@@ -177,7 +183,7 @@ Dos ideas suyas merecen mención aparte:
 * **Particionado oculto**. En un lago clásico, si la tabla está particionada por `anio=2025/mes=03`, quien consulta tiene que acordarse de filtrar por esas columnas derivadas o se llevará una lectura completa por delante. Iceberg registra la transformación (`month(fecha_matricula)`) en los metadatos y la aplica sola cuando alguien filtra por `fecha_matricula`. El usuario no necesita saber cómo está particionada la tabla.
 * **Evolución de particionado**. Se puede cambiar el criterio de particionado de una tabla sin reescribirla. Los datos antiguos conservan el esquema de partición con el que se escribieron y los nuevos usan el actual, conviviendo en la misma tabla.
 
-[Tabular](https://tabular.io), la empresa fundada por sus creadores, fue adquirida por Databricks en 2024, movimiento que zanjó buena parte del debate sobre qué formato iba a acabar siendo el estándar de intercambio.
+Para el detalle de su modelo de metadatos, la referencia más completa es _Apache Iceberg: The Definitive Guide_ [@shiran2024iceberg]. [Tabular](https://tabular.io), la empresa fundada por sus creadores, fue adquirida por Databricks en 2024, movimiento que zanjó buena parte del debate sobre qué formato iba a acabar siendo el estándar de intercambio.
 
 ### Apache Hudi
 
@@ -257,7 +263,7 @@ Si se adopta un formato de tabla, el trabajo de mantenimiento se planifica el pr
 
 Hay un detalle en todo lo que hemos visto que invita a una pregunta incómoda. Los tres formatos guardan sus metadatos **en ficheros**, lo que los hace autocontenidos y portables. Pero para resolver la concurrencia han acabado necesitando, todos, un catálogo con una base de datos transaccional detrás.
 
-Si de todas formas vamos a tener esa base de datos, ¿por qué seguir reconstruyendo el estado de la tabla leyendo cadenas de ficheros de manifiesto? Esa es la premisa de [DuckLake](https://ducklake.select/), y como es sobre lo que vamos a construir la [capa de aterrizaje](../load/staging.qmd), lo dejamos apuntado aquí y lo desarrollamos allí con las manos en el teclado.
+Si de todas formas vamos a tener esa base de datos, ¿por qué seguir reconstruyendo el estado de la tabla leyendo cadenas de ficheros de manifiesto? Esa es la premisa de [DuckLake](https://ducklake.select/) [@ducklake2025manifesto], y como es sobre lo que vamos a construir la [capa de aterrizaje](../load/staging.qmd), lo dejamos apuntado aquí y lo desarrollamos allí con las manos en el teclado.
 
 ## Cómo elegir
 

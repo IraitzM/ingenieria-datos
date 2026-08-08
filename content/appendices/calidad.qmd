@@ -1,0 +1,301 @@
+## Calidad de datos {.appendix}
+
+Hay una pregunta que aparece tarde en todos los proyectos y que conviene adelantar: **¿cómo sabemos que lo que hay en el almacén está bien?**
+
+La respuesta perezosa es que ya lo comprobamos, porque el proyecto de dbt tiene sus pruebas y pasan todas. Y es cierto a medias, que es la peor forma de ser cierto. Las pruebas de dbt comprueban que el modelo cumple lo que esperábamos **cuando lo escribimos**. La calidad de datos es otra cosa: es vigilar que el mundo real sigue pareciéndose a lo que asumimos, sabiendo que no lo hará.
+
+## Las dos preguntas que no son la misma
+
+Merece la pena separarlas con claridad porque se confunden todo el tiempo.
+
+| | **Pruebas de transformación** | **Vigilancia de calidad** |
+|---|---|---|
+| Pregunta | ¿Mi código hace lo que dije? | ¿El dato se parece a lo que esperaba? |
+| Momento | En cada ejecución, antes de publicar | Continuo, sobre lo ya publicado |
+| Resultado | Pasa o falla, y corta la tubería | Un valor con umbral y una tendencia |
+| Ejemplo | `hk_alumno` es único | El 4 % de los correos está vacío, ayer era el 1 % |
+| Dueño | Quien escribe el modelo | Quien responde del dato |
+
+: Dos comprobaciones que se parecen y no son lo mismo
+
+La segunda columna es la que suele faltar, y su ausencia se nota en un síntoma muy concreto: los problemas de datos los descubre el usuario del cuadro de mando, no el equipo que lo mantiene.
+
+Las dimensiones que se vigilan son casi siempre las mismas seis:
+
+* **Completitud**: cuántos huecos hay donde no debería haberlos.
+* **Unicidad**: si lo que identifica a algo lo identifica de verdad.
+* **Validez**: si los valores están dentro del dominio permitido.
+* **Consistencia**: si dos sitios que deberían coincidir coinciden.
+* **Frescura**: cuánto hace que el dato no se actualiza.
+* **Exactitud**: si el dato refleja la realidad, la única que no se puede comprobar sin salir del sistema.
+
+Esta lista no es académica. La experiencia documentada de poner modelos en producción [@breck2019datalinter] apunta de forma insistente a lo mismo: la mayoría de los fallos entran por los datos y no por el algoritmo, y se detectan validando la entrada de forma sistemática, no revisando el código.
+
+## Lo que ya tenemos
+
+Empecemos por reconocer el punto de partida, que no es cero. El proyecto de dbt de los capítulos de [transformación](../transform/data_warehousing.qmd) ya declara quince pruebas.
+
+```{python}
+#| echo: false
+#| output: false
+import json
+import os
+import sys
+
+import duckdb
+import pandas as pd
+
+sys.path.insert(0, os.path.abspath("../transform"))
+import utilidades
+
+utilidades.usar("calidad")
+utilidades.crear_lago()
+utilidades.dbt("run", "--select", "prep", "raw_vault")
+utilidades.cargar(utilidades.CARGA_2)
+utilidades.dbt("build")
+```
+
+```{python}
+#| echo: true
+#| output: true
+def artefacto(nombre):
+    with open(os.path.join(utilidades.ESPACIO, "target", nombre), encoding="utf-8") as f:
+        return json.load(f)
+
+manifest = artefacto("manifest.json")
+resultados = artefacto("run_results.json")
+
+pruebas = []
+for resultado in resultados["results"]:
+    if not resultado["unique_id"].startswith("test."):
+        continue
+    nodo = manifest["nodes"][resultado["unique_id"]]
+    modelo = nodo.get("attached_node", "")
+    pruebas.append({
+        "activo": modelo.split(".")[-1],
+        "columna": nodo.get("column_name") or "-",
+        "control": (nodo.get("test_metadata") or {}).get("name", "propio"),
+        "estado": resultado["status"],
+        "fallos": resultado["failures"],
+    })
+
+df_calidad = pd.DataFrame(pruebas).sort_values(["activo", "columna"])
+df_calidad
+```
+
+Quince controles que se ejecutan en cada carga y cortan la tubería si algo se rompe. No está mal, y para muchos equipos es todo lo que va a haber durante mucho tiempo.
+
+Pero fijémonos en lo que **no** hay en esa tabla. No hay ningún control sobre el porcentaje de correos vacíos, ni sobre si el número de alumnos ha cambiado más de lo razonable de una carga a otra, ni sobre cuánto hace que la fuente no se actualiza. Todo eso son cosas que no son incorrectas por sí mismas y que, sin embargo, son exactamente las que avisan de que algo va mal aguas arriba.
+
+## Soda
+
+[Soda](https://www.soda.io/) cubre ese segundo hueco y encaja bien junto a dbt precisamente porque **no intenta sustituirlo**. Su núcleo, `soda-core`, es una herramienta de línea de comandos con licencia Apache 2.0 que ejecuta comprobaciones declaradas en YAML contra una fuente de datos.
+
+La conexión se declara una vez:
+
+```yaml
+# configuration.yml
+data_source lago:
+  type: duckdb
+  path: ":memory:"
+  read_only: false
+  # Con DuckLake, la extensión se carga y se adjunta el catálogo
+  # antes de lanzar el escaneo
+```
+
+Y las comprobaciones se escriben en su propio lenguaje, SodaCL, que es lo bastante legible como para que lo revise alguien de negocio:
+
+```yaml
+# checks/marts.yml
+checks for dim_alumno:
+  # Completitud, con umbral en lugar de con corte
+  - missing_percent(email) < 5 %:
+      name: "Correos informados"
+  # Unicidad, que aquí sí es un corte
+  - duplicate_count(alumno_id) = 0
+  # Validez sobre un dominio cerrado
+  - invalid_count(tipo_correo) = 0:
+      valid values: [interno, externo]
+  # Volumen, comparado consigo mismo
+  - change avg 7d for row_count < 25 %
+  # Perfilado, que no falla nunca pero deja rastro
+  - schema:
+      warn:
+        when schema changes: any
+
+checks for fct_matriculas:
+  - row_count > 0
+  - freshness(fecha_matricula) < 2d:
+      name: "La ingesta sigue viva"
+  # Consistencia entre dos tablas
+  - values in (alumno_id) must exist in dim_alumno (alumno_id)
+```
+
+Lo que aporta frente a una prueba de dbt está en esas seis comprobaciones:
+
+* **Umbrales en lugar de binarios**. `missing_percent(email) < 5 %` acepta que el mundo real tiene ruido y avisa cuando el ruido crece.
+* **Comparación con la historia**. `change avg 7d for row_count` no compara contra un número escrito a mano, sino contra lo que esa tabla viene haciendo.
+* **Frescura como control de primera clase**, que es la comprobación que más incidentes reales detecta y la que más se olvida.
+* **Perfilado y detección de cambios de esquema**, que no fallan pero dejan constancia.
+* **Separación de responsabilidades**. El fichero de comprobaciones no vive dentro del modelo, con lo que quien responde del dato puede escribirlo sin tocar el SQL de nadie.
+
+Se ejecuta como cualquier otro paso del proceso:
+
+```bash
+soda scan -d lago -c configuration.yml checks/marts.yml
+```
+
+:::{.callout-tip}
+# El reparto que funciona
+
+La regla práctica que evita duplicar trabajo entre las dos herramientas:
+
+**En dbt** lo que es un invariante del modelo y debe cortar la ejecución: claves únicas, integridad referencial del vault, no nulos en las claves. Si eso falla, publicar es peor que no publicar.
+
+**En Soda** lo que es una expectativa sobre el dato y debe generar un aviso: proporciones, volúmenes, frescura, rangos, cambios de esquema. Si eso se desvía, alguien tiene que mirarlo, pero parar la tubería probablemente empeore las cosas.
+
+Y una tercera regla que ahorra discusiones: cada control tiene un nombre de persona detrás. Un aviso que no tiene destinatario es ruido, y el ruido se acaba silenciando.
+:::
+
+Soda sabe además leer los resultados de dbt, con lo que las dos mitades acaban en el mismo sitio en lugar de en dos informes distintos:
+
+```bash
+soda ingest dbt -d lago -c configuration.yml \
+  --dbt-artifacts content/transform/academia/_ejecucion/calidad/target
+```
+
+## Aterrizarlo en la base de metadatos
+
+Aquí es donde esto deja de ser una herramienta más y empieza a valer para algo. En el [apéndice de metadatado](metadatado.qmd) construimos un esquema `meta` dentro del propio lago con el inventario de activos, el linaje y las ejecuciones. La calidad pertenece exactamente al mismo sitio.
+
+Además de los resultados de las pruebas, calculamos un perfil básico, que es lo que haría un escaneo de Soda y lo que permite comparar con el de mañana:
+
+```{python}
+#| echo: true
+#| output: true
+perfil = utilidades.consultar("""
+    SELECT
+        'dim_alumno'                                        AS activo,
+        count(*)                                            AS filas,
+        round(100.0 * count(*) FILTER (email IS NULL)
+              / count(*), 2)                                AS pct_email_vacio,
+        count(DISTINCT alumno_id)                           AS alumnos_distintos,
+        max(ultima_modificacion)                            AS ultimo_cambio
+    FROM main_marts.dim_alumno
+    UNION ALL
+    SELECT
+        'fct_matriculas',
+        count(*),
+        0.0,
+        count(DISTINCT alumno_id),
+        max(fecha_matricula)
+    FROM main_marts.fct_matriculas
+""")
+perfil
+```
+
+Y lo guardamos junto al resto de metadatos, con la marca de tiempo del escaneo, porque un perfil sin fecha no sirve para comparar:
+
+```{python}
+#| echo: true
+#| output: true
+con = duckdb.connect()
+con.sql("INSTALL ducklake; LOAD ducklake;")
+con.sql(f"ATTACH 'ducklake:sqlite:{utilidades.CATALOGO}' AS lago (DATA_PATH '{utilidades.DATOS}')")
+con.sql("USE lago")
+
+# El inventario de activos es el mismo del apéndice de metadatado
+df_activos = pd.DataFrame(
+    [(nodo["fqn"][1], nodo["name"]) for nodo in manifest["nodes"].values()
+     if nodo["resource_type"] == "model"],
+    columns=["capa", "activo"],
+)
+
+con.sql("CREATE SCHEMA IF NOT EXISTS meta")
+con.sql("CREATE OR REPLACE TABLE meta.activos AS SELECT * FROM df_activos")
+con.sql("""
+    CREATE OR REPLACE TABLE meta.calidad AS
+    SELECT *, now() AS escaneado_en FROM df_calidad
+""")
+con.sql("""
+    CREATE OR REPLACE TABLE meta.perfil AS
+    SELECT *, now() AS escaneado_en FROM perfil
+""")
+con.close()
+
+utilidades.consultar("""
+    SELECT activo, count(*) AS controles,
+           count(*) FILTER (estado = 'pass') AS pasan,
+           max(escaneado_en)                 AS ultimo_escaneo
+    FROM meta.calidad
+    GROUP BY activo ORDER BY activo
+""")
+```
+
+Con eso, la pregunta **¿me puedo fiar de esta tabla?** deja de responderse por correo. Es una consulta:
+
+```{python}
+#| echo: true
+#| output: true
+utilidades.consultar("""
+    SELECT
+        a.activo,
+        a.capa,
+        count(c.control)                             AS controles,
+        count(c.control) FILTER (c.estado <> 'pass') AS incidencias,
+        CASE
+            WHEN count(c.control) = 0 THEN 'sin vigilancia'
+            WHEN count(c.control) FILTER (c.estado <> 'pass') > 0 THEN 'con incidencias'
+            ELSE 'apto'
+        END                                          AS veredicto
+    FROM meta.activos a
+    LEFT JOIN meta.calidad c ON c.activo = a.activo
+    WHERE a.capa IN ('marts', 'raw_vault')
+    GROUP BY a.activo, a.capa
+    ORDER BY incidencias DESC, a.activo
+""")
+```
+
+Nótese la tercera categoría, **sin vigilancia**, que es la más útil de las tres y la que ninguna herramienta muestra por defecto. Una tabla que no falla ningún control porque no tiene ninguno no es una tabla sana, es una tabla sobre la que no sabemos nada, y conviene que las dos cosas no se parezcan en el informe.
+
+## Por qué esto decide si un modelo puede servir
+
+Cerramos con el motivo por el que este apéndice existe, que está en el [último capítulo](../explotacion/mlops.qmd).
+
+Cuando un modelo entrenado pasa a producción, lo que consume no son tablas sino **variables** servidas por un feature store. Y ahí la calidad deja de ser un informe que alguien mira los lunes para convertirse en una condición de servicio, por una razón muy concreta: un modelo **no falla** cuando le llega una variable mala. Acepta el valor, calcula y devuelve una predicción con la misma confianza de siempre. El error no aparece en ningún registro y se propaga hasta la decisión.
+
+Es la observación de fondo del trabajo sobre deuda técnica en sistemas de aprendizaje automático [@sculley2015debt]: las dependencias de datos cuestan más que las de código y son mucho más difíciles de detectar, porque se rompen en silencio.
+
+De ahí que el patrón que funciona sea unir las dos cosas que hemos construido:
+
+```{mermaid}
+flowchart LR
+    lago[("Capa de consumo")] --> ctrl{"¿Controles<br/>vigentes y en verde?"}
+    ctrl -->|"sí"| fs[("Feature store")]
+    ctrl -->|"no"| alto["Se sirve el último<br/>valor bueno y se avisa"]
+    fs --> mod["Modelo en producción"]
+    meta[("meta.calidad<br/>meta.perfil")] -.-> ctrl
+
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef meta fill:#d9efec,stroke:#3a8f8a,stroke-width:1.5px,color:#0f3f3c
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    class lago transformacion
+    class fs,mod explotacion
+    class meta meta
+    class alto carga
+```
+
+Las dos palabras que sostienen el rombo son **vigentes** y **en verde**, y la primera importa más que la segunda. Un control que pasó hace tres semanas no dice que el dato esté bien, dice que hace tres semanas estaba bien y que desde entonces nadie ha mirado. Por eso guardamos `escaneado_en` junto a cada resultado: sin esa columna, el estado de calidad y la ausencia de noticias son indistinguibles.
+
+Y por eso el sitio de todo esto es la base de metadatos y no el informe de una herramienta. El proceso que sirve las variables no va a abrir una interfaz para consultar si puede seguir: va a lanzar una consulta, y necesita que la respuesta esté donde están los datos.
+
+:::{.callout-warning}
+# La calidad no se declara una vez
+
+El fallo habitual con estas herramientas no es técnico. Es escribir cuarenta comprobaciones el primer mes, no revisarlas nunca, y llegar al año siguiente con la mitad avisando de cosas que ya no importan.
+
+Cuando eso pasa, el equipo aprende a ignorar los avisos, y a partir de ahí el sistema de calidad es peor que no tener ninguno, porque genera una sensación de cobertura que no existe.
+
+Dos hábitos lo evitan: retirar el control que lleva seis meses avisando sin que nadie actúe, y añadir uno nuevo cada vez que un incidente llega al usuario antes que a nosotros. Es decir, tratar el conjunto de controles como lo que es, código vivo, y no como documentación.
+:::

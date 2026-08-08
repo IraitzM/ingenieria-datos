@@ -29,6 +29,16 @@ flowchart TB
     tec -->|"apunta a"| alm
     personas["Personas y agentes"] --> gob
     motor["Motor de consulta"] --> tec
+
+    %% Paleta por bloque del libro
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef meta fill:#d9efec,stroke:#3a8f8a,stroke-width:1.5px,color:#0f3f3c
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    class g,personas explotacion
+    class t meta
+    class p almacen
+    class motor transformacion
 ```
 
 Son complementarios, no alternativos. DuckLake, [Apache Polaris](https://polaris.apache.org/), Unity Catalog o [Apache Gravitino](https://gravitino.apache.org/) juegan en la capa técnica; OpenMetadata y DataHub, en la de gobierno. Y esta última se alimenta, entre otras fuentes, de la primera.
@@ -396,17 +406,40 @@ Con esas dos piezas ya se puede dibujar el recorrido de principio a fin, desde l
 ```{python}
 #| echo: true
 #| output: asis
+PALETA = {
+    "origen":         "fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a",
+    "carga":          "fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809",
+    "transformacion": "fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e",
+    "explotacion":    "fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757",
+}
+
 def nodo_id(nombre):
     return nombre.replace(".", "_")
 
 def etiqueta(nombre):
     return nombre.replace("main_", "")
 
+def bloque(nombre):
+    """Cada activo se colorea por la parte del libro a la que pertenece."""
+    esquema = nombre.split(".")[0].replace("main_", "")
+    if esquema == "staging":
+        return "carga"
+    if esquema in ("prep", "raw_vault", "business_vault"):
+        return "transformacion"
+    if esquema == "marts":
+        return "explotacion"
+    return "origen"
+
 print("```{mermaid}")
 print("flowchart LR")
 for arista in df_linaje.itertuples():
     print(f"    {nodo_id(arista.origen)}[\"{etiqueta(arista.origen)}\"]"
           f" --> {nodo_id(arista.destino)}[\"{etiqueta(arista.destino)}\"]")
+
+for clase, estilo in PALETA.items():
+    print(f"    classDef {clase} {estilo}")
+for activo in sorted(set(df_linaje.origen) | set(df_linaje.destino)):
+    print(f"    class {nodo_id(activo)} {bloque(activo)}")
 print("```")
 ```
 

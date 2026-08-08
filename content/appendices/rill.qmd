@@ -1,0 +1,139 @@
+## Exploración con Rill {.appendix}
+
+En el capítulo de [inteligencia de negocio](../explotacion/bi.qmd) dejamos a Evidence el trabajo de publicar informes y apuntamos que había una herramienta que encaja todavía mejor con este stack para una tarea distinta: **averiguar qué está pasando**. Esa herramienta es [Rill](https://www.rilldata.com/), y merece un apéndice propio porque su modelo de trabajo es poco común y se entiende mal desde fuera.
+
+## Qué problema resuelve
+
+Un informe responde a una pregunta que alguien ya se hizo. La exploración empieza cuando aparece un número raro y **todavía no se sabe qué preguntar**. Es un modo de trabajo distinto: filtrar, comparar, quitar el filtro, cambiar la dimensión, bajar al detalle, y hacerlo lo bastante rápido como para no perder el hilo de lo que uno estaba pensando.
+
+Ese requisito de velocidad es la razón de ser de Rill. Está construido sobre DuckDB precisamente porque un motor columnar embebido responde en milisegundos sobre volúmenes que a una herramienta clásica le costarían segundos, y la diferencia entre milisegundos y segundos no es de comodidad, es de **si se explora o no se explora**.
+
+Sus rasgos, en orden de importancia para nosotros:
+
+* **Conector nativo de DuckLake**. No ingiere nuestros datos ni los copia: empuja las consultas al lago directamente. Toda la arquitectura de las partes anteriores sigue siendo la única copia de la verdad.
+* **La capa semántica va incluida**, en los mismos ficheros de métricas que vimos en el [capítulo correspondiente](../explotacion/semantica.qmd). No hay que operar una pieza más.
+* **Todo el proyecto es YAML y SQL** en un directorio, con lo que entra en el repositorio como cualquier otra cosa.
+* **Se ejecuta en local**, sin desplegar nada, lo que permite iterar sobre un panel en segundos.
+* Su modelo de exploración prioriza el **detalle**: está pensado para que quien ve una anomalía pueda bajar hasta la fila que la causa sin pedir un informe nuevo.
+
+## Ponerlo en marcha
+
+```bash
+curl https://rill.sh | sh
+rill start academia
+```
+
+La interfaz queda en `http://localhost:9009`. No hay servicio que desplegar, ni base de datos de metadatos que administrar: el proyecto es la carpeta.
+
+## Conectarlo al lakehouse
+
+Dos ficheros. El conector, que es literalmente la misma sentencia `ATTACH` que usamos en el [capítulo de la capa de aterrizaje](../load/staging.qmd):
+
+```yaml
+# connectors/ducklake.yaml
+type: connector
+driver: duckdb
+attach: "'ducklake:sqlite:catalogo.sqlite' (DATA_PATH 'lago/')"
+```
+
+Y la declaración de que ese es el motor del proyecto:
+
+```yaml
+# rill.yaml
+olap_connector: ducklake
+```
+
+Con eso Rill ve las tablas que dbt dejó construidas, incluidas `dim_alumno` y `fct_matriculas`. En producción bastaría con cambiar el catálogo por un PostgreSQL y el `DATA_PATH` por un bucket, sin tocar nada más:
+
+```yaml
+attach: "'ducklake:postgres:dbname=catalogo host={{ .env.PG_HOST }}' (DATA_PATH 's3://universidad/lago/')"
+```
+
+Esta es la diferencia práctica con Evidence que mencionábamos en el capítulo: aquí no hay fichero intermedio ni paso de materialización, el panel consulta el lago tal cual.
+
+## La estructura de un proyecto
+
+Un proyecto de Rill tiene cuatro tipos de fichero y conviene entender el papel de cada uno, porque el orden importa.
+
+```
+academia/
+├── rill.yaml                 # motor y configuración global
+├── connectors/
+│   └── ducklake.yaml         # cómo se llega a los datos
+├── models/
+│   └── matriculas.sql        # SQL de preparación, opcional
+├── metrics/
+│   └── alumnos.yaml          # la capa semántica
+└── explores/
+    └── alumnos.yaml          # qué se expone y cómo
+```
+
+Los **modelos** son opcionales y ahí está el matiz que más se malinterpreta. En un stack sin transformación previa, Rill puede hacer esa transformación él mismo. En el nuestro **no hace falta**, porque el trabajo ya lo hizo dbt y los modelos de Rill duplicarían lógica que vive mejor en el proyecto de transformación. La regla es sencilla: si una definición sirve a más de una herramienta, no debe vivir dentro de una herramienta.
+
+### La capa semántica
+
+Es la pieza central, y es la misma que ya vimos:
+
+```yaml
+# metrics/alumnos.yaml
+version: 1
+type: metrics_view
+model: dim_alumno
+timeseries: alta_en_almacen
+
+dimensions:
+  - column: tipo_correo
+    display_name: "Tipo de correo"
+  - column: dominio_email
+    display_name: "Dominio"
+
+measures:
+  - name: alumnos
+    expression: COUNT(*)
+    display_name: "Alumnos"
+    description: >
+      Alumnos dados de alta en secretaría, estén matriculados o no en alguna
+      asignatura. Para contar únicamente los que cursan algo, usar la medida
+      "alumnos matriculados" del panel de matrículas.
+```
+
+El campo `timeseries` merece atención aparte: al declarar cuál es la columna temporal, toda la interfaz gana comparación con el periodo anterior, ventanas móviles y series por defecto, sin escribir una consulta. Es el tipo de cosa que en una herramienta de clics costaría una tarde por panel.
+
+### El panel de exploración
+
+```yaml
+# explores/alumnos.yaml
+version: 1
+type: explore
+display_name: "Alumnado"
+metrics_view: alumnos
+
+dimensions: "*"
+measures: "*"
+```
+
+Y ya está. La brevedad no es un truco del ejemplo: como las métricas y las dimensiones están definidas en la capa semántica, el panel solo decide qué se expone. Ese `"*"` es además una decisión consciente que conviene revisar en un proyecto real, donde interesa exponer un subconjunto y no todo lo que exista.
+
+## Cuándo Rill y cuándo no
+
+| Situación | Herramienta |
+|---|---|
+| Hay que publicar un informe que alguien lee cada lunes | Evidence |
+| Ha aparecido un número raro y hay que averiguar por qué | Rill |
+| Cincuenta personas quieren cruzar métricas sin escribir SQL | Lightdash |
+| Los datos están en el lago y no queremos copiarlos | Rill |
+| El resultado tiene que verse sin instalar ni desplegar nada | Evidence |
+
+: Reparto de tareas entre las tres herramientas abiertas
+
+La conclusión práctica es que **no son excluyentes**, y que en un equipo pequeño tener dos de ellas apuntando al mismo lakehouse cuesta muy poco. Lo caro nunca fue la herramienta de visualización, fue mantener dos definiciones distintas de la misma métrica.
+
+## Lo que hay que vigilar
+
+Tres advertencias que ahorran disgustos, en orden de probabilidad.
+
+**Rill quiere trabajar con datos locales o cercanos.** Su rendimiento sale de DuckDB, y DuckDB rinde cuando el dato está cerca. Sobre un bucket remoto con particiones mal diseñadas, la experiencia deja de ser inmediata y con ella se va la razón para usarlo. Vale la pena repasar el [particionado](../sistemas/dbms_analítica.qmd#particionado) antes de culpar a la herramienta.
+
+**La capa semántica queda dentro.** Es cómodo, pero significa que esas definiciones no las tiene ninguna otra herramienta. Si el proyecto crece y aparecen dos consumidores más, el sitio correcto para las métricas pasa a ser [dbt o un servicio aparte](../explotacion/semantica.qmd#dónde-vive), y las de Rill se convierten en una copia que se desactualiza.
+
+**Es una herramienta joven y con empresa detrás.** Lo primero se nota en cambios de formato entre versiones, así que conviene fijar la versión en el proyecto. Lo segundo es lo de siempre: el núcleo es de código abierto, el servicio gestionado no, y merece la pena tener claro dónde está esa línea antes de apoyar procesos críticos en el segundo.

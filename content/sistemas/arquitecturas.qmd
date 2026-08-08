@@ -6,7 +6,7 @@ Es una fuente constante de debate pensar en si existe una mejor manera de hacer 
 
 ## Top-down o bottom-up
 
-Quizás con un foco más operativo debido a los sistemas existentes, tanto Bill Inmon como Ralph Kimball se enfrentaron al reto de almacenar de forma efectiva toda la información que contiene una organización, pero a su vez presentar vistas específicas y cohesionadas que permitieran a los usuarios entender lo que los datos reflejaban sobre el funcionamiento de la empresa en áreas concretas.
+Quizás con un foco más operativo debido a los sistemas existentes, tanto Bill Inmon [@inmon2005building] como Ralph Kimball [@kimball2013toolkit] se enfrentaron al reto de almacenar de forma efectiva toda la información que contiene una organización, pero a su vez presentar vistas específicas y cohesionadas que permitieran a los usuarios entender lo que los datos reflejaban sobre el funcionamiento de la empresa en áreas concretas.
 
 El enfoque de Inmon abogaba por fijarnos en las fuentes y generar un sistema centralizado de datos al que luego poder destilar los recursos necesarios.
 ```{mermaid}
@@ -32,6 +32,16 @@ flowchart LR
 
     etl2 --- datamart1
     etl2 --- datamart2
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class source1,source2 origen
+    class etl1,etl2 carga
+    class dw almacen
+    class datamart1,datamart2 explotacion
 ```
 
 Mientras que la colección de Data Marts representan para Kimball el Data Warehouse, la pieza central. Desde las unidades de negocio podemos indicar las dimensiones y hechos a agregar que deberemos materializar en visiones concretas para cada unidad donde, entendemos, las dimensiones serán comunes dado que trabajamos en unidades de una empresa en una misma industria.
@@ -52,13 +62,20 @@ flowchart LR
 
     etl1 --- dw
 
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class source1,source2 origen
+    class etl1 carga
+    class datamart1,datamart2 explotacion
 ```
 
 Estas dos aproximaciones han sentado la base de lo que es necesario en un warehouse, tanto para el equipo que lo mantiene y quieren dar un buen servicio como paras los consumidores de datos que los necesitan para tener una operativa inteligente.
 
 ## La caja fuerte
 
-El Data Vault, se plateó como una metodología más allá del propio sistema de modelado intermedio. Habíamos aprendido mucho sobre cómo nos comunicamos con los negocios y sus necesidades. Pero esto también nos daba una perspectiva de cómo la información debía ser promocionada hacia las capas de consumo.
+El Data Vault [@linstedt2015vault], se plateó como una metodología más allá del propio sistema de modelado intermedio. Habíamos aprendido mucho sobre cómo nos comunicamos con los negocios y sus necesidades. Pero esto también nos daba una perspectiva de cómo la información debía ser promocionada hacia las capas de consumo.
 
 ![Fases de madurez del dato en DV](https://www.scalefree.com/wp-content/uploads/2024/03/Data-Vault-20-Architecture.png)
 
@@ -74,19 +91,19 @@ Para principios de los 2000s, varias empresas se enfrentaban a problemas relativ
 
 Ya en 1998, Carlo Strozzi había sugerido el uso de sistemas que [no solo soportarán SQL](https://en.wikipedia.org/wiki/NoSQL). Es decir, que permitieran lo que conocemos como _schema-on-read_ trasladando el problema de modelado a capas posteriores del sistema de forma que al menos, no perdiéramos información. En la misma medida, los equipos de Google y Yahoo! se encontraban en su pelea particular de cómo almacenar y procesar la información disponible en internet de manera económica y efectiva.
 
-Un par de trabajos del equipo de Google ([Google File System](https://static.googleusercontent.com/media/research.google.com/es//archive/gfs-sosp2003.pdf) y [Map Reduce](https://static.googleusercontent.com/media/research.google.com/es//archive/mapreduce-osdi04.pdf)) motivaron la implementación de Mike Cafarella y Doug Cutting, [Apache Hadoop](https://hadoop.apache.org/) un sistema que tuvo una adopción vertiginosa en la década de 2010, algo antes de que se desencadenara el movimiento a la nube.
+El equipo de Google publicó dos trabajos que formaban parte de los sistemas internos que hacían que Google funcionara como lo hacía y pudieran analizar volúmenes como el que ocupaba la información en internet sin quebrar la compañía: [Google File System](https://static.googleusercontent.com/media/research.google.com/es//archive/gfs-sosp2003.pdf) [@ghemawat2003gfs] y [Map Reduce](https://static.googleusercontent.com/media/research.google.com/es//archive/mapreduce-osdi04.pdf) [@dean2004mapreduce]. Estas publicaciones motivaron la implementación de Mike Cafarella y Doug Cutting, [Apache Hadoop](https://hadoop.apache.org/) un sistema que tuvo una adopción vertiginosa en la década de 2010, algo antes de que se desencadenara el movimiento a la nube.
 
 Este sistema fue de los primeros que ofrecía a las empresas un sistema desacoplado entre almacenamiento y computación, con un sistema de código abierto, lo cual lo hacía accesible a todo el mundo al coste de ser uno mismo quien mantiene este sistema organizado.
 
 ## La casa del lago
 
-Hadoop estaba basado en un sistema de ficheros, lo cual daba la versatilidad de almacenar lo que fuera necesario, sin embargo, consumir datos de esta fuente se volvía engorroso. Dado que los conocimientos de los equipos seguían centrándose en SQL y herramientas que podían realizar este tipo de consultas, los ingenieros de Facebook tomaron como referencia el trabajo del equipo de Google [Dremel](https://static.googleusercontent.com/media/research.google.com/es//pubs/archive/36632.pdf) y crearon un sistema que permitía consultar información tabular en el sistema, [Apache Hive](https://hive.apache.org/). Simplemente catalogando cómo realizar la traducción tabla a fichero, estos sistemas abstraían a los usuarios de las complejidades del **lago de datos** empezando a vislumbrar lo que años más tarde el equipo de Databricks denominaría **la casa del lago** (o Data Lakehouse).
+Hadoop estaba basado en un sistema de ficheros, lo cual daba la versatilidad de almacenar lo que fuera necesario, sin embargo, consumir datos de esta fuente se volvía engorroso. Dado que los conocimientos de los equipos seguían centrándose en SQL y herramientas que podían realizar este tipo de consultas, los ingenieros de Facebook tomaron como referencia el trabajo del equipo de Google [Dremel](https://static.googleusercontent.com/media/research.google.com/es//pubs/archive/36632.pdf) [@melnik2010dremel] y crearon un sistema que permitía consultar información tabular en el sistema, [Apache Hive](https://hive.apache.org/). Simplemente catalogando cómo realizar la traducción tabla a fichero, estos sistemas abstraían a los usuarios de las complejidades del **lago de datos** empezando a vislumbrar lo que años más tarde el equipo de Databricks denominaría **la casa del lago** (o Data Lakehouse) [@armbrust2021lakehouse].
 
 ## Ordenando el lago
 
-Tras la polvareda generada por la tumultuosa era de los clústeres Hadoop, la nube se abrió camino y con ello soluciones que haciendo uso de las tecnologías abiertas disponibles ofrecieron soluciones renovadas a las empresas. En cierta forma es como si hubiéramos reinventado los sistemas de gestión de base de datos cayendo en los mismos problemas que presentaban los sistemas originales. No es que no hubiera almacenamiento columnar antes de [Apache Parquet](https://parquet.apache.org/) o computación distribuida en memoria antes de [Apache Spark](https://spark.apache.org/), pero a veces tenemos que romper el _status quo_ para apreciar el trabajo existente.
+Tras la polvareda generada por la tumultuosa era de los clústeres Hadoop, la nube se abrió camino y con ello soluciones que haciendo uso de las tecnologías abiertas disponibles ofrecieron soluciones renovadas a las empresas. En cierta forma es como si hubiéramos reinventado los sistemas de gestión de base de datos cayendo en los mismos problemas que presentaban los sistemas originales, un ciclo que Stonebraker y Pavlo llevan documentando desde hace dos décadas [@stonebraker2024around]. No es que no hubiera almacenamiento columnar antes de [Apache Parquet](https://parquet.apache.org/) o computación distribuida en memoria antes de [Apache Spark](https://spark.apache.org/), pero a veces tenemos que romper el _status quo_ para apreciar el trabajo existente.
 
-Dos grandes empresas salieron de esta época, [Snowflake](https://www.snowflake.com/es/) con su sistema de gestión de bases de datos tabulares que permitía una gestión desacoplada de almacenamiento y computo. Y Databricks, cuyo co-fundador es [Matei Zaharia](https://en.wikipedia.org/wiki/Matei_Zaharia), autor principal del trabajo en Apache Spark[^2].
+Dos grandes empresas salieron de esta época, [Snowflake](https://www.snowflake.com/es/) con su sistema de gestión de bases de datos tabulares que permitía una gestión desacoplada de almacenamiento y computo. Y Databricks, cuyo co-fundador es [Matei Zaharia](https://en.wikipedia.org/wiki/Matei_Zaharia), autor principal del trabajo en Apache Spark [@zaharia2012rdd; @zaharia2016spark][^2].
 
 Estas dos soluciones de algún modo han vuelto a enfocarse en ofrecer rendimiento y estructura a los sistemas de datos. Han incorporado necesidades como las de lanzar procesos de bajo nivel o permitir flexibilizar los tipos de datos (VARIANT o JSON) para albergar estructuras anidadas de datos
 
@@ -99,7 +116,7 @@ Estas dos soluciones de algún modo han vuelto a enfocarse en ofrecer rendimient
             [
                 "SDG Group"
                 "Iberdrola",
-                "panda Security",
+                "Panda Security",
                 "Tecnalia"
             ]
         }

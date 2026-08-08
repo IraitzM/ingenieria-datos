@@ -72,6 +72,8 @@ book:
 
   appendices:
     - content/appendices/metadatado.qmd
+    - content/appendices/calidad.qmd
+    - content/appendices/rill.qmd
     - content/appendices/de_storybook.qmd
 
 bibliography: content/references.bib

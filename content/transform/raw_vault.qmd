@@ -1,6 +1,6 @@
 # El raw vault
 
-El raw vault es la pieza donde los datos dejan de estar organizados por sistema origen y pasan a estarlo por **concepto de negocio**. Es también la que más resistencia genera cuando uno la ve por primera vez, porque el modelo resultante parece innecesariamente troceado.
+El raw vault [@linstedt2015vault] es la pieza donde los datos dejan de estar organizados por sistema origen y pasan a estarlo por **concepto de negocio**. Es también la que más resistencia genera cuando uno la ve por primera vez, porque el modelo resultante parece innecesariamente troceado.
 
 Conviene entonces empezar por el problema que resuelve, no por su forma.
 

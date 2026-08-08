@@ -20,6 +20,12 @@ flowchart LR
         s1 --> i3["informe 3"]
         s1 --> i4["informe 4"]
     end
+
+    %% Paleta por bloque del libro
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class s1 carga
+    class i1,i2,i3,i4 explotacion
 ```
 
 El coste de las consultas directas no está en escribirlas, está en mantenerlas. Por eso todas las metodologías serias de almacén de datos, desde Inmon hasta hoy, insisten en lo mismo: **hace falta una capa intermedia** que modele el negocio una sola vez, y sobre ella se construye todo lo demás.
@@ -59,6 +65,14 @@ flowchart LR
     bv --> marts
     rv --> marts
     marts --> bi["Cuadros de mando<br/>y análisis"]
+
+    %% Paleta por bloque del libro
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class stg carga
+    class rv,bv,marts transformacion
+    class bi explotacion
 ```
 
 * El **raw vault** integra los datos de todos los orígenes en torno a los conceptos de negocio, sin interpretar nada. Es el registro histórico, y es inmutable: solo se añade.

@@ -15,7 +15,7 @@ Ensemble Logical Modelling (ELM) es una técnica de abstracción que nos permite
 
 ### Data Vault
 
-Una de las implementaciones lógicas de las ELM se la debemos a [Daniel Lindstedt](https://en.wikipedia.org/wiki/Dan_Linstedt). Su enfoque, llamado Data Vault, realiza un mapeo bastante fiel de nuestro modelo lógico, con una flexibilidad adicional sobre la información ligada a los conceptos clave y las relaciones naturales:
+Una de las implementaciones lógicas de las ELM se la debemos a [Daniel Lindstedt](https://en.wikipedia.org/wiki/Dan_Linstedt), cuya segunda versión de la metodología [@linstedt2015vault] es la que seguiremos en la parte de [transformación](../transform/intro.qmd). Su enfoque, llamado Data Vault, realiza un mapeo bastante fiel de nuestro modelo lógico, con una flexibilidad adicional sobre la información ligada a los conceptos clave y las relaciones naturales:
 
 * HUBs: Donde se registran las instancias de las entidades
 * LINKs: Donde se registran los eventos o hechos que vinculan una o más entidades
@@ -28,3 +28,15 @@ Tanto los HUBs como los LINKs llevan huellas temporales de carácter efectivo e 
 En un mecanismo intermediario entre datos de fuentes normalizadas y entornos donde el consumo se realiza en base a dimensiones y hechos. Algunos lo regieren incluso como una [metodología ágil](https://www.scalefree.com/consulting/data-vault-2-0/) debido a sus características. Son un perfecto nexo que permite una adición incremental pero con huella temporal de todos los hechos acontecidos y permite promocionar la información consumible a las capas de acceso de los usuarios en base a sus necesidades.
 
 Existen otras modalidades que extienden más aún este concepto aunque Data Vault ha sido quizás el paradigma que más adopción presenta teniendo en cuenta la complejidad técnica y madurez del equipo que requiere su correcto gobierno. Cabe destacar que todos estos conceptos no implican un **uso de tablas** para almacenar la información. Esto ha venido determinado por la tecnología disponible en cada momento.
+
+## La malla de datos
+
+Todo lo anterior asume algo que conviene poner sobre la mesa: que existe **un** equipo capaz de integrar la información de toda la organización en una pieza central. Cuando la empresa crece, ese equipo se convierte en un cuello de botella que conoce cada vez peor los dominios que modela, y aparece la queja de siempre en las dos direcciones (el negocio dice que datos tarda meses, y datos dice que el negocio no explica sus reglas).
+
+La **malla de datos** o _data mesh_ [@dehghani2022mesh] propone invertir el reparto. En lugar de un equipo central que consolida lo de todos, cada dominio se hace responsable de publicar sus datos como un **producto**, con su dueño, su contrato, su calidad declarada y su documentación. Lo central deja de ser el almacén y pasa a ser la plataforma que hace barato publicar y consumir, más un mínimo de reglas comunes para que los productos se puedan cruzar entre sí.
+
+Cuatro principios lo resumen: propiedad por dominio, el dato como producto, plataforma de autoservicio y gobierno federado.
+
+Es una propuesta **organizativa** antes que técnica, y ahí está tanto su fuerza como su riesgo. Adoptarla comprando una herramienta y sin cambiar quién responde de cada dato produce lo mismo de siempre, pero con más silos y menos coordinación. Volvemos a [Conway](../sistemas/arquitecturas.qmd): el sistema acabará pareciéndose a la organización, se escriba lo que se escriba en el diagrama.
+
+Para una empresa de tamaño medio, que es el caso de la mayoría, la lectura útil de la malla no es desmontar el almacén sino quedarse con dos de sus ideas: que cada conjunto de datos tenga un responsable con nombre y apellidos, y que se publique con un contrato explícito. Ambas caben perfectamente dentro de una arquitectura centralizada, y las retomaremos al hablar del [metadatado](../appendices/metadatado.qmd).

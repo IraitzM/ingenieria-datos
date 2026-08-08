@@ -34,7 +34,7 @@ Y una segunda, más prosaica: cuanto más de nuestro proyecto viva en ficheros d
 
 ## Cuando el modelo tiene que vivir
 
-Un modelo entrenado en un portátil no vale nada por sí mismo. Para que aporte, alguien tiene que ejecutarlo de forma recurrente sobre datos nuevos, y ahí aparece un conjunto de problemas que no son de ciencia de datos sino de ingeniería. Es lo que se agrupa bajo el nombre de **MLOps**.
+Un modelo entrenado en un portátil no vale nada por sí mismo. Para que aporte, alguien tiene que ejecutarlo de forma recurrente sobre datos nuevos, y ahí aparece un conjunto de problemas que no son de ciencia de datos sino de ingeniería. Es lo que se agrupa bajo el nombre de **MLOps**, y su mejor descripción sigue siendo la que dieron Sculley y sus compañeros al observar que el código de aprendizaje automático es una fracción diminuta de un sistema real, rodeada de infraestructura que acumula deuda técnica a una velocidad poco común [@sculley2015debt].
 
 ```{mermaid}
 flowchart LR
@@ -45,13 +45,19 @@ flowchart LR
     fs --> serv
     serv --> mon["Monitorización"]
     mon -.->|"deriva"| ent
+
+    %% Paleta por bloque del libro
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class tab transformacion
+    class ent,reg,serv,mon,fs explotacion
 ```
 
 Las piezas que aparecen siempre, con el problema real que resuelve cada una:
 
 * **Registro de modelos** (_model registry_). Un modelo es un artefacto binario con versión, métricas de validación, datos con los que se entrenó y un estado (en pruebas, en producción, retirado). Sin registro, la pregunta *qué versión está respondiendo ahora mismo* no tiene respuesta. [MLflow](https://mlflow.org/) es la referencia abierta.
 * **Almacén de variables** (_feature store_). Nace de un problema muy concreto que ya hemos tocado: la variable que se calcula al entrenar y la que se calcula al predecir **tienen que ser la misma**, y normalmente las escriben personas distintas en lenguajes distintos. Un feature store guarda la definición una sola vez y la sirve a ambos, además de resolver la consulta por fecha que vimos en el [tablón](ds.qmd#el-tablón-correcto-a-fecha). [Feast](https://feast.dev/) es la opción abierta más extendida.
-* **Monitorización**. Un modelo no falla con un error, falla degradándose: los datos de entrada dejan poco a poco de parecerse a los de entrenamiento. Detectar esa **deriva** es vigilar distribuciones, no excepciones.
+* **Monitorización**. Un modelo no falla con un error, falla degradándose: los datos de entrada dejan poco a poco de parecerse a los de entrenamiento. Detectar esa **deriva** es vigilar distribuciones, no excepciones. La experiencia de Google con sistemas en producción [@breck2019datalinter] es tajante en un punto: la mayoría de los fallos de un modelo entran por los datos, no por el algoritmo, y se detectan validando la entrada.
 * **Reentrenamiento**, que cierra el ciclo y que en la práctica es un proceso más de los que orquestamos.
 
 :::{.callout-tip}

@@ -91,6 +91,12 @@ flowchart LR
     sem --> api["API / aplicaciones"]
     sem --> ag["Agentes"]
     sem --> hoja["Hojas de cálculo"]
+
+    %% Paleta por bloque del libro
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class dw transformacion
+    class sem explotacion
 ```
 
 ### Dónde vive
@@ -108,7 +114,7 @@ De ahí que hayan aparecido cuatro ubicaciones posibles, y merece la pena saber 
 
 : Dónde puede vivir la capa semántica
 
-Para nuestro stack la respuesta natural es la primera, porque [Rill](bi.qmd) trae la capa semántica incluida y consulta directamente el lakehouse. Una métrica se declara así:
+Para nuestro stack hay dos respuestas defendibles. Si la exploración se hace con [Rill](../appendices/rill.qmd), la capa semántica va incluida y consulta directamente el lakehouse. Si el consumidor va a ser más de uno, el sitio correcto es junto a las transformaciones, en el propio dbt, que es de donde las lee [Lightdash](bi.qmd#lightdash). Empecemos por la primera, que es la más corta de enseñar. Una métrica se declara así:
 
 ```yaml
 # metrics/alumnos.yaml
@@ -149,7 +155,7 @@ Hay una razón nueva, y bastante fuerte, para tomarse esto en serio en 2026.
 
 Cuando quien pregunta es una persona, una definición ambigua produce una discusión. Cuando quien pregunta es un modelo de lenguaje con acceso al almacén, produce **SQL plausible y silenciosamente equivocado**. El agente no sabe que hay tres formas de contar alumnos: elegirá una, la ejecutará y presentará el resultado con total aplomo.
 
-Una capa semántica cambia el planteamiento: en lugar de dar al agente las tablas y confiar, se le da un conjunto acotado de medidas y dimensiones con sus definiciones. El agente elige entre métricas ya validadas en lugar de inventarse la agregación. Por eso prácticamente todas las herramientas de esta categoría han incorporado un servidor MCP, y por eso Rill se describe a sí mismo hoy como una herramienta de BI *para humanos y agentes*.
+Una capa semántica cambia el planteamiento: en lugar de dar al agente las tablas y confiar, se le da un conjunto acotado de medidas y dimensiones con sus definiciones. El agente elige entre métricas ya validadas en lugar de inventarse la agregación. Por eso prácticamente todas las herramientas de esta categoría han incorporado un servidor MCP, y por eso [Rill](../appendices/rill.qmd) se describe a sí mismo hoy como una herramienta de BI *para humanos y agentes*.
 
 Es, mirado con perspectiva, el mismo argumento del [catálogo de gobierno](../appendices/metadatado.qmd): lo que hace útil un dato es el contexto que lo acompaña.
 
