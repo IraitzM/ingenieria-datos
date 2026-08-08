@@ -102,6 +102,8 @@ Done. PASS=74 WARN=0 ERROR=0 SKIP=0 TOTAL=74
 
 Las setenta y cuatro incluyen diecisiete modelos y cincuenta y siete pruebas. Que pasen todas no significa que el modelo sea bueno, pero que falle una sí significa que algo está mal, y en este proyecto hay pruebas puestas justo donde el Data Vault se rompe con más facilidad.
 
+![Linaje de datos en dbt docs](../../assets/dbt-linaje.png)
+
 ### Las dos cosas de una vez
 
 Los dos pasos anteriores pueden ejecutarse como un solo proceso, porque dlt sabe lanzar un proyecto dbt por su cuenta:
@@ -125,6 +127,8 @@ docker compose --profile bi up -d rill
 ```
 
 El panel queda en `http://localhost:9010`. Rill consulta el mismo fichero DuckDB que acaba de construir dbt, sin copiar nada.
+
+![Dashboard en Rill](../../assets/ri.png)
 
 :::{.callout-warning}
 # Rill bloquea el almacén

@@ -169,6 +169,41 @@ services:
       - datalake
     command: ["dbt", "build"]
 
+  # --------------------------------------------------------- documentación --
+
+  # El sitio de documentación de dbt: el diccionario de los modelos y, sobre
+  # todo, el grafo de linaje. Sirve ficheros estáticos de dbt_project/target y
+  # no abre la base de datos, así que convive con Rill sin pelearse por el
+  # bloqueo de DuckDB. Quien sí la abre es "dbt docs generate", que se lanza
+  # aparte con el servicio "transform".
+  #
+  #   docker compose run --rm transform dbt docs generate
+  #   docker compose --profile docs up -d docs
+  docs:
+    build:
+      context: .
+      dockerfile: docker/toolbox.Dockerfile
+    image: datalake-toolbox
+    container_name: dl-docs
+    profiles: ["docs"]
+    user: "1000:1000"
+    working_dir: /app/dbt_project
+    environment:
+      DUCKDB_PATH: /data/warehouse.duckdb
+    volumes:
+      - ./warehouse:/data
+      - ./dbt_project:/app/dbt_project
+    ports:
+      # 8081 fuera, 8080 dentro (el puerto propio de dbt docs). El 8080 del
+      # anfitrión es de los más disputados, así que se publica corrido.
+      - "8081:8080"
+    networks:
+      - datalake
+    # Sin --host el servidor escucha en 127.0.0.1 dentro del contenedor y desde
+    # el anfitrión no se le ve, aunque el puerto esté publicado.
+    command: ["dbt", "docs", "serve", "--port", "8080", "--host", "0.0.0.0", "--no-browser"]
+    restart: unless-stopped
+
   # ------------------------------------------------------------------ bi --
 
   # Rill queda tras un perfil y no arranca con "up -d". El motivo es que DuckDB
