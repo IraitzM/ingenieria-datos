@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>13&nbsp; Patrones de carga – Ingeniería de datos</title>
+<title>12&nbsp; Patrones de carga – Ingeniería de datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -61,7 +61,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -83,7 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-181dfe74f60b45fb364f5d98d01a2ee9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -135,7 +154,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<meta property="og:title" content="13&nbsp; Patrones de carga – Ingeniería de datos">
+<meta property="og:title" content="12&nbsp; Patrones de carga – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -152,7 +171,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/patrones.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/patrones.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Patrones de carga</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -190,7 +209,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+ <span class="menu-text">Introducción</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -205,25 +224,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/modelado_analitico.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/nuevos_paradigmas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
   </div>
 </li>
       </ul>
@@ -240,37 +259,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/dbms_analítica.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/nuevos-formatos.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
   </div>
 </li>
       </ul>
@@ -287,25 +306,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
   </div>
 </li>
       </ul>
@@ -322,25 +341,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -357,25 +376,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -403,8 +422,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/calidad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Calidad de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/rill.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Exploración con Rill</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/datalake.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -419,17 +456,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#de-etl-a-elt" id="toc-de-etl-a-elt" class="nav-link active" data-scroll-target="#de-etl-a-elt"><span class="header-section-number">13.1</span> De ETL a ELT</a></li>
-  <li><a href="#carga-completa" id="toc-carga-completa" class="nav-link" data-scroll-target="#carga-completa"><span class="header-section-number">13.2</span> Carga completa</a></li>
-  <li><a href="#carga-incremental" id="toc-carga-incremental" class="nav-link" data-scroll-target="#carga-incremental"><span class="header-section-number">13.3</span> Carga incremental</a>
+  <li><a href="#de-etl-a-elt" id="toc-de-etl-a-elt" class="nav-link active" data-scroll-target="#de-etl-a-elt"><span class="header-section-number">12.1</span> De ETL a ELT</a></li>
+  <li><a href="#carga-completa" id="toc-carga-completa" class="nav-link" data-scroll-target="#carga-completa"><span class="header-section-number">12.2</span> Carga completa</a></li>
+  <li><a href="#carga-incremental" id="toc-carga-incremental" class="nav-link" data-scroll-target="#carga-incremental"><span class="header-section-number">12.3</span> Carga incremental</a>
   <ul class="collapse">
-  <li><a href="#dónde-se-rompe" id="toc-dónde-se-rompe" class="nav-link" data-scroll-target="#dónde-se-rompe"><span class="header-section-number">13.3.1</span> Dónde se rompe</a></li>
+  <li><a href="#dónde-se-rompe" id="toc-dónde-se-rompe" class="nav-link" data-scroll-target="#dónde-se-rompe"><span class="header-section-number">12.3.1</span> Dónde se rompe</a></li>
   </ul></li>
-  <li><a href="#cómo-aterriza-en-destino" id="toc-cómo-aterriza-en-destino" class="nav-link" data-scroll-target="#cómo-aterriza-en-destino"><span class="header-section-number">13.4</span> Cómo aterriza en destino</a></li>
-  <li><a href="#change-data-capture" id="toc-change-data-capture" class="nav-link" data-scroll-target="#change-data-capture"><span class="header-section-number">13.5</span> Change Data Capture</a></li>
-  <li><a href="#idempotencia-y-reprocesos" id="toc-idempotencia-y-reprocesos" class="nav-link" data-scroll-target="#idempotencia-y-reprocesos"><span class="header-section-number">13.6</span> Idempotencia y reprocesos</a></li>
-  <li><a href="#evolución-del-esquema" id="toc-evolución-del-esquema" class="nav-link" data-scroll-target="#evolución-del-esquema"><span class="header-section-number">13.7</span> Evolución del esquema</a></li>
-  <li><a href="#los-metadatos-de-carga" id="toc-los-metadatos-de-carga" class="nav-link" data-scroll-target="#los-metadatos-de-carga"><span class="header-section-number">13.8</span> Los metadatos de carga</a></li>
+  <li><a href="#cómo-aterriza-en-destino" id="toc-cómo-aterriza-en-destino" class="nav-link" data-scroll-target="#cómo-aterriza-en-destino"><span class="header-section-number">12.4</span> Cómo aterriza en destino</a></li>
+  <li><a href="#change-data-capture" id="toc-change-data-capture" class="nav-link" data-scroll-target="#change-data-capture"><span class="header-section-number">12.5</span> Change Data Capture</a></li>
+  <li><a href="#idempotencia-y-reprocesos" id="toc-idempotencia-y-reprocesos" class="nav-link" data-scroll-target="#idempotencia-y-reprocesos"><span class="header-section-number">12.6</span> Idempotencia y reprocesos</a></li>
+  <li><a href="#evolución-del-esquema" id="toc-evolución-del-esquema" class="nav-link" data-scroll-target="#evolución-del-esquema"><span class="header-section-number">12.7</span> Evolución del esquema</a></li>
+  <li><a href="#los-metadatos-de-carga" id="toc-los-metadatos-de-carga" class="nav-link" data-scroll-target="#los-metadatos-de-carga"><span class="header-section-number">12.8</span> Los metadatos de carga</a></li>
   </ul>
 </nav>
     </div>
@@ -439,9 +476,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/patrones.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/load/intro.html">Ingesta de datos</a></li><li class="breadcrumb-item"><a href="../../content/load/patrones.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Patrones de carga</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></h1>
+<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Patrones de carga</span></h1>
 </div>
 
 
@@ -459,9 +496,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 <p>Sabemos ya de dónde vienen los datos. Toca decidir cómo los traemos de forma que el proceso pueda repetirse cada día sin intervención humana, que es la diferencia real entre un script y una plataforma de datos.</p>
-<section id="de-etl-a-elt" class="level2" data-number="13.1">
-<h2 data-number="13.1" class="anchored" data-anchor-id="de-etl-a-elt"><span class="header-section-number">13.1</span> De ETL a ELT</h2>
-<p>Durante décadas el acrónimo fue <strong>ETL</strong>: extraer, transformar y cargar. El orden no era caprichoso. El almacén de datos era caro, tanto en disco como en cómputo, así que no tenía ningún sentido meter ahí datos que no fuéramos a usar. La transformación ocurría en un servidor intermedio, con herramientas dedicadas, y al destino solo llegaba el resultado ya limpio.</p>
+<section id="de-etl-a-elt" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="de-etl-a-elt"><span class="header-section-number">12.1</span> De ETL a ELT</h2>
+<p>Durante décadas el acrónimo fue <strong>ETL</strong>: extraer, transformar y cargar, con toda una disciplina detrás que Kimball y su equipo documentaron en su día hasta el último detalle <span class="citation" data-cites="kimball2008etl">(<a href="../references.html#ref-kimball2008etl" role="doc-biblioref">Kimball et&nbsp;al. 2008</a>)</span>. El orden no era caprichoso. El almacén de datos era caro, tanto en disco como en cómputo, así que no tenía ningún sentido meter ahí datos que no fuéramos a usar. La transformación ocurría en un servidor intermedio, con herramientas dedicadas, y al destino solo llegaba el resultado ya limpio.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -469,6 +506,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
     o[("Origen")] --&gt; e["Extraer"] --&gt; t["Transformar"] --&gt; l["Cargar"] --&gt; d[("Almacén")]
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class o origen
+    class e,l carga
+    class t transformacion
+    class d almacen
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -484,6 +531,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <pre class="mermaid mermaid-js">flowchart LR
     o[("Origen")] --&gt; e["Extraer"] --&gt; l["Cargar"] --&gt; d[("Almacén")] --&gt; t["Transformar"]
     t --&gt; d
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class o origen
+    class e,l carga
+    class t transformacion
+    class d almacen
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -498,8 +555,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 <p>A cambio, acumulamos en el destino datos que quizá nunca se usen y trasladamos allí el coste de cómputo. Es un intercambio que hoy casi siempre sale a cuenta, y es la razón por la que esta parte del libro se llama <em>ingesta</em> y no <em>ETL</em>: nuestro trabajo aquí es la <strong>E</strong> y la <strong>L</strong>, dejando la <strong>T</strong> para <a href="../../content/transform/intro.html">la parte siguiente</a>.</p>
 </section>
-<section id="carga-completa" class="level2" data-number="13.2">
-<h2 data-number="13.2" class="anchored" data-anchor-id="carga-completa"><span class="header-section-number">13.2</span> Carga completa</h2>
+<section id="carga-completa" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="carga-completa"><span class="header-section-number">12.2</span> Carga completa</h2>
 <p>La estrategia más simple: cada ejecución trae toda la tabla y reemplaza lo que hubiera en destino.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">TRUNCATE</span> <span class="kw">TABLE</span> staging.alumnos;</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> staging.alumnos <span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> origen.alumnos;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
@@ -524,8 +581,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 </section>
-<section id="carga-incremental" class="level2" data-number="13.3">
-<h2 data-number="13.3" class="anchored" data-anchor-id="carga-incremental"><span class="header-section-number">13.3</span> Carga incremental</h2>
+<section id="carga-incremental" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="carga-incremental"><span class="header-section-number">12.3</span> Carga incremental</h2>
 <p>Cuando la tabla ya no cabe en la ventana, solo queda traer lo que ha cambiado. Y para eso necesitamos una <strong>marca de agua</strong> (<em>watermark</em>): el valor máximo de la columna que usamos como referencia en la última ejecución, guardado en algún sitio para la siguiente.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -537,6 +594,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     o[("Origen")] --&gt; c
     c --&gt; d[("Destino")]
     c --&gt; m2[("Nueva marca&lt;br/&gt;2026-01-12 10:00")]
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class o origen
+    class c,m,m2 carga
+    class d almacen
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -544,7 +609,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Veámoslo funcionando. Preparamos primero una secretaría académica de juguete, con el mismo modelo que ya conocemos pero añadiendo el campo que nos va a servir de huella.</p>
-<div id="982f7375" class="cell" data-execution_count="1">
+<div id="cfc18153" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>origen <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">":memory:"</span>)</span>
@@ -568,7 +633,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Nuestro proceso de extracción mantiene una marca de agua y solo pide lo posterior a ella.</p>
-<div id="4cdd644e" class="cell" data-execution_count="2">
+<div id="4a9a0b29" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extraer(conexion, marca):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Devuelve los registros posteriores a la marca y la nueva marca."""</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    filas <span class="op">=</span> conexion.execute(</span>
@@ -587,7 +652,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Si nadie toca el origen, la siguiente ejecución no trae nada. Que es justo lo que queremos.</p>
-<div id="24112357" class="cell" data-execution_count="3">
+<div id="bab59199" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>filas, marca <span class="op">=</span> extraer(origen, marca)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(filas)<span class="sc">}</span><span class="ss"> registros | nueva marca: </span><span class="sc">{</span>marca<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -595,7 +660,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Ahora se matricula una alumna nueva y otro corrige su apellido.</p>
-<div id="08dacdc7" class="cell" data-execution_count="4">
+<div id="3a922bb1" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>origen.executescript(<span class="st">"""</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES (4, 'María', 'Garcia', '2026-01-12 10:00:00');</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">    UPDATE alumnos SET apellido = 'Fernández', actualizado = '2026-01-12 11:00:00'</span></span>
@@ -613,8 +678,8 @@ nueva marca: 2026-01-12 11:00:00</code></pre>
 </div>
 </div>
 <p>Dos registros, no cuatro. Eso es una carga incremental, y cabe en veinte líneas.</p>
-<section id="dónde-se-rompe" class="level3" data-number="13.3.1">
-<h3 data-number="13.3.1" class="anchored" data-anchor-id="dónde-se-rompe"><span class="header-section-number">13.3.1</span> Dónde se rompe</h3>
+<section id="dónde-se-rompe" class="level3" data-number="12.3.1">
+<h3 data-number="12.3.1" class="anchored" data-anchor-id="dónde-se-rompe"><span class="header-section-number">12.3.1</span> Dónde se rompe</h3>
 <p>El ejemplo anterior funciona porque nosotros controlamos el origen. En un sistema real hay que vigilar varias cosas:</p>
 <ul>
 <li><strong>Registros que llegan tarde</strong>. Si la marca es la fecha de la operación en lugar de la fecha de modificación, un apunte con fecha de ayer insertado hoy queda por debajo de la marca y no lo veremos nunca. Por eso se usa siempre la fecha de <em>modificación técnica</em>, no la fecha de negocio.</li>
@@ -640,8 +705,8 @@ nueva marca: 2026-01-12 11:00:00</code></pre>
 </div>
 </section>
 </section>
-<section id="cómo-aterriza-en-destino" class="level2" data-number="13.4">
-<h2 data-number="13.4" class="anchored" data-anchor-id="cómo-aterriza-en-destino"><span class="header-section-number">13.4</span> Cómo aterriza en destino</h2>
+<section id="cómo-aterriza-en-destino" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="cómo-aterriza-en-destino"><span class="header-section-number">12.4</span> Cómo aterriza en destino</h2>
 <p>Traído el lote, hay que decidir qué hacemos con él. Son tres opciones, y las herramientas de ingesta las llaman casi siempre por estos nombres:</p>
 <table class="caption-top table">
 <caption>Modos de escritura en destino</caption>
@@ -678,8 +743,8 @@ nueva marca: 2026-01-12 11:00:00</code></pre>
 <p><code>append</code> es el más barato y el más peligroso: si el lote se reprocesa, los registros se duplican. <code>merge</code>, también llamado <em>upsert</em>, es el que resuelve el caso más común y el que hace falta para nuestros alumnos, ya que un alumno que corrige su apellido debe actualizar su fila, no crear una segunda.</p>
 <p>Conviene notar que <code>merge</code> <strong>pierde la historia</strong>: al actualizar la fila, el apellido anterior desaparece. Si esa historia importa (y en un almacén de datos suele importar) hay que conservarla explícitamente, ya sea guardando todos los lotes en <code>append</code> y resolviendo el histórico en la transformación, ya sea con las dimensiones lentamente cambiantes que vimos en el <a href="../../content/modelado/modelado_analitico.html">modelado analítico</a> o con los satélites del <a href="../../content/sistemas/arquitecturas.html#la-caja-fuerte">Data Vault</a>.</p>
 </section>
-<section id="change-data-capture" class="level2" data-number="13.5">
-<h2 data-number="13.5" class="anchored" data-anchor-id="change-data-capture"><span class="header-section-number">13.5</span> Change Data Capture</h2>
+<section id="change-data-capture" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="change-data-capture"><span class="header-section-number">12.5</span> Change Data Capture</h2>
 <p>Todo lo anterior consulta el estado actual del origen y deduce qué ha cambiado. El <strong>CDC</strong> hace lo contrario: lee el registro de transacciones que la base de datos ya escribe para poder recuperarse de una caída, y del que se puede reconstruir la secuencia exacta de operaciones.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -695,6 +760,14 @@ nueva marca: 2026-01-12 11:00:00</code></pre>
     wal --&gt; cdc["Conector CDC"]
     cdc --&gt; cola[["Cola de eventos"]]
     cola --&gt; dest[("Destino")]
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class t,wal origen
+    class cdc,cola carga
+    class dest almacen
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -705,8 +778,8 @@ nueva marca: 2026-01-12 11:00:00</code></pre>
 <p>El precio también lo es. Hay que tener acceso privilegiado al motor y convencer al equipo que lo administra; hay que desplegar y operar una pieza más (<a href="https://debezium.io/">Debezium</a> es la referencia en el mundo abierto), normalmente acompañada de una cola; y el arranque inicial sigue necesitando una carga completa sobre la que aplicar después el flujo de cambios, con el consiguiente cuidado para no perder ni duplicar nada en la transición.</p>
 <p>La recomendación honesta: <strong>empieza por carga completa, pasa a incremental cuando duela, y llega a CDC solo cuando lo incremental ya no baste</strong>. Es un orden de complejidad creciente y saltar etapas se paga.</p>
 </section>
-<section id="idempotencia-y-reprocesos" class="level2" data-number="13.6">
-<h2 data-number="13.6" class="anchored" data-anchor-id="idempotencia-y-reprocesos"><span class="header-section-number">13.6</span> Idempotencia y reprocesos</h2>
+<section id="idempotencia-y-reprocesos" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="idempotencia-y-reprocesos"><span class="header-section-number">12.6</span> Idempotencia y reprocesos</h2>
 <p>Un proceso es <strong>idempotente</strong> cuando ejecutarlo varias veces con la misma entrada deja el sistema en el mismo estado que ejecutarlo una sola vez. En ingesta no es un lujo académico, es la propiedad que permite dormir tranquilo, porque los reintentos son inevitables: la red falla a mitad de carga, alguien relanza el proceso sin mirar, el orquestador reprograma una tarea que creía muerta y en realidad seguía viva.</p>
 <p>Lo que hace idempotente a una carga:</p>
 <ul>
@@ -715,8 +788,8 @@ nueva marca: 2026-01-12 11:00:00</code></pre>
 <li><strong>Escrituras transaccionales</strong>. O se ve el lote entero o no se ve nada. Es justo lo que aportan los <a href="../../content/sistemas/nuevos-formatos.html">formatos de tabla abiertos</a> frente a un directorio de ficheros sueltos, y lo que aprovecharemos en la <a href="../../content/load/staging.html">capa de staging</a>.</li>
 </ul>
 </section>
-<section id="evolución-del-esquema" class="level2" data-number="13.7">
-<h2 data-number="13.7" class="anchored" data-anchor-id="evolución-del-esquema"><span class="header-section-number">13.7</span> Evolución del esquema</h2>
+<section id="evolución-del-esquema" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="evolución-del-esquema"><span class="header-section-number">12.7</span> Evolución del esquema</h2>
 <p>El origen cambiará. Añadirán una columna, ampliarán un <code>VARCHAR</code>, convertirán un entero en decimal. La pregunta no es si va a pasar, sino qué queremos que haga nuestro proceso cuando pase.</p>
 <p>Las políticas razonables, de más permisiva a más estricta:</p>
 <ul>
@@ -726,8 +799,8 @@ nueva marca: 2026-01-12 11:00:00</code></pre>
 </ul>
 <p>Lo sensato es no aplicar la misma política en todas partes. En la capa de aterrizaje interesa evolucionar, porque el objetivo ahí es <strong>no perder nada</strong>; en las tablas que alimentan informes de dirección interesa fallar, porque el objetivo es <strong>no mentir</strong>. Veremos cómo se declara esto de forma explícita en las <a href="../../content/load/herramientas.html#contratos-de-esquema">herramientas de ingesta</a>.</p>
 </section>
-<section id="los-metadatos-de-carga" class="level2" data-number="13.8">
-<h2 data-number="13.8" class="anchored" data-anchor-id="los-metadatos-de-carga"><span class="header-section-number">13.8</span> Los metadatos de carga</h2>
+<section id="los-metadatos-de-carga" class="level2" data-number="12.8">
+<h2 data-number="12.8" class="anchored" data-anchor-id="los-metadatos-de-carga"><span class="header-section-number">12.8</span> Los metadatos de carga</h2>
 <p>Por último, un detalle pequeño de implementar y que ahorra incontables horas: acompañar cada registro con información sobre su propia carga. Como mínimo, de dónde vino y cuándo llegó.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">..</span>.,</span>
@@ -739,6 +812,11 @@ nueva marca: 2026-01-12 11:00:00</code></pre>
 <p>Con los patrones claros, veamos qué herramientas nos evitan escribir todo esto a mano.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-kimball2008etl" class="csl-entry" role="listitem">
+Kimball, Ralph, Margy Ross, Warren Thornthwaite, Joy Mundy, y Bob Becker. 2008. <em>The Data Warehouse Lifecycle Toolkit</em>. 2.ª ed. Wiley.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -1145,12 +1223,12 @@ nueva marca: 2026-01-12 11:00:00</code></pre>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../../content/load/intro.html" class="pagination-link" aria-label="Extracción">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../../content/load/herramientas.html" class="pagination-link" aria-label="Herramientas de ingesta">
-        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

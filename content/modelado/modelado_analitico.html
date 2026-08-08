@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Modelado analítico – Ingeniería de datos</title>
+<title>3&nbsp; Modelado analítico – Ingeniería de datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,7 +26,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -48,7 +67,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-181dfe74f60b45fb364f5d98d01a2ee9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -100,7 +119,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<meta property="og:title" content="4&nbsp; Modelado analítico – Ingeniería de datos">
+<meta property="og:title" content="3&nbsp; Modelado analítico – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -117,7 +136,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/modelado/intro.html">Modelado de datos</a></li><li class="breadcrumb-item"><a href="../../content/modelado/modelado_analitico.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/modelado/intro.html">Modelado de datos</a></li><li class="breadcrumb-item"><a href="../../content/modelado/modelado_analitico.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelado analítico</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -155,7 +174,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+ <span class="menu-text">Introducción</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -170,25 +189,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/modelado_analitico.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/nuevos_paradigmas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
   </div>
 </li>
       </ul>
@@ -205,37 +224,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/dbms_analítica.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/nuevos-formatos.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
   </div>
 </li>
       </ul>
@@ -252,25 +271,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
   </div>
 </li>
       </ul>
@@ -287,25 +306,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -322,25 +341,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -368,8 +387,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/calidad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Calidad de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/rill.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Exploración con Rill</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/datalake.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -384,15 +421,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#modelado-dimensional" id="toc-modelado-dimensional" class="nav-link active" data-scroll-target="#modelado-dimensional"><span class="header-section-number">4.1</span> Modelado dimensional</a>
+  <li><a href="#modelado-dimensional" id="toc-modelado-dimensional" class="nav-link active" data-scroll-target="#modelado-dimensional"><span class="header-section-number">3.1</span> Modelado dimensional</a>
   <ul class="collapse">
-  <li><a href="#scd" id="toc-scd" class="nav-link" data-scroll-target="#scd"><span class="header-section-number">4.1.1</span> SCD</a></li>
+  <li><a href="#scd" id="toc-scd" class="nav-link" data-scroll-target="#scd"><span class="header-section-number">3.1.1</span> SCD</a></li>
   </ul></li>
-  <li><a href="#modelado-de-copo-de-nieve" id="toc-modelado-de-copo-de-nieve" class="nav-link" data-scroll-target="#modelado-de-copo-de-nieve"><span class="header-section-number">4.2</span> Modelado de copo de nieve</a>
+  <li><a href="#modelado-de-copo-de-nieve" id="toc-modelado-de-copo-de-nieve" class="nav-link" data-scroll-target="#modelado-de-copo-de-nieve"><span class="header-section-number">3.2</span> Modelado de copo de nieve</a>
   <ul class="collapse">
-  <li><a href="#gestión-de-datos-maestros" id="toc-gestión-de-datos-maestros" class="nav-link" data-scroll-target="#gestión-de-datos-maestros"><span class="header-section-number">4.2.1</span> Gestión de datos maestros</a></li>
+  <li><a href="#gestión-de-datos-maestros" id="toc-gestión-de-datos-maestros" class="nav-link" data-scroll-target="#gestión-de-datos-maestros"><span class="header-section-number">3.2.1</span> Gestión de datos maestros</a></li>
   </ul></li>
-  <li><a href="#data-marts" id="toc-data-marts" class="nav-link" data-scroll-target="#data-marts"><span class="header-section-number">4.3</span> Data Marts</a></li>
+  <li><a href="#data-marts" id="toc-data-marts" class="nav-link" data-scroll-target="#data-marts"><span class="header-section-number">3.3</span> Data Marts</a></li>
   </ul>
 </nav>
     </div>
@@ -402,9 +439,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/modelado/intro.html">Modelado de datos</a></li><li class="breadcrumb-item"><a href="../../content/modelado/modelado_analitico.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/modelado/intro.html">Modelado de datos</a></li><li class="breadcrumb-item"><a href="../../content/modelado/modelado_analitico.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelado analítico</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelado analítico</span></h1>
 </div>
 
 
@@ -428,16 +465,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <figcaption>Ejemplo de la base de datos Northwind</figcaption>
 </figure>
 </div>
-<p>Por ello, ya que de todos modos tenemos que disponer un sistema pensado para analítica, por qué no darle una forma que haga la información más fácil de consumir. Aunque este proceso no está falto de trabajo. <a href="https://en.wikipedia.org/wiki/Bill_Inmon">William (Bill) Inmon</a> es reconocido como el padre del concepto almacén de datos o <em>data warehouse</em>. Un data warehouse es esencialmente ese repositorio donde residen todos los datos de la compañía, no de forma operacional, si no para poder realizar consultas, análisis e informes sobre ellos. Esto permite además unificar las distintas fuentes para dar una visión cohesionada de los procesos en la empresa y sus datos asociados.</p>
+<p>Por ello, ya que de todos modos tenemos que disponer un sistema pensado para analítica, por qué no darle una forma que haga la información más fácil de consumir. Aunque este proceso no está falto de trabajo. <a href="https://en.wikipedia.org/wiki/Bill_Inmon">William (Bill) Inmon</a> es reconocido como el padre del concepto almacén de datos o <em>data warehouse</em> <span class="citation" data-cites="inmon2005building">(<a href="../references.html#ref-inmon2005building" role="doc-biblioref">Inmon 2005</a>)</span>. Un data warehouse es esencialmente ese repositorio donde residen todos los datos de la compañía, no de forma operacional, si no para poder realizar consultas, análisis e informes sobre ellos. Esto permite además unificar las distintas fuentes para dar una visión cohesionada de los procesos en la empresa y sus datos asociados.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Data_Warehouse_%26_Data-Marts_overview.svg/1920px-Data_Warehouse_%26_Data-Marts_overview.svg.png" class="img-fluid figure-img" style="width:60.0%"></p>
 <figcaption>Data Warehouse</figcaption>
 </figure>
 </div>
-<p>Sin embargo, el modelo de Inmon requería una consolidación entre fuentes que es difícil de construir. Además, el ritmo al que operan las distintas unidades hace que existan urgencias de datos que “no pueden esperar”. Un enfoque algo más pragmático que permitía enfocarse en necesidades concretas es asociado con <a href="https://en.wikipedia.org/wiki/Ralph_Kimball">Ralph Kimball</a>. Fue años más tarde y quizás el progreso de la tecnología hacia los 90 hizo posible el enfoque de Kimball pero sin duda es uno de los modelados más comunes cuando nos acercamos a las áreas de consumo de datos. De hecho, el término Business Intelligence se inicia en esta época gracias al foco en el warehousing y el modelado analítico.</p>
-<section id="modelado-dimensional" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="modelado-dimensional"><span class="header-section-number">4.1</span> Modelado dimensional</h2>
+<p>Sin embargo, el modelo de Inmon requería una consolidación entre fuentes que es difícil de construir. Además, el ritmo al que operan las distintas unidades hace que existan urgencias de datos que “no pueden esperar”. Un enfoque algo más pragmático que permitía enfocarse en necesidades concretas es asociado con <a href="https://en.wikipedia.org/wiki/Ralph_Kimball">Ralph Kimball</a>, cuyo <em>Data Warehouse Toolkit</em> <span class="citation" data-cites="kimball2013toolkit">(<a href="../references.html#ref-kimball2013toolkit" role="doc-biblioref">Kimball y Ross 2013</a>)</span> sigue siendo la referencia canónica del modelado dimensional. Fue años más tarde y quizás el progreso de la tecnología hacia los 90 hizo posible el enfoque de Kimball pero sin duda es uno de los modelados más comunes cuando nos acercamos a las áreas de consumo de datos. De hecho, el término Business Intelligence se inicia en esta época gracias al foco en el warehousing y el modelado analítico.</p>
+<section id="modelado-dimensional" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="modelado-dimensional"><span class="header-section-number">3.1</span> Modelado dimensional</h2>
 <p>El <a href="https://es.wikipedia.org/wiki/Modelado_dimensional">modelado dimensional</a>, en estrella o también referido Kimball, se enfoca en disponer las dimensiones de corte de los análisis en tablas muy próximas a los conceptos de entidad que comentamos en el modelado <a href="../../content/modelado/intro.html#entidades-y-relaciones">Entidad-Relación</a> y los hechos, acontecimientos en otra entidad de crecimiento más frecuente y vertical.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -514,8 +551,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li>FACT_FACTURAS: número de facturas asociadas a DIMs</li>
 </ul>
 <p>Pudiendo variar únicamente la métrica (cuantas unidades, cuantos dolares, qué porcentaje de descuentos, …). Esto hace que muchas consultas puedan componerse de forma aditiva en base a preguntas frecuentes, atributos concretos usados frecuentemente, agregadas de forma distinta.</p>
-<section id="scd" class="level3" data-number="4.1.1">
-<h3 data-number="4.1.1" class="anchored" data-anchor-id="scd"><span class="header-section-number">4.1.1</span> SCD</h3>
+<section id="scd" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="scd"><span class="header-section-number">3.1.1</span> SCD</h3>
 <p>El concepto de <strong>Slowly Changing Dimension (SCD)</strong> nos obliga a indicar distintos valores para nuestras dimensiones en base a una condición temporal. Un producto que cambia de nombre a una fecha dada, un cliente que cambia de apellidos,… Existen varias modalidades con las que podemos intentar paliar este hecho, y una de las más comunes es historificar los cambios con fechas de efecto, también conocido como dimensión de <strong>tipo 2</strong>.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -546,8 +583,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Esto nos obliga a añadir condiciones que filtren los registros vigentes, o indiquen la fecha de efecto pudiendo así consultar la información como hubiera sido consultada en un intervalo entre fechas efectivas. Esto sin duda complica la composición de consulta, aunque nos permite copar con estos cambios.</p>
 </section>
 </section>
-<section id="modelado-de-copo-de-nieve" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="modelado-de-copo-de-nieve"><span class="header-section-number">4.2</span> Modelado de copo de nieve</h2>
+<section id="modelado-de-copo-de-nieve" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="modelado-de-copo-de-nieve"><span class="header-section-number">3.2</span> Modelado de copo de nieve</h2>
 <p>El modelo de copo de nieve extiende el modelo estrella arriba mencionado a jerarquías de dimensiones. Pensemos que por ejemplo, cuando hablamos del territorio que cubre un empleado, esto se refiere a una entidad o dimensión en esta etapa, donde se determinan todos los territorios existentes.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -627,18 +664,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Si conseguimos tener dimensiones comunes a todas las áreas de negocio, esto nos da una consolidación de la información con poca variación entre unidades. Sin embargo, suele ser común la variación entre unidades de esas dimensiones comunes a nuestra actividad. El control sobre estas dimensiones clave ha hecho que la gestión de datos maestros se convierta en una actividad en si misma.</p>
-<section id="gestión-de-datos-maestros" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="gestión-de-datos-maestros"><span class="header-section-number">4.2.1</span> Gestión de datos maestros</h3>
+<section id="gestión-de-datos-maestros" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="gestión-de-datos-maestros"><span class="header-section-number">3.2.1</span> Gestión de datos maestros</h3>
 <p>La gestión de datos maestros (Master Data Management, MDM) es una disciplina tecnológica en la que las empresas y los departamentos de TI colaboran para garantizar la uniformidad, la precisión, la gestión, la coherencia semántica y la responsabilidad de los activos de datos maestros compartidos de la empresa.</p>
 <p>Es un marco utilizado por empresas que buscan aprovechar sus datos de manera más efectiva, asegurando la precisión, coherencia y accesibilidad de los datos comerciales centrales, como información de clientes, detalles de productos o registros de proveedores.</p>
 <p>MDM se define como una disciplina en la que el negocio y la tecnología trabajan juntos para asegurar la uniformidad, la exactitud, la custodia, la consistencia semántica y la responsabilidad de los activos de datos maestros oficiales de la empresa.</p>
 </section>
 </section>
-<section id="data-marts" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="data-marts"><span class="header-section-number">4.3</span> Data Marts</h2>
+<section id="data-marts" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="data-marts"><span class="header-section-number">3.3</span> Data Marts</h2>
 <p>Siendo prácticos, por mucho que dispongamos de toda la información de una empresa, solo necesitaremos ciertas dimensiones y hechos para conformar nuestras métricas y realizar nuestro análisis. Habitualmente la organización se dispone de manera que un subconjunto de los datos es accesible por la unidad que los necesita y a ese subconjunto lo conocemos como <strong>data mart</strong>. Dónde reside y cómo se modela no cambia, pero es el nombre que se le atribuye a esas colecciones de tablas que permiten a la unidad gestionar los datos necesarios en el universo de datos disponibles.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-inmon2005building" class="csl-entry" role="listitem">
+Inmon, William H. 2005. <em>Building the Data Warehouse</em>. 4.ª ed. Wiley.
+</div>
+<div id="ref-kimball2013toolkit" class="csl-entry" role="listitem">
+Kimball, Ralph, y Margy Ross. 2013. <em>The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling</em>. 3.ª ed. Wiley.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -1045,12 +1090,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../../content/modelado/desnormalizar.html" class="pagination-link" aria-label="Desnormalizar">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../../content/modelado/nuevos_paradigmas.html" class="pagination-link" aria-label="Nuevos paradigmas">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

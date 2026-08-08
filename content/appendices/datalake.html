@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Apéndice D — Ejercicio: un lago de datos entero – Ingeniería de datos</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../content/appendices/de_storybook.html" rel="next">
+<link href="../../content/appendices/rill.html" rel="prev">
+<link href="../../cover.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-181dfe74f60b45fb364f5d98d01a2ee9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-MXHDHE1HP5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MXHDHE1HP5');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PLKHBRCG');</script>
+<!-- End Google Tag Manager -->
+
+<meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Apéndice D — Ejercicio: un lago de datos entero – Ingeniería de datos">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
+<meta property="og:site_name" content="Ingeniería de datos">
+<meta property="og:image:height" content="1536">
+<meta property="og:image:width" content="1024">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/appendices/metadatado.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../content/appendices/datalake.html"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Ingeniería de datos</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/IraitzM/ingenieria-datos" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=|url|" title="LinkedIn" class="quarto-navigation-tool px-1" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prólogo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducción</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../content/modelado/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelado de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/modelado_analitico.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/nuevos_paradigmas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sistemas gestores de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/dbms_analítica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/nuevos-formatos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Ingesta de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Transformación de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../content/explotacion/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Explotación de los datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referencias</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/metadatado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/calidad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Calidad de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/rill.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Exploración con Rill</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/datalake.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#lo-que-se-va-a-levantar" id="toc-lo-que-se-va-a-levantar" class="nav-link active" data-scroll-target="#lo-que-se-va-a-levantar"><span class="header-section-number">D.1</span> Lo que se va a levantar</a></li>
+  <li><a href="#antes-de-empezar" id="toc-antes-de-empezar" class="nav-link" data-scroll-target="#antes-de-empezar"><span class="header-section-number">D.2</span> Antes de empezar</a></li>
+  <li><a href="#puesta-en-marcha" id="toc-puesta-en-marcha" class="nav-link" data-scroll-target="#puesta-en-marcha"><span class="header-section-number">D.3</span> Puesta en marcha</a>
+  <ul class="collapse">
+  <li><a href="#levantar-el-origen" id="toc-levantar-el-origen" class="nav-link" data-scroll-target="#levantar-el-origen"><span class="header-section-number">D.3.1</span> Levantar el origen</a></li>
+  <li><a href="#cargar-la-capa-bronce" id="toc-cargar-la-capa-bronce" class="nav-link" data-scroll-target="#cargar-la-capa-bronce"><span class="header-section-number">D.3.2</span> Cargar la capa bronce</a></li>
+  <li><a href="#construir-el-vault" id="toc-construir-el-vault" class="nav-link" data-scroll-target="#construir-el-vault"><span class="header-section-number">D.3.3</span> Construir el vault</a></li>
+  <li><a href="#las-dos-cosas-de-una-vez" id="toc-las-dos-cosas-de-una-vez" class="nav-link" data-scroll-target="#las-dos-cosas-de-una-vez"><span class="header-section-number">D.3.4</span> Las dos cosas de una vez</a></li>
+  <li><a href="#explorar" id="toc-explorar" class="nav-link" data-scroll-target="#explorar"><span class="header-section-number">D.3.5</span> Explorar</a></li>
+  <li><a href="#comprobar-que-está-todo" id="toc-comprobar-que-está-todo" class="nav-link" data-scroll-target="#comprobar-que-está-todo"><span class="header-section-number">D.3.6</span> Comprobar que está todo</a></li>
+  </ul></li>
+  <li><a href="#lo-que-ha-quedado-construido" id="toc-lo-que-ha-quedado-construido" class="nav-link" data-scroll-target="#lo-que-ha-quedado-construido"><span class="header-section-number">D.4</span> Lo que ha quedado construido</a></li>
+  <li><a href="#las-decisiones-que-importan" id="toc-las-decisiones-que-importan" class="nav-link" data-scroll-target="#las-decisiones-que-importan"><span class="header-section-number">D.5</span> Las decisiones que importan</a>
+  <ul class="collapse">
+  <li><a href="#el-hub-se-carga-desde-todos-los-orígenes" id="toc-el-hub-se-carga-desde-todos-los-orígenes" class="nav-link" data-scroll-target="#el-hub-se-carga-desde-todos-los-orígenes"><span class="header-section-number">D.5.1</span> El hub se carga desde todos los orígenes</a></li>
+  <li><a href="#los-satélites-no-se-cierran-se-deducen" id="toc-los-satélites-no-se-cierran-se-deducen" class="nav-link" data-scroll-target="#los-satélites-no-se-cierran-se-deducen"><span class="header-section-number">D.5.2</span> Los satélites no se cierran, se deducen</a></li>
+  <li><a href="#el-enlace-no-lleva-atributos" id="toc-el-enlace-no-lleva-atributos" class="nav-link" data-scroll-target="#el-enlace-no-lleva-atributos"><span class="header-section-number">D.5.3</span> El enlace no lleva atributos</a></li>
+  <li><a href="#el-modelo-físico-de-un-erp-no-es-el-que-enseña" id="toc-el-modelo-físico-de-un-erp-no-es-el-que-enseña" class="nav-link" data-scroll-target="#el-modelo-físico-de-un-erp-no-es-el-que-enseña"><span class="header-section-number">D.5.4</span> El modelo físico de un ERP no es el que enseña</a></li>
+  </ul></li>
+  <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios"><span class="header-section-number">D.6</span> Ejercicios</a>
+  <ul class="collapse">
+  <li><a href="#ver-el-historial-en-funcionamiento" id="toc-ver-el-historial-en-funcionamiento" class="nav-link" data-scroll-target="#ver-el-historial-en-funcionamiento"><span class="header-section-number">D.6.1</span> Ver el historial en funcionamiento</a></li>
+  <li><a href="#romper-la-integridad-a-propósito" id="toc-romper-la-integridad-a-propósito" class="nav-link" data-scroll-target="#romper-la-integridad-a-propósito"><span class="header-section-number">D.6.2</span> Romper la integridad a propósito</a></li>
+  <li><a href="#añadir-un-origen" id="toc-añadir-un-origen" class="nav-link" data-scroll-target="#añadir-un-origen"><span class="header-section-number">D.6.3</span> Añadir un origen</a></li>
+  </ul></li>
+  <li><a href="#lo-que-hay-que-vigilar" id="toc-lo-que-hay-que-vigilar" class="nav-link" data-scroll-target="#lo-que-hay-que-vigilar"><span class="header-section-number">D.7</span> Lo que hay que vigilar</a></li>
+  <li><a href="#lo-que-este-ejercicio-deja-fuera" id="toc-lo-que-este-ejercicio-deja-fuera" class="nav-link" data-scroll-target="#lo-que-este-ejercicio-deja-fuera"><span class="header-section-number">D.8</span> Lo que este ejercicio deja fuera</a></li>
+  <li><a href="#desmontarlo" id="toc-desmontarlo" class="nav-link" data-scroll-target="#desmontarlo"><span class="header-section-number">D.9</span> Desmontarlo</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/appendices/metadatado.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../content/appendices/datalake.html"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Apéndice D — Ejercicio: un lago de datos entero</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>El resto del libro construye sobre la secretaría académica, un origen inventado a medida para que cada capítulo pueda enseñar una cosa sin que estorben las demás. Este apéndice propone el ejercicio contrario: <strong>partir de un sistema real y llegar hasta el panel</strong>, con todo lo que eso trae. El origen es <a href="https://www.odoo.com/">Odoo</a>, un ERP de código abierto con datos de demostración, y la gracia está precisamente en que su base de datos no está diseñada para que la analicemos.</p>
+<p>Todo lo necesario está en el repositorio. Basta con este apéndice y los ficheros que se citan para reconstruirlo desde cero, y conviene hacerlo en ese orden, porque cada paso deja algo que el siguiente necesita.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Es un ejercicio aparte
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Este montaje no continúa el ejemplo de la academia ni comparte nada con él. Los puertos están elegidos para que ambos puedan convivir en la misma máquina, así que se puede tener el libro renderizando y este lago levantado a la vez.</p>
+</div>
+</div>
+<section id="lo-que-se-va-a-levantar" class="level2" data-number="D.1">
+<h2 data-number="D.1" class="anchored" data-anchor-id="lo-que-se-va-a-levantar"><span class="header-section-number">D.1</span> Lo que se va a levantar</h2>
+<p>Cinco piezas, todas de código abierto, cada una haciendo exactamente un trabajo.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    o[("Odoo&lt;br/&gt;PostgreSQL")] --&gt; d["dlt"]
+    d --&gt; b[("DuckDB&lt;br/&gt;raw")]
+    b --&gt; t["dbt"]
+    t --&gt; v[("DuckDB&lt;br/&gt;vault")]
+    v --&gt; t2["dbt"]
+    t2 --&gt; g[("DuckDB&lt;br/&gt;oro")]
+    g --&gt; r["Rill"]
+
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class o origen
+    class d carga
+    class b,v,g almacen
+    class t,t2 transformacion
+    class r explotacion
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<table class="caption-top table">
+<caption>Las piezas del ejercicio y dónde encontrarlas</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pieza</th>
+<th>Papel</th>
+<th>Dónde queda</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Odoo 16 y PostgreSQL 15</td>
+<td>Sistema origen con datos de demostración</td>
+<td><code>http://localhost:8069</code></td>
+</tr>
+<tr class="even">
+<td>dlt</td>
+<td>Ingesta de Odoo al almacén</td>
+<td><code>pipelines/odoo_extract.py</code></td>
+</tr>
+<tr class="odd">
+<td>DuckDB</td>
+<td>El almacén, las cuatro capas</td>
+<td><code>warehouse/warehouse.duckdb</code></td>
+</tr>
+<tr class="even">
+<td>dbt</td>
+<td>Data Vault y capa de explotación</td>
+<td><code>dbt_project/</code></td>
+</tr>
+<tr class="odd">
+<td>Rill</td>
+<td>Panel de exploración</td>
+<td><code>http://localhost:9010</code></td>
+</tr>
+</tbody>
+</table>
+<p>Los puertos no son los de costumbre y la razón es evitar choques: el 3000 lo usa Evidence en el <a href="../../content/explotacion/bi.html">capítulo de inteligencia de negocio</a>, el 8585 lo ocupa OpenMetadata en el <a href="../../content/appendices/metadatado.html">apéndice de metadatado</a> y el 9009 es el de un Rill arrancado en local como se ve en el <a href="../../content/appendices/rill.html">apéndice de exploración</a>. Aquí PostgreSQL se publica en el 5433 y Rill en el 9010.</p>
+</section>
+<section id="antes-de-empezar" class="level2" data-number="D.2">
+<h2 data-number="D.2" class="anchored" data-anchor-id="antes-de-empezar"><span class="header-section-number">D.2</span> Antes de empezar</h2>
+<p>Hace falta Docker con el complemento <code>compose</code>, unos 4 GiB de memoria libre y unos 3 GiB de disco, casi todo para la imagen de Odoo. La primera ejecución tarda lo que tarde la descarga.</p>
+</section>
+<section id="puesta-en-marcha" class="level2" data-number="D.3">
+<h2 data-number="D.3" class="anchored" data-anchor-id="puesta-en-marcha"><span class="header-section-number">D.3</span> Puesta en marcha</h2>
+<section id="levantar-el-origen" class="level3" data-number="D.3.1">
+<h3 data-number="D.3.1" class="anchored" data-anchor-id="levantar-el-origen"><span class="header-section-number">D.3.1</span> Levantar el origen</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Esto arranca PostgreSQL, crea la base de datos de Odoo con el módulo de ventas y sus datos de demostración, y deja el ERP escuchando. La creación de la base de datos la hace un servicio de un solo uso (<code>odoo-init</code>) en lugar del asistente web, que es lo que suele proponerse y que tiene el inconveniente de no ser reproducible: obliga a rellenar un formulario a mano y a acordarse de marcar la casilla de los datos de demostración.</p>
+<p>El primer arranque tarda un par de minutos en inicializar la base. Se sabe que ha terminado cuando el servicio de inicialización ha salido con código cero:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> inspect dl-odoo-init <span class="at">--format</span> <span class="st">'{{.State.ExitCode}}'</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A partir de ahí Odoo responde en <code>http://localhost:8069</code>, con usuario <code>admin</code> y contraseña <code>admin</code>. Merece la pena entrar y mirar los pedidos de venta, aunque solo sea para tener presente cómo se ven los datos antes de que los toquemos.</p>
+</section>
+<section id="cargar-la-capa-bronce" class="level3" data-number="D.3.2">
+<h3 data-number="D.3.2" class="anchored" data-anchor-id="cargar-la-capa-bronce"><span class="header-section-number">D.3.2</span> Cargar la capa bronce</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> extract</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>dlt lee cinco tablas de Odoo y las deja en el esquema <code>raw</code> sin más cambio que el nombre. Al terminar informa de lo cargado, y estos son los números que salen con los datos de demostración:</p>
+<pre><code>raw.raw_customers: 40
+raw.raw_orders: 20
+raw.raw_order_lines: 44
+raw.raw_products: 34
+raw.raw_product_templates: 29</code></pre>
+<p>Si esos números no cuadran, no tiene sentido seguir: algo ha fallado en el origen y todo lo que venga después heredará el problema.</p>
+</section>
+<section id="construir-el-vault" class="level3" data-number="D.3.3">
+<h3 data-number="D.3.3" class="anchored" data-anchor-id="construir-el-vault"><span class="header-section-number">D.3.3</span> Construir el vault</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> transform</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>dbt encadena las tres capas que quedan (staging, vault y explotación) y a continuación ejecuta las pruebas. La salida termina así:</p>
+<pre><code>Done. PASS=74 WARN=0 ERROR=0 SKIP=0 TOTAL=74</code></pre>
+<p>Las setenta y cuatro incluyen diecisiete modelos y cincuenta y siete pruebas. Que pasen todas no significa que el modelo sea bueno, pero que falle una sí significa que algo está mal, y en este proyecto hay pruebas puestas justo donde el Data Vault se rompe con más facilidad.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../assets/dbt-linaje.png" class="img-fluid figure-img"></p>
+<figcaption>Linaje de datos en dbt docs</figcaption>
+</figure>
+</div>
+</section>
+<section id="las-dos-cosas-de-una-vez" class="level3" data-number="D.3.4">
+<h3 data-number="D.3.4" class="anchored" data-anchor-id="las-dos-cosas-de-una-vez"><span class="header-section-number">D.3.4</span> Las dos cosas de una vez</h3>
+<p>Los dos pasos anteriores pueden ejecutarse como un solo proceso, porque dlt sabe lanzar un proyecto dbt por su cuenta:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> pipeline</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Está en <code>pipelines/run_pipeline.py</code> y son tres líneas de fondo: se crea el pipeline, se carga y se le pasa el mismo objeto a <code>dlt.dbt.package()</code>, que deduce de él a qué base de datos tiene que apuntar dbt. La dependencia entre cargar y transformar no hay que declararla en ningún sitio, porque si la carga lanza una excepción la línea siguiente no llega a ejecutarse.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span><code>run_all</code> no ejecuta las pruebas
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El nombre engaña. <code>run_all()</code> hace <code>dbt deps</code>, <code>dbt seed</code> y <code>dbt run</code>, es decir el equivalente a <code>dbt run</code> y no a <code>dbt build</code>: <strong>las pruebas de los modelos no entran</strong>. Quedarse ahí dejaría el vault sin sus cincuenta y siete comprobaciones y sin enterarse. Por eso el script pide las pruebas aparte, con <code>transformacion.test()</code>, y suma los dos resultados antes de decidir si ha ido bien.</p>
+</div>
+</div>
+</section>
+<section id="explorar" class="level3" data-number="D.3.5">
+<h3 data-number="D.3.5" class="anchored" data-anchor-id="explorar"><span class="header-section-number">D.3.5</span> Explorar</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">--profile</span> bi up <span class="at">-d</span> rill</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>El panel queda en <code>http://localhost:9010</code>. Rill consulta el mismo fichero DuckDB que acaba de construir dbt, sin copiar nada.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../assets/ri.png" class="img-fluid figure-img"></p>
+<figcaption>Dashboard en Rill</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>Rill bloquea el almacén
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>DuckDB admite un único escritor sobre el fichero, por las razones que se explican en el <a href="../../content/sistemas/dbms_analítica.html#embebido-o-servidor">capítulo de bases de datos analíticas</a>. Mientras Rill esté levantado, <strong>cualquiera de las órdenes que escriben</strong> (<code>extract</code>, <code>transform</code> o <code>pipeline</code>) falla con un <code>Conflicting lock is held in PID 0</code>. Ese <code>PID 0</code> despista, porque el proceso que tiene el bloqueo está en otro contenedor y desde aquí no se le ve el número.</p>
+<p>La solución es parar el panel antes de volver a cargar:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose stop rill</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por eso Rill vive tras un perfil de Compose y no arranca con el <code>up -d</code> general: el orden natural (cargar, transformar y después explorar) evita el choque. Al terminar de reconstruir, <code>docker compose --profile bi up -d rill</code> lo devuelve a su sitio.</p>
+</div>
+</div>
+</section>
+<section id="comprobar-que-está-todo" class="level3" data-number="D.3.6">
+<h3 data-number="D.3.6" class="anchored" data-anchor-id="comprobar-que-está-todo"><span class="header-section-number">D.3.6</span> Comprobar que está todo</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> <span class="at">--entrypoint</span> python transform <span class="at">-c</span> <span class="st">"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">import duckdb</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">con = duckdb.connect('/data/warehouse.duckdb', read_only=True)</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">print(con.execute('SELECT count(*) FROM vault.hub_customer').fetchone())</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="st">print(con.execute('SELECT * FROM main.kpis_daily LIMIT 5').fetchall())</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="lo-que-ha-quedado-construido" class="level2" data-number="D.4">
+<h2 data-number="D.4" class="anchored" data-anchor-id="lo-que-ha-quedado-construido"><span class="header-section-number">D.4</span> Lo que ha quedado construido</h2>
+<p>Cuatro capas en un mismo fichero DuckDB, cada una en su esquema.</p>
+<table class="caption-top table">
+<caption>Las capas del almacén y lo que hay en cada una</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Esquema</th>
+<th>Capa</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>raw</code></td>
+<td>Bronce</td>
+<td>Reflejo de Odoo, sin transformar (5 tablas)</td>
+</tr>
+<tr class="even">
+<td><code>staging</code></td>
+<td>Preparación</td>
+<td>Vistas que resuelven las rarezas del origen (4 vistas)</td>
+</tr>
+<tr class="odd">
+<td><code>vault</code></td>
+<td>Plata</td>
+<td>3 hubs, 2 enlaces y 4 satélites</td>
+</tr>
+<tr class="even">
+<td><code>main</code></td>
+<td>Oro</td>
+<td><code>point_in_time_orders</code>, <code>kpis_daily</code>, <code>customer_360</code>, <code>customer_history</code></td>
+</tr>
+</tbody>
+</table>
+<p>Que la capa de explotación viva en <code>main</code> y no en un esquema propio llamado <code>analytics</code> no es un descuido. Rill solo sabe direccionar tablas del esquema por defecto de la base de datos que adjunta (sus claves <code>database</code> y <code>database_schema</code> se ignoran con este conector), de modo que una tabla en un esquema <code>analytics</code> resulta invisible para el panel. Las capas de abajo sí van en su esquema porque solo las consume dbt. Es un ejemplo pequeño y muy típico de cómo una limitación de la herramienta de consumo acaba decidiendo dónde se materializa el dato.</p>
+</section>
+<section id="las-decisiones-que-importan" class="level2" data-number="D.5">
+<h2 data-number="D.5" class="anchored" data-anchor-id="las-decisiones-que-importan"><span class="header-section-number">D.5</span> Las decisiones que importan</h2>
+<p>Cuatro cosas de este montaje merecen explicación, porque son las que separan un Data Vault que funciona de uno que parece funcionar.</p>
+<section id="el-hub-se-carga-desde-todos-los-orígenes" class="level3" data-number="D.5.1">
+<h3 data-number="D.5.1" class="anchored" data-anchor-id="el-hub-se-carga-desde-todos-los-orígenes"><span class="header-section-number">D.5.1</span> El hub se carga desde todos los orígenes</h3>
+<p>Un hub guarda claves de negocio. La tentación es sacarlas de la tabla que “es” esa entidad (los clientes, de la tabla de clientes) y ya está. Pero un pedido también nombra a un cliente, y si esa clave no estaba en la lista de contactos que hemos filtrado, el enlace apunta a un hub donde no existe y <strong>el vault queda roto</strong>.</p>
+<p>Aquí <code>hub_customer</code> se carga de dos sitios a la vez:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> fuente <span class="kw">AS</span> (</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> customer_id <span class="kw">FROM</span> {{ <span class="fu">ref</span>(<span class="st">'stg_customers'</span>) }}</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UNION</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> customer_id <span class="kw">FROM</span> {{ <span class="fu">ref</span>(<span class="st">'stg_orders'</span>) }}</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Esto no es una precaución teórica. Al construir el ejercicio, el filtro <code>customer_rank &gt; 0</code> en staging dejaba fuera a los tres clientes que tienen pedidos, y la prueba <code>relationships</code> del enlace saltó con quince filas huérfanas. La razón es de las que solo se aprenden mirando: Odoo incrementa ese contador desde el flujo de su interfaz, no desde la base de datos, así que los datos de demostración (que se cargan como fixtures XML) lo dejan a cero incluso para quien tiene pedidos confirmados.</p>
+<p>De ahí la regla, que conviene llevarse escrita: <strong>un filtro de negocio no puede decidir qué claves existen</strong>.</p>
+</section>
+<section id="los-satélites-no-se-cierran-se-deducen" class="level3" data-number="D.5.2">
+<h3 data-number="D.5.2" class="anchored" data-anchor-id="los-satélites-no-se-cierran-se-deducen"><span class="header-section-number">D.5.2</span> Los satélites no se cierran, se deducen</h3>
+<p>Casi toda la literatura describe el satélite con una columna <code>dv_end_date</code> que se rellena cuando el atributo cambia, y con <code>NULL</code> para la versión vigente. Es fácil de explicar y es una mala idea de implementar, porque cerrar una fila exige un <code>UPDATE</code> sobre el histórico, que es justo lo que un vault no debe hacer nunca.</p>
+<p>Aquí los satélites son de <strong>solo inserción</strong>. En cada carga se calcula la huella (<code>hashdiff</code>) de los atributos y solo se escribe si difiere de la última guardada para esa clave. La vigencia y el intervalo de validez se calculan al consultar, con una función de ventana:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lead</span>(s.load_date) <span class="kw">OVER</span> (</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">PARTITION</span> <span class="kw">BY</span> s.hk_customer</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ORDER</span> <span class="kw">BY</span> s.load_date</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>) <span class="kw">AS</span> dv_end_date</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Si hay una carga posterior, esa es la fecha en la que la versión dejó de ser cierta. Si no la hay, la versión sigue vigente y el cierre queda a <code>NULL</code>. El resultado es el mismo que promete la teoría, y el histórico no se toca jamás. Está en el modelo <code>customer_history</code>.</p>
+</section>
+<section id="el-enlace-no-lleva-atributos" class="level3" data-number="D.5.3">
+<h3 data-number="D.5.3" class="anchored" data-anchor-id="el-enlace-no-lleva-atributos"><span class="header-section-number">D.5.3</span> El enlace no lleva atributos</h3>
+<p>Un enlace guarda la relación y las claves de los hubs que une. Nada más. Meter la cantidad de la línea dentro del enlace pedido-producto, que es lo primero que uno hace, rompe por dos sitios: un mismo producto puede aparecer en dos líneas del mismo pedido (con lo que el par deja de ser único) y la cantidad es un atributo descriptivo, que en Data Vault va siempre en un satélite.</p>
+<p>La solución del ejercicio es tomar la línea de pedido como grano del enlace, conservar su identificador como clave degenerada y colgar del enlace un satélite (<code>sat_order_line</code>) con cantidades y precios.</p>
+</section>
+<section id="el-modelo-físico-de-un-erp-no-es-el-que-enseña" class="level3" data-number="D.5.4">
+<h3 data-number="D.5.4" class="anchored" data-anchor-id="el-modelo-físico-de-un-erp-no-es-el-que-enseña"><span class="header-section-number">D.5.4</span> El modelo físico de un ERP no es el que enseña</h3>
+<p>Esta es la lección que justifica usar Odoo en lugar de un origen de juguete. Lo que la interfaz presenta como un producto con su nombre y su precio, por debajo es otra cosa:</p>
+<ul>
+<li><strong><code>product_product</code> no tiene nombre ni precio.</strong> Son campos de la plantilla (<code>product_template</code>), y hay que ir a buscarlos con un <code>join</code>.</li>
+<li><strong><code>product_template.name</code> es <code>jsonb</code></strong>, porque desde Odoo 16 los campos traducibles se guardan como un diccionario de idiomas. Hay que extraerlo con <code>json_extract_string(name, '$.en_US')</code>.</li>
+<li><strong><code>standard_price</code> no existe como columna.</strong> Vive en <code>ir_property</code>, porque depende de la compañía. Cualquier cálculo de margen tiene que ir allí.</li>
+</ul>
+<p>Todo esto se resuelve en <code>stg_products.sql</code>, que es exactamente para lo que sirve la capa de staging: <strong>absorber la rareza del origen una sola vez</strong> para que no se propague al resto.</p>
+</section>
+</section>
+<section id="ejercicios" class="level2" data-number="D.6">
+<h2 data-number="D.6" class="anchored" data-anchor-id="ejercicios"><span class="header-section-number">D.6</span> Ejercicios</h2>
+<section id="ver-el-historial-en-funcionamiento" class="level3" data-number="D.6.1">
+<h3 data-number="D.6.1" class="anchored" data-anchor-id="ver-el-historial-en-funcionamiento"><span class="header-section-number">D.6.1</span> Ver el historial en funcionamiento</h3>
+<p>Con una sola carga cada cliente tiene una única versión y el histórico no se aprecia. Hay que cambiar algo y volver a pasar el pipeline:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec dl-postgres psql <span class="at">-U</span> odoo <span class="at">-d</span> odoo_demo <span class="dt">\</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-c</span> <span class="st">"UPDATE res_partner SET city='Bilbao' WHERE id=11;"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose stop rill</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> extract</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> transform</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>El satélite pasa de cuarenta filas a cuarenta y una (no a ochenta: solo se escribe lo que cambió) y <code>customer_history</code> muestra la versión antigua cerrada con la fecha de la carga nueva y la nueva abierta. La consulta:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_name, city, dv_start_date, dv_end_date, es_version_vigente</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> main.customer_history <span class="kw">WHERE</span> customer_id <span class="op">=</span> <span class="dv">11</span> <span class="kw">ORDER</span> <span class="kw">BY</span> dv_start_date;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Conviene ejecutar <code>transform</code> una tercera vez sin tocar nada y comprobar que <strong>no aparece ninguna fila nueva</strong>. Si aparece, la detección por huella está mal y el histórico se llenaría de duplicados a cada carga.</p>
+</section>
+<section id="romper-la-integridad-a-propósito" class="level3" data-number="D.6.2">
+<h3 data-number="D.6.2" class="anchored" data-anchor-id="romper-la-integridad-a-propósito"><span class="header-section-number">D.6.2</span> Romper la integridad a propósito</h3>
+<p>Merece la pena ver fallar la prueba que protege el vault, y el ejercicio enseña más de lo que parece porque <strong>hacen falta dos cambios, no uno</strong>.</p>
+<p>El primero es el filtro que parecía inofensivo, en <code>stg_customers.sql</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">id</span> <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> customer_rank <span class="op">&gt;</span> <span class="dv">0</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Con eso solo, todo sigue pasando. El hub se carga de dos orígenes, así que las claves que el filtro deja fuera entran igualmente por la puerta de los pedidos. Para romperlo hay que quitar además esa segunda fuente en <code>hub_customer.sql</code>, dejando el hub alimentado únicamente por la lista de contactos:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> fuente <span class="kw">AS</span> (</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> <span class="kw">DISTINCT</span> customer_id <span class="kw">FROM</span> {{ <span class="fu">ref</span>(<span class="st">'stg_customers'</span>) }}</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>),</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Y hay un tercer detalle. Los hubs son de solo inserción, de modo que las claves cargadas en ejecuciones anteriores siguen ahí y tapan el problema. Hay que reconstruir desde cero:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> transform dbt build <span class="at">--full-refresh</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Ahora sí: <code>Got 15 results</code>, la prueba <code>relationships</code> del enlace falla y el proceso termina con código distinto de cero. Esas quince filas son pedidos que apuntan a un cliente que no existe en el hub.</p>
+<p>La conclusión es la que interesa: el filtro por sí solo no era el fallo, y la carga multiorigen del hub no era una precaución decorativa. Cada uno tapaba al otro, y solo quitando los dos aparece el problema. Para volver atrás, basta con deshacer ambos cambios y repetir el <code>--full-refresh</code>.</p>
+</section>
+<section id="añadir-un-origen" class="level3" data-number="D.6.3">
+<h3 data-number="D.6.3" class="anchored" data-anchor-id="añadir-un-origen"><span class="header-section-number">D.6.3</span> Añadir un origen</h3>
+<p>Odoo tiene facturas (<code>account_move</code> y <code>account_move_line</code>). Añadirlas es el recorrido completo: declararlas en <code>ODOO_TABLES</code> del pipeline, crear su modelo de staging, decidir si la factura es un hub nuevo o un satélite del pedido (pista: tiene identidad y vida propias) y llevarla hasta la capa de explotación.</p>
+</section>
+</section>
+<section id="lo-que-hay-que-vigilar" class="level2" data-number="D.7">
+<h2 data-number="D.7" class="anchored" data-anchor-id="lo-que-hay-que-vigilar"><span class="header-section-number">D.7</span> Lo que hay que vigilar</h2>
+<p><strong>Las versiones de dbt y su adaptador tienen que ir emparejadas.</strong> Si se instala <code>dbt-duckdb</code> sin fijar también <code>dbt-core</code>, pip resuelve el núcleo más nuevo que exista y lo empareja con un adaptador viejo. Esa combinación arranca, avisa de que el plugin está desactualizado y luego <strong>se cae de forma intermitente</strong>, que es la peor manera de fallar. Las versiones van fijadas en <code>docker/toolbox.Dockerfile</code>.</p>
+<p><strong>DuckDB escribe con un solo proceso.</strong> Además de lo ya dicho sobre Rill, el proyecto usa un único hilo de dbt (<code>threads: 1</code>). Subirlo no acelera nada y provoca caídas cuando varios modelos escriben a la vez.</p>
+<p><strong>El directorio <code>warehouse/</code> tiene que existir antes del primer arranque.</strong> Si no está, Docker lo crea como <code>root</code> y los contenedores, que corren con el usuario del anfitrión, no pueden escribir. En el repositorio va un <code>.gitkeep</code> para que exista siempre.</p>
+</section>
+<section id="lo-que-este-ejercicio-deja-fuera" class="level2" data-number="D.8">
+<h2 data-number="D.8" class="anchored" data-anchor-id="lo-que-este-ejercicio-deja-fuera"><span class="header-section-number">D.8</span> Lo que este ejercicio deja fuera</h2>
+<p>Por mantenerlo reproducible en un portátil, tres piezas se han quedado a la puerta.</p>
+<p><strong>El catálogo.</strong> OpenMetadata pide alrededor de 6 GiB solo para él y ya tiene su propio <a href="../../content/appendices/metadatado.html">apéndice</a>, con su despliegue y su puerto. Conectarlo a este almacén es un buen ejercicio adicional.</p>
+<p><strong>La orquestación.</strong> Aquí el pipeline son dos órdenes seguidas que se lanzan a mano, y para un único origen eso no pide orquestador ninguno: dlt sabe ejecutar un proyecto dbt por su cuenta (<code>dlt.dbt.package</code>), con lo que las dos órdenes se convierten en un script y la dependencia queda expresada por el propio flujo del programa. La maquinaria empieza a compensar cuando los orígenes son varios y hay que esperar a todos. Ambas cosas están en el <a href="../../content/load/herramientas.html#quién-lo-pone-en-marcha">capítulo de herramientas de ingesta</a>.</p>
+<p><strong>La exploración de verdad.</strong> El panel que queda montado es mínimo, con una vista de métricas y un <code>explore</code>. Cómo se saca partido a Rill está en su <a href="../../content/appendices/rill.html">apéndice</a>.</p>
+</section>
+<section id="desmontarlo" class="level2" data-number="D.9">
+<h2 data-number="D.9" class="anchored" data-anchor-id="desmontarlo"><span class="header-section-number">D.9</span> Desmontarlo</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">--profile</span> bi <span class="at">--profile</span> jobs down <span class="at">-v</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> warehouse/warehouse.duckdb</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>El <code>-v</code> borra también los volúmenes, es decir, la base de datos de Odoo. Sin él, el ERP conserva sus datos y volver a levantarlo es inmediato.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/iraitzm\.github\.io\/ingenieria-datos\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../content/appendices/rill.html" class="pagination-link" aria-label="Exploración con Rill">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Exploración con Rill</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../content/appendices/de_storybook.html" class="pagination-link" aria-label="La danza del Ingeniero de Datos">
+        <span class="nav-page-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2025, Iraitz Montalbán</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/IraitzM">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/iraitzmontalban/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

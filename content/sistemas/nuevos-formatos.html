@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>11&nbsp; Formatos abiertos – Ingeniería de datos</title>
+<title>10&nbsp; Formatos abiertos – Ingeniería de datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -61,7 +61,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -83,7 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-181dfe74f60b45fb364f5d98d01a2ee9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -138,7 +157,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
-<meta property="og:title" content="11&nbsp; Formatos abiertos – Ingeniería de datos">
+<meta property="og:title" content="10&nbsp; Formatos abiertos – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -155,7 +174,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/nuevos-formatos.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/nuevos-formatos.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -193,7 +212,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+ <span class="menu-text">Introducción</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -208,25 +227,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/modelado_analitico.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/nuevos_paradigmas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
   </div>
 </li>
       </ul>
@@ -243,37 +262,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/dbms_analítica.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/nuevos-formatos.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
   </div>
 </li>
       </ul>
@@ -290,25 +309,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
   </div>
 </li>
       </ul>
@@ -325,25 +344,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -360,25 +379,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -406,8 +425,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/calidad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Calidad de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/rill.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Exploración con Rill</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/datalake.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -422,27 +459,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#el-lago-tal-y-como-lo-dejamos" id="toc-el-lago-tal-y-como-lo-dejamos" class="nav-link active" data-scroll-target="#el-lago-tal-y-como-lo-dejamos"><span class="header-section-number">11.1</span> El lago tal y como lo dejamos</a></li>
-  <li><a href="#qué-añade-un-formato-de-tabla" id="toc-qué-añade-un-formato-de-tabla" class="nav-link" data-scroll-target="#qué-añade-un-formato-de-tabla"><span class="header-section-number">11.2</span> Qué añade un formato de tabla</a>
+  <li><a href="#el-lago-tal-y-como-lo-dejamos" id="toc-el-lago-tal-y-como-lo-dejamos" class="nav-link active" data-scroll-target="#el-lago-tal-y-como-lo-dejamos"><span class="header-section-number">10.1</span> El lago tal y como lo dejamos</a></li>
+  <li><a href="#qué-añade-un-formato-de-tabla" id="toc-qué-añade-un-formato-de-tabla" class="nav-link" data-scroll-target="#qué-añade-un-formato-de-tabla"><span class="header-section-number">10.2</span> Qué añade un formato de tabla</a>
   <ul class="collapse">
-  <li><a href="#borrar-y-actualizar-dos-escuelas" id="toc-borrar-y-actualizar-dos-escuelas" class="nav-link" data-scroll-target="#borrar-y-actualizar-dos-escuelas"><span class="header-section-number">11.2.1</span> Borrar y actualizar: dos escuelas</a></li>
+  <li><a href="#borrar-y-actualizar-dos-escuelas" id="toc-borrar-y-actualizar-dos-escuelas" class="nav-link" data-scroll-target="#borrar-y-actualizar-dos-escuelas"><span class="header-section-number">10.2.1</span> Borrar y actualizar: dos escuelas</a></li>
   </ul></li>
-  <li><a href="#los-tres-formatos" id="toc-los-tres-formatos" class="nav-link" data-scroll-target="#los-tres-formatos"><span class="header-section-number">11.3</span> Los tres formatos</a>
+  <li><a href="#los-tres-formatos" id="toc-los-tres-formatos" class="nav-link" data-scroll-target="#los-tres-formatos"><span class="header-section-number">10.3</span> Los tres formatos</a>
   <ul class="collapse">
-  <li><a href="#delta-lake" id="toc-delta-lake" class="nav-link" data-scroll-target="#delta-lake"><span class="header-section-number">11.3.1</span> Delta Lake</a></li>
-  <li><a href="#apache-iceberg" id="toc-apache-iceberg" class="nav-link" data-scroll-target="#apache-iceberg"><span class="header-section-number">11.3.2</span> Apache Iceberg</a></li>
-  <li><a href="#apache-hudi" id="toc-apache-hudi" class="nav-link" data-scroll-target="#apache-hudi"><span class="header-section-number">11.3.3</span> Apache Hudi</a></li>
+  <li><a href="#delta-lake" id="toc-delta-lake" class="nav-link" data-scroll-target="#delta-lake"><span class="header-section-number">10.3.1</span> Delta Lake</a></li>
+  <li><a href="#apache-iceberg" id="toc-apache-iceberg" class="nav-link" data-scroll-target="#apache-iceberg"><span class="header-section-number">10.3.2</span> Apache Iceberg</a></li>
+  <li><a href="#apache-hudi" id="toc-apache-hudi" class="nav-link" data-scroll-target="#apache-hudi"><span class="header-section-number">10.3.3</span> Apache Hudi</a></li>
   </ul></li>
-  <li><a href="#el-catálogo-la-pieza-que-faltaba" id="toc-el-catálogo-la-pieza-que-faltaba" class="nav-link" data-scroll-target="#el-catálogo-la-pieza-que-faltaba"><span class="header-section-number">11.4</span> El catálogo, la pieza que faltaba</a></li>
-  <li><a href="#la-tregua-entre-formatos" id="toc-la-tregua-entre-formatos" class="nav-link" data-scroll-target="#la-tregua-entre-formatos"><span class="header-section-number">11.5</span> La tregua entre formatos</a>
+  <li><a href="#el-catálogo-la-pieza-que-faltaba" id="toc-el-catálogo-la-pieza-que-faltaba" class="nav-link" data-scroll-target="#el-catálogo-la-pieza-que-faltaba"><span class="header-section-number">10.4</span> El catálogo, la pieza que faltaba</a></li>
+  <li><a href="#la-tregua-entre-formatos" id="toc-la-tregua-entre-formatos" class="nav-link" data-scroll-target="#la-tregua-entre-formatos"><span class="header-section-number">10.5</span> La tregua entre formatos</a>
   <ul class="collapse">
-  <li><a href="#apache-xtable" id="toc-apache-xtable" class="nav-link" data-scroll-target="#apache-xtable"><span class="header-section-number">11.5.1</span> Apache XTable</a></li>
-  <li><a href="#uniform" id="toc-uniform" class="nav-link" data-scroll-target="#uniform"><span class="header-section-number">11.5.2</span> UniForm</a></li>
-  <li><a href="#la-convergencia-de-las-especificaciones" id="toc-la-convergencia-de-las-especificaciones" class="nav-link" data-scroll-target="#la-convergencia-de-las-especificaciones"><span class="header-section-number">11.5.3</span> La convergencia de las especificaciones</a></li>
+  <li><a href="#apache-xtable" id="toc-apache-xtable" class="nav-link" data-scroll-target="#apache-xtable"><span class="header-section-number">10.5.1</span> Apache XTable</a></li>
+  <li><a href="#uniform" id="toc-uniform" class="nav-link" data-scroll-target="#uniform"><span class="header-section-number">10.5.2</span> UniForm</a></li>
+  <li><a href="#la-convergencia-de-las-especificaciones" id="toc-la-convergencia-de-las-especificaciones" class="nav-link" data-scroll-target="#la-convergencia-de-las-especificaciones"><span class="header-section-number">10.5.3</span> La convergencia de las especificaciones</a></li>
   </ul></li>
-  <li><a href="#el-mantenimiento-no-es-gratis" id="toc-el-mantenimiento-no-es-gratis" class="nav-link" data-scroll-target="#el-mantenimiento-no-es-gratis"><span class="header-section-number">11.6</span> El mantenimiento no es gratis</a></li>
-  <li><a href="#otra-vuelta-de-tuerca" id="toc-otra-vuelta-de-tuerca" class="nav-link" data-scroll-target="#otra-vuelta-de-tuerca"><span class="header-section-number">11.7</span> Otra vuelta de tuerca</a></li>
-  <li><a href="#cómo-elegir" id="toc-cómo-elegir" class="nav-link" data-scroll-target="#cómo-elegir"><span class="header-section-number">11.8</span> Cómo elegir</a></li>
+  <li><a href="#el-mantenimiento-no-es-gratis" id="toc-el-mantenimiento-no-es-gratis" class="nav-link" data-scroll-target="#el-mantenimiento-no-es-gratis"><span class="header-section-number">10.6</span> El mantenimiento no es gratis</a></li>
+  <li><a href="#otra-vuelta-de-tuerca" id="toc-otra-vuelta-de-tuerca" class="nav-link" data-scroll-target="#otra-vuelta-de-tuerca"><span class="header-section-number">10.7</span> Otra vuelta de tuerca</a></li>
+  <li><a href="#cómo-elegir" id="toc-cómo-elegir" class="nav-link" data-scroll-target="#cómo-elegir"><span class="header-section-number">10.8</span> Cómo elegir</a></li>
   </ul>
 </nav>
     </div>
@@ -452,9 +489,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/nuevos-formatos.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/nuevos-formatos.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></h1>
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></h1>
 </div>
 
 
@@ -474,10 +511,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Los sistemas analíticos se benefician de forma especial de formatos abiertos, interoperables y de almacenamiento columnar, como es el caso de <a href="https://parquet.apache.org/">Apache Parquet</a>. Trabajar con ficheros y carpetas nos permite de forma sencilla implementar <a href="../../content/sistemas/dbms_analítica.html#particionado">particionado</a> para filtrar de manera eficiente los ficheros que no son necesarios en las consultas.</p>
 <p>Sin embargo, con la proliferación de sistemas en <em>streaming</em> o flujos de datos, se plantearon problemas propios. Por ejemplo, la modificación de registros resulta pesada, ya que debemos cargar los ficheros completos, alterar y reescribir su contenido. Recordemos que al estar ordenados en columnas, modificar un registro resulta costoso, pero esto se debe a que asumimos que no era necesario.</p>
 <p>Menos aún ofrecer capacidades ACID, pero ¿y si dos procesos quieren intervenir y alterar un mismo fichero? Los sistemas basados en ficheros son amigables a la adición (<em>append</em>) pero no tanto a la modificación.</p>
-<section id="el-lago-tal-y-como-lo-dejamos" class="level2" data-number="11.1">
-<h2 data-number="11.1" class="anchored" data-anchor-id="el-lago-tal-y-como-lo-dejamos"><span class="header-section-number">11.1</span> El lago tal y como lo dejamos</h2>
+<section id="el-lago-tal-y-como-lo-dejamos" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="el-lago-tal-y-como-lo-dejamos"><span class="header-section-number">10.1</span> El lago tal y como lo dejamos</h2>
 <p>Vale la pena ver el problema en concreto, porque es de esos que se entienden mejor tocándolos. Montemos un lago mínimo: una tabla de matrículas escrita como Parquet particionado por año, exactamente lo que haría cualquier proceso de la era Hadoop.</p>
-<div id="57558d6d" class="cell" data-execution_count="1">
+<div id="c8e79108" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
@@ -505,7 +542,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>La tabla <strong>es</strong> ese árbol de carpetas, y consultarla consiste en listarlo y leer lo que haya dentro.</p>
-<div id="b3d680ab" class="cell" data-execution_count="2">
+<div id="5f5678e9" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT * FROM read_parquet('_lago_demo/**/*.parquet', hive_partitioning = true)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY id</span></span>
@@ -553,7 +590,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Hasta aquí, todo bien. Ahora llega una corrección: Nerea confirma su matrícula. Como Parquet es inmutable, no hay un <code>UPDATE</code> posible. Lo que hay es leer el fichero entero, aplicar el cambio en memoria y sobrescribirlo.</p>
-<div id="a0ca01c8" class="cell" data-execution_count="3">
+<div id="48a0a0a3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE particion_2025 AS</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT id, alumno,</span></span>
@@ -622,8 +659,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 <p>Ninguno de estos problemas es exótico. Son exactamente las garantías que un gestor de base de datos lleva ofreciendo desde los años setenta, y que perdimos al mudarnos a un lago de ficheros.</p>
 </section>
-<section id="qué-añade-un-formato-de-tabla" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="qué-añade-un-formato-de-tabla"><span class="header-section-number">11.2</span> Qué añade un formato de tabla</h2>
+<section id="qué-añade-un-formato-de-tabla" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="qué-añade-un-formato-de-tabla"><span class="header-section-number">10.2</span> Qué añade un formato de tabla</h2>
 <p>La idea que resuelve todo lo anterior cabe en una frase: <strong>una tabla deja de ser una carpeta y pasa a ser una lista de ficheros</strong>.</p>
 <p>En lugar de deducir el contenido de la tabla listando un directorio, se mantiene junto a los datos una capa de metadatos que dice, de forma explícita, qué ficheros componen la tabla en cada momento. Los datos siguen siendo Parquet corriente; lo que se añade es el índice que los organiza.</p>
 <div class="cell" data-layout-align="default">
@@ -653,6 +690,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     v2 -.-&gt; man
     v1 -.-&gt; man
     man --&gt; p1 &amp; p2 &amp; p3 &amp; p4
+
+    %% Paleta por bloque del libro
+    classDef meta fill:#d9efec,stroke:#3a8f8a,stroke-width:1.5px,color:#0f3f3c
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    class cat,v3,v2,v1,man meta
+    class p1,p2,p3,p4 almacen
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -681,8 +724,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Es la diferencia esencial con un almacén propietario, donde el dato vive en un formato interno al que solo se accede a través del motor que lo escribió.</p>
 </div>
 </div>
-<section id="borrar-y-actualizar-dos-escuelas" class="level3" data-number="11.2.1">
-<h3 data-number="11.2.1" class="anchored" data-anchor-id="borrar-y-actualizar-dos-escuelas"><span class="header-section-number">11.2.1</span> Borrar y actualizar: dos escuelas</h3>
+<section id="borrar-y-actualizar-dos-escuelas" class="level3" data-number="10.2.1">
+<h3 data-number="10.2.1" class="anchored" data-anchor-id="borrar-y-actualizar-dos-escuelas"><span class="header-section-number">10.2.1</span> Borrar y actualizar: dos escuelas</h3>
 <p>Queda pendiente cómo se materializa un borrado o una actualización, porque los ficheros Parquet siguen siendo inmutables. Hay dos estrategias, y todos los formatos acaban ofreciendo ambas.</p>
 <table class="caption-top table">
 <colgroup>
@@ -723,12 +766,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>La segunda opción ha ido ganando terreno con los <strong>vectores de borrado</strong> (<em>deletion vectors</em>), que son mapas de bits compactos indicando qué posiciones de un fichero ya no cuentan. Marcar una fila como borrada pasa a costar unos pocos bytes en lugar de reescribir cientos de megas, a cambio de que la lectura tenga algo más de trabajo y de que la compactación posterior sea obligatoria.</p>
 </section>
 </section>
-<section id="los-tres-formatos" class="level2" data-number="11.3">
-<h2 data-number="11.3" class="anchored" data-anchor-id="los-tres-formatos"><span class="header-section-number">11.3</span> Los tres formatos</h2>
+<section id="los-tres-formatos" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="los-tres-formatos"><span class="header-section-number">10.3</span> Los tres formatos</h2>
 <p>Tres proyectos llegaron a esta misma conclusión de forma independiente, cada uno resolviendo el problema que tenía delante.</p>
-<section id="delta-lake" class="level3" data-number="11.3.1">
-<h3 data-number="11.3.1" class="anchored" data-anchor-id="delta-lake"><span class="header-section-number">11.3.1</span> Delta Lake</h3>
-<p>Posiblemente unos de los primeros en intentar dar respuesta a este problema fueron la amable gente de Databricks. Basado en el formato Parquet, <a href="https://delta.io/">Delta</a> mantiene un <strong>registro de transacciones</strong> en una carpeta <code>_delta_log/</code> junto a los datos: una secuencia de ficheros JSON numerados, cada uno describiendo qué ficheros se añaden y cuáles se retiran en esa transacción. La atomicidad sale de que solo un escritor puede crear el fichero con el siguiente número.</p>
+<section id="delta-lake" class="level3" data-number="10.3.1">
+<h3 data-number="10.3.1" class="anchored" data-anchor-id="delta-lake"><span class="header-section-number">10.3.1</span> Delta Lake</h3>
+<p>Posiblemente unos de los primeros en intentar dar respuesta a este problema fueron la amable gente de Databricks. Basado en el formato Parquet, <a href="https://delta.io/">Delta</a> <span class="citation" data-cites="armbrust2020delta">(<a href="../references.html#ref-armbrust2020delta" role="doc-biblioref">Armbrust et&nbsp;al. 2020</a>)</span> mantiene un <strong>registro de transacciones</strong> en una carpeta <code>_delta_log/</code> junto a los datos: una secuencia de ficheros JSON numerados, cada uno describiendo qué ficheros se añaden y cuáles se retiran en esa transacción. La atomicidad sale de que solo un escritor puede crear el fichero con el siguiente número.</p>
 <p>Reconstruir el estado de la tabla es reproducir el registro desde el principio, algo que se vuelve lento tras miles de transacciones, así que periódicamente se consolida todo en un <em>checkpoint</em> en Parquet a partir del cual se sigue leyendo.</p>
 <p>Sus señas de identidad:</p>
 <ul>
@@ -738,8 +781,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 <p>Es el formato nativo de Databricks y el que sostiene su <a href="../../content/sistemas/arquitecturas.html#la-casa-del-lago">arquitectura medallón</a>. Está donado a la Linux Foundation, aunque durante años la distancia entre lo que hacía la versión abierta y lo que hacía la de Databricks fue motivo de queja recurrente.</p>
 </section>
-<section id="apache-iceberg" class="level3" data-number="11.3.2">
-<h3 data-number="11.3.2" class="anchored" data-anchor-id="apache-iceberg"><span class="header-section-number">11.3.2</span> Apache Iceberg</h3>
+<section id="apache-iceberg" class="level3" data-number="10.3.2">
+<h3 data-number="10.3.2" class="anchored" data-anchor-id="apache-iceberg"><span class="header-section-number">10.3.2</span> Apache Iceberg</h3>
 <p>Nació en Netflix, de manos de Ryan Blue y Dan Weeks, para resolver un problema muy concreto: tablas con millones de particiones sobre S3 donde el simple hecho de listar directorios hacía inviable cualquier consulta. Se donó a la Apache Software Foundation en 2018.</p>
 <p>Su modelo de metadatos es un árbol en tres niveles (fichero de metadatos de la tabla, lista de manifiestos por versión, y manifiestos con las estadísticas de cada fichero de datos), lo que le permite planificar una consulta sin tocar el almacenamiento más que para leer unos pocos ficheros de metadatos.</p>
 <p>Dos ideas suyas merecen mención aparte:</p>
@@ -747,10 +790,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li><strong>Particionado oculto</strong>. En un lago clásico, si la tabla está particionada por <code>anio=2025/mes=03</code>, quien consulta tiene que acordarse de filtrar por esas columnas derivadas o se llevará una lectura completa por delante. Iceberg registra la transformación (<code>month(fecha_matricula)</code>) en los metadatos y la aplica sola cuando alguien filtra por <code>fecha_matricula</code>. El usuario no necesita saber cómo está particionada la tabla.</li>
 <li><strong>Evolución de particionado</strong>. Se puede cambiar el criterio de particionado de una tabla sin reescribirla. Los datos antiguos conservan el esquema de partición con el que se escribieron y los nuevos usan el actual, conviviendo en la misma tabla.</li>
 </ul>
-<p><a href="https://tabular.io">Tabular</a>, la empresa fundada por sus creadores, fue adquirida por Databricks en 2024, movimiento que zanjó buena parte del debate sobre qué formato iba a acabar siendo el estándar de intercambio.</p>
+<p>Para el detalle de su modelo de metadatos, la referencia más completa es <em>Apache Iceberg: The Definitive Guide</em> <span class="citation" data-cites="shiran2024iceberg">(<a href="../references.html#ref-shiran2024iceberg" role="doc-biblioref">Shiran et&nbsp;al. 2024</a>)</span>. <a href="https://tabular.io">Tabular</a>, la empresa fundada por sus creadores, fue adquirida por Databricks en 2024, movimiento que zanjó buena parte del debate sobre qué formato iba a acabar siendo el estándar de intercambio.</p>
 </section>
-<section id="apache-hudi" class="level3" data-number="11.3.3">
-<h3 data-number="11.3.3" class="anchored" data-anchor-id="apache-hudi"><span class="header-section-number">11.3.3</span> Apache Hudi</h3>
+<section id="apache-hudi" class="level3" data-number="10.3.3">
+<h3 data-number="10.3.3" class="anchored" data-anchor-id="apache-hudi"><span class="header-section-number">10.3.3</span> Apache Hudi</h3>
 <p><a href="https://hudi.apache.org/">Hudi</a> (de <em>Hadoop Upserts Deletes and Incrementals</em>) salió de Uber, donde el problema no era analítico sino de ingesta: aplicar sobre el lago, cada pocos minutos, los cambios que llegaban de las bases de datos operacionales.</p>
 <p>Por eso su diseño gira alrededor de la <strong>clave primaria</strong>. Hudi mantiene un índice a nivel de registro que dice en qué fichero vive cada clave, lo que convierte el <em>upsert</em> en una operación dirigida en lugar de en un cruce contra la tabla entera. Fue además quien acuñó los términos copy on write y merge on read, y quien primero ofreció <strong>consultas incrementales</strong>: pedirle a la tabla no su contenido, sino los cambios ocurridos entre dos instantes, que es exactamente lo que necesita alimentar una capa aguas abajo sin recalcularla.</p>
 <p><a href="https://www.onehouse.ai/">Onehouse</a>, fundada por Vinoth Chandar, es el principal impulsor comercial del proyecto.</p>
@@ -811,8 +854,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </table>
 </section>
 </section>
-<section id="el-catálogo-la-pieza-que-faltaba" class="level2" data-number="11.4">
-<h2 data-number="11.4" class="anchored" data-anchor-id="el-catálogo-la-pieza-que-faltaba"><span class="header-section-number">11.4</span> El catálogo, la pieza que faltaba</h2>
+<section id="el-catálogo-la-pieza-que-faltaba" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="el-catálogo-la-pieza-que-faltaba"><span class="header-section-number">10.4</span> El catálogo, la pieza que faltaba</h2>
 <p>Queda un cabo suelto en el diagrama de antes. Si confirmar una transacción consiste en cambiar el puntero a la versión vigente, <strong>alguien tiene que custodiar ese puntero</strong> y garantizar que dos escritores no lo cambian a la vez. Sobre un sistema de ficheros esto se resuelve solo (crear un fichero es atómico), pero el almacenamiento de objetos no ofrece esa garantía de forma fiable. Ahí es donde entra el catálogo.</p>
 <p>Durante años ese papel lo hizo el <strong>Hive Metastore</strong>, heredado de la era Hadoop, con su base de datos relacional detrás y su protocolo Thrift. Funcionaba, pero arrastraba tantos años de decisiones ajenas que nadie lo defendía con entusiasmo.</p>
 <p>La respuesta ha sido especificar un <strong>catálogo REST</strong>: en lugar de que cada motor implemente la lógica de metadatos, el catálogo expone una API y se convierte en el árbitro único de las transacciones. Todo motor que hable ese protocolo puede leer y escribir la misma tabla con garantías. Las implementaciones más habituales:</p>
@@ -825,24 +868,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 <p>Que la discusión se haya desplazado del formato al catálogo no es casual. El formato es una especificación pública que cualquiera puede implementar; el catálogo es el punto por el que pasa todo el mundo, y por tanto donde se ejercen el gobierno, los permisos y, si nadie lo evita, el bloqueo de proveedor.</p>
 </section>
-<section id="la-tregua-entre-formatos" class="level2" data-number="11.5">
-<h2 data-number="11.5" class="anchored" data-anchor-id="la-tregua-entre-formatos"><span class="header-section-number">11.5</span> La tregua entre formatos</h2>
+<section id="la-tregua-entre-formatos" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="la-tregua-entre-formatos"><span class="header-section-number">10.5</span> La tregua entre formatos</h2>
 <p>Durante un tiempo la elección de formato se vivió como una apuesta irreversible. Hoy lo es bastante menos, por tres vías.</p>
-<section id="apache-xtable" class="level3" data-number="11.5.1">
-<h3 data-number="11.5.1" class="anchored" data-anchor-id="apache-xtable"><span class="header-section-number">11.5.1</span> Apache XTable</h3>
+<section id="apache-xtable" class="level3" data-number="10.5.1">
+<h3 data-number="10.5.1" class="anchored" data-anchor-id="apache-xtable"><span class="header-section-number">10.5.1</span> Apache XTable</h3>
 <p><a href="https://xtable.apache.org/">XTable</a> surge de la falta de consonancia entre proveedores y busca hacer interoperables todos los formatos. Su observación de partida es la que ya hemos repetido: si los ficheros de datos son los mismos Parquet en los tres casos, lo único que difiere son los metadatos, y <strong>los metadatos se pueden traducir</strong>. XTable genera los metadatos de Iceberg para una tabla que se escribió como Delta, o al revés, sin mover ni un byte de datos. Una misma tabla puede así presentarse en varios formatos a la vez.</p>
 </section>
-<section id="uniform" class="level3" data-number="11.5.2">
-<h3 data-number="11.5.2" class="anchored" data-anchor-id="uniform"><span class="header-section-number">11.5.2</span> UniForm</h3>
+<section id="uniform" class="level3" data-number="10.5.2">
+<h3 data-number="10.5.2" class="anchored" data-anchor-id="uniform"><span class="header-section-number">10.5.2</span> UniForm</h3>
 <p>Delta incorporó la misma idea de fábrica: una tabla declarada con <strong>UniForm</strong> escribe, junto a su registro de transacciones, los metadatos equivalentes de Iceberg. Para un motor que solo hable Iceberg, la tabla es una tabla Iceberg perfectamente normal.</p>
 </section>
-<section id="la-convergencia-de-las-especificaciones" class="level3" data-number="11.5.3">
-<h3 data-number="11.5.3" class="anchored" data-anchor-id="la-convergencia-de-las-especificaciones"><span class="header-section-number">11.5.3</span> La convergencia de las especificaciones</h3>
+<section id="la-convergencia-de-las-especificaciones" class="level3" data-number="10.5.3">
+<h3 data-number="10.5.3" class="anchored" data-anchor-id="la-convergencia-de-las-especificaciones"><span class="header-section-number">10.5.3</span> La convergencia de las especificaciones</h3>
 <p>Las tres especificaciones llevan varios años copiándose las buenas ideas. Los vectores de borrado, el tipo <code>VARIANT</code> para datos semiestructurados como los que veíamos al hablar de <a href="../../content/sistemas/arquitecturas.html#ordenando-el-lago">arquitecturas</a>, el linaje a nivel de fila o la ampliación de tipos sin reescritura han ido apareciendo en todas ellas. La versión 3 de la especificación de Iceberg y las últimas de Delta son, en lo esencial, muy parecidas.</p>
 </section>
 </section>
-<section id="el-mantenimiento-no-es-gratis" class="level2" data-number="11.6">
-<h2 data-number="11.6" class="anchored" data-anchor-id="el-mantenimiento-no-es-gratis"><span class="header-section-number">11.6</span> El mantenimiento no es gratis</h2>
+<section id="el-mantenimiento-no-es-gratis" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="el-mantenimiento-no-es-gratis"><span class="header-section-number">10.6</span> El mantenimiento no es gratis</h2>
 <p>Todo lo anterior tiene una contrapartida que se descubre tarde: una tabla en formato abierto <strong>es un sistema que hay que operar</strong>. No hay un proceso de fondo cuidándola salvo que alguien lo ponga.</p>
 <p>Las tareas son siempre las mismas cuatro, con distinto nombre según el formato:</p>
 <ol type="1">
@@ -867,13 +910,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 </section>
-<section id="otra-vuelta-de-tuerca" class="level2" data-number="11.7">
-<h2 data-number="11.7" class="anchored" data-anchor-id="otra-vuelta-de-tuerca"><span class="header-section-number">11.7</span> Otra vuelta de tuerca</h2>
+<section id="otra-vuelta-de-tuerca" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="otra-vuelta-de-tuerca"><span class="header-section-number">10.7</span> Otra vuelta de tuerca</h2>
 <p>Hay un detalle en todo lo que hemos visto que invita a una pregunta incómoda. Los tres formatos guardan sus metadatos <strong>en ficheros</strong>, lo que los hace autocontenidos y portables. Pero para resolver la concurrencia han acabado necesitando, todos, un catálogo con una base de datos transaccional detrás.</p>
-<p>Si de todas formas vamos a tener esa base de datos, ¿por qué seguir reconstruyendo el estado de la tabla leyendo cadenas de ficheros de manifiesto? Esa es la premisa de <a href="https://ducklake.select/">DuckLake</a>, y como es sobre lo que vamos a construir la <a href="../../content/load/staging.html">capa de aterrizaje</a>, lo dejamos apuntado aquí y lo desarrollamos allí con las manos en el teclado.</p>
+<p>Si de todas formas vamos a tener esa base de datos, ¿por qué seguir reconstruyendo el estado de la tabla leyendo cadenas de ficheros de manifiesto? Esa es la premisa de <a href="https://ducklake.select/">DuckLake</a> <span class="citation" data-cites="ducklake2025manifesto">(<a href="../references.html#ref-ducklake2025manifesto" role="doc-biblioref">DuckDB Labs 2025</a>)</span>, y como es sobre lo que vamos a construir la <a href="../../content/load/staging.html">capa de aterrizaje</a>, lo dejamos apuntado aquí y lo desarrollamos allí con las manos en el teclado.</p>
 </section>
-<section id="cómo-elegir" class="level2" data-number="11.8">
-<h2 data-number="11.8" class="anchored" data-anchor-id="cómo-elegir"><span class="header-section-number">11.8</span> Cómo elegir</h2>
+<section id="cómo-elegir" class="level2" data-number="10.8">
+<h2 data-number="10.8" class="anchored" data-anchor-id="cómo-elegir"><span class="header-section-number">10.8</span> Cómo elegir</h2>
 <p>Para cerrar, y a riesgo de simplificar:</p>
 <ul>
 <li>Si el ecosistema es <strong>Databricks</strong>, será Delta, y no hay mucho que decidir. Con UniForm activado si algo de fuera necesita leerlo.</li>
@@ -884,6 +927,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>En cualquiera de los casos, la garantía de fondo es la misma y es la que da nombre al capítulo: los datos son Parquet, están en un almacenamiento que controlamos nosotros y se pueden leer sin pedir permiso a nadie. Todo lo demás es reversible.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-armbrust2020delta" class="csl-entry" role="listitem">
+Armbrust, Michael, Tathagata Das, Liwen Sun, et&nbsp;al. 2020. <span>«Delta Lake: High-Performance ACID Table Storage over Cloud Object Stores»</span>. <em>Proceedings of the VLDB Endowment</em> 13 (12): 3411-24.
+</div>
+<div id="ref-ducklake2025manifesto" class="csl-entry" role="listitem">
+DuckDB Labs. 2025. <em>DuckLake: SQL as a Lakehouse Format</em>. <a href="https://ducklake.select/manifesto/" class="uri">Https://ducklake.select/manifesto/</a>.
+</div>
+<div id="ref-shiran2024iceberg" class="csl-entry" role="listitem">
+Shiran, Tomer, Jason Hughes, Alex Merced, y Dipankar Mazumdar. 2024. <em>Apache Iceberg: The Definitive Guide</em>. O’Reilly Media.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -1290,12 +1344,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../../content/sistemas/arquitecturas.html" class="pagination-link" aria-label="Elección de arquitecturas">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../../content/load/intro.html" class="pagination-link" aria-label="Extracción">
-        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

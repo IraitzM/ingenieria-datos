@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>10&nbsp; Elección de arquitecturas – Ingeniería de datos</title>
+<title>9&nbsp; Elección de arquitecturas – Ingeniería de datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -61,7 +61,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -83,7 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-181dfe74f60b45fb364f5d98d01a2ee9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -135,7 +154,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<meta property="og:title" content="10&nbsp; Elección de arquitecturas – Ingeniería de datos">
+<meta property="og:title" content="9&nbsp; Elección de arquitecturas – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -152,7 +171,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/arquitecturas.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/arquitecturas.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -190,7 +209,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+ <span class="menu-text">Introducción</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -205,25 +224,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/modelado_analitico.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/nuevos_paradigmas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
   </div>
 </li>
       </ul>
@@ -240,37 +259,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/dbms_analítica.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/nuevos-formatos.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
   </div>
 </li>
       </ul>
@@ -287,25 +306,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
   </div>
 </li>
       </ul>
@@ -322,25 +341,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -357,25 +376,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -403,8 +422,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/calidad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Calidad de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/rill.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Exploración con Rill</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/datalake.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -419,11 +456,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#top-down-o-bottom-up" id="toc-top-down-o-bottom-up" class="nav-link active" data-scroll-target="#top-down-o-bottom-up"><span class="header-section-number">10.1</span> Top-down o bottom-up</a></li>
-  <li><a href="#la-caja-fuerte" id="toc-la-caja-fuerte" class="nav-link" data-scroll-target="#la-caja-fuerte"><span class="header-section-number">10.2</span> La caja fuerte</a></li>
-  <li><a href="#la-era-big-data" id="toc-la-era-big-data" class="nav-link" data-scroll-target="#la-era-big-data"><span class="header-section-number">10.3</span> La era Big Data</a></li>
-  <li><a href="#la-casa-del-lago" id="toc-la-casa-del-lago" class="nav-link" data-scroll-target="#la-casa-del-lago"><span class="header-section-number">10.4</span> La casa del lago</a></li>
-  <li><a href="#ordenando-el-lago" id="toc-ordenando-el-lago" class="nav-link" data-scroll-target="#ordenando-el-lago"><span class="header-section-number">10.5</span> Ordenando el lago</a></li>
+  <li><a href="#top-down-o-bottom-up" id="toc-top-down-o-bottom-up" class="nav-link active" data-scroll-target="#top-down-o-bottom-up"><span class="header-section-number">9.1</span> Top-down o bottom-up</a></li>
+  <li><a href="#la-caja-fuerte" id="toc-la-caja-fuerte" class="nav-link" data-scroll-target="#la-caja-fuerte"><span class="header-section-number">9.2</span> La caja fuerte</a></li>
+  <li><a href="#la-era-big-data" id="toc-la-era-big-data" class="nav-link" data-scroll-target="#la-era-big-data"><span class="header-section-number">9.3</span> La era Big Data</a></li>
+  <li><a href="#la-casa-del-lago" id="toc-la-casa-del-lago" class="nav-link" data-scroll-target="#la-casa-del-lago"><span class="header-section-number">9.4</span> La casa del lago</a></li>
+  <li><a href="#ordenando-el-lago" id="toc-ordenando-el-lago" class="nav-link" data-scroll-target="#ordenando-el-lago"><span class="header-section-number">9.5</span> Ordenando el lago</a></li>
   </ul>
 </nav>
     </div>
@@ -433,9 +470,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/arquitecturas.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/sistemas/intro.html">Sistemas gestores de datos</a></li><li class="breadcrumb-item"><a href="../../content/sistemas/arquitecturas.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></h1>
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></h1>
 </div>
 
 
@@ -456,9 +493,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <blockquote class="blockquote">
 <p>Las organizaciones que diseñan sistemas son un fiel reflejo de la comunicación en la misma.</p>
 </blockquote>
-<section id="top-down-o-bottom-up" class="level2" data-number="10.1">
-<h2 data-number="10.1" class="anchored" data-anchor-id="top-down-o-bottom-up"><span class="header-section-number">10.1</span> Top-down o bottom-up</h2>
-<p>Quizás con un foco más operativo debido a los sistemas existentes, tanto Bill Inmon como Ralph Kimball se enfrentaron al reto de almacenar de forma efectiva toda la información que contiene una organización, pero a su vez presentar vistas específicas y cohesionadas que permitieran a los usuarios entender lo que los datos reflejaban sobre el funcionamiento de la empresa en áreas concretas.</p>
+<section id="top-down-o-bottom-up" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="top-down-o-bottom-up"><span class="header-section-number">9.1</span> Top-down o bottom-up</h2>
+<p>Quizás con un foco más operativo debido a los sistemas existentes, tanto Bill Inmon <span class="citation" data-cites="inmon2005building">(<a href="../references.html#ref-inmon2005building" role="doc-biblioref">Inmon 2005</a>)</span> como Ralph Kimball <span class="citation" data-cites="kimball2013toolkit">(<a href="../references.html#ref-kimball2013toolkit" role="doc-biblioref">Kimball y Ross 2013</a>)</span> se enfrentaron al reto de almacenar de forma efectiva toda la información que contiene una organización, pero a su vez presentar vistas específicas y cohesionadas que permitieran a los usuarios entender lo que los datos reflejaban sobre el funcionamiento de la empresa en áreas concretas.</p>
 <p>El enfoque de Inmon abogaba por fijarnos en las fuentes y generar un sistema centralizado de datos al que luego poder destilar los recursos necesarios.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -487,6 +524,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     etl2 --- datamart1
     etl2 --- datamart2
+
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class source1,source2 origen
+    class etl1,etl2 carga
+    class dw almacen
+    class datamart1,datamart2 explotacion
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -515,6 +562,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     etl1 --- dw
 
+    %% Paleta por bloque del libro
+    classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
+    classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class source1,source2 origen
+    class etl1 carga
+    class datamart1,datamart2 explotacion
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -523,9 +577,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <p>Estas dos aproximaciones han sentado la base de lo que es necesario en un warehouse, tanto para el equipo que lo mantiene y quieren dar un buen servicio como paras los consumidores de datos que los necesitan para tener una operativa inteligente.</p>
 </section>
-<section id="la-caja-fuerte" class="level2" data-number="10.2">
-<h2 data-number="10.2" class="anchored" data-anchor-id="la-caja-fuerte"><span class="header-section-number">10.2</span> La caja fuerte</h2>
-<p>El Data Vault, se plateó como una metodología más allá del propio sistema de modelado intermedio. Habíamos aprendido mucho sobre cómo nos comunicamos con los negocios y sus necesidades. Pero esto también nos daba una perspectiva de cómo la información debía ser promocionada hacia las capas de consumo.</p>
+<section id="la-caja-fuerte" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="la-caja-fuerte"><span class="header-section-number">9.2</span> La caja fuerte</h2>
+<p>El Data Vault <span class="citation" data-cites="linstedt2015vault">(<a href="../references.html#ref-linstedt2015vault" role="doc-biblioref">Linstedt y Olschimke 2015</a>)</span>, se plateó como una metodología más allá del propio sistema de modelado intermedio. Habíamos aprendido mucho sobre cómo nos comunicamos con los negocios y sus necesidades. Pero esto también nos daba una perspectiva de cómo la información debía ser promocionada hacia las capas de consumo.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://www.scalefree.com/wp-content/uploads/2024/03/Data-Vault-20-Architecture.png" class="img-fluid figure-img"></p>
@@ -536,21 +590,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Una vez entendidos los datos y su cohesión en los conceptos de negocio, formarán parte de la estructura base de nuestro sistema informacional. Quizás podamos aplicar algunas restricciones de negocio o validar la bondad de los datos recibidos. Todas estas fases son parte de una etapa intermedia que en el caso de data vault, forman el <strong>raw vault</strong>, con la información cruda ya estructurada; y el <strong>business vault</strong> donde ciertas reglas de negocio puedan ser aplicadas.</p>
 <p>Finalmente, el usuario debe ser abstraído de toda esta complejidad técnica. Una última capa pensada para la extracción de información, en un modelado en <a href="../../content/modelado/modelado_analitico.html#modelado-dimensional">estrella</a> o de tabla única, es donde la información resulta sencilla de consumir y con suerte disponemos de información adicional sobre cuándo fue actualizada por última vez, si algo ha cambiado en los datos, etc. Es la capa de consumo o <strong>business intelligence</strong>.</p>
 </section>
-<section id="la-era-big-data" class="level2" data-number="10.3">
-<h2 data-number="10.3" class="anchored" data-anchor-id="la-era-big-data"><span class="header-section-number">10.3</span> La era Big Data</h2>
+<section id="la-era-big-data" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="la-era-big-data"><span class="header-section-number">9.3</span> La era Big Data</h2>
 <p>Para principios de los 2000s, varias empresas se enfrentaban a problemas relativos a la <em>velocidad</em> y <em>variabilidad</em> de los datos que venían de procedencias ajenas a la red empresarial: internet. El <em>volumen</em> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> que debían de procesar bien al vuelo como en reposo, crecía exponencialmente. Y si añadimos a esto la necesidad de modelar al mismo ritmo debido a la variabilidad de los formatos (<a href="https://es.wikipedia.org/wiki/Extensible_Markup_Language">XML</a> en gran medida en aquella época). Recordemos que los sistemas tabulares requerían de informar del esquema de la tabla incluyendo el tipo de dato de antemano, y cada cambio supone un quebradero de cabeza de gestión.</p>
 <p>Ya en 1998, Carlo Strozzi había sugerido el uso de sistemas que <a href="https://en.wikipedia.org/wiki/NoSQL">no solo soportarán SQL</a>. Es decir, que permitieran lo que conocemos como <em>schema-on-read</em> trasladando el problema de modelado a capas posteriores del sistema de forma que al menos, no perdiéramos información. En la misma medida, los equipos de Google y Yahoo! se encontraban en su pelea particular de cómo almacenar y procesar la información disponible en internet de manera económica y efectiva.</p>
-<p>Un par de trabajos del equipo de Google (<a href="https://static.googleusercontent.com/media/research.google.com/es//archive/gfs-sosp2003.pdf">Google File System</a> y <a href="https://static.googleusercontent.com/media/research.google.com/es//archive/mapreduce-osdi04.pdf">Map Reduce</a>) motivaron la implementación de Mike Cafarella y Doug Cutting, <a href="https://hadoop.apache.org/">Apache Hadoop</a> un sistema que tuvo una adopción vertiginosa en la década de 2010, algo antes de que se desencadenara el movimiento a la nube.</p>
+<p>El equipo de Google publicó dos trabajos que formaban parte de los sistemas internos que hacían que Google funcionara como lo hacía y pudieran analizar volúmenes como el que ocupaba la información en internet sin quebrar la compañía: <a href="https://static.googleusercontent.com/media/research.google.com/es//archive/gfs-sosp2003.pdf">Google File System</a> <span class="citation" data-cites="ghemawat2003gfs">(<a href="../references.html#ref-ghemawat2003gfs" role="doc-biblioref">Ghemawat et&nbsp;al. 2003</a>)</span> y <a href="https://static.googleusercontent.com/media/research.google.com/es//archive/mapreduce-osdi04.pdf">Map Reduce</a> <span class="citation" data-cites="dean2004mapreduce">(<a href="../references.html#ref-dean2004mapreduce" role="doc-biblioref">Dean y Ghemawat 2004</a>)</span>. Estas publicaciones motivaron la implementación de Mike Cafarella y Doug Cutting, <a href="https://hadoop.apache.org/">Apache Hadoop</a> un sistema que tuvo una adopción vertiginosa en la década de 2010, algo antes de que se desencadenara el movimiento a la nube.</p>
 <p>Este sistema fue de los primeros que ofrecía a las empresas un sistema desacoplado entre almacenamiento y computación, con un sistema de código abierto, lo cual lo hacía accesible a todo el mundo al coste de ser uno mismo quien mantiene este sistema organizado.</p>
 </section>
-<section id="la-casa-del-lago" class="level2" data-number="10.4">
-<h2 data-number="10.4" class="anchored" data-anchor-id="la-casa-del-lago"><span class="header-section-number">10.4</span> La casa del lago</h2>
-<p>Hadoop estaba basado en un sistema de ficheros, lo cual daba la versatilidad de almacenar lo que fuera necesario, sin embargo, consumir datos de esta fuente se volvía engorroso. Dado que los conocimientos de los equipos seguían centrándose en SQL y herramientas que podían realizar este tipo de consultas, los ingenieros de Facebook tomaron como referencia el trabajo del equipo de Google <a href="https://static.googleusercontent.com/media/research.google.com/es//pubs/archive/36632.pdf">Dremel</a> y crearon un sistema que permitía consultar información tabular en el sistema, <a href="https://hive.apache.org/">Apache Hive</a>. Simplemente catalogando cómo realizar la traducción tabla a fichero, estos sistemas abstraían a los usuarios de las complejidades del <strong>lago de datos</strong> empezando a vislumbrar lo que años más tarde el equipo de Databricks denominaría <strong>la casa del lago</strong> (o Data Lakehouse).</p>
+<section id="la-casa-del-lago" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="la-casa-del-lago"><span class="header-section-number">9.4</span> La casa del lago</h2>
+<p>Hadoop estaba basado en un sistema de ficheros, lo cual daba la versatilidad de almacenar lo que fuera necesario, sin embargo, consumir datos de esta fuente se volvía engorroso. Dado que los conocimientos de los equipos seguían centrándose en SQL y herramientas que podían realizar este tipo de consultas, los ingenieros de Facebook tomaron como referencia el trabajo del equipo de Google <a href="https://static.googleusercontent.com/media/research.google.com/es//pubs/archive/36632.pdf">Dremel</a> <span class="citation" data-cites="melnik2010dremel">(<a href="../references.html#ref-melnik2010dremel" role="doc-biblioref">Melnik et&nbsp;al. 2010</a>)</span> y crearon un sistema que permitía consultar información tabular en el sistema, <a href="https://hive.apache.org/">Apache Hive</a>. Simplemente catalogando cómo realizar la traducción tabla a fichero, estos sistemas abstraían a los usuarios de las complejidades del <strong>lago de datos</strong> empezando a vislumbrar lo que años más tarde el equipo de Databricks denominaría <strong>la casa del lago</strong> (o Data Lakehouse) <span class="citation" data-cites="armbrust2021lakehouse">(<a href="../references.html#ref-armbrust2021lakehouse" role="doc-biblioref">Armbrust et&nbsp;al. 2021</a>)</span>.</p>
 </section>
-<section id="ordenando-el-lago" class="level2" data-number="10.5">
-<h2 data-number="10.5" class="anchored" data-anchor-id="ordenando-el-lago"><span class="header-section-number">10.5</span> Ordenando el lago</h2>
-<p>Tras la polvareda generada por la tumultuosa era de los clústeres Hadoop, la nube se abrió camino y con ello soluciones que haciendo uso de las tecnologías abiertas disponibles ofrecieron soluciones renovadas a las empresas. En cierta forma es como si hubiéramos reinventado los sistemas de gestión de base de datos cayendo en los mismos problemas que presentaban los sistemas originales. No es que no hubiera almacenamiento columnar antes de <a href="https://parquet.apache.org/">Apache Parquet</a> o computación distribuida en memoria antes de <a href="https://spark.apache.org/">Apache Spark</a>, pero a veces tenemos que romper el <em>status quo</em> para apreciar el trabajo existente.</p>
-<p>Dos grandes empresas salieron de esta época, <a href="https://www.snowflake.com/es/">Snowflake</a> con su sistema de gestión de bases de datos tabulares que permitía una gestión desacoplada de almacenamiento y computo. Y Databricks, cuyo co-fundador es <a href="https://en.wikipedia.org/wiki/Matei_Zaharia">Matei Zaharia</a>, autor principal del trabajo en Apache Spark<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<section id="ordenando-el-lago" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="ordenando-el-lago"><span class="header-section-number">9.5</span> Ordenando el lago</h2>
+<p>Tras la polvareda generada por la tumultuosa era de los clústeres Hadoop, la nube se abrió camino y con ello soluciones que haciendo uso de las tecnologías abiertas disponibles ofrecieron soluciones renovadas a las empresas. En cierta forma es como si hubiéramos reinventado los sistemas de gestión de base de datos cayendo en los mismos problemas que presentaban los sistemas originales, un ciclo que Stonebraker y Pavlo llevan documentando desde hace dos décadas <span class="citation" data-cites="stonebraker2024around">(<a href="../references.html#ref-stonebraker2024around" role="doc-biblioref">Stonebraker y Pavlo 2024</a>)</span>. No es que no hubiera almacenamiento columnar antes de <a href="https://parquet.apache.org/">Apache Parquet</a> o computación distribuida en memoria antes de <a href="https://spark.apache.org/">Apache Spark</a>, pero a veces tenemos que romper el <em>status quo</em> para apreciar el trabajo existente.</p>
+<p>Dos grandes empresas salieron de esta época, <a href="https://www.snowflake.com/es/">Snowflake</a> con su sistema de gestión de bases de datos tabulares que permitía una gestión desacoplada de almacenamiento y computo. Y Databricks, cuyo co-fundador es <a href="https://en.wikipedia.org/wiki/Matei_Zaharia">Matei Zaharia</a>, autor principal del trabajo en Apache Spark <span class="citation" data-cites="zaharia2012rdd zaharia2016spark">(<a href="../references.html#ref-zaharia2012rdd" role="doc-biblioref">Zaharia et&nbsp;al. 2012</a>, <a href="../references.html#ref-zaharia2016spark" role="doc-biblioref">2016</a>)</span><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
 <p>Estas dos soluciones de algún modo han vuelto a enfocarse en ofrecer rendimiento y estructura a los sistemas de datos. Han incorporado necesidades como las de lanzar procesos de bajo nivel o permitir flexibilizar los tipos de datos (VARIANT o JSON) para albergar estructuras anidadas de datos</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"persona"</span><span class="fu">:</span> <span class="fu">{</span></span>
@@ -560,7 +614,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            <span class="ot">[</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">"SDG Group"</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Iberdrola"</span><span class="ot">,</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">"panda Security"</span><span class="ot">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Panda Security"</span><span class="ot">,</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Tecnalia"</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="ot">]</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
@@ -577,6 +631,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Es curioso cómo estos sistemas han evolucionado precisamente ofreciendo capacidades operacionales en las modalidades de arquitecturas mixtas gracias a los <a href="../../content/sistemas/nuevos-formatos.html">formatos abiertos de nueva generación</a>.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-armbrust2021lakehouse" class="csl-entry" role="listitem">
+Armbrust, Michael, Ali Ghodsi, Reynold Xin, y Matei Zaharia. 2021. <span>«Lakehouse: A New Generation of Open Platforms that Unify Data Warehousing and Advanced Analytics»</span>. <em>11th Conference on Innovative Data Systems Research (CIDR)</em>.
+</div>
+<div id="ref-dean2004mapreduce" class="csl-entry" role="listitem">
+Dean, Jeffrey, y Sanjay Ghemawat. 2004. <span>«MapReduce: Simplified Data Processing on Large Clusters»</span>. <em>6th Symposium on Operating Systems Design and Implementation (OSDI)</em>, 137-50.
+</div>
+<div id="ref-ghemawat2003gfs" class="csl-entry" role="listitem">
+Ghemawat, Sanjay, Howard Gobioff, y Shun-Tak Leung. 2003. <span>«The Google File System»</span>. <em>Proceedings of the 19th ACM Symposium on Operating Systems Principles (SOSP)</em>, 29-43.
+</div>
+<div id="ref-inmon2005building" class="csl-entry" role="listitem">
+Inmon, William H. 2005. <em>Building the Data Warehouse</em>. 4.ª ed. Wiley.
+</div>
+<div id="ref-kimball2013toolkit" class="csl-entry" role="listitem">
+Kimball, Ralph, y Margy Ross. 2013. <em>The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling</em>. 3.ª ed. Wiley.
+</div>
+<div id="ref-linstedt2015vault" class="csl-entry" role="listitem">
+Linstedt, Daniel, y Michael Olschimke. 2015. <em>Building a Scalable Data Warehouse with Data Vault 2.0</em>. Morgan Kaufmann.
+</div>
+<div id="ref-melnik2010dremel" class="csl-entry" role="listitem">
+Melnik, Sergey, Andrey Gubarev, Jing Jing Long, et&nbsp;al. 2010. <span>«Dremel: Interactive Analysis of Web-Scale Datasets»</span>. <em>Proceedings of the VLDB Endowment</em> 3 (1-2): 330-39.
+</div>
+<div id="ref-stonebraker2024around" class="csl-entry" role="listitem">
+Stonebraker, Michael, y Andrew Pavlo. 2024. <span>«What Goes Around Comes Around... And Around...»</span> <em>ACM SIGMOD Record</em> 53 (2): 21-37.
+</div>
+<div id="ref-zaharia2012rdd" class="csl-entry" role="listitem">
+Zaharia, Matei, Mosharaf Chowdhury, Tathagata Das, et&nbsp;al. 2012. <span>«Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing»</span>. <em>9th USENIX Symposium on Networked Systems Design and Implementation (NSDI)</em>, 15-28.
+</div>
+<div id="ref-zaharia2016spark" class="csl-entry" role="listitem">
+Zaharia, Matei, Reynold S. Xin, Patrick Wendell, et&nbsp;al. 2016. <span>«Apache Spark: A Unified Engine for Big Data Processing»</span>. <em>Communications of the ACM</em> 59 (11): 56-65.
+</div>
+</div>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
@@ -991,12 +1077,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../../content/sistemas/dbms_analítica.html" class="pagination-link" aria-label="Base de datos analítica">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../../content/sistemas/nuevos-formatos.html" class="pagination-link" aria-label="Formatos abiertos">
-        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

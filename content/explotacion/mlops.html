@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>23&nbsp; Del cuaderno a producción – Ingeniería de datos</title>
+<title>22&nbsp; Del cuaderno a producción – Ingeniería de datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,7 +26,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -48,7 +67,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-ef0e1f3183002b1dd086f4436a49a19e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-181dfe74f60b45fb364f5d98d01a2ee9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -100,7 +119,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<meta property="og:title" content="23&nbsp; Del cuaderno a producción – Ingeniería de datos">
+<meta property="og:title" content="22&nbsp; Del cuaderno a producción – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -117,7 +136,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/mlops.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/mlops.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -155,7 +174,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+ <span class="menu-text">Introducción</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -170,25 +189,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/modelado_analitico.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/modelado/nuevos_paradigmas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
   </div>
 </li>
       </ul>
@@ -205,37 +224,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/dbms_analítica.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/sistemas/nuevos-formatos.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
   </div>
 </li>
       </ul>
@@ -252,25 +271,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
   </div>
 </li>
       </ul>
@@ -287,25 +306,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
   </div>
 </li>
       </ul>
@@ -322,25 +341,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
   </div>
 </li>
       </ul>
@@ -368,8 +387,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/calidad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Calidad de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/rill.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Exploración con Rill</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/datalake.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -384,11 +421,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#el-cuaderno-y-su-techo" id="toc-el-cuaderno-y-su-techo" class="nav-link active" data-scroll-target="#el-cuaderno-y-su-techo"><span class="header-section-number">23.1</span> El cuaderno y su techo</a></li>
-  <li><a href="#el-entorno-se-acerca-a-los-datos" id="toc-el-entorno-se-acerca-a-los-datos" class="nav-link" data-scroll-target="#el-entorno-se-acerca-a-los-datos"><span class="header-section-number">23.2</span> El entorno se acerca a los datos</a></li>
-  <li><a href="#cuando-el-modelo-tiene-que-vivir" id="toc-cuando-el-modelo-tiene-que-vivir" class="nav-link" data-scroll-target="#cuando-el-modelo-tiene-que-vivir"><span class="header-section-number">23.3</span> Cuando el modelo tiene que vivir</a></li>
-  <li><a href="#dónde-acaba-nuestro-trabajo" id="toc-dónde-acaba-nuestro-trabajo" class="nav-link" data-scroll-target="#dónde-acaba-nuestro-trabajo"><span class="header-section-number">23.4</span> Dónde acaba nuestro trabajo</a></li>
-  <li><a href="#cierre" id="toc-cierre" class="nav-link" data-scroll-target="#cierre"><span class="header-section-number">23.5</span> Cierre</a></li>
+  <li><a href="#el-cuaderno-y-su-techo" id="toc-el-cuaderno-y-su-techo" class="nav-link active" data-scroll-target="#el-cuaderno-y-su-techo"><span class="header-section-number">22.1</span> El cuaderno y su techo</a></li>
+  <li><a href="#el-entorno-se-acerca-a-los-datos" id="toc-el-entorno-se-acerca-a-los-datos" class="nav-link" data-scroll-target="#el-entorno-se-acerca-a-los-datos"><span class="header-section-number">22.2</span> El entorno se acerca a los datos</a></li>
+  <li><a href="#cuando-el-modelo-tiene-que-vivir" id="toc-cuando-el-modelo-tiene-que-vivir" class="nav-link" data-scroll-target="#cuando-el-modelo-tiene-que-vivir"><span class="header-section-number">22.3</span> Cuando el modelo tiene que vivir</a></li>
+  <li><a href="#dónde-acaba-nuestro-trabajo" id="toc-dónde-acaba-nuestro-trabajo" class="nav-link" data-scroll-target="#dónde-acaba-nuestro-trabajo"><span class="header-section-number">22.4</span> Dónde acaba nuestro trabajo</a></li>
+  <li><a href="#cierre" id="toc-cierre" class="nav-link" data-scroll-target="#cierre"><span class="header-section-number">22.5</span> Cierre</a></li>
   </ul>
 </nav>
     </div>
@@ -398,9 +435,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/mlops.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/mlops.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></h1>
+<h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></h1>
 </div>
 
 
@@ -419,8 +456,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>Tenemos el tablón. Alguien va a abrir un cuaderno, va a entrenar un modelo y va a obtener un resultado prometedor. Y entonces empieza la parte difícil, que no es la que la mayoría espera.</p>
 <p>Este último capítulo recorre dos evoluciones que van de la mano: la del <strong>entorno</strong> en el que se trabaja con datos, y la de la <strong>infraestructura</strong> que hace falta para que un modelo deje de ser un experimento.</p>
-<section id="el-cuaderno-y-su-techo" class="level2" data-number="23.1">
-<h2 data-number="23.1" class="anchored" data-anchor-id="el-cuaderno-y-su-techo"><span class="header-section-number">23.1</span> El cuaderno y su techo</h2>
+<section id="el-cuaderno-y-su-techo" class="level2" data-number="22.1">
+<h2 data-number="22.1" class="anchored" data-anchor-id="el-cuaderno-y-su-techo"><span class="header-section-number">22.1</span> El cuaderno y su techo</h2>
 <p>El cuaderno de notas, <a href="https://jupyter.org/">Jupyter</a> y sus descendientes, se ganó su sitio con razón. Permite alternar código, resultado y explicación, lo que encaja perfectamente con la naturaleza exploratoria del trabajo con datos: mirar, probar, corregir, volver a mirar.</p>
 <p>Sus límites también son conocidos y aparecen todos a la vez el día que algo funciona y hay que repetirlo:</p>
 <ul>
@@ -430,8 +467,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 <p>La respuesta clásica ha sido siempre la misma, y sigue siendo válida: el cuaderno para explorar, y lo que sobreviva a la exploración se mueve a módulos con pruebas. Lo que ha cambiado es la herramienta con la que se hace ese movimiento.</p>
 </section>
-<section id="el-entorno-se-acerca-a-los-datos" class="level2" data-number="23.2">
-<h2 data-number="23.2" class="anchored" data-anchor-id="el-entorno-se-acerca-a-los-datos"><span class="header-section-number">23.2</span> El entorno se acerca a los datos</h2>
+<section id="el-entorno-se-acerca-a-los-datos" class="level2" data-number="22.2">
+<h2 data-number="22.2" class="anchored" data-anchor-id="el-entorno-se-acerca-a-los-datos"><span class="header-section-number">22.2</span> El entorno se acerca a los datos</h2>
 <p>Durante años el editor de código y el almacén de datos fueron dos mundos. El editor conocía la sintaxis de SQL pero no sabía <strong>qué tablas existen</strong>, así que autocompletaba a ciegas y uno descubría que la columna se llamaba de otro modo al ejecutar.</p>
 <p>La generación actual de entornos rompe esa separación conectándose al almacén. <a href="https://getnao.io/">nao</a>, de nao Labs, es probablemente el ejemplo más claro de la categoría: un editor derivado de Visual Studio Code cuyo asistente está enganchado al almacén, de forma que conoce el esquema real, las columnas y los datos antes de sugerir nada. Sobre esa base ofrece lo que uno esperaría: generar modelos de dbt y consultas, documentar, escribir pruebas, comparar el resultado de una consulta antes y después de un cambio, y ver qué se rompe aguas abajo apoyándose en el linaje.</p>
 <p>El detalle que importa no es que haya un asistente, que a estas alturas lo hay en todas partes, sino <strong>de qué contexto dispone</strong>. Un asistente sin acceso al esquema inventa nombres de columna con enorme convicción; con acceso al esquema, deja de hacerlo. Es exactamente el mismo argumento que veíamos al hablar de las <a href="../../content/explotacion/semantica.html#métricas-para-agentes">métricas para agentes</a> y del <a href="../../content/appendices/metadatado.html">catálogo de gobierno</a>: lo que hace útil a un dato es el contexto que lo rodea, y eso vale igual para las personas que para las máquinas.</p>
@@ -450,9 +487,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 </section>
-<section id="cuando-el-modelo-tiene-que-vivir" class="level2" data-number="23.3">
-<h2 data-number="23.3" class="anchored" data-anchor-id="cuando-el-modelo-tiene-que-vivir"><span class="header-section-number">23.3</span> Cuando el modelo tiene que vivir</h2>
-<p>Un modelo entrenado en un portátil no vale nada por sí mismo. Para que aporte, alguien tiene que ejecutarlo de forma recurrente sobre datos nuevos, y ahí aparece un conjunto de problemas que no son de ciencia de datos sino de ingeniería. Es lo que se agrupa bajo el nombre de <strong>MLOps</strong>.</p>
+<section id="cuando-el-modelo-tiene-que-vivir" class="level2" data-number="22.3">
+<h2 data-number="22.3" class="anchored" data-anchor-id="cuando-el-modelo-tiene-que-vivir"><span class="header-section-number">22.3</span> Cuando el modelo tiene que vivir</h2>
+<p>Un modelo entrenado en un portátil no vale nada por sí mismo. Para que aporte, alguien tiene que ejecutarlo de forma recurrente sobre datos nuevos, y ahí aparece un conjunto de problemas que no son de ciencia de datos sino de ingeniería. Es lo que se agrupa bajo el nombre de <strong>MLOps</strong>, y su mejor descripción sigue siendo la que dieron Sculley y sus compañeros al observar que el código de aprendizaje automático es una fracción diminuta de un sistema real, rodeada de infraestructura que acumula deuda técnica a una velocidad poco común <span class="citation" data-cites="sculley2015debt">(<a href="../references.html#ref-sculley2015debt" role="doc-biblioref">Sculley et&nbsp;al. 2015</a>)</span>.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -466,6 +503,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     fs --&gt; serv
     serv --&gt; mon["Monitorización"]
     mon -.-&gt;|"deriva"| ent
+
+    %% Paleta por bloque del libro
+    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class tab transformacion
+    class ent,reg,serv,mon,fs explotacion
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -476,7 +519,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <ul>
 <li><strong>Registro de modelos</strong> (<em>model registry</em>). Un modelo es un artefacto binario con versión, métricas de validación, datos con los que se entrenó y un estado (en pruebas, en producción, retirado). Sin registro, la pregunta <em>qué versión está respondiendo ahora mismo</em> no tiene respuesta. <a href="https://mlflow.org/">MLflow</a> es la referencia abierta.</li>
 <li><strong>Almacén de variables</strong> (<em>feature store</em>). Nace de un problema muy concreto que ya hemos tocado: la variable que se calcula al entrenar y la que se calcula al predecir <strong>tienen que ser la misma</strong>, y normalmente las escriben personas distintas en lenguajes distintos. Un feature store guarda la definición una sola vez y la sirve a ambos, además de resolver la consulta por fecha que vimos en el <a href="../../content/explotacion/ds.html#el-tablón-correcto-a-fecha">tablón</a>. <a href="https://feast.dev/">Feast</a> es la opción abierta más extendida.</li>
-<li><strong>Monitorización</strong>. Un modelo no falla con un error, falla degradándose: los datos de entrada dejan poco a poco de parecerse a los de entrenamiento. Detectar esa <strong>deriva</strong> es vigilar distribuciones, no excepciones.</li>
+<li><strong>Monitorización</strong>. Un modelo no falla con un error, falla degradándose: los datos de entrada dejan poco a poco de parecerse a los de entrenamiento. Detectar esa <strong>deriva</strong> es vigilar distribuciones, no excepciones. La experiencia de Google con sistemas en producción <span class="citation" data-cites="breck2019datalinter">(<a href="../references.html#ref-breck2019datalinter" role="doc-biblioref">Breck et&nbsp;al. 2019</a>)</span> es tajante en un punto: la mayoría de los fallos de un modelo entran por los datos, no por el algoritmo, y se detectan validando la entrada.</li>
 <li><strong>Reentrenamiento</strong>, que cierra el ciclo y que en la práctica es un proceso más de los que orquestamos.</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -494,19 +537,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 </section>
-<section id="dónde-acaba-nuestro-trabajo" class="level2" data-number="23.4">
-<h2 data-number="23.4" class="anchored" data-anchor-id="dónde-acaba-nuestro-trabajo"><span class="header-section-number">23.4</span> Dónde acaba nuestro trabajo</h2>
+<section id="dónde-acaba-nuestro-trabajo" class="level2" data-number="22.4">
+<h2 data-number="22.4" class="anchored" data-anchor-id="dónde-acaba-nuestro-trabajo"><span class="header-section-number">22.4</span> Dónde acaba nuestro trabajo</h2>
 <p>Merece la pena cerrar delimitando, porque MLOps es una disciplina con entidad propia y este es un libro de ingeniería de datos.</p>
 <p>Del recorrido anterior, lo que es inequívocamente nuestro es la parte de abajo: que los datos que alimentan el entrenamiento y los que alimentan la predicción vengan del mismo sitio, estén correctamente fechados, sean reproducibles y estén documentados. El registro de modelos, el servicio y la monitorización de la deriva pertenecen a otro perfil, aunque en equipos pequeños acabe siendo la misma persona.</p>
 <p>Y hay una simetría que conviene notar, porque resume bastante bien todo el libro. Un modelo en producción es, al final, <strong>otro consumidor más</strong> de la capa de explotación. Tiene las mismas necesidades que un cuadro de mando: datos fiables, definiciones estables, historia consultable y alguien que avise cuando algo cambie río arriba. Nada de lo que hemos construido cambia porque el consumidor sea un algoritmo en lugar de una persona.</p>
 </section>
-<section id="cierre" class="level2" data-number="23.5">
-<h2 data-number="23.5" class="anchored" data-anchor-id="cierre"><span class="header-section-number">23.5</span> Cierre</h2>
+<section id="cierre" class="level2" data-number="22.5">
+<h2 data-number="22.5" class="anchored" data-anchor-id="cierre"><span class="header-section-number">22.5</span> Cierre</h2>
 <p>Hemos recorrido el ciclo completo. Empezamos con <a href="../../content/intro.html">Codd y el modelo tabular</a>, pasamos por el <a href="../../content/modelado/intro.html">modelado</a> y los <a href="../../content/sistemas/intro.html">sistemas que almacenan</a>, <a href="../../content/load/intro.html">extrajimos</a> de las fuentes y <a href="../../content/load/staging.html">aterrizamos</a> en un lakehouse abierto, <a href="../../content/transform/raw_vault.html">integramos</a> la historia en un vault y la <a href="../../content/transform/business_vault.html">presentamos</a> de forma consumible, y finalmente la hemos puesto en manos de quien tiene las preguntas.</p>
 <p>Si algo debería quedar de todo esto, no son las herramientas. DuckLake, dlt, dbt y Rill son buenas elecciones hoy y serán otras dentro de unos años, igual que Hadoop lo fue y dejó de serlo. Lo que permanece son las decisiones que hay debajo: guardar el dato crudo antes de interpretarlo, separar lo que el negocio decide de lo que el sistema impone, conservar la historia porque nadie sabe qué se preguntará mañana, y escribir las definiciones en algún sitio donde no puedan desactualizarse en silencio.</p>
 <p>Eso, y recordar que al final del último <code>SELECT</code> siempre hay una persona intentando tomar una decisión mejor.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-breck2019datalinter" class="csl-entry" role="listitem">
+Breck, Eric, Neoklis Polyzotis, Sudip Roy, Steven Euijong Whang, y Martin Zinkevich. 2019. <span>«Data Validation for Machine Learning»</span>. <em>Proceedings of Machine Learning and Systems (MLSys)</em> 1: 334-47.
+</div>
+<div id="ref-sculley2015debt" class="csl-entry" role="listitem">
+Sculley, D., Gary Holt, Daniel Golovin, et&nbsp;al. 2015. <span>«Hidden Technical Debt in Machine Learning Systems»</span>. <em>Advances in Neural Information Processing Systems (NeurIPS)</em> 28: 2503-11.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -913,7 +964,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../../content/explotacion/ds.html" class="pagination-link" aria-label="Ciencia de datos">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
