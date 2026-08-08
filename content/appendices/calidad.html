@@ -554,7 +554,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="lo-que-ya-tenemos" class="level2" data-number="B.2">
 <h2 data-number="B.2" class="anchored" data-anchor-id="lo-que-ya-tenemos"><span class="header-section-number">B.2</span> Lo que ya tenemos</h2>
 <p>Empecemos por reconocer el punto de partida, que no es cero. El proyecto de dbt de los capítulos de <a href="../../content/transform/data_warehousing.html">transformación</a> ya declara quince pruebas.</p>
-<div id="ee89ace6" class="cell" data-execution_count="2">
+<div id="b83e833c" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> artefacto(nombre):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(os.path.join(utilidades.ESPACIO, <span class="st">"target"</span>, nombre), encoding<span class="op">=</span><span class="st">"utf-8"</span>) <span class="im">as</span> f:</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> json.load(f)</span>
@@ -792,7 +792,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2 data-number="B.4" class="anchored" data-anchor-id="aterrizarlo-en-la-base-de-metadatos"><span class="header-section-number">B.4</span> Aterrizarlo en la base de metadatos</h2>
 <p>Aquí es donde esto deja de ser una herramienta más y empieza a valer para algo. En el <a href="../../content/appendices/metadatado.html">apéndice de metadatado</a> construimos un esquema <code>meta</code> dentro del propio lago con el inventario de activos, el linaje y las ejecuciones. La calidad pertenece exactamente al mismo sitio.</p>
 <p>Además de los resultados de las pruebas, calculamos un perfil básico, que es lo que haría un escaneo de Soda y lo que permite comparar con el de mañana:</p>
-<div id="310810b2" class="cell" data-execution_count="3">
+<div id="366f959f" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>perfil <span class="op">=</span> utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">        'dim_alumno'                                        AS activo,</span></span>
@@ -851,7 +851,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Y lo guardamos junto al resto de metadatos, con la marca de tiempo del escaneo, porque un perfil sin fecha no sirve para comparar:</p>
-<div id="5c12bd23" class="cell" data-execution_count="4">
+<div id="90dd5fdf" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"INSTALL ducklake; LOAD ducklake;"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="ss">f"ATTACH 'ducklake:sqlite:</span><span class="sc">{</span>utilidades<span class="sc">.</span>CATALOGO<span class="sc">}</span><span class="ss">' AS lago (DATA_PATH '</span><span class="sc">{</span>utilidades<span class="sc">.</span>DATOS<span class="sc">}</span><span class="ss">')"</span>)</span>
@@ -903,28 +903,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <td>hub_alumno</td>
 <td>4</td>
 <td>4</td>
-<td>2026-08-08 17:20:35.203033+00:00</td>
+<td>2026-08-08 19:27:41.092037+00:00</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>hub_asignatura</td>
 <td>2</td>
 <td>2</td>
-<td>2026-08-08 17:20:35.203033+00:00</td>
+<td>2026-08-08 19:27:41.092037+00:00</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
 <td>link_matricula</td>
 <td>5</td>
 <td>5</td>
-<td>2026-08-08 17:20:35.203033+00:00</td>
+<td>2026-08-08 19:27:41.092037+00:00</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
 <td>sat_alumno</td>
 <td>4</td>
 <td>4</td>
-<td>2026-08-08 17:20:35.203033+00:00</td>
+<td>2026-08-08 19:27:41.092037+00:00</td>
 </tr>
 </tbody>
 </table>
@@ -933,7 +933,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Con eso, la pregunta <strong>¿me puedo fiar de esta tabla?</strong> deja de responderse por correo. Es una consulta:</p>
-<div id="6b500734" class="cell" data-execution_count="5">
+<div id="e2406d07" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">        a.activo,</span></span>

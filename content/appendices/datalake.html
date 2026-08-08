@@ -445,8 +445,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <li><a href="#cargar-la-capa-bronce" id="toc-cargar-la-capa-bronce" class="nav-link" data-scroll-target="#cargar-la-capa-bronce"><span class="header-section-number">D.3.2</span> Cargar la capa bronce</a></li>
   <li><a href="#construir-el-vault" id="toc-construir-el-vault" class="nav-link" data-scroll-target="#construir-el-vault"><span class="header-section-number">D.3.3</span> Construir el vault</a></li>
   <li><a href="#las-dos-cosas-de-una-vez" id="toc-las-dos-cosas-de-una-vez" class="nav-link" data-scroll-target="#las-dos-cosas-de-una-vez"><span class="header-section-number">D.3.4</span> Las dos cosas de una vez</a></li>
-  <li><a href="#explorar" id="toc-explorar" class="nav-link" data-scroll-target="#explorar"><span class="header-section-number">D.3.5</span> Explorar</a></li>
-  <li><a href="#comprobar-que-está-todo" id="toc-comprobar-que-está-todo" class="nav-link" data-scroll-target="#comprobar-que-está-todo"><span class="header-section-number">D.3.6</span> Comprobar que está todo</a></li>
+  <li><a href="#ver-el-linaje" id="toc-ver-el-linaje" class="nav-link" data-scroll-target="#ver-el-linaje"><span class="header-section-number">D.3.5</span> Ver el linaje</a></li>
+  <li><a href="#explorar" id="toc-explorar" class="nav-link" data-scroll-target="#explorar"><span class="header-section-number">D.3.6</span> Explorar</a></li>
+  <li><a href="#comprobar-que-está-todo" id="toc-comprobar-que-está-todo" class="nav-link" data-scroll-target="#comprobar-que-está-todo"><span class="header-section-number">D.3.7</span> Comprobar que está todo</a></li>
   </ul></li>
   <li><a href="#lo-que-ha-quedado-construido" id="toc-lo-que-ha-quedado-construido" class="nav-link" data-scroll-target="#lo-que-ha-quedado-construido"><span class="header-section-number">D.4</span> Lo que ha quedado construido</a></li>
   <li><a href="#las-decisiones-que-importan" id="toc-las-decisiones-que-importan" class="nav-link" data-scroll-target="#las-decisiones-que-importan"><span class="header-section-number">D.5</span> Las decisiones que importan</a>
@@ -510,7 +511,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <section id="lo-que-se-va-a-levantar" class="level2" data-number="D.1">
 <h2 data-number="D.1" class="anchored" data-anchor-id="lo-que-se-va-a-levantar"><span class="header-section-number">D.1</span> Lo que se va a levantar</h2>
-<p>Cinco piezas, todas de código abierto, cada una haciendo exactamente un trabajo.</p>
+<p>Seis piezas, todas de código abierto, cada una haciendo exactamente un trabajo.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -524,23 +525,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     v --&gt; t2["dbt"]
     t2 --&gt; g[("DuckDB&lt;br/&gt;oro")]
     g --&gt; r["Rill"]
+    t2 -.-&gt; doc["dbt docs"]
 
     classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
     classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
     classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
     classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
     classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef documentacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e,stroke-dasharray:4 3
     class o origen
     class d carga
     class b,v,g almacen
     class t,t2 transformacion
     class r explotacion
+    class doc documentacion
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
+<p>La flecha de puntos es la única que no lleva datos: dbt docs no transforma nada, se limita a publicar lo que dbt sabe de sus propios modelos.</p>
 <table class="caption-top table">
 <caption>Las piezas del ejercicio y dónde encontrarlas</caption>
 <colgroup>
@@ -577,13 +582,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <td><code>dbt_project/</code></td>
 </tr>
 <tr class="odd">
+<td>dbt docs</td>
+<td>Diccionario de modelos y grafo de linaje</td>
+<td><code>http://localhost:8081</code></td>
+</tr>
+<tr class="even">
 <td>Rill</td>
 <td>Panel de exploración</td>
 <td><code>http://localhost:9010</code></td>
 </tr>
 </tbody>
 </table>
-<p>Los puertos no son los de costumbre y la razón es evitar choques: el 3000 lo usa Evidence en el <a href="../../content/explotacion/bi.html">capítulo de inteligencia de negocio</a>, el 8585 lo ocupa OpenMetadata en el <a href="../../content/appendices/metadatado.html">apéndice de metadatado</a> y el 9009 es el de un Rill arrancado en local como se ve en el <a href="../../content/appendices/rill.html">apéndice de exploración</a>. Aquí PostgreSQL se publica en el 5433 y Rill en el 9010.</p>
+<p>Los puertos no son los de costumbre y la razón es evitar choques: el 3000 lo usa Evidence en el <a href="../../content/explotacion/bi.html">capítulo de inteligencia de negocio</a>, el 8585 lo ocupa OpenMetadata en el <a href="../../content/appendices/metadatado.html">apéndice de metadatado</a> y el 9009 es el de un Rill arrancado en local como se ve en el <a href="../../content/appendices/rill.html">apéndice de exploración</a>. Aquí PostgreSQL se publica en el 5433, Rill en el 9010 y la documentación en el 8081 (dbt docs sirve por defecto en el 8080, que es de los puertos más disputados de cualquier portátil).</p>
 </section>
 <section id="antes-de-empezar" class="level2" data-number="D.2">
 <h2 data-number="D.2" class="anchored" data-anchor-id="antes-de-empezar"><span class="header-section-number">D.2</span> Antes de empezar</h2>
@@ -616,12 +626,6 @@ raw.raw_product_templates: 29</code></pre>
 <p>dbt encadena las tres capas que quedan (staging, vault y explotación) y a continuación ejecuta las pruebas. La salida termina así:</p>
 <pre><code>Done. PASS=74 WARN=0 ERROR=0 SKIP=0 TOTAL=74</code></pre>
 <p>Las setenta y cuatro incluyen diecisiete modelos y cincuenta y siete pruebas. Que pasen todas no significa que el modelo sea bueno, pero que falle una sí significa que algo está mal, y en este proyecto hay pruebas puestas justo donde el Data Vault se rompe con más facilidad.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../../assets/dbt-linaje.png" class="img-fluid figure-img"></p>
-<figcaption>Linaje de datos en dbt docs</figcaption>
-</figure>
-</div>
 </section>
 <section id="las-dos-cosas-de-una-vez" class="level3" data-number="D.3.4">
 <h3 data-number="D.3.4" class="anchored" data-anchor-id="las-dos-cosas-de-una-vez"><span class="header-section-number">D.3.4</span> Las dos cosas de una vez</h3>
@@ -642,9 +646,39 @@ raw.raw_product_templates: 29</code></pre>
 </div>
 </div>
 </section>
-<section id="explorar" class="level3" data-number="D.3.5">
-<h3 data-number="D.3.5" class="anchored" data-anchor-id="explorar"><span class="header-section-number">D.3.5</span> Explorar</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">--profile</span> bi up <span class="at">-d</span> rill</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="ver-el-linaje" class="level3" data-number="D.3.5">
+<h3 data-number="D.3.5" class="anchored" data-anchor-id="ver-el-linaje"><span class="header-section-number">D.3.5</span> Ver el linaje</h3>
+<p>Cada <code>ref()</code> y cada <code>source()</code> del proyecto es una dependencia declarada, así que dbt conoce el grafo entero sin que nadie se lo cuente. Publicarlo como sitio web son dos pasos:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> transform dbt docs generate</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">--profile</span> docs up <span class="at">-d</span> docs</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>El primero deja en <code>dbt_project/target/</code> el <code>manifest.json</code> (los modelos y sus dependencias) y el <code>catalog.json</code> (las columnas y los tipos de cada relación, que sí hay que ir a preguntarle a DuckDB). El segundo sirve esos ficheros en <code>http://localhost:8081</code>. El botón azul de la esquina inferior derecha abre el grafo:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../assets/dbt-linaje.png" class="img-fluid figure-img"></p>
+<figcaption>Linaje de datos en dbt docs</figcaption>
+</figure>
+</div>
+<p>Se lee de izquierda a derecha y es exactamente el recorrido que cuenta este apéndice: en verde las cinco tablas de <code>raw</code> que dejó dlt, y en azul las cuatro vistas de staging, los tres hubs, los dos enlaces, los cuatro satélites y las cuatro tablas de explotación. El nodo <code>satelite_grano_unico</code> no es un modelo sino la prueba singular de <code>dbt_project/tests/</code>, porque en el grafo de dbt <strong>las pruebas son nodos como cualquier otro</strong>: cuelgan de aquello que comprueban, que es justo lo que permite a <code>dbt build</code> ordenar la ejecución sin que nadie escriba las dependencias a mano.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Servir no bloquea el almacén, generar sí
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>dbt docs serve</code> es un servidor de ficheros estáticos: reparte el <code>manifest.json</code> y el <code>catalog.json</code> que ya están en <code>target/</code> y <strong>no abre DuckDB en ningún momento</strong>. Por eso este servicio sí convive con Rill, al contrario que <code>extract</code>, <code>transform</code> o <code>pipeline</code>.</p>
+<p>Quien sí abre el almacén es <code>dbt docs generate</code>, porque el catálogo de columnas tiene que consultarlo. Con Rill levantado falla con el mismo <code>Conflicting lock is held in PID 0</code> de siempre, de modo que el orden que funciona es generar la documentación primero y arrancar el panel después.</p>
+</div>
+</div>
+<p>Las descripciones que aparecen al pinchar un modelo salen de los <code>description:</code> de <code>_core_models.yml</code> y <code>_stg_sources.yml</code>. No hay nada automático en esa parte: lo que no esté escrito ahí sale vacío, y un diccionario de datos sin descripciones es poco más que la lista de columnas que ya da la base de datos.</p>
+<p>El límite del grafo se ve mejor con la imagen delante: dbt solo dibuja lo que pasa por sus <code>ref()</code> y sus <code>source()</code>. El tramo de Odoo a <code>raw</code> lo hizo dlt y aquí no existe (las tablas de <code>raw</code> aparecen como el principio del mundo, cuando son la mitad de la historia), y el panel de Rill que consume la capa oro tampoco. Coser los tres tramos es precisamente el trabajo de un catálogo de gobierno, y cómo se reconstruye ese linaje completo a partir del <code>manifest.json</code> de dbt y del esquema que deja dlt está en el <a href="../../content/appendices/metadatado.html#trazabilidad-de-principio-a-fin-con-dlt-y-dbt">apéndice de metadatado</a>.</p>
+</section>
+<section id="explorar" class="level3" data-number="D.3.6">
+<h3 data-number="D.3.6" class="anchored" data-anchor-id="explorar"><span class="header-section-number">D.3.6</span> Explorar</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">--profile</span> bi up <span class="at">-d</span> rill</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>El panel queda en <code>http://localhost:9010</code>. Rill consulta el mismo fichero DuckDB que acaba de construir dbt, sin copiar nada.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -664,19 +698,19 @@ raw.raw_product_templates: 29</code></pre>
 <div class="callout-body-container callout-body">
 <p>DuckDB admite un único escritor sobre el fichero, por las razones que se explican en el <a href="../../content/sistemas/dbms_analítica.html#embebido-o-servidor">capítulo de bases de datos analíticas</a>. Mientras Rill esté levantado, <strong>cualquiera de las órdenes que escriben</strong> (<code>extract</code>, <code>transform</code> o <code>pipeline</code>) falla con un <code>Conflicting lock is held in PID 0</code>. Ese <code>PID 0</code> despista, porque el proceso que tiene el bloqueo está en otro contenedor y desde aquí no se le ve el número.</p>
 <p>La solución es parar el panel antes de volver a cargar:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose stop rill</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose stop rill</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Por eso Rill vive tras un perfil de Compose y no arranca con el <code>up -d</code> general: el orden natural (cargar, transformar y después explorar) evita el choque. Al terminar de reconstruir, <code>docker compose --profile bi up -d rill</code> lo devuelve a su sitio.</p>
 </div>
 </div>
 </section>
-<section id="comprobar-que-está-todo" class="level3" data-number="D.3.6">
-<h3 data-number="D.3.6" class="anchored" data-anchor-id="comprobar-que-está-todo"><span class="header-section-number">D.3.6</span> Comprobar que está todo</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> <span class="at">--entrypoint</span> python transform <span class="at">-c</span> <span class="st">"</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">import duckdb</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">con = duckdb.connect('/data/warehouse.duckdb', read_only=True)</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">print(con.execute('SELECT count(*) FROM vault.hub_customer').fetchone())</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="st">print(con.execute('SELECT * FROM main.kpis_daily LIMIT 5').fetchall())</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="comprobar-que-está-todo" class="level3" data-number="D.3.7">
+<h3 data-number="D.3.7" class="anchored" data-anchor-id="comprobar-que-está-todo"><span class="header-section-number">D.3.7</span> Comprobar que está todo</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> <span class="at">--entrypoint</span> python transform <span class="at">-c</span> <span class="st">"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="st">import duckdb</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="st">con = duckdb.connect('/data/warehouse.duckdb', read_only=True)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="st">print(con.execute('SELECT count(*) FROM vault.hub_customer').fetchone())</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="st">print(con.execute('SELECT * FROM main.kpis_daily LIMIT 5').fetchall())</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="lo-que-ha-quedado-construido" class="level2" data-number="D.4">
@@ -728,11 +762,11 @@ raw.raw_product_templates: 29</code></pre>
 <h3 data-number="D.5.1" class="anchored" data-anchor-id="el-hub-se-carga-desde-todos-los-orígenes"><span class="header-section-number">D.5.1</span> El hub se carga desde todos los orígenes</h3>
 <p>Un hub guarda claves de negocio. La tentación es sacarlas de la tabla que “es” esa entidad (los clientes, de la tabla de clientes) y ya está. Pero un pedido también nombra a un cliente, y si esa clave no estaba en la lista de contactos que hemos filtrado, el enlace apunta a un hub donde no existe y <strong>el vault queda roto</strong>.</p>
 <p>Aquí <code>hub_customer</code> se carga de dos sitios a la vez:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> fuente <span class="kw">AS</span> (</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> customer_id <span class="kw">FROM</span> {{ <span class="fu">ref</span>(<span class="st">'stg_customers'</span>) }}</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UNION</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> customer_id <span class="kw">FROM</span> {{ <span class="fu">ref</span>(<span class="st">'stg_orders'</span>) }}</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> fuente <span class="kw">AS</span> (</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> customer_id <span class="kw">FROM</span> {{ <span class="fu">ref</span>(<span class="st">'stg_customers'</span>) }}</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">UNION</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> customer_id <span class="kw">FROM</span> {{ <span class="fu">ref</span>(<span class="st">'stg_orders'</span>) }}</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Esto no es una precaución teórica. Al construir el ejercicio, el filtro <code>customer_rank &gt; 0</code> en staging dejaba fuera a los tres clientes que tienen pedidos, y la prueba <code>relationships</code> del enlace saltó con quince filas huérfanas. La razón es de las que solo se aprenden mirando: Odoo incrementa ese contador desde el flujo de su interfaz, no desde la base de datos, así que los datos de demostración (que se cargan como fixtures XML) lo dejan a cero incluso para quien tiene pedidos confirmados.</p>
 <p>De ahí la regla, que conviene llevarse escrita: <strong>un filtro de negocio no puede decidir qué claves existen</strong>.</p>
 </section>
@@ -740,10 +774,10 @@ raw.raw_product_templates: 29</code></pre>
 <h3 data-number="D.5.2" class="anchored" data-anchor-id="los-satélites-no-se-cierran-se-deducen"><span class="header-section-number">D.5.2</span> Los satélites no se cierran, se deducen</h3>
 <p>Casi toda la literatura describe el satélite con una columna <code>dv_end_date</code> que se rellena cuando el atributo cambia, y con <code>NULL</code> para la versión vigente. Es fácil de explicar y es una mala idea de implementar, porque cerrar una fila exige un <code>UPDATE</code> sobre el histórico, que es justo lo que un vault no debe hacer nunca.</p>
 <p>Aquí los satélites son de <strong>solo inserción</strong>. En cada carga se calcula la huella (<code>hashdiff</code>) de los atributos y solo se escribe si difiere de la última guardada para esa clave. La vigencia y el intervalo de validez se calculan al consultar, con una función de ventana:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lead</span>(s.load_date) <span class="kw">OVER</span> (</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">PARTITION</span> <span class="kw">BY</span> s.hk_customer</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ORDER</span> <span class="kw">BY</span> s.load_date</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>) <span class="kw">AS</span> dv_end_date</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lead</span>(s.load_date) <span class="kw">OVER</span> (</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">PARTITION</span> <span class="kw">BY</span> s.hk_customer</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ORDER</span> <span class="kw">BY</span> s.load_date</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>) <span class="kw">AS</span> dv_end_date</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Si hay una carga posterior, esa es la fecha en la que la versión dejó de ser cierta. Si no la hay, la versión sigue vigente y el cierre queda a <code>NULL</code>. El resultado es el mismo que promete la teoría, y el histórico no se toca jamás. Está en el modelo <code>customer_history</code>.</p>
 </section>
 <section id="el-enlace-no-lleva-atributos" class="level3" data-number="D.5.3">
@@ -767,29 +801,29 @@ raw.raw_product_templates: 29</code></pre>
 <section id="ver-el-historial-en-funcionamiento" class="level3" data-number="D.6.1">
 <h3 data-number="D.6.1" class="anchored" data-anchor-id="ver-el-historial-en-funcionamiento"><span class="header-section-number">D.6.1</span> Ver el historial en funcionamiento</h3>
 <p>Con una sola carga cada cliente tiene una única versión y el histórico no se aprecia. Hay que cambiar algo y volver a pasar el pipeline:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec dl-postgres psql <span class="at">-U</span> odoo <span class="at">-d</span> odoo_demo <span class="dt">\</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-c</span> <span class="st">"UPDATE res_partner SET city='Bilbao' WHERE id=11;"</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose stop rill</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> extract</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> transform</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec dl-postgres psql <span class="at">-U</span> odoo <span class="at">-d</span> odoo_demo <span class="dt">\</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-c</span> <span class="st">"UPDATE res_partner SET city='Bilbao' WHERE id=11;"</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose stop rill</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> extract</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> transform</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>El satélite pasa de cuarenta filas a cuarenta y una (no a ochenta: solo se escribe lo que cambió) y <code>customer_history</code> muestra la versión antigua cerrada con la fecha de la carga nueva y la nueva abierta. La consulta:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_name, city, dv_start_date, dv_end_date, es_version_vigente</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> main.customer_history <span class="kw">WHERE</span> customer_id <span class="op">=</span> <span class="dv">11</span> <span class="kw">ORDER</span> <span class="kw">BY</span> dv_start_date;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_name, city, dv_start_date, dv_end_date, es_version_vigente</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> main.customer_history <span class="kw">WHERE</span> customer_id <span class="op">=</span> <span class="dv">11</span> <span class="kw">ORDER</span> <span class="kw">BY</span> dv_start_date;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Conviene ejecutar <code>transform</code> una tercera vez sin tocar nada y comprobar que <strong>no aparece ninguna fila nueva</strong>. Si aparece, la detección por huella está mal y el histórico se llenaría de duplicados a cada carga.</p>
 </section>
 <section id="romper-la-integridad-a-propósito" class="level3" data-number="D.6.2">
 <h3 data-number="D.6.2" class="anchored" data-anchor-id="romper-la-integridad-a-propósito"><span class="header-section-number">D.6.2</span> Romper la integridad a propósito</h3>
 <p>Merece la pena ver fallar la prueba que protege el vault, y el ejercicio enseña más de lo que parece porque <strong>hacen falta dos cambios, no uno</strong>.</p>
 <p>El primero es el filtro que parecía inofensivo, en <code>stg_customers.sql</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">id</span> <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> customer_rank <span class="op">&gt;</span> <span class="dv">0</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">id</span> <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> customer_rank <span class="op">&gt;</span> <span class="dv">0</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Con eso solo, todo sigue pasando. El hub se carga de dos orígenes, así que las claves que el filtro deja fuera entran igualmente por la puerta de los pedidos. Para romperlo hay que quitar además esa segunda fuente en <code>hub_customer.sql</code>, dejando el hub alimentado únicamente por la lista de contactos:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> fuente <span class="kw">AS</span> (</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> <span class="kw">DISTINCT</span> customer_id <span class="kw">FROM</span> {{ <span class="fu">ref</span>(<span class="st">'stg_customers'</span>) }}</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>),</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> fuente <span class="kw">AS</span> (</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> <span class="kw">DISTINCT</span> customer_id <span class="kw">FROM</span> {{ <span class="fu">ref</span>(<span class="st">'stg_customers'</span>) }}</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>),</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Y hay un tercer detalle. Los hubs son de solo inserción, de modo que las claves cargadas en ejecuciones anteriores siguen ahí y tapan el problema. Hay que reconstruir desde cero:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> transform dbt build <span class="at">--full-refresh</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> transform dbt build <span class="at">--full-refresh</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Ahora sí: <code>Got 15 results</code>, la prueba <code>relationships</code> del enlace falla y el proceso termina con código distinto de cero. Esas quince filas son pedidos que apuntan a un cliente que no existe en el hub.</p>
 <p>La conclusión es la que interesa: el filtro por sí solo no era el fallo, y la carga multiorigen del hub no era una precaución decorativa. Cada uno tapaba al otro, y solo quitando los dos aparece el problema. Para volver atrás, basta con deshacer ambos cambios y repetir el <code>--full-refresh</code>.</p>
 </section>
@@ -807,14 +841,14 @@ raw.raw_product_templates: 29</code></pre>
 <section id="lo-que-este-ejercicio-deja-fuera" class="level2" data-number="D.8">
 <h2 data-number="D.8" class="anchored" data-anchor-id="lo-que-este-ejercicio-deja-fuera"><span class="header-section-number">D.8</span> Lo que este ejercicio deja fuera</h2>
 <p>Por mantenerlo reproducible en un portátil, tres piezas se han quedado a la puerta.</p>
-<p><strong>El catálogo.</strong> OpenMetadata pide alrededor de 6 GiB solo para él y ya tiene su propio <a href="../../content/appendices/metadatado.html">apéndice</a>, con su despliegue y su puerto. Conectarlo a este almacén es un buen ejercicio adicional.</p>
+<p><strong>El catálogo.</strong> OpenMetadata pide alrededor de 6 GiB solo para él y ya tiene su propio <a href="../../content/appendices/metadatado.html">apéndice</a>, con su despliegue y su puerto. Conectarlo a este almacén es un buen ejercicio adicional. Lo que queda montado con dbt docs cubre una parte pequeña de eso: el linaje de lo que ocurre dentro de dbt y el diccionario de los modelos, sin glosario de negocio, sin propietarios, sin reglas de calidad publicadas y sin ver los tramos que hacen dlt y Rill.</p>
 <p><strong>La orquestación.</strong> Aquí el pipeline son dos órdenes seguidas que se lanzan a mano, y para un único origen eso no pide orquestador ninguno: dlt sabe ejecutar un proyecto dbt por su cuenta (<code>dlt.dbt.package</code>), con lo que las dos órdenes se convierten en un script y la dependencia queda expresada por el propio flujo del programa. La maquinaria empieza a compensar cuando los orígenes son varios y hay que esperar a todos. Ambas cosas están en el <a href="../../content/load/herramientas.html#quién-lo-pone-en-marcha">capítulo de herramientas de ingesta</a>.</p>
 <p><strong>La exploración de verdad.</strong> El panel que queda montado es mínimo, con una vista de métricas y un <code>explore</code>. Cómo se saca partido a Rill está en su <a href="../../content/appendices/rill.html">apéndice</a>.</p>
 </section>
 <section id="desmontarlo" class="level2" data-number="D.9">
 <h2 data-number="D.9" class="anchored" data-anchor-id="desmontarlo"><span class="header-section-number">D.9</span> Desmontarlo</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">--profile</span> bi <span class="at">--profile</span> jobs down <span class="at">-v</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> warehouse/warehouse.duckdb</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose <span class="at">--profile</span> bi <span class="at">--profile</span> docs <span class="at">--profile</span> jobs down <span class="at">-v</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> warehouse/warehouse.duckdb</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>El <code>-v</code> borra también los volúmenes, es decir, la base de datos de Odoo. Sin él, el ERP conserva sus datos y volver a levantarlo es inmediato.</p>
 
 
