@@ -2,12 +2,14 @@
 #
 # Los puertos están elegidos para no chocar con los ejemplos del libro:
 # Evidence usa el 3000, OpenMetadata el 8585 y el Rill del apéndice
-# correspondiente el 9009. Aquí Rill se publica en el 9010 y PostgreSQL en el
-# 5433, de modo que este ejercicio puede convivir con el resto.
+# correspondiente el 9009. Aquí Rill se publica en el 9010, PostgreSQL en el
+# 5433 y dbt docs en el 8081, de modo que este ejercicio puede convivir con el
+# resto.
 #
 #   docker compose up -d              levanta Odoo (con datos de demostración)
 #   docker compose run --rm extract   carga Odoo en DuckDB (capa bronce)
 #   docker compose run --rm transform construye el Data Vault y la capa oro
+#   docker compose --profile docs up -d docs   publica el linaje en el 8081
 #   docker compose down -v            lo desmonta todo
 
 name: datalake-odoo

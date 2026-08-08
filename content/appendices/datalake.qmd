@@ -12,7 +12,7 @@ Este montaje no continúa el ejemplo de la academia ni comparte nada con él. Lo
 
 ## Lo que se va a levantar
 
-Cinco piezas, todas de código abierto, cada una haciendo exactamente un trabajo.
+Seis piezas, todas de código abierto, cada una haciendo exactamente un trabajo.
 
 ```{mermaid}
 flowchart LR
@@ -23,18 +23,23 @@ flowchart LR
     v --> t2["dbt"]
     t2 --> g[("DuckDB<br/>oro")]
     g --> r["Rill"]
+    t2 -.-> doc["dbt docs"]
 
     classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
     classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
     classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
     classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
     classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef documentacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e,stroke-dasharray:4 3
     class o origen
     class d carga
     class b,v,g almacen
     class t,t2 transformacion
     class r explotacion
+    class doc documentacion
 ```
+
+La flecha de puntos es la única que no lleva datos: dbt docs no transforma nada, se limita a publicar lo que dbt sabe de sus propios modelos.
 
 | Pieza | Papel | Dónde queda |
 |---|---|---|
@@ -42,11 +47,12 @@ flowchart LR
 | dlt | Ingesta de Odoo al almacén | `pipelines/odoo_extract.py` |
 | DuckDB | El almacén, las cuatro capas | `warehouse/warehouse.duckdb` |
 | dbt | Data Vault y capa de explotación | `dbt_project/` |
+| dbt docs | Diccionario de modelos y grafo de linaje | `http://localhost:8081` |
 | Rill | Panel de exploración | `http://localhost:9010` |
 
 : Las piezas del ejercicio y dónde encontrarlas
 
-Los puertos no son los de costumbre y la razón es evitar choques: el 3000 lo usa Evidence en el [capítulo de inteligencia de negocio](../explotacion/bi.qmd), el 8585 lo ocupa OpenMetadata en el [apéndice de metadatado](metadatado.qmd) y el 9009 es el de un Rill arrancado en local como se ve en el [apéndice de exploración](rill.qmd). Aquí PostgreSQL se publica en el 5433 y Rill en el 9010.
+Los puertos no son los de costumbre y la razón es evitar choques: el 3000 lo usa Evidence en el [capítulo de inteligencia de negocio](../explotacion/bi.qmd), el 8585 lo ocupa OpenMetadata en el [apéndice de metadatado](metadatado.qmd) y el 9009 es el de un Rill arrancado en local como se ve en el [apéndice de exploración](rill.qmd). Aquí PostgreSQL se publica en el 5433, Rill en el 9010 y la documentación en el 8081 (dbt docs sirve por defecto en el 8080, que es de los puertos más disputados de cualquier portátil).
 
 ## Antes de empezar
 
@@ -102,8 +108,6 @@ Done. PASS=74 WARN=0 ERROR=0 SKIP=0 TOTAL=74
 
 Las setenta y cuatro incluyen diecisiete modelos y cincuenta y siete pruebas. Que pasen todas no significa que el modelo sea bueno, pero que falle una sí significa que algo está mal, y en este proyecto hay pruebas puestas justo donde el Data Vault se rompe con más facilidad.
 
-![Linaje de datos en dbt docs](../../assets/dbt-linaje.png)
-
 ### Las dos cosas de una vez
 
 Los dos pasos anteriores pueden ejecutarse como un solo proceso, porque dlt sabe lanzar un proyecto dbt por su cuenta:
@@ -119,6 +123,33 @@ Está en `pipelines/run_pipeline.py` y son tres líneas de fondo: se crea el pip
 
 El nombre engaña. `run_all()` hace `dbt deps`, `dbt seed` y `dbt run`, es decir el equivalente a `dbt run` y no a `dbt build`: **las pruebas de los modelos no entran**. Quedarse ahí dejaría el vault sin sus cincuenta y siete comprobaciones y sin enterarse. Por eso el script pide las pruebas aparte, con `transformacion.test()`, y suma los dos resultados antes de decidir si ha ido bien.
 :::
+
+### Ver el linaje
+
+Cada `ref()` y cada `source()` del proyecto es una dependencia declarada, así que dbt conoce el grafo entero sin que nadie se lo cuente. Publicarlo como sitio web son dos pasos:
+
+```bash
+docker compose run --rm transform dbt docs generate
+docker compose --profile docs up -d docs
+```
+
+El primero deja en `dbt_project/target/` el `manifest.json` (los modelos y sus dependencias) y el `catalog.json` (las columnas y los tipos de cada relación, que sí hay que ir a preguntarle a DuckDB). El segundo sirve esos ficheros en `http://localhost:8081`. El botón azul de la esquina inferior derecha abre el grafo:
+
+![Linaje de datos en dbt docs](../../assets/dbt-linaje.png)
+
+Se lee de izquierda a derecha y es exactamente el recorrido que cuenta este apéndice: en verde las cinco tablas de `raw` que dejó dlt, y en azul las cuatro vistas de staging, los tres hubs, los dos enlaces, los cuatro satélites y las cuatro tablas de explotación. El nodo `satelite_grano_unico` no es un modelo sino la prueba singular de `dbt_project/tests/`, porque en el grafo de dbt **las pruebas son nodos como cualquier otro**: cuelgan de aquello que comprueban, que es justo lo que permite a `dbt build` ordenar la ejecución sin que nadie escriba las dependencias a mano.
+
+:::{.callout-note}
+# Servir no bloquea el almacén, generar sí
+
+`dbt docs serve` es un servidor de ficheros estáticos: reparte el `manifest.json` y el `catalog.json` que ya están en `target/` y **no abre DuckDB en ningún momento**. Por eso este servicio sí convive con Rill, al contrario que `extract`, `transform` o `pipeline`.
+
+Quien sí abre el almacén es `dbt docs generate`, porque el catálogo de columnas tiene que consultarlo. Con Rill levantado falla con el mismo `Conflicting lock is held in PID 0` de siempre, de modo que el orden que funciona es generar la documentación primero y arrancar el panel después.
+:::
+
+Las descripciones que aparecen al pinchar un modelo salen de los `description:` de `_core_models.yml` y `_stg_sources.yml`. No hay nada automático en esa parte: lo que no esté escrito ahí sale vacío, y un diccionario de datos sin descripciones es poco más que la lista de columnas que ya da la base de datos.
+
+El límite del grafo se ve mejor con la imagen delante: dbt solo dibuja lo que pasa por sus `ref()` y sus `source()`. El tramo de Odoo a `raw` lo hizo dlt y aquí no existe (las tablas de `raw` aparecen como el principio del mundo, cuando son la mitad de la historia), y el panel de Rill que consume la capa oro tampoco. Coser los tres tramos es precisamente el trabajo de un catálogo de gobierno, y cómo se reconstruye ese linaje completo a partir del `manifest.json` de dbt y del esquema que deja dlt está en el [apéndice de metadatado](metadatado.qmd#trazabilidad-de-principio-a-fin-con-dlt-y-dbt).
 
 ### Explorar
 
@@ -292,7 +323,7 @@ Odoo tiene facturas (`account_move` y `account_move_line`). Añadirlas es el rec
 
 Por mantenerlo reproducible en un portátil, tres piezas se han quedado a la puerta.
 
-**El catálogo.** OpenMetadata pide alrededor de 6 GiB solo para él y ya tiene su propio [apéndice](metadatado.qmd), con su despliegue y su puerto. Conectarlo a este almacén es un buen ejercicio adicional.
+**El catálogo.** OpenMetadata pide alrededor de 6 GiB solo para él y ya tiene su propio [apéndice](metadatado.qmd), con su despliegue y su puerto. Conectarlo a este almacén es un buen ejercicio adicional. Lo que queda montado con dbt docs cubre una parte pequeña de eso: el linaje de lo que ocurre dentro de dbt y el diccionario de los modelos, sin glosario de negocio, sin propietarios, sin reglas de calidad publicadas y sin ver los tramos que hacen dlt y Rill.
 
 **La orquestación.** Aquí el pipeline son dos órdenes seguidas que se lanzan a mano, y para un único origen eso no pide orquestador ninguno: dlt sabe ejecutar un proyecto dbt por su cuenta (`dlt.dbt.package`), con lo que las dos órdenes se convierten en un script y la dependencia queda expresada por el propio flujo del programa. La maquinaria empieza a compensar cuando los orígenes son varios y hay que esperar a todos. Ambas cosas están en el [capítulo de herramientas de ingesta](../load/herramientas.qmd#quién-lo-pone-en-marcha).
 
@@ -301,7 +332,7 @@ Por mantenerlo reproducible en un portátil, tres piezas se han quedado a la pue
 ## Desmontarlo
 
 ```bash
-docker compose --profile bi --profile jobs down -v
+docker compose --profile bi --profile docs --profile jobs down -v
 rm -rf warehouse/warehouse.duckdb
 ```
 
