@@ -1,0 +1,142 @@
+version: 2
+
+# Pruebas de conformidad del Data Vault.
+#
+# Las del proyecto anterior estaban escritas como macros invocadas desde dentro
+# de los propios modelos, cosa que dbt no ejecuta nunca como prueba: se
+# limitaba a concatenar SQL al final del SELECT. Estas son pruebas de verdad,
+# se ejecutan con `dbt test` y fallan cuando el modelo se rompe.
+
+models:
+
+  # ----------------------------------------------------------------- hubs --
+
+  - name: hub_customer
+    description: "Claves de negocio de cliente. Solo inserción."
+    columns:
+      - name: hk_customer
+        description: "Clave hash de la clave de negocio."
+        data_tests: [not_null, unique]
+      - name: customer_id
+        description: "Clave de negocio original de Odoo."
+        data_tests: [not_null, unique]
+      - name: load_date
+        data_tests: [not_null]
+      - name: record_source
+        data_tests: [not_null]
+
+  - name: hub_order
+    columns:
+      - name: hk_order
+        data_tests: [not_null, unique]
+      - name: order_id
+        data_tests: [not_null, unique]
+      - name: load_date
+        data_tests: [not_null]
+
+  - name: hub_product
+    columns:
+      - name: hk_product
+        data_tests: [not_null, unique]
+      - name: product_id
+        data_tests: [not_null, unique]
+      - name: load_date
+        data_tests: [not_null]
+
+  # ---------------------------------------------------------------- links --
+
+  - name: link_order_customer
+    description: "Relación pedido - cliente."
+    columns:
+      - name: hk_order_customer
+        data_tests: [not_null, unique]
+      - name: hk_order
+        description: "Tiene que existir en el hub de pedido."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_order')
+              field: hk_order
+      - name: hk_customer
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_customer')
+              field: hk_customer
+
+  - name: link_order_product
+    description: "Relación pedido - producto, a grano de línea."
+    columns:
+      - name: hk_order_product
+        data_tests: [not_null, unique]
+      - name: order_line_id
+        description: "Clave degenerada: el identificador de la línea en Odoo."
+        data_tests: [not_null, unique]
+      - name: hk_order
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_order')
+              field: hk_order
+      - name: hk_product
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_product')
+              field: hk_product
+
+  # ----------------------------------------------------------- satellites --
+
+  - name: sat_customer_details
+    description: "Atributos del cliente con histórico."
+    columns:
+      - name: hk_customer
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_customer')
+              field: hk_customer
+      - name: hashdiff
+        data_tests: [not_null]
+      - name: load_date
+        data_tests: [not_null]
+
+  - name: sat_order_status
+    columns:
+      - name: hk_order
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_order')
+              field: hk_order
+      - name: hashdiff
+        data_tests: [not_null]
+      - name: load_date
+        data_tests: [not_null]
+
+  - name: sat_product_pricing
+    columns:
+      - name: hk_product
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_product')
+              field: hk_product
+      - name: hashdiff
+        data_tests: [not_null]
+      - name: load_date
+        data_tests: [not_null]
+
+  - name: sat_order_line
+    description: "Satélite del enlace: cantidades y precios de cada línea."
+    columns:
+      - name: hk_order_product
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('link_order_product')
+              field: hk_order_product
+      - name: hashdiff
+        data_tests: [not_null]
+      - name: load_date
+        data_tests: [not_null]

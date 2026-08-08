@@ -1,0 +1,60 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Capa bronce tal y como la deja dlt. Un reflejo de Odoo sin más cambio que
+      el nombre de las tablas.
+    schema: raw
+    loaded_at_field: _extracted_at
+    freshness:
+      warn_after: {count: 12, period: hour}
+      error_after: {count: 24, period: hour}
+
+    tables:
+      - name: raw_customers
+        description: "res_partner de Odoo: clientes, proveedores y contactos."
+        columns:
+          - name: id
+            description: "Identificador interno de Odoo."
+            data_tests: [not_null, unique]
+          - name: customer_rank
+            description: "Mayor que cero si el contacto actúa como cliente."
+
+      - name: raw_orders
+        description: "sale_order de Odoo: cabeceras de pedido de venta."
+        columns:
+          - name: id
+            data_tests: [not_null, unique]
+          - name: partner_id
+            description: "Cliente del pedido, referencia a res_partner."
+          - name: state
+            description: "draft, sent, sale, done o cancel."
+
+      - name: raw_order_lines
+        description: "sale_order_line de Odoo: líneas de pedido."
+        columns:
+          - name: id
+            data_tests: [not_null, unique]
+          - name: order_id
+            description: "Pedido al que pertenece la línea."
+          - name: product_id
+            description: "Producto de la línea, referencia a product_product."
+
+      - name: raw_products
+        description: >
+          product_product de Odoo, la variante concreta. No lleva ni nombre ni
+          precio: ambos viven en la plantilla.
+        columns:
+          - name: id
+            data_tests: [not_null, unique]
+          - name: product_tmpl_id
+            description: "Plantilla de la que cuelga la variante."
+
+      - name: raw_product_templates
+        description: >
+          product_template de Odoo. Su columna `name` es JSON, porque desde la
+          versión 16 los campos traducibles se guardan por idioma.
+        columns:
+          - name: id
+            data_tests: [not_null, unique]

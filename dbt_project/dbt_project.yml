@@ -1,0 +1,43 @@
+name: 'data_vault_odoo'
+version: '1.0.0'
+config-version: 2
+
+# El nombre tiene que coincidir con el del perfil declarado en profiles.yml.
+# Si no coinciden, dbt aborta con "Could not find profile named ...".
+profile: 'data_vault_odoo'
+
+model-paths: ['models']
+macro-paths: ['macros']
+test-paths: ['tests']
+
+target-path: 'target'
+clean-targets:
+  - 'target'
+  - 'dbt_packages'
+
+vars:
+  # Sistema del que procede el dato. En un vault con varios orígenes esto deja
+  # de ser una constante y pasa a resolverse por modelo.
+  record_source: 'odoo_erp'
+
+models:
+  data_vault_odoo:
+    staging:
+      +materialized: view
+      +schema: staging
+    core:
+      +materialized: table
+      +schema: vault
+    analytics:
+      # La capa oro va al esquema `main`, declarado de forma explícita y no por
+      # herencia del destino. Si se dejara al valor por defecto, bastaría con
+      # ejecutar dbt desde otro perfil (por ejemplo el que genera dlt, cuyo
+      # esquema es el del dataset) para que estas tablas cambiasen de sitio y
+      # el panel dejase de encontrarlas.
+      +schema: main
+      # El motivo de que sea `main` y no un esquema propio:
+      # Rill solo sabe direccionar tablas del esquema por defecto de la base de
+      # datos que adjunta: sus claves `database` y `database_schema` se ignoran
+      # con este conector, de modo que una tabla en un esquema `analytics` es
+      # invisible para el panel. Las capas de abajo (raw, staging, vault) sí
+      # van en su propio esquema porque solo las consume dbt.

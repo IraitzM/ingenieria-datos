@@ -38,6 +38,52 @@ Tener una buena ordenación nos ayuda a no leer información que no vayamos a ut
 La forma más sencilla de ver el particionado es con un ejemplo que emplee la fecha como parámetro de filtrado (cláusula `WHERE`). Si solo precisamos la información de 2025 en adelante, podemos buscar por cada registro cuales cumplen ese criterio. Podemos construir un índice que nos permita emplear solo esa información con el almacenamiento adicional y tiempos de inserción mayores como impacto.
 Sin embargo hay un modo quizás más sencillo entendiendo que la información ya viene de otros sistemas y actuamos sobre ella al ser ingestada. Podemos crear distintas estructuras (tablas, ficheros,...) con el sufijo `_YYYY` haciendo referencia al año, de forma que solo empleemos esas tablas en nuestro proceso. El particionado se refiere a componer estas estructuras que aunque abstraigan al usuario de estar consultando más de una tabla, tienen un efecto importante en el filtrado de información cuando este es indicado en algún cálculo.
 
+## Embebido o servidor
+
+Hay una distinción que no suele aparecer en las comparativas y que condiciona el despliegue entero: si el sistema es un **servidor** al que uno se conecta por red, o una **biblioteca** que se ejecuta dentro del propio proceso.
+
+Casi todos los de la lista que viene a continuación son servidores. DuckDB no: es una biblioteca, igual que SQLite. No hay demonio que arrancar, ni puerto, ni usuarios que administrar; se importa y se consulta. Esa es la razón de que aparezca en tantos sitios donde antes hacía falta infraestructura.
+
+La contrapartida está en el modelo de concurrencia. Sobre un mismo fichero DuckDB admite **varios lectores o un único escritor**, nunca las dos cosas a la vez, porque toma un bloqueo exclusivo del fichero. No es un defecto que vayan a corregir, es la consecuencia de no tener un servidor que arbitre: sin proceso central, el único árbitro posible es el sistema de ficheros.
+
+En la práctica eso se nota en cuanto dos herramientas quieren el mismo fichero. Un panel de BI que lo mantiene abierto impide que el proceso de transformación escriba, y el error que aparece (`Conflicting lock is held`) despista bastante la primera vez. Hay un caso concreto documentado en el [apéndice del lago de datos](../appendices/datalake.qmd).
+
+### Ponerle un servidor delante
+
+Cuando varias herramientas necesitan leer a la vez desde máquinas distintas, la salida habitual es envolver el motor en un servicio mínimo que centralice el acceso:
+
+```python
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import duckdb
+
+app = FastAPI(title="DuckDB HTTP")
+RUTA = "/data/warehouse.duckdb"
+
+
+class Consulta(BaseModel):
+    sql: str
+
+
+@app.post("/query")
+def consultar(peticion: Consulta):
+    # Solo lectura: así varios procesos pueden atacar el fichero a la vez
+    # sin pelearse por el bloqueo de escritura.
+    con = duckdb.connect(RUTA, read_only=True)
+    try:
+        cursor = con.execute(peticion.sql)
+        columnas = [d[0] for d in cursor.description]
+        return {"columnas": columnas, "filas": cursor.fetchall()}
+    except duckdb.Error as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        con.close()
+```
+
+Merece la pena ser honestos sobre lo que es esto: **un apaño útil, no una arquitectura**. Resuelve el acceso remoto de lectura y poco más. En cuanto haga falta que varios procesos escriban de verdad a la vez, con control de acceso y transacciones, lo que se está pidiendo es un sistema servidor, y conviene coger uno en lugar de seguir añadiendo capas al que no lo es. La alternativa intermedia, si se quiere conservar DuckDB como motor, es sacar los metadatos a un catálogo transaccional, que es justo lo que hace [DuckLake](../load/staging.qmd).
+
+Y un aviso que ese ejemplo hace evidente: aceptar SQL por HTTP es abrir una puerta. Sin autenticación, sin límites de tiempo y sin restringir lo que se puede ejecutar, eso no sale de una red interna de confianza.
+
 ## Sistemas comunes
 
 Todos estos principios deben ser implementados por los proveedores y cada uno tendrá su filosofía de cómo deben realizarse estas acciones pero os dejamos un listado no exhaustivo de tecnologías destinadas a sistemas analíticos que merece la pena explorar.

@@ -1,0 +1,15 @@
+# Proyecto de Rill sobre la capa oro del almacén.
+#
+# El fichero anterior declaraba secciones (`models:`, `dashboards:`,
+# `metrics:`, `ui:`, `cache:`) que Rill no lee: la herramienta descubre los
+# recursos por el `type:` de cada YAML dentro del proyecto, no por un índice
+# central. Aquí solo queda la configuración global.
+
+compiler: rillv1
+
+display_name: "Ventas Odoo"
+
+# Sin esta línea Rill consulta su motor DuckDB interno, que está vacío, y las
+# vistas de métricas fallan con un "table does not exist" que despista bastante.
+# El valor es el nombre del fichero de connectors/ sin extensión.
+olap_connector: duckdb

@@ -1,0 +1,18 @@
+# Conexión al almacén que dejaron dlt y dbt.
+#
+# El fichero tiene que llamarse `duckdb.yaml`, porque el nombre del conector es
+# el del fichero y es el que se declara como `olap_connector` en rill.yaml.
+#
+# Rill no copia nada: consulta el mismo fichero DuckDB que acaba de construir
+# dbt, así que no hay una segunda versión de la verdad que mantener.
+#
+# `mode: read` evita que Rill escriba en el almacén, pero conviene no llamarse
+# a engaño: DuckDB toma un bloqueo exclusivo sobre el fichero igualmente, así
+# que con Rill levantado dbt no puede reconstruir nada y falla con un
+# "Conflicting lock is held". Por eso Rill vive tras un perfil de Compose y el
+# orden del ejercicio es cargar, transformar y solo entonces explorar.
+
+type: connector
+driver: duckdb
+path: /data/warehouse.duckdb
+mode: read

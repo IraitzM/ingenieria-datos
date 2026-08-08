@@ -1,0 +1,14 @@
+# Panel de exploración.
+#
+# Es corto porque las métricas y las dimensiones ya están definidas en la capa
+# semántica; aquí solo se decide qué se expone. El `"*"` vale para un ejercicio,
+# pero en un proyecto real conviene enumerar lo que se quiere enseñar.
+
+version: 1
+type: explore
+display_name: "Ventas"
+
+metrics_view: ventas
+
+dimensions: "*"
+measures: "*"

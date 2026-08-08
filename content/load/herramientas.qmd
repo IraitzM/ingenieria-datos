@@ -228,6 +228,122 @@ Al cargar, dlt incorpora columnas técnicas que son exactamente los [metadatos d
 
 Y mantiene además unas cuantas tablas propias en el destino: `_dlt_loads` con el registro de cada carga y su resultado, `_dlt_version` con la historia de versiones del esquema inferido, y `_dlt_pipeline_state` con el estado incremental. Ese conjunto es, en la práctica, la trazabilidad mínima de la capa de ingesta, y viene puesta sin pedirla.
 
+## Quién lo pone en marcha
+
+Hay una pregunta que el capítulo ha esquivado hasta ahora: el proceso está escrito, pero **alguien tiene que ejecutarlo**. dlt mueve los datos cuando se le llama, y no tiene opinión sobre cuándo hacerlo.
+
+La primera respuesta es siempre `cron`, y durante un tiempo funciona. Deja de funcionar el día que aparece cualquiera de estas cuatro cosas, y aparecen todas:
+
+* La transformación tiene que esperar a que la ingesta **haya terminado bien**, no a que hayan pasado veinte minutos.
+* Una carga falla por un corte de red y hay que **reintentarla** sin levantarse de madrugada.
+* Alguien pregunta si el proceso de anteayer se ejecutó, y hay que **mirar en un log** por SSH para saberlo.
+* Se corrige un error y hay que **reprocesar** los últimos treinta días, en orden.
+
+Un orquestador es la pieza que responde a esas cuatro. No aporta capacidad de cálculo ni sabe nada de datos: aporta **dependencias, reintentos, calendario y visibilidad**.
+
+### dlt ya sabe llamar a dbt
+
+Antes de montar nada conviene saber que la dependencia más común, la de "transforma cuando la carga haya ido bien", **no necesita orquestador**. dlt trae un ejecutor de proyectos dbt integrado:
+
+```python
+import dlt
+
+pipeline = dlt.pipeline(
+    pipeline_name="secretaria",
+    destination="duckdb",
+    dataset_name="staging",
+)
+
+carga = pipeline.run(fuente, write_disposition="replace")
+
+transformacion = dlt.dbt.package(pipeline, "/opt/academia")
+modelos = transformacion.run_all()
+pruebas = transformacion.test()
+
+for nodo in list(modelos) + list(pruebas):
+    print(nodo.model_name, nodo.status, nodo.time)
+```
+
+Lo interesante no es que ahorre un `subprocess`. Es que `package()` recibe **el pipeline**, y de ahí deduce contra qué base de datos tiene que trabajar dbt: exporta las credenciales del destino al entorno (con el prefijo `DLT__`) y trae perfiles de serie para cada destino, de modo que un proyecto cuyo perfil se llame como el destino no necesita `profiles.yml` propio. Si el proyecto ya trae el suyo, dbt lo resuelve como siempre y se puede forzar con `package_profile_name`. En cualquiera de los dos casos desaparece la posibilidad de que la carga escriba en un sitio y la transformación lea de otro, que es un fallo tan tonto como habitual.
+
+Y si `pipeline.run()` levanta una excepción, la línea siguiente no se ejecuta. La dependencia está expresada por el propio flujo del programa, sin grafo que declarar.
+
+:::{.callout-important}
+# `run_all` no ejecuta las pruebas
+
+El nombre invita a pensar que hace todo el trabajo, y no. `run_all()` encadena `dbt deps`, `dbt seed` y `dbt run`: es el equivalente de `dbt run`, no de `dbt build`, y **las pruebas de los modelos se quedan fuera**. Quien sustituya un `dbt build` por esta llamada se queda sin sus comprobaciones y sin ningún aviso de que ha ocurrido. Por eso arriba se pide `test()` aparte y se juntan los dos resultados antes de dar el proceso por bueno.
+:::
+
+Así que la respuesta honesta a "¿hace falta un orquestador?" para un proceso de un solo origen es **no**. Un script y una entrada en `cron` cubren el caso, y montar Airflow para dos pasos es de las decisiones que se lamentan a los seis meses.
+
+### Dónde sigue haciendo falta
+
+Lo que un script no colapsa es la **convergencia**. En cuanto la transformación depende de varios orígenes que van a su ritmo (la secretaría de noche, la plataforma en línea cada hora, un fichero de tarifas cuando administración se acuerda), la pregunta deja de ser "¿terminó la carga?" y pasa a ser "¿terminaron todas?". Eso ya no cabe en el flujo de un programa:
+
+```python
+from datetime import datetime, timedelta
+
+from airflow import DAG
+from airflow.operators.bash import BashOperator
+
+with DAG(
+    "academia_diaria",
+    start_date=datetime(2025, 9, 1),
+    schedule="0 3 * * *",
+    catchup=False,
+    default_args={
+        "retries": 2,
+        "retry_delay": timedelta(minutes=5),
+    },
+) as dag:
+
+    origenes = [
+        BashOperator(
+            task_id=f"ingesta_{nombre}",
+            bash_command=f"python /opt/pipelines/{nombre}.py",
+        )
+        for nombre in ("secretaria", "plataforma", "tarifas")
+    ]
+
+    transformacion = BashOperator(
+        task_id="transformacion",
+        bash_command="dbt build --project-dir /opt/academia",
+    )
+
+    origenes >> transformacion
+```
+
+Las tres cargas se ejecutan en paralelo, cada una reintenta por su cuenta y la transformación arranca cuando todas han terminado bien. Junto a esa convergencia, hay otras tres cosas que el script tampoco da y que rara vez se echan de menos hasta que hacen falta:
+
+* **Reproceso.** Recalcular los últimos treinta días, en orden y sin solaparse, es una orden en un orquestador y un bucle escrito a mano en cualquier otro sitio.
+* **Historia.** Saber si el proceso de anteayer se ejecutó y cuánto tardó, sin entrar por SSH a leer un log.
+* **Aviso.** Que alguien se entere de que ha fallado sin tener que mirar.
+
+Conviene fijarse en lo que **no** hay ahí dentro. No hay una sola línea de SQL, ni una transformación, ni una regla de negocio: solo llamadas a procesos que ya existían y saben ejecutarse solos. Esa es la regla que más se incumple y la que más cara sale, porque en cuanto la lógica se muda al orquestador deja de poder ejecutarse en local, deja de poder probarse y queda atada a la herramienta.
+
+El otro detalle es que la validación no necesita una tarea propia. `dbt build` ejecuta los modelos y sus pruebas en el mismo paso, y se detiene si alguna falla, de modo que la tarea siguiente no llega a arrancar. Separar "transformar" de "validar" en dos tareas suena más ordenado y en realidad abre una ventana para que algo lea datos que ya se sabían malos.
+
+### Cuál elegir
+
+| Herramienta | Enfoque | Encaja cuando |
+|---|---|---|
+| Airflow | Tareas y dependencias, el estándar de facto | Hay equipo de plataforma y se valora encontrar respuestas en internet |
+| Dagster | Orientado a los **activos** de datos, no a las tareas | El proyecto gira alrededor de dbt y se quiere linaje de serie |
+| Prefect | Python corriente, decoradores sobre funciones | El equipo es pequeño y ya piensa en Python |
+| Kestra | Declarativo en YAML | Se prefiere configuración a código y perfiles mixtos |
+
+: Orquestadores de uso común y en qué situación compensa cada uno
+
+La diferencia importante no está en la tabla sino en el enfoque de Dagster: declarar **qué activos existen** y cómo se derivan unos de otros, en lugar de qué tareas se ejecutan en qué orden. Sobre un proyecto dbt eso encaja casi sin fricción, porque el grafo ya está descrito en los `ref()`.
+
+:::{.callout-warning}
+# El orquestador no arregla un proceso no idempotente
+
+Un orquestador reintenta, y reintentar es exactamente lo que rompe un proceso que no tolera ejecutarse dos veces. La [idempotencia](patrones.qmd#idempotencia-y-reprocesos) no es un requisito que traiga el orquestador, es uno que el orquestador **da por supuesto**: la primera vez que una tarea se reintente sola, se sabrá si estaba bien escrita.
+:::
+
+Hay un ejercicio completo con este montaje en el [apéndice del lago de datos](../appendices/datalake.qmd), donde el proceso son dos órdenes seguidas y se explica por qué ahí no se llegó a montar un orquestador: con dos pasos que se lanzan a mano, la maquinaria cuesta más de lo que ordena.
+
 ## Lo que una herramienta de ingesta no hace
 
 Para cerrar con expectativas ajustadas. dlt, o cualquiera de sus alternativas, resuelve el movimiento de datos. **No** decide qué es una entidad de negocio, no construye el modelo dimensional, no calcula métricas y no sabe si el dato es correcto. Todo eso es la [transformación](../transform/intro.qmd), y sigue siendo el trabajo con criterio.

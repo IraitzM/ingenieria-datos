@@ -1,0 +1,198 @@
+# Ejercicio del apéndice: Odoo -> dlt -> DuckDB -> dbt -> Rill
+#
+# Los puertos están elegidos para no chocar con los ejemplos del libro:
+# Evidence usa el 3000, OpenMetadata el 8585 y el Rill del apéndice
+# correspondiente el 9009. Aquí Rill se publica en el 9010 y PostgreSQL en el
+# 5433, de modo que este ejercicio puede convivir con el resto.
+#
+#   docker compose up -d              levanta Odoo (con datos de demostración)
+#   docker compose run --rm extract   carga Odoo en DuckDB (capa bronce)
+#   docker compose run --rm transform construye el Data Vault y la capa oro
+#   docker compose down -v            lo desmonta todo
+
+name: datalake-odoo
+
+volumes:
+  postgres_data:
+  odoo_data:
+
+networks:
+  datalake:
+    driver: bridge
+
+services:
+
+  # ---------------------------------------------------------------- origen --
+
+  postgres:
+    image: postgres:15
+    container_name: dl-postgres
+    environment:
+      POSTGRES_DB: odoo_demo
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      # 5433 en el anfitrión para no pelearse con un PostgreSQL local.
+      - "5433:5432"
+    networks:
+      - datalake
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo -d odoo_demo"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Servicio de un solo uso: crea la base de datos de Odoo e instala el módulo
+  # de ventas con sus datos de demostración. Sustituye al asistente web
+  # "Create database", que obligaba a hacerlo a mano y no era reproducible.
+  odoo-init:
+    image: odoo:16
+    container_name: dl-odoo-init
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # La imagen oficial de Odoo lee HOST, PORT, USER y PASSWORD. Con los
+      # nombres POSTGRES_* que suelen copiarse de otros compose no se entera y
+      # acaba buscando un servidor llamado "db".
+      HOST: postgres
+      PORT: 5432
+      USER: odoo
+      PASSWORD: odoo
+    volumes:
+      - odoo_data:/var/lib/odoo
+    networks:
+      - datalake
+    command: ["odoo", "-d", "odoo_demo", "-i", "sale_management", "--stop-after-init"]
+    restart: "no"
+
+  odoo:
+    image: odoo:16
+    container_name: dl-odoo
+    depends_on:
+      odoo-init:
+        condition: service_completed_successfully
+    environment:
+      HOST: postgres
+      PORT: 5432
+      USER: odoo
+      PASSWORD: odoo
+    volumes:
+      - odoo_data:/var/lib/odoo
+    ports:
+      - "8069:8069"
+    networks:
+      - datalake
+    command: ["odoo", "-d", "odoo_demo", "--db-filter=odoo_demo"]
+    restart: unless-stopped
+
+  # ----------------------------------------------------------- ingesta dlt --
+
+  # Trabajo de un solo uso. Vive tras un perfil para que "up -d" no lo dispare
+  # antes de que Odoo tenga datos; se invoca con "compose run --rm extract".
+  extract:
+    build:
+      context: .
+      dockerfile: docker/toolbox.Dockerfile
+    image: datalake-toolbox
+    container_name: dl-extract
+    profiles: ["jobs"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    user: "1000:1000"
+    environment:
+      ODOO_DB_HOST: postgres
+      ODOO_DB_PORT: 5432
+      ODOO_DB_NAME: odoo_demo
+      ODOO_DB_USER: odoo
+      ODOO_DB_PASSWORD: odoo
+      DUCKDB_PATH: /data/warehouse.duckdb
+    volumes:
+      - ./warehouse:/data
+      - ./pipelines:/app/pipelines
+    networks:
+      - datalake
+    command: ["python", "/app/pipelines/odoo_extract.py"]
+
+  # Las dos etapas anteriores en un solo proceso. dlt sabe ejecutar un proyecto
+  # dbt por su cuenta, así que la dependencia "transforma solo si la carga fue
+  # bien" queda expresada por el flujo del programa y no hace falta orquestador.
+  #
+  #   docker compose run --rm pipeline
+  pipeline:
+    build:
+      context: .
+      dockerfile: docker/toolbox.Dockerfile
+    image: datalake-toolbox
+    container_name: dl-pipeline
+    profiles: ["jobs"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    user: "1000:1000"
+    environment:
+      ODOO_DB_HOST: postgres
+      ODOO_DB_PORT: 5432
+      ODOO_DB_NAME: odoo_demo
+      ODOO_DB_USER: odoo
+      ODOO_DB_PASSWORD: odoo
+      DUCKDB_PATH: /data/warehouse.duckdb
+      DBT_PROJECT_DIR: /app/dbt_project
+    volumes:
+      - ./warehouse:/data
+      - ./pipelines:/app/pipelines
+      - ./dbt_project:/app/dbt_project
+    networks:
+      - datalake
+    command: ["python", "/app/pipelines/run_pipeline.py"]
+
+  # ------------------------------------------------------ transformación dbt --
+
+  transform:
+    build:
+      context: .
+      dockerfile: docker/toolbox.Dockerfile
+    image: datalake-toolbox
+    container_name: dl-transform
+    profiles: ["jobs"]
+    user: "1000:1000"
+    working_dir: /app/dbt_project
+    environment:
+      DUCKDB_PATH: /data/warehouse.duckdb
+    volumes:
+      - ./warehouse:/data
+      - ./dbt_project:/app/dbt_project
+    networks:
+      - datalake
+    command: ["dbt", "build"]
+
+  # ------------------------------------------------------------------ bi --
+
+  # Rill queda tras un perfil y no arranca con "up -d". El motivo es que DuckDB
+  # solo admite un escritor: con Rill levantado, el contenedor de dbt no podría
+  # tomar el bloqueo del fichero. El orden natural del ejercicio (cargar,
+  # transformar y después explorar) evita el choque.
+  #
+  #   docker compose --profile bi up -d rill
+  rill:
+    image: rilldata/rill:latest
+    container_name: dl-rill
+    profiles: ["bi"]
+    user: "1000:1000"
+    ports:
+      # 9010 fuera, 9009 dentro (el puerto propio de Rill). El 9009 del
+      # anfitrión queda libre para el Rill del apéndice de exploración.
+      - "9010:9009"
+    volumes:
+      - ./rill_project:/project
+      - ./warehouse:/data
+    environment:
+      HOME: /tmp
+    networks:
+      - datalake
+    entrypoint: ["rill"]
+    command: ["start", "--no-open", "--pull-env=false", "--port", "9009", "/project"]
+    restart: unless-stopped

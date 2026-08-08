@@ -1,0 +1,52 @@
+# Capa semántica: qué es una venta y cómo se mide.
+#
+# Se apoya en la vista point_in_time_orders, que ya trae el pedido con su
+# cliente resuelto. La alternativa (que Rill reconstruyera el vault por su
+# cuenta con modelos propios) duplicaría en la herramienta una lógica que ya
+# vive en dbt, y eso es justo lo que conviene no hacer.
+#
+# El nombre de la tabla va sin cualificar. Rill busca en el esquema por defecto
+# de la base de datos adjunta, y por eso la capa oro se materializa ahí.
+
+version: 1
+type: metrics_view
+display_name: "Ventas"
+
+connector: duckdb
+table: point_in_time_orders
+
+timeseries: date_order
+
+dimensions:
+  - name: cliente
+    column: customer_name
+    display_name: "Cliente"
+  - name: ciudad
+    column: city
+    display_name: "Ciudad"
+  - name: estado
+    column: order_state
+    display_name: "Estado del pedido"
+  - name: es_empresa
+    column: is_company
+    display_name: "Es empresa"
+
+measures:
+  - name: facturacion
+    expression: sum(amount_total)
+    display_name: "Facturación"
+    description: >
+      Importe total con impuestos de los pedidos confirmados. No incluye
+      presupuestos, porque el filtro se aplica ya en la capa de staging.
+  - name: base_imponible
+    expression: sum(amount_untaxed)
+    display_name: "Base imponible"
+  - name: pedidos
+    expression: count(distinct order_id)
+    display_name: "Pedidos"
+  - name: clientes
+    expression: count(distinct customer_id)
+    display_name: "Clientes"
+  - name: ticket_medio
+    expression: sum(amount_total) / nullif(count(distinct order_id), 0)
+    display_name: "Ticket medio"

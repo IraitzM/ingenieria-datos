@@ -1,0 +1,17 @@
+# El nombre del perfil tiene que ser el mismo que el `profile:` de
+# dbt_project.yml.
+data_vault_odoo:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # La ruta llega por variable de entorno para que el mismo proyecto sirva
+      # dentro del contenedor (/data/warehouse.duckdb) y desde el anfitrión.
+      path: "{{ env_var('DUCKDB_PATH', 'warehouse/warehouse.duckdb') }}"
+      # Esquema por defecto. Los modelos lo sobreescriben con staging, vault y
+      # analytics a través de generate_schema_name.
+      schema: main
+      # Un solo hilo. DuckDB admite un único escritor sobre el fichero, y
+      # subirlo no acelera nada: lo que hace es provocar caídas intermitentes
+      # cuando varios modelos intentan escribir a la vez.
+      threads: 1

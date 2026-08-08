@@ -25,3 +25,16 @@ content/transform/academia/logs/
 content/transform/academia/target/
 content/transform/academia/.user.yml
 content/transform/**/__pycache__/
+
+# Artefactos generados por el ejercicio del apéndice del datalake
+warehouse/*
+!warehouse/.gitkeep
+rill_project/tmp/
+dbt_project/target/
+dbt_project/logs/
+
+# Credenciales locales (no versionar)
+secrets/
+
+# Cache
+__pycache__
