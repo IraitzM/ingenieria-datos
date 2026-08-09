@@ -249,7 +249,9 @@ Por eso Rill vive tras un perfil de Compose y no arranca con el `up -d` general:
 
 ### Preguntar en castellano
 
-La última pieza es [nao](https://getnao.io/), un agente analítico de código abierto. Se monta en dos pasos y la separación entre ellos es la misma que ya vimos con dbt docs:
+La última pieza es [nao](https://getnao.io/), un agente analítico de código abierto. Complementario al agente nativo de Rill aunque con algún extra respecto al acceso a documentación adicional a la de la capa semántica. 
+
+Se monta en dos pasos y la separación entre ellos es la misma que ya vimos con dbt docs:
 
 ```bash
 docker compose run --rm nao-context
@@ -332,6 +334,8 @@ A nao esas descripciones le llegan por el otro lado, con el repositorio sincroni
 #### La clave y lo que sale de casa
 
 El agente necesita un modelo, y ahí hay dos cosas que decir.
+
+![Panel de consulta en Nao](../../assets/nao_chat.png)
 
 La clave llega por variable de entorno y no se versiona:
 
