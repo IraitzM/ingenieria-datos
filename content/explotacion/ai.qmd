@@ -1,3 +1,8 @@
+---
+execute:
+  freeze: auto
+---
+
 # Agentes y asistentes
 
 El [primer capítulo de esta parte](intro.qmd#quién-consume-y-cómo) enumeraba cuatro consumidores y hemos atendido a dos: el analista con su [cuadro de mando](bi.qmd) y el científico de datos con su [tablón](ds.qmd). Queda el cuarto, que es el que ha aparecido de golpe y el que peor se porta.
@@ -101,6 +106,297 @@ Que el modo de fallo pase de "un número equivocado" a "no sé responder" es tod
 
 Sobre el [ejercicio del lago de datos](../appendices/datalake.qmd), esto no exige montar nada nuevo: la capa oro y las métricas de Rill que quedaron construidas al final del apéndice son exactamente lo que un agente necesita del otro lado. Rill, de hecho, ya se describe como una herramienta de BI para humanos y agentes.
 
+## La segunda puerta
+
+Esa vía resuelve el esquema y buena parte del significado, porque una medida viene con su definición al lado. Pero quedaban tres cosas en la lista y la tercera sigue fuera: el procedimiento. Y con él se queda fuera todo el significado que no cabe dentro de una medida, que es bastante: el glosario, las decisiones de modelado, la nota de que la carga del lunes tarda dos horas.
+
+Todo eso es texto, y el texto no cabe entero en el prompt. Hay que elegir qué trozo entra, y elegirlo por parecido es lo que hace un índice vectorial: se convierte cada documento en un vector, se convierte la pregunta en otro y se recuperan los más cercanos. De ahí vienen los *embeddings* a un libro de ingeniería de datos, y no por moda.
+
+El problema llega con ellos. El agente pasa a tener **dos puertas** y ninguna regla sobre cuál usar. Y la segunda devuelve texto, que es un formato en el que caben cifras. Basta con que alguien haya indexado la memoria del curso pasado para que, a la pregunta de cuántos alumnos hay, el agente conteste 4.120 sacado de un PDF sin haber tocado el almacén.
+
+Es la [métrica que da tres números](intro.qmd#la-métrica-que-da-tres-números) otra vez, con un agravante. Esta cuarta cifra no sale del almacén, así que **ni siquiera es reproducible**: no hay consulta que rehacer para comprobar de dónde salió.
+
+:::{.callout-important}
+# El índice no guarda cifras que el almacén sepa calcular
+
+Guarda significado y procedimiento. El número sale siempre de la métrica.
+
+Dicho en términos de diseño: la recuperación no responde, **devuelve qué medida hay que usar y qué significa**, y el agente la consulta. Es RAG que entrega herramientas, no respuestas.
+:::
+
+Con esa regla, cada pregunta tiene un dueño y deja de haber discusión sobre quién contesta:
+
+| Pregunta | Quién responde | Por qué |
+|---|---|---|
+| ¿Cuántos alumnos activos hay? | La capa semántica | Es determinista, agregable y auditable |
+| ¿Qué cuenta "alumno activo"? | El índice vectorial | Es texto, y hay varios candidatos |
+| ¿De dónde sale ese número? | El grafo de linaje | Es un recorrido, no un parecido |
+
+: Cada puerta con su pregunta
+
+```{mermaid}
+flowchart TD
+    p["Pregunta"] --> ag["Agente"]
+    ag -->|"significado"| vec["Índice vectorial<br/>documentación"]
+    ag -->|"cifras"| sem["Capa semántica<br/>medidas"]
+    vec -.->|"qué medida usar"| sem
+    sem --> dw[("Almacén")]
+
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class dw almacen
+    class p,ag,sem,vec explotacion
+```
+
+Y de ahí sale lo que nos toca, que es la conciliación propiamente dicha: **el corpus no es material nuevo, es una proyección de la capa de explotación**. Las descripciones de los modelos de dbt, el campo `description` de cada métrica, el paquete OKF, el glosario del [catálogo](../appendices/metadatado.qmd). Si el índice se genera en el mismo pipeline que construye la capa oro, no puede contradecir al almacén; como mucho puede quedarse viejo, que es un problema más pequeño y que ya sabemos tratar.
+
+Una carpeta de PDF que alguien sube aparte, no. Eso es una fuente de verdad paralela, sin linaje y sin dueño, y es justo lo que llevamos evitando desde la parte de ingesta.
+
+## Un índice es una materialización más
+
+Si el corpus es derivado, el índice es una tabla más del almacén y le tocan las mismas preguntas que a cualquier otra. Son cuatro, y ninguna es nueva.
+
+**El grano.** Qué es un fragmento. Es la misma decisión que el grano de una tabla de hechos: si el fragmento es demasiado grande la recuperación trae ruido, y si es demasiado pequeño trae frases sin contexto. La ventaja de partir de un corpus derivado es que ya viene troceado por nosotros, y se puede usar un fragmento por artefacto (un modelo, una columna, una métrica) en lugar de cortar el texto cada 512 caracteres a ver qué sale.
+
+**La frescura.** A una tabla se le puede preguntar cuándo se cargó. Un fragmento no tiene nada, salvo que se lo pongamos, y **un fragmento viejo no se distingue de uno nuevo**: se recupera igual de bien y se cita con el mismo aplomo. De ahí que cada fila lleve cuándo se generó y de qué versión del artefacto salió.
+
+**El coste.** Reembeber el corpus entero cada noche se paga en dinero y en tiempo. Solo debería reembeberse lo que ha cambiado, y para saberlo hace falta una huella del contenido, que es exactamente la idea del `hd_alumno` del [satélite](../transform/raw_vault.qmd). Con un matiz caro: **la versión del modelo de embeddings forma parte de la clave**, porque dos vectores calculados con modelos distintos no se pueden comparar entre sí. Cambiar de modelo no es una migración, es reconstruir el índice entero.
+
+**El borrado.** Cuando un modelo de dbt desaparece, su fragmento tiene que desaparecer con él. Aquí no sirve el "no se borra, se deduce el cierre" del vault, porque no hay consulta a fecha que salve al recuperador: si el fragmento sigue en la tabla, se recupera.
+
+Las cuatro apuntan al mismo sitio. El índice se reconstruye **dentro del mismo `dbt build`** que construye la capa oro, como un modelo Python o un post-hook, y no en un cuaderno aparte que alguien ejecuta cuando se acuerda. No es comodidad, es la única forma de que no derive.
+
+### El índice sobre nuestro propio almacén
+
+```{python}
+#| echo: false
+#| output: false
+import os, sys
+
+sys.path.insert(0, os.path.abspath("../transform"))
+import utilidades
+
+os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+
+utilidades.usar("agentes")
+utilidades.crear_lago()
+utilidades.dbt("run", "--select", "prep", "raw_vault")
+utilidades.cargar(utilidades.CARGA_2)
+utilidades.dbt("run", "--select", "prep", "raw_vault")
+utilidades.cargar(utilidades.CARGA_3)
+utilidades.dbt("build")
+```
+
+Se ve mejor construyéndolo. Partimos de la secretaría académica con su vault y su capa de consumo ya montados, y el corpus no lo escribimos: lo saca dbt de su propio manifiesto, que es donde acaban las descripciones que alguien puso en los YAML.
+
+```{python}
+#| echo: true
+#| output: true
+import json
+import pandas as pd
+
+def artefacto(nombre):
+    """Lee uno de los artefactos que dbt deja en target/."""
+    ruta = os.path.join(utilidades.ESPACIO, "target", nombre)
+    with open(ruta, encoding="utf-8") as f:
+        return json.load(f)
+
+manifest = artefacto("manifest.json")
+
+documentos = []
+for nodo in manifest["nodes"].values():
+    if nodo["resource_type"] != "model":
+        continue
+    if nodo["description"]:
+        documentos.append(("modelo", nodo["name"], nodo["description"]))
+    for columna, detalle in nodo["columns"].items():
+        if detalle["description"]:
+            documentos.append(
+                ("columna", f"{nodo['name']}.{columna}", detalle["description"])
+            )
+
+for fuente in manifest["sources"].values():
+    if fuente["description"]:
+        documentos.append(("origen", fuente["name"], fuente["description"]))
+
+corpus = pd.DataFrame(documentos, columns=["tipo", "activo", "texto"])
+corpus
+```
+
+Diez fragmentos, y ni uno escrito para el agente: son los que ya estaban en el proyecto. Antes de seguir conviene mirar una cifra que sale del mismo manifiesto.
+
+```{python}
+#| echo: true
+#| output: true
+modelos = [n for n in manifest["nodes"].values() if n["resource_type"] == "model"]
+descritos = [n for n in modelos if n["description"]]
+
+print(f"{len(descritos)} de {len(modelos)} modelos tienen descripción")
+```
+
+Ahora los vectores. Usamos [model2vec](https://github.com/MinishLab/model2vec), que ejecuta modelos de embeddings estáticos con numpy y sin GPU: para diez documentos va sobrado y no arrastra media biblioteca de aprendizaje profundo al libro.
+
+```{python}
+#| echo: true
+#| output: true
+#| warning: false
+from model2vec import StaticModel
+
+modelo = StaticModel.from_pretrained("minishlab/potion-multilingual-128M")
+vectores = modelo.encode((corpus.activo + ". " + corpus.texto).tolist())
+
+vectores.shape
+```
+
+Cada fragmento es ya un punto en un espacio de 256 dimensiones. Y como es una materialización más, se guarda donde vive el dato, en un esquema aparte del propio lago, con su huella de contenido y su marca de generación.
+
+```{python}
+#| echo: true
+#| output: true
+import duckdb
+
+dimension = vectores.shape[1]
+fragmentos = corpus.assign(vector=list(vectores.astype("float32")))
+
+con = duckdb.connect()
+con.sql("INSTALL ducklake; LOAD ducklake;")
+con.sql(f"ATTACH 'ducklake:sqlite:{utilidades.CATALOGO}' AS lago (DATA_PATH '{utilidades.DATOS}')")
+con.sql("USE lago")
+
+con.sql("CREATE SCHEMA IF NOT EXISTS indice")
+con.sql("""
+    CREATE OR REPLACE TABLE indice.fragmentos AS
+    SELECT tipo, activo, texto, vector,
+           md5(texto)                AS hash_contenido,
+           current_localtimestamp()  AS generado_en
+    FROM fragmentos
+""")
+
+con.sql("DESCRIBE indice.fragmentos").df()
+```
+
+El vector queda como lista y no como vector de tamaño fijo, porque es lo que admite el formato abierto de debajo; el tamaño se impone al consultar, que es donde hace falta. Y ya se puede preguntar. La distancia del coseno es una función del núcleo de DuckDB, así que esto no necesita ninguna extensión ni ningún servicio.
+
+```{python}
+#| echo: true
+#| output: true
+pregunta = "¿Cuántos alumnos tenemos?"
+consulta = modelo.encode([pregunta])[0].astype("float32").tolist()
+
+con.execute(f"""
+    SELECT activo, tipo,
+           round(array_cosine_distance(vector::FLOAT[{dimension}],
+                                       ?::FLOAT[{dimension}]), 3) AS distancia
+    FROM indice.fragmentos
+    ORDER BY distancia
+    LIMIT 3
+""", [consulta]).df()
+```
+
+Merece la pena mirar esa respuesta con calma, porque es el resultado que justifica el capítulo.
+
+El recuperador ha devuelto tres documentos con toda naturalidad y **ninguno responde a la pregunta**. El primero describe un satélite con la historia de los atributos, el segundo las claves de negocio y el tercero la tabla de aterrizaje sin interpretar. Nada de eso cuenta alumnos.
+
+Las dos tablas que sí saben contarlos, `dim_alumno` y `fct_matriculas`, no aparecen por ningún lado. Y no es culpa del modelo de embeddings: es que **no están en el índice**. Nadie escribió su descripción, así que no hay documento que recuperar. Un índice no puede indexar lo que no se escribió.
+
+La respuesta, mientras tanto, estaba a una consulta de distancia por la otra puerta:
+
+```{python}
+#| echo: true
+#| output: true
+con.close()  # el lago no admite dos escritores a la vez
+
+utilidades.consultar("select count(*) as alumnos from main_marts.dim_alumno")
+```
+
+Y hay un detalle más en la recuperación de antes que conviene no pasar por alto: las tres distancias son casi iguales. El recuperador no tiene forma de decir *ninguno de estos vale*. Devuelve siempre sus tres mejores, y sin un umbral el agente los recibe como si fueran buenos. Es el aplomo del principio del capítulo, ahora instalado en la pieza de recuperación.
+
+:::{.callout-important}
+# Un índice no arregla la documentación, la amplifica
+
+La reacción natural al ver ese resultado es cambiar de modelo de embeddings o de estrategia de troceado. No es ahí. Con tres modelos descritos de doce, ningún recuperador va a encontrar lo que no está escrito, y lo que sí está (hashes, claves de negocio, integridad referencial) es precisamente lo que no hace falta para responder a una pregunta de negocio.
+
+Es el aviso que hacíamos con OKF, un paso más allá. Un paquete de conocimiento sin métricas definidas produce un agente que se equivoca con más documentación. Un índice vectorial sobre un almacén sin describir produce un agente que se equivoca **con más confianza**, porque ahora acompaña el error con citas.
+:::
+
+## Dónde vive el vector
+
+Lo acabamos de hacer dentro de DuckDB sin instalar nada, y eso adelanta bastante la recomendación. Pero conviene el mapa completo, porque es la decisión con más ruido alrededor de todas las de este capítulo.
+
+| Dónde | Ejemplos | Consecuencia |
+|---|---|---|
+| En el propio almacén | `vss` de DuckDB, pgvector, vector search de Snowflake y Databricks | El vector es una columna más: se reconstruye con el resto y no hay nada que sincronizar |
+| Embebido, en fichero | LanceDB, FAISS, Chroma | Cabe en el repositorio y viaja con el proyecto |
+| Servicio gestionado | [Pinecone](https://www.pinecone.io/), Turbopuffer | Escala y latencia sin operar nada; una copia más del dato, con su propio retraso |
+| Autoalojado | Qdrant, Weaviate, Milvus | Control del coste y del dato; una pieza más que operar |
+
+: Dónde puede vivir el índice vectorial
+
+Para el caso que nos ocupa la respuesta por defecto es la primera fila, y el argumento es de ingeniería de datos y no de rendimiento. La documentación de un almacén son cientos o unos miles de fragmentos, no millones. Montar un servicio aparte para eso añade **una copia más que sincronizar**, con su propio retraso y su propia manera de quedarse vieja, que es justo el problema que llevamos todo el libro evitando.
+
+Pinecone y los suyos se justifican cuando el corpus es del producto y no del almacén: millones de documentos, latencia de percentil 99, multi-tenencia. Ahí el índice *es* la aplicación y merece su propia infraestructura. Para responder a qué cuenta la medida de alumnos activos, no.
+
+:::{.callout-warning}
+# El índice HNSW de DuckDB todavía no es para producción
+
+La extensión `vss` añade índices HNSW, pero su persistencia sigue siendo experimental: hay que activarla con `hnsw_enable_experimental_persistence` y la recuperación tras una parada inesperada no está resuelta.
+
+Con unos miles de fragmentos da igual, y por eso el ejemplo de arriba no la usa: la fuerza bruta con `array_cosine_distance` recorre la tabla entera en milisegundos y es núcleo de DuckDB. El índice hace falta cuando la tabla crece, y para entonces probablemente la conversación sea otra.
+:::
+
+## Cuando el parecido no basta
+
+Hay una pregunta que el índice de arriba no sabe contestar por mucho que mejoremos el corpus: *si cambio `stg_alumnos`, ¿qué se rompe?*
+
+No hay ningún documento que se **parezca** a esa pregunta. La respuesta no es un texto que recuperar, es un recorrido: de un modelo a los que lo referencian, y de ahí a los paneles que los consumen. Para eso hace falta un grafo, y de ahí viene el nombre feo de GraphRAG.
+
+Lo interesante para nosotros es que **ese grafo ya lo tenemos, y por duplicado**.
+
+**Uno, el grafo de metadatos.** Es el mismo `manifest.json` del que acabamos de sacar el corpus: su `parent_map` es la lista de aristas, y el [apéndice de metadatado](../appendices/metadatado.qmd#el-grafo-completo) ya lo recorre entero para dibujar el linaje de principio a fin. GraphRAG sobre este stack no consiste en construir nada, sino en dejar que el agente recorra lo que ya se dibuja solo en cada ejecución.
+
+**Dos, el propio Data Vault.** Un hub es un nodo, un enlace es una arista y un satélite guarda las propiedades de ese nodo con toda su historia. `hub_alumno`, `link_matricula` y `sat_alumno` son literalmente eso. No hay que convertir el vault en un grafo de conocimiento: hay que leerlo como lo que ya es.
+
+Y ahí aparece la coincidencia más fina, que merece su párrafo. Los grafos de conocimiento temporales guardan en cada arista cuándo empezó a ser cierta y cuándo dejó de serlo, además de cuándo se supo. Es la distinción bitemporal, y es la misma que llevamos usando desde el raw vault entre el tiempo del negocio y el `load_date`. Con una diferencia de estilo: [Graphiti](https://help.getzep.com/graphiti/getting-started/overview) materializa el cierre en la propia arista, mientras que [`sat_alumno`](../transform/raw_vault.qmd) no lo guarda y lo deduce con una ventana, y [`pit_alumno`](../transform/business_vault.qmd) es esa deducción precalculada. La consulta a fecha del business vault y la consulta *point in time* de un grafo temporal son la misma operación con dos vocabularios distintos.
+
+| Herramienta | Qué hace | Cuándo |
+|---|---|---|
+| [Graphify](https://github.com/Graphify-Labs/graphify) | Convierte código, esquemas SQL, configuración y documentación en un grafo consultable, con parseo determinista y sin índice vectorial | Cuando lo que hay que recorrer es el repositorio |
+| [Graphiti](https://help.getzep.com/graphiti/getting-started/overview) | Grafo de conocimiento temporal para memoria de agentes, con validez bitemporal en cada arista | Cuando el agente tiene que recordar y las cosas cambian |
+| Microsoft GraphRAG, LightRAG | Extraen entidades y relaciones desde texto usando un modelo de lenguaje | Cuando solo hay documentos y no hay esquema |
+| Neo4j, Kùzu, Apache AGE | El almacén donde vive el grafo | Kùzu es a los grafos lo que DuckDB a la analítica: embebido y sin servidor |
+
+: Herramientas para la parte de grafo
+
+La distinción que importa de esa tabla no es quién la publica, sino **de dónde sale el grafo**. Graphify lo deriva de estructura que ya existe y lo hace con parseo determinista, sin modelo de por medio. Microsoft GraphRAG y LightRAG lo **infieren del texto** con un modelo de lenguaje, lo cual cuesta dinero y acierta a veces. Graphiti admite las dos vías, y su aportación está en otro sitio: en el tiempo.
+
+Para un almacén, inferir es casi siempre el error caro de esta categoría. Nosotros tenemos el grafo por construcción, en el manifiesto y en el vault, y pagar por adivinar con un modelo lo que ya sabemos con certeza no mejora nada. Determinista donde se pueda, inferido solo donde no quede otra.
+
+## La arquitectura, entera
+
+Juntando las tres piezas, lo que queda no es un agente con acceso al almacén sino un agente con tres recuperadores y una regla de precedencia.
+
+```{mermaid}
+flowchart TD
+    p["Pregunta"] --> ag["Agente"]
+    ag --> m["Métrica<br/>MCP sobre la capa semántica"]
+    ag --> v["Vectorial<br/>catálogo y documentación"]
+    ag --> g["Grafo<br/>linaje y vault"]
+    v -.->|"qué medida usar"| m
+    g -.->|"de dónde sale"| m
+    m --> oro[("Capa oro")]
+    v --> idx[("Índice derivado<br/>del catálogo")]
+    g --> lin[("manifest.json<br/>hubs y enlaces")]
+
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class oro,idx,lin almacen
+    class p,ag,m,v,g explotacion
+```
+
+La regla de precedencia es la de antes y cabe en una línea: **si la pregunta lleva número, gana la métrica**. Los otros dos recuperadores sirven para elegir bien la métrica y para explicar de dónde sale, nunca para sustituirla.
+
+Falta saber si funciona, y esa parte también es nuestra. La forma barata de medirlo es un fichero de preguntas de referencia con la medida que cada una debería activar, versionado junto al proyecto y ejecutado en cada construcción. Es la idea de las pruebas de dbt aplicada a la recuperación: si al tocar una descripción una pregunta deja de encontrar su medida, salta en la integración continua y no en una reunión. La calidad de la redacción de la respuesta no es cosa nuestra; que el recuperador traiga el documento correcto, sí.
+
 ## El otro agente, el que escribe el código
 
 Todo lo anterior va del agente que **consulta** el almacén. Hay una segunda categoría que conviene no mezclar, porque el usuario es otro: el agente que **escribe** las transformaciones, y cuyo usuario somos nosotros.
@@ -114,6 +410,8 @@ Merece la pena señalar el patrón, porque se repite en los dos casos y es la co
 
 Esta es la parte del libro con la vida media más corta. OKF va por la v0.1 y sus propios autores la presentan como un punto de partida; Ossie convierte definiciones pero todavía no lo consume ningún producto de forma nativa; las herramientas de la sección anterior cambian de nombre y de dueño cada pocos meses.
 
+Las tablas de bases vectoriales y de grafos envejecen todavía más rápido, y los modelos de embeddings más aún: el que usa el ejemplo será viejo antes que el resto del capítulo. Están puestas para enseñar en qué se diferencian las categorías, no para elegir proveedor a partir de ellas.
+
 Lo que no cambia es el problema: un agente responde con la confianza de quien no sabe lo que no sabe, y la única defensa es que el significado esté escrito antes de que pregunte. Conviene leer este capítulo por ahí y tomarse las herramientas como lo que son, ejemplos de una fecha concreta.
 :::
 
@@ -122,6 +420,12 @@ Lo que no cambia es el problema: un agente responde con la confianza de quien no
 La frontera es parecida a la que trazábamos con la [ciencia de datos](ds.qmd#lo-que-le-toca-al-ingeniero-de-datos), y por las mismas razones.
 
 Elegir el modelo, diseñar las instrucciones y evaluar la calidad de las respuestas **no** es trabajo del ingeniero de datos. Que exista una definición única de cada métrica, que esté escrita en un fichero versionado y que el agente no pueda acceder a nada que no haya pasado por ahí, **sí lo es**.
+
+Con el contexto recuperado la frontera no se mueve, solo se alarga por nuestro lado con tres cosas más:
+
+* Que el corpus sea **derivado y no original**, para que no pueda contradecir al almacén.
+* Que se reconstruya **en el mismo pipeline**, con su huella de contenido y su marca de generación, para que quedarse viejo sea visible.
+* Que el agente **no pueda contestar una cifra desde el índice**, porque las cifras salen de la métrica.
 
 Dicho de otra forma: no nos toca hacer que el agente sea listo, nos toca hacer que no pueda equivocarse en silencio. Y eso, convenientemente, es el mismo trabajo que llevamos haciendo desde el principio del libro. Un almacén bien modelado, con la historia intacta y las métricas acordadas por escrito, era ya la respuesta correcta antes de que hubiera nadie preguntándole en lenguaje natural.
 

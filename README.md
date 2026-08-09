@@ -33,6 +33,14 @@ La variable `QUARTO_PYTHON` no es opcional si hay pyenv por medio: sin ella Quar
 
 Varios capítulos levantan servicios propios con Docker mientras se ejecutan (Evidence en el 3000, OpenMetadata en el 8585, Rill en el 9009). Están documentados en el capítulo correspondiente.
 
+El capítulo de [agentes](content/explotacion/ai.qmd) es la excepción a que todo se ejecute en cada render: lleva `freeze: auto` porque su ejemplo descarga un modelo de embeddings de medio giga, y eso no tiene sentido en cada publicación. Sus resultados se versionan en `_freeze/` y el CI los reutiliza sin ejecutar nada. Al tocar ese capítulo hay que renderizarlo en local y versionar el freeze junto al cambio:
+
+```bash
+QUARTO_PYTHON=$PWD/.venv/bin/python quarto render content/explotacion/ai.qmd
+```
+
+Quarto detecta los cambios del propio `.qmd`, pero no los de [`content/transform/utilidades.py`](content/transform/utilidades.py) ni los del proyecto dbt de ejemplo. Si se toca alguno de esos, hay que forzar el render del capítulo a mano.
+
 ### Publicación
 
 [`.github/workflows/publish.yml`](.github/workflows/publish.yml) renderiza y publica en la rama `gh-pages` con cada `push` a `main`. Ojo con las dependencias: **el CI instala desde `requirements.txt`**, no desde `pyproject.toml`. Al añadir un paquete hay que actualizar los dos ficheros:
