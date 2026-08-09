@@ -146,6 +146,14 @@ soda scan -d lago -c configuration.yml checks/marts.yml
 ```
 
 :::{.callout-tip}
+# Esto está montado y se puede ejecutar
+
+Todo lo que cuenta este apéndice está aplicado sobre un almacén real en el [ejercicio del lago de datos](datalake.qmd#vigilar-la-calidad): Soda vigila allí la capa oro con su imagen propia, y sus avisos acaban junto a los de dbt en un esquema `meta` del mismo DuckDB.
+
+Vale la pena por lo que encuentra. Sobre datos de demostración de un ERP, con ciento setenta y nueve pruebas de dbt en verde, el primer escaneo avisa de que **el 34,85 % de las fichas de cliente no tiene país**. Ninguna prueba de dbt lo había mencionado, porque no hay nada incorrecto.
+:::
+
+:::{.callout-tip}
 # El reparto que funciona
 
 La regla práctica que evita duplicar trabajo entre las dos herramientas:

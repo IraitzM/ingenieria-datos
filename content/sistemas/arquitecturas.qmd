@@ -128,7 +128,7 @@ pero se centran en disponer la información de forma tabular a sus consumidores.
 
 ![Arquitectura medallón](https://www.databricks.com/sites/default/files/inline-images/building-data-pipelines-with-delta-lake-120823.png)
 
-Que de algún modo, reinventa las tres capas base que ya veníamos empleando con otro nombre. Podríamos llamarlo la **arquitectura del sentido común** ya que sabemos que nuestras fuentes y nuestros consumidores vana  tener distintas necesidades y únicamente nos estamos concediendo un hueco entre ambos para poder realizar nuestro trabajo y consolidar toda la información de la empresa de forma que sea manejable.
+Que de algún modo, reinventa las tres capas base que ya veníamos empleando con otro nombre. Podríamos llamarlo la **arquitectura del sentido común** ya que sabemos que nuestras fuentes y nuestros consumidores van a tener distintas necesidades y únicamente nos estamos concediendo un hueco entre ambos para poder realizar nuestro trabajo y consolidar toda la información de la empresa de forma que sea manejable.
 
 Es curioso cómo estos sistemas han evolucionado precisamente ofreciendo capacidades operacionales en las modalidades de arquitecturas mixtas gracias a los [formatos abiertos de nueva generación](./nuevos-formatos.qmd).
 

@@ -55,8 +55,20 @@ databases:
     # con un "Nothing to sync" que no explica por qué.
     include:
       - "main.*"
+      # El esquema de metadatos entra también, y es de las decisiones que más
+      # cambian lo que el agente puede hacer. Con `meta.veredicto` a mano puede
+      # comprobar si la tabla con la que va a contestar está vigilada y en
+      # verde, en lugar de responder con aplomo desde una tabla que lleva una
+      # semana sin cargarse. Un agente que no puede consultar la calidad del
+      # dato no tiene forma de saber que está equivocándose.
+      - "meta.*"
 
-    exclude: []
+    # Las tres vistas `calidad_*` de `main` son un duplicado: existen solo
+    # porque Rill no sabe mirar fuera del esquema por defecto. El agente lee
+    # `meta.*` directamente, así que enseñarle las dos copias solo serviría
+    # para que dudase de cuál es la buena.
+    exclude:
+      - "main.calidad_*"
 
 repos:
   # El proyecto de dbt como contexto. Aquí está lo que la base de datos no

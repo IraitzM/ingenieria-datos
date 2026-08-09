@@ -1,0 +1,26 @@
+# Panel de calidad.
+#
+# El que contesta a "¿me puedo fiar de esta tabla?" sin escribir a nadie. Se
+# abre por herramienta y por capa, que es como se mira cuando algo va mal:
+# primero si lo que ha saltado corta la carga o solo avisa, y después dónde.
+
+version: 1
+type: explore
+display_name: "Calidad"
+
+metrics_view: calidad
+
+dimensions: "*"
+measures: "*"
+
+defaults:
+  measures:
+    - controles
+    - avisos
+    - fallos
+    - en_verde
+  dimensions:
+    - herramienta
+    - capa
+    - activo
+  time_range: P7D

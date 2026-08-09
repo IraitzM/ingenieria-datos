@@ -1,0 +1,72 @@
+# Capa semántica de la vigilancia de calidad.
+#
+# La cuarta vista de métricas del proyecto, y la única que no mide el negocio
+# sino el almacén. Es una diferencia que conviene tener presente al leerla: aquí
+# una cifra que sube no es una buena noticia, es más trabajo pendiente.
+#
+# Se apoya en `calidad_controles`, que es una vista sobre `meta.controles`. Las
+# tablas de metadatos viven en el esquema `meta`, que es su sitio, y en `main`
+# solo se publica el puente, porque Rill no sabe mirar fuera del esquema por
+# defecto.
+
+version: 1
+type: metrics_view
+display_name: "Calidad"
+
+connector: duckdb
+table: calidad_controles
+
+# El momento del escaneo, no el del dato. Con una sola ejecución habrá un único
+# punto en la serie; la gracia aparece al cabo de unos días, cuando se puede ver
+# si el número de avisos sube o baja.
+timeseries: escaneado_en
+
+dimensions:
+  - name: herramienta
+    column: herramienta
+    display_name: "Herramienta"
+    description: >
+      `dbt` para los invariantes del modelo, que cortan la carga, y `soda` para
+      las expectativas sobre el dato, que solo avisan. Es el reparto que evita
+      duplicar trabajo entre las dos.
+  - name: capa
+    column: capa
+    display_name: "Capa"
+  - name: activo
+    column: activo
+    display_name: "Activo"
+  - name: estado
+    column: estado
+    display_name: "Resultado"
+    description: "`pass`, `warn`, `fail` o `error`."
+  - name: control
+    column: control
+    display_name: "Tipo de control"
+  - name: nombre
+    column: nombre
+    display_name: "Control"
+  - name: corta
+    column: corta_la_carga
+    display_name: "Corta la carga"
+
+measures:
+  - name: controles
+    expression: count(*)
+    display_name: "Controles"
+  - name: fallos
+    expression: count(*) filter (where estado = 'fail')
+    display_name: "Fallos"
+  - name: avisos
+    expression: count(*) filter (where estado = 'warn')
+    display_name: "Avisos"
+  - name: en_verde
+    expression: count(*) filter (where estado = 'pass') / nullif(count(*), 0)
+    display_name: "En verde"
+    format_preset: percentage
+    description: >
+      Proporción de controles que pasan. Es una medida cómoda y engañosa: sube
+      igual añadiendo controles fáciles que arreglando problemas, así que no
+      sirve como objetivo, solo como termómetro.
+  - name: activos_vigilados
+    expression: count(distinct activo)
+    display_name: "Activos vigilados"

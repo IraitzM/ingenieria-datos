@@ -208,6 +208,70 @@ services:
     command: ["dbt", "docs", "serve", "--port", "8080", "--host", "0.0.0.0", "--no-browser"]
     restart: unless-stopped
 
+  # ----------------------------------------------------------- calidad --
+
+  # Escaneo de calidad con Soda. Trabajo de un solo uso, y de solo lectura:
+  # convive con Rill levantado y con nao, pero no con una carga en curso.
+  #
+  # Deja el resultado en JSON dentro de warehouse/, que es el directorio que ya
+  # comparten todos los servicios, para que el paso siguiente lo recoja.
+  #
+  #   docker compose run --rm soda
+  soda:
+    build:
+      context: .
+      dockerfile: docker/soda.Dockerfile
+    image: datalake-soda
+    container_name: dl-soda
+    profiles: ["jobs"]
+    user: "1000:1000"
+    working_dir: /project
+    volumes:
+      - ./warehouse:/data
+      - ./soda_project:/project
+    networks:
+      - datalake
+    entrypoint: ["soda"]
+    # `--scan-results-file` es la clave de todo esto: sin él, Soda escribe un
+    # informe bonito en la terminal que se pierde al cerrarla. Con él, el
+    # resultado es un artefacto que se puede cargar en el almacén.
+    command:
+      - "scan"
+      - "-d"
+      - "almacen"
+      - "-c"
+      - "configuration.yml"
+      - "--scan-results-file"
+      - "/data/soda_results.json"
+      - "checks/oro.yml"
+
+  # Consolidación de metadatos: recoge lo que dejaron dbt y Soda y lo carga en
+  # el esquema `meta` del propio almacén.
+  #
+  # Es el paso que convierte tres informes sueltos en algo consultable. Se
+  # ejecuta al final, cuando ya existen los artefactos de los otros dos.
+  #
+  #   docker compose run --rm metadatos
+  metadatos:
+    build:
+      context: .
+      dockerfile: docker/toolbox.Dockerfile
+    image: datalake-toolbox
+    container_name: dl-metadatos
+    profiles: ["jobs"]
+    user: "1000:1000"
+    environment:
+      DUCKDB_PATH: /data/warehouse.duckdb
+      DBT_TARGET_DIR: /app/dbt_project/target
+      SODA_RESULTS: /data/soda_results.json
+    volumes:
+      - ./warehouse:/data
+      - ./pipelines:/app/pipelines
+      - ./dbt_project:/app/dbt_project:ro
+    networks:
+      - datalake
+    command: ["python", "/app/pipelines/metadatos.py"]
+
   # ------------------------------------------------------- agente nao --
 
   # Construcción del contexto del agente. Trabajo de un solo uso, como

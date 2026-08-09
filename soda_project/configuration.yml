@@ -1,0 +1,18 @@
+# Conexión de Soda al almacén.
+#
+# Es el mismo fichero DuckDB que construye dbt y que consultan Rill y nao. Aquí
+# no hay copia ni extracto: la vigilancia mira el dato que se publica, no una
+# instantánea suya, que es la única forma de que lo que diga sea cierto.
+#
+# `read_only: true` no es una precaución decorativa. Soda no tiene por qué
+# escribir en el almacén, y además es lo que le permite convivir con Rill
+# levantado: DuckDB admite varios lectores a la vez y un solo escritor.
+
+data_source almacen:
+  type: duckdb
+  path: /data/warehouse.duckdb
+  read_only: true
+  # La capa oro. Los controles se escriben contra lo que se publica, no contra
+  # las capas intermedias: si un problema no llega a `main`, no ha llegado a
+  # nadie.
+  schema: main

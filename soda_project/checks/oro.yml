@@ -1,0 +1,101 @@
+# Vigilancia de calidad sobre la capa oro.
+#
+# El reparto con dbt es el que explica el apéndice de calidad y conviene tenerlo
+# delante al leer este fichero:
+#
+#   * En dbt van los **invariantes del modelo**, los que deben cortar la
+#     ejecución: claves únicas, integridad referencial del vault, no nulos en
+#     las claves. Si eso falla, publicar es peor que no publicar.
+#   * Aquí van las **expectativas sobre el dato**, las que deben avisar:
+#     proporciones, volúmenes, frescura, rangos. Si eso se desvía, alguien tiene
+#     que mirarlo, pero parar la tubería probablemente empeore las cosas.
+#
+# De ahí que varios controles lleven `warn` y no `fail`. Un umbral que corta la
+# carga porque el 21 % de los clientes no tiene país convierte un dato conocido
+# del origen en una incidencia de plataforma, y lo que consigue es que alguien
+# suba el umbral hasta que deje de molestar.
+
+checks for customer_360:
+  - row_count > 0:
+      name: "Hay clientes"
+
+  # Duplicada a propósito con la prueba `unique` de dbt. No sobra: si algún día
+  # alguien publica esta tabla sin pasar por dbt, esta es la que lo caza.
+  - duplicate_count(customer_id) = 0:
+      name: "Un cliente, una ficha"
+
+  - missing_percent(email) < 5 %:
+      name: "Correos informados"
+
+  # Este es el que de verdad enseña para qué sirve la herramienta. Con los datos
+  # de demostración da alrededor del 35 %, así que avisa desde el primer día.
+  # No es un fallo del pipeline: es que Odoo no obliga a informar el país y
+  # nadie lo había mirado. Justo el tipo de cosa que ninguna prueba de dbt
+  # detecta, porque no hay nada incorrecto.
+  - missing_percent(country_name):
+      warn: when > 20 %
+      fail: when > 60 %
+      name: "País informado en la ficha de cliente"
+
+checks for point_in_time_orders:
+  - row_count > 0:
+      name: "Hay pedidos publicados"
+
+  - duplicate_count(order_id) = 0:
+      name: "Un pedido, una fila"
+
+  # La frescura como control de primera clase: es la comprobación que más
+  # incidentes reales detecta y la que más se olvida. Mide el dato de negocio
+  # (cuándo se vendió), no cuándo se cargó, que es lo que mide la frescura de
+  # fuentes de dbt. Las dos hacen falta y no son la misma pregunta.
+  - freshness(date_order) < 2d:
+      name: "Se sigue vendiendo"
+
+checks for point_in_time_order_lines:
+  - row_count > 0:
+      name: "Hay líneas de pedido"
+
+  - duplicate_count(order_line_id) = 0:
+      name: "Una línea, una fila"
+
+checks for employee_360:
+  - row_count > 0:
+      name: "Hay plantilla"
+
+  - duplicate_count(employee_id) = 0:
+      name: "Un empleado, una fila"
+
+  # Si esta se dispara, lo más probable es que se haya consultado el enlace
+  # empleado-departamento sin resolver la clave conductora y los trasladados
+  # aparezcan por duplicado.
+  - missing_percent(work_email) < 10 %:
+      name: "Correos de trabajo informados"
+
+checks for product_performance:
+  - row_count > 0:
+      name: "Hay catálogo"
+
+  - duplicate_count(product_id) = 0:
+      name: "Un producto, una fila"
+
+checks for kpis_daily:
+  - row_count > 0:
+      name: "Hay días con actividad"
+
+  - duplicate_count(fecha) = 0:
+      name: "Un día, una fila"
+
+# Lo que no está aquí y en un proyecto real estaría:
+#
+#   - change avg 7d for row_count < 25 %
+#   - schema:
+#       warn:
+#         when schema changes: any
+#
+# Las dos necesitan **historia**, y el núcleo de Soda no la guarda: cada
+# escaneo empieza de cero y no sabe qué dio el de ayer. Esa memoria la pone
+# Soda Cloud, que no es de código abierto.
+#
+# Aquí la historia nos la guardamos nosotros, en `meta.perfil`, con su columna
+# `escaneado_en`. Es más trabajo y tiene la ventaja de que la serie queda en el
+# almacén, donde se puede consultar con SQL junto al resto.

@@ -94,3 +94,33 @@ rows:
             - comerciales
             - facturacion_total
         width: 6
+
+  # El bloque que casi nunca se pone y que decide si lo de arriba vale algo.
+  # Un panel que enseña una facturación sin decir si el dato está vigilado
+  # obliga a quien lo mira a suponer que sí.
+  - items:
+      - markdown:
+          content: |
+            ### ¿Se puede confiar en estos números?
+
+            Estado de los controles en la última ejecución. Los de dbt cortan
+            la carga; los de Soda solo avisan.
+        width: 12
+
+  - items:
+      - kpi_grid:
+          metrics_view: calidad
+          measures:
+            - controles
+            - avisos
+            - fallos
+            - en_verde
+        width: 6
+      - table:
+          metrics_view: calidad
+          columns:
+            - capa
+            - controles
+            - avisos
+            - fallos
+        width: 6

@@ -12,7 +12,7 @@ Este montaje no continúa el ejemplo de la academia ni comparte nada con él. Lo
 
 ## Lo que se va a levantar
 
-Siete piezas, todas de código abierto, cada una haciendo exactamente un trabajo.
+Ocho piezas, todas de código abierto, cada una haciendo exactamente un trabajo.
 
 ```{mermaid}
 flowchart LR
@@ -24,8 +24,13 @@ flowchart LR
     t2 --> g[("DuckDB<br/>oro")]
     g --> r["Rill"]
     g --> n["nao"]
+    g --> s["Soda"]
     t2 -.-> doc["dbt docs"]
     t2 -.-> n
+    s -.-> m[("DuckDB<br/>meta")]
+    t2 -.-> m
+    m -.-> r
+    m -.-> n
 
     classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
     classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
@@ -33,15 +38,19 @@ flowchart LR
     classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
     classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
     classDef documentacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e,stroke-dasharray:4 3
+    classDef meta fill:#d9efec,stroke:#3a8f8a,stroke-width:1.5px,color:#0f3f3c
     class o origen
     class d carga
     class b,v,g almacen
     class t,t2 transformacion
     class r,n explotacion
-    class doc documentacion
+    class doc,s documentacion
+    class m meta
 ```
 
-Las flechas de puntos son las únicas que no llevan datos. dbt docs no transforma nada, se limita a publicar lo que dbt sabe de sus propios modelos. La que llega a nao es de la misma naturaleza y es la que hace interesante a esa pieza: el agente recibe el dato por un lado y **el proyecto de dbt por el otro**, porque para contestar bien no le basta con ver las tablas, necesita saber qué decidimos al construirlas.
+Las flechas de puntos no llevan datos, llevan **lo que sabemos sobre los datos**. dbt docs no transforma nada, se limita a publicar lo que dbt sabe de sus propios modelos. La que llega a nao es de la misma naturaleza y es la que hace interesante a esa pieza: el agente recibe el dato por un lado y **el proyecto de dbt por el otro**, porque para contestar bien no le basta con ver las tablas, necesita saber qué decidimos al construirlas.
+
+Y las que confluyen en `meta` son las que casi nunca se dibujan. Ahí acaban el resultado de las pruebas de dbt, la frescura de las fuentes y los avisos de Soda, que de otro modo se quedarían en tres ficheros JSON que nadie vuelve a abrir. Desde ahí las leen el panel y el agente, que es lo que permite preguntar si un número es de fiar en el mismo sitio donde se mira el número.
 
 | Pieza | Papel | Dónde queda |
 |---|---|---|
@@ -50,10 +59,13 @@ Las flechas de puntos son las únicas que no llevan datos. dbt docs no transform
 | DuckDB | El almacén, las cuatro capas | `warehouse/warehouse.duckdb` |
 | dbt | Data Vault y capa de explotación | `dbt_project/` |
 | dbt docs | Diccionario de modelos y grafo de linaje | `http://localhost:8081` |
+| Soda | Vigilancia de calidad sobre la capa oro | `soda_project/` |
 | Rill | Paneles de exploración | `http://localhost:9010` |
 | nao | Agente analítico sobre la capa oro | `http://localhost:5005` |
 
 : Las piezas del ejercicio y dónde encontrarlas
+
+Soda es la única sin dirección web: no tiene interfaz propia en este montaje a propósito, porque su resultado no acaba en un informe suyo sino en el almacén, junto al dato que vigila.
 
 Los puertos no son los de costumbre y la razón es evitar choques: el 3000 lo usa Evidence en el [capítulo de inteligencia de negocio](../explotacion/bi.qmd), el 8585 lo ocupa OpenMetadata en el [apéndice de metadatado](metadatado.qmd) y el 9009 es el de un Rill arrancado en local como se ve en el [apéndice de exploración](rill.qmd). Aquí PostgreSQL se publica en el 5433, Rill en el 9010 y la documentación en el 8081 (dbt docs sirve por defecto en el 8080, que es de los puertos más disputados de cualquier portátil). nao se queda en su 5005 de siempre, que no lo disputa nadie.
 
@@ -200,6 +212,128 @@ Hay un bloque con nombre reservado, `__overview__`, que sustituye la portada del
 
 El límite del grafo se ve mejor con la imagen delante: dbt solo dibuja lo que pasa por sus `ref()` y sus `source()`. El tramo de Odoo a `raw` lo hizo dlt y aquí no existe (las tablas de `raw` aparecen como el principio del mundo, cuando son la mitad de la historia), y el panel de Rill que consume la capa oro tampoco. Coser los tres tramos es precisamente el trabajo de un catálogo de gobierno, y cómo se reconstruye ese linaje completo a partir del `manifest.json` de dbt y del esquema que deja dlt está en el [apéndice de metadatado](metadatado.qmd#trazabilidad-de-principio-a-fin-con-dlt-y-dbt).
 
+### Vigilar la calidad
+
+Llegados aquí hay ciento setenta y nueve pruebas de dbt en verde, y conviene fijarse en dos cosas que **no** se saben todavía.
+
+La primera es si el dato sigue llegando. Las fuentes tienen declarada su frescura desde el principio, en `_stg_sources.yml`:
+
+```yaml
+sources:
+  - name: raw
+    loaded_at_field: _extracted_at
+    freshness:
+      warn_after: {count: 12, period: hour}
+      error_after: {count: 24, period: hour}
+```
+
+Y esa declaración no la ejecutaba nadie. `dbt build` no incluye la frescura: hay que pedirla aparte.
+
+```bash
+docker compose run --rm transform dbt source freshness
+```
+
+La segunda es todo lo que las pruebas de dbt no preguntan por diseño. Una prueba de dbt comprueba que **el modelo cumple lo que dijimos al escribirlo**: que la clave es única, que el enlace no cuelga. La calidad de datos es otra cosa, es vigilar que el mundo real sigue pareciéndose a lo que asumimos, sabiendo que no lo hará. Esa mitad la cubre [Soda](https://www.soda.io/), con el reparto que explica el [apéndice de calidad](calidad.qmd).
+
+```bash
+docker compose run --rm soda
+```
+
+Con los datos de demostración el escaneo termina así:
+
+```
+1/16 checks WARNED:
+    customer_360 in almacen
+      País informado en la ficha de cliente [WARNED]
+        check_value: 34.85
+```
+
+Merece la pena parar en ese número. **El 34,85 % de las fichas de cliente no tiene país**, y ninguna de las ciento setenta y nueve pruebas de dbt lo había mencionado, porque no hay nada incorrecto: Odoo no obliga a informar ese campo y el modelo nunca prometió que estuviera. Es exactamente el tipo de cosa que se descubre cuando alguien filtra un panel por país y le faltan un tercio de los clientes.
+
+Por eso avisa en lugar de fallar:
+
+```yaml
+- missing_percent(country_name):
+    warn: when > 20 %
+    fail: when > 60 %
+    name: "País informado en la ficha de cliente"
+```
+
+Un umbral que corta la carga por esto convierte un dato conocido del origen en una incidencia de plataforma, y lo que consigue a la larga es que alguien suba el umbral hasta que deje de molestar.
+
+:::{.callout-note}
+# Lo que el núcleo de Soda no puede hacer
+
+Dos de los controles más útiles de SodaCL no están en `checks/oro.yml`, y no es un olvido:
+
+```yaml
+- change avg 7d for row_count < 25 %
+- schema:
+    warn:
+      when schema changes: any
+```
+
+Los dos necesitan **historia**, y el núcleo de código abierto no la guarda: cada escaneo empieza de cero y no sabe qué dio el de ayer. Esa memoria la pone Soda Cloud, que no es abierto. Aquí la historia nos la guardamos nosotros en `meta.perfil_historico`, que es más trabajo y tiene la ventaja de que la serie queda en el almacén, consultable con SQL junto a todo lo demás.
+:::
+
+#### Dónde acaba todo esto (y por qué no en dbt docs)
+
+Tenemos tres comprobaciones distintas y tres artefactos que no se hablan: `run_results.json` con las pruebas, `sources.json` con la frescura y el JSON de Soda con los avisos. Ninguno se consulta con SQL, y aquí está lo que sorprende a casi todo el mundo:
+
+**El sitio de documentación de dbt no enseña ninguno de los tres.** Su `index.html` solo carga `manifest.json` y `catalog.json`. Se puede comprobar:
+
+```bash
+grep -o "sources\.json\|catalog\.json\|manifest\.json\|run_results\.json" \
+  $(python -c "import dbt,os;print(os.path.dirname(dbt.__file__))")/task/docs/index.html | sort -u
+```
+
+De modo que en dbt docs se ve que **existe** una prueba y que se **declaró** una frescura de doce horas, y nunca si están en verde. Es un catálogo de definiciones, no de estado, y confundir las dos cosas es fácil porque la interfaz no lo advierte en ninguna parte. La pregunta "¿me puedo fiar de esta tabla?" no se responde ahí.
+
+Se responde donde están los datos, que es lo que defiende el [apéndice de calidad](calidad.qmd#aterrizarlo-en-la-base-de-metadatos). El último paso recoge los tres artefactos y los carga en un esquema `meta` del propio DuckDB:
+
+```bash
+docker compose run --rm metadatos
+```
+
+```
+meta.activos:    47
+meta.controles:  195
+meta.frescura:   10
+meta.perfil:     7
+
+Veredicto de la capa publicada:
+  apto: 6
+  con avisos: 1
+```
+
+Los ciento noventa y cinco controles son las ciento setenta y nueve pruebas de dbt más los dieciséis de Soda, en una sola tabla con una columna que dice quién los ejecutó y otra que dice si cortan la carga. Y los cuarenta y siete activos incluyen las diez fuentes, que son las únicas que tienen frescura: si `raw_orders` deja de llegar, todo lo que hay debajo sigue en verde durante días porque el problema no está en las transformaciones.
+
+A partir de ahí, fiarse de una tabla es una consulta:
+
+```sql
+SELECT activo, capa, controles, avisos, fallos, veredicto, escaneado_en
+FROM meta.veredicto
+WHERE capa = 'analytics'
+ORDER BY fallos DESC, avisos DESC;
+```
+
+Esa vista tiene una cuarta categoría además de `apto`, `con avisos` y `con fallos`, y es la más útil de las cuatro: **`sin vigilancia`**. Una tabla que no falla ningún control porque no tiene ninguno no es una tabla sana, es una tabla sobre la que no sabemos nada, y conviene que las dos cosas no se parezcan en el informe. En este proyecto no hay ninguna, y comprobarlo con una consulta vale más que suponerlo.
+
+La columna `escaneado_en` está en todas las tablas de `meta` y tampoco es decorativa: sin ella no se distingue "esto está bien" de "esto estaba bien hace tres semanas y nadie ha vuelto a mirar".
+
+#### El recorrido completo
+
+Con la calidad dentro, la secuencia entera del ejercicio son cuatro órdenes:
+
+```bash
+docker compose run --rm pipeline                        # ingesta y transformación
+docker compose run --rm transform dbt source freshness  # ¿sigue llegando el dato?
+docker compose run --rm soda                            # ¿se parece a lo esperado?
+docker compose run --rm metadatos                       # todo junto y consultable
+```
+
+El atajo `pipeline` cubre solo las dos primeras capas: la vigilancia se pide aparte a propósito, porque son comprobaciones sobre lo ya publicado y no un paso más de la construcción.
+
 ### Explorar
 
 ```bash
@@ -217,9 +351,12 @@ Lo que hay dentro son cuatro pantallas y tres vistas de métricas, y el reparto 
 | `metrics/ventas.yaml` | `point_in_time_orders` | Pedido | Facturación, ticket medio, reparto por comercial y departamento |
 | `metrics/catalogo.yaml` | `point_in_time_order_lines` | Línea de pedido | Unidades, precio medio ponderado, descuentos por producto y categoría |
 | `metrics/plantilla.yaml` | `employee_360` | Empleado | Quién hay, dónde y qué parte de la plantilla vende |
-| `canvas/resumen.yaml` | Las tres | Composición fija | La portada que se mira sin tocar nada |
+| `metrics/calidad.yaml` | `calidad_controles` | Control ejecutado | Si el almacén está vigilado y en verde |
+| `canvas/resumen.yaml` | Las cuatro | Composición fija | La portada que se mira sin tocar nada |
 
 : Los recursos del proyecto de Rill
+
+La cuarta es la rara y merece un apunte: no mide el negocio sino el almacén, de modo que una cifra que sube ahí no es una buena noticia. Su tabla es una vista en `main` sobre `meta.controles`, y existe por la misma limitación que obligó a materializar la capa oro en `main`: Rill no sabe mirar fuera del esquema por defecto, así que los metadatos se quedan en `meta` y lo que se publica es el puente.
 
 Las tres vistas de métricas consultan el mismo almacén y **no se pueden mezclar**, porque miden granos distintos. Se ve en la definición de la misma cifra: en `ventas` la facturación es `sum(amount_total)` sobre la cabecera del pedido, y en `catalogo` es `sum(price_total)` sobre la línea. Sumar la primera a grano de línea la multiplicaría por el número de líneas de cada pedido, y el total saldría inflado sin que nada avisara.
 
@@ -389,10 +526,15 @@ Cuatro capas en un mismo fichero DuckDB, cada una en su esquema.
 | `staging` | Preparación | Vistas que resuelven las rarezas del origen (10 vistas) |
 | `vault` | Plata | 6 hubs, 5 enlaces, 7 satélites y 2 tablas de referencia |
 | `main` | Oro | `point_in_time_orders`, `point_in_time_order_lines`, `kpis_daily`, `customer_360`, `customer_history`, `employee_360`, `product_performance` |
+| `meta` | Metadatos | Qué hay, quién lo vigila y en qué estado: `activos`, `controles`, `frescura`, `perfil`, `perfil_historico` y la vista `veredicto` |
 
 : Las capas del almacén y lo que hay en cada una
 
-Los dos consumidores finales no ven lo mismo, y no por casualidad. Rill ataca tres tablas de `main` a través de su capa semántica, y el agente de nao ve las siete y nada más. Ninguno de los dos llega al vault ni a `raw`: la capa oro es la frontera, y por debajo de ella el almacén es asunto de dbt.
+`meta` no es una quinta capa del dato, es una capa **sobre** el dato: no la produce ninguna transformación sino la consolidación de lo que dejaron dbt y Soda. Vive dentro del mismo fichero a propósito, porque el proceso que quiera saber si puede fiarse de una tabla va a lanzar una consulta, no a abrir una interfaz.
+
+Los dos consumidores finales no ven lo mismo, y no por casualidad. Rill ataca tres tablas de `main` a través de su capa semántica, más el puente de metadatos para su panel de calidad. El agente de nao ve las siete de `main` y las seis de `meta`, y ninguna más: puede comprobar si la tabla con la que va a contestar está vigilada y en verde, que es lo que le permite saber cuándo no fiarse de sí mismo.
+
+Ninguno de los dos llega al vault ni a `raw`. La capa oro es la frontera, y por debajo de ella el almacén es asunto de dbt.
 
 El vault entero, con las entidades nuevas y las relaciones que las unen:
 
@@ -670,6 +812,10 @@ Traerlo obliga a lo que ninguna tabla limpia enseña: filtrar `ir_property` por 
 
 **DuckDB escribe con un solo proceso.** Admite varios lectores a la vez, pero un único escritor: es la regla que explica por qué nao convive con Rill y dbt no. Además, el proyecto usa un único hilo de dbt (`threads: 1`). Subirlo no acelera nada y provoca caídas cuando varios modelos escriben a la vez.
 
+**Soda obliga a un duckdb más viejo, así que va en imagen aparte.** `soda-core-duckdb` declara `duckdb<1.1.0`. Instalarlo junto a dbt degradaría el motor que escribe el almacén de 1.1.3 a 1.0.0 sin decir nada, que es la misma clase de accidente que la del adaptador de dbt. Por eso hay un `docker/soda.Dockerfile` propio. Que puedan convivir con versiones distintas no es suerte: el formato de almacenamiento de DuckDB es estable dentro de la serie 1.x, y conviene volver a comprobarlo al subir cualquiera de las dos.
+
+**Y necesita `pytz`, que no pide él.** Lo pide el cliente de DuckDB, y solo al tocar una columna `TIMESTAMP WITH TIME ZONE`, que en este proyecto es la primera comprobación de frescura. El error tampoco ayuda: se ve un `cannot rollback - no transaction is active` con una traza larga de Soda, y el motivo real (`Required module 'pytz' failed to import`) aparece tres líneas más abajo.
+
 **nao también va emparejado consigo mismo.** La CLI que construye el contexto (`nao-core`, en la imagen de utilidades) y el contenedor del chat tienen que ser de la misma versión, por el mismo motivo que dbt y su adaptador. Es un proyecto joven que solo publica etiquetas por commit, así que fijar la versión obliga a escribir el hash (`getnao/nao:b325bba`, la 0.3.3). Con `latest` bastaría con que cambiaran el formato del contexto para que el ya construido dejara de leerse.
 
 **`pyarrow-hotfix` hace falta y no lo pide nadie.** La versión de duckdb del proyecto lo importa siempre que convierte un resultado a Arrow, aunque el parche solo fuera necesario para pyarrow anterior al 14. Sin ese paquete, `nao sync` conecta, encuentra las tablas, falla en todas con un `No module named 'pyarrow_hotfix'` y aun así termina imprimiendo `7 tables synced` en verde. El contexto queda vacío y nada avisa.
@@ -680,7 +826,7 @@ Traerlo obliga a lo que ninguna tabla limpia enseña: filtrar `ir_property` por 
 
 Por mantenerlo reproducible en un portátil, tres piezas se han quedado a la puerta.
 
-**El catálogo.** OpenMetadata pide alrededor de 6 GiB solo para él y ya tiene su propio [apéndice](metadatado.qmd), con su despliegue y su puerto. Conectarlo a este almacén es un buen ejercicio adicional. Lo que queda montado con dbt docs cubre una parte pequeña de eso: el linaje de lo que ocurre dentro de dbt y el diccionario de los modelos, sin glosario de negocio, sin propietarios, sin reglas de calidad publicadas y sin ver los tramos que hacen dlt y Rill.
+**El catálogo.** OpenMetadata pide alrededor de 6 GiB solo para él y ya tiene su propio [apéndice](metadatado.qmd), con su despliegue y su puerto. Conectarlo a este almacén es un buen ejercicio adicional. Lo que queda montado cubre una parte de eso y por dos caminos distintos: dbt docs pone el linaje y el diccionario de los modelos, y el esquema `meta` pone el estado de la vigilancia. Lo que sigue faltando es el glosario de negocio, los propietarios (cada control debería tener un nombre de persona detrás, y aquí no lo tiene) y los tramos que hacen dlt, Rill y nao, que ninguna de las dos piezas ve.
 
 **La orquestación.** Aquí el pipeline son dos órdenes seguidas que se lanzan a mano, y para un único origen eso no pide orquestador ninguno: dlt sabe ejecutar un proyecto dbt por su cuenta (`dlt.dbt.package`), con lo que las dos órdenes se convierten en un script y la dependencia queda expresada por el propio flujo del programa. La maquinaria empieza a compensar cuando los orígenes son varios y hay que esperar a todos. Ambas cosas están en el [capítulo de herramientas de ingesta](../load/herramientas.qmd#quién-lo-pone-en-marcha).
 
@@ -692,7 +838,8 @@ Por mantenerlo reproducible en un portátil, tres piezas se han quedado a la pue
 
 ```bash
 docker compose --profile bi --profile docs --profile jobs --profile ai down -v
-rm -rf warehouse/warehouse.duckdb nao_project/databases nao_project/repos
+rm -rf warehouse/warehouse.duckdb warehouse/soda_results.json \
+       nao_project/databases nao_project/repos
 ```
 
 El `-v` borra también los volúmenes, es decir, la base de datos de Odoo. Sin él, el ERP conserva sus datos y volver a levantarlo es inmediato. Lo que se borra a mano son artefactos generados: el almacén y el contexto del agente se reconstruyen con las mismas órdenes de siempre.
