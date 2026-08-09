@@ -520,7 +520,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="el-lago-tal-y-como-lo-dejamos" class="level2" data-number="10.1">
 <h2 data-number="10.1" class="anchored" data-anchor-id="el-lago-tal-y-como-lo-dejamos"><span class="header-section-number">10.1</span> El lago tal y como lo dejamos</h2>
 <p>Vale la pena ver el problema en concreto, porque es de esos que se entienden mejor tocándolos. Montemos un lago mínimo: una tabla de matrículas escrita como Parquet particionado por año, exactamente lo que haría cualquier proceso de la era Hadoop.</p>
-<div id="14bea160" class="cell" data-execution_count="1">
+<div id="7b67c160" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
@@ -548,7 +548,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>La tabla <strong>es</strong> ese árbol de carpetas, y consultarla consiste en listarlo y leer lo que haya dentro.</p>
-<div id="bfbdc309" class="cell" data-execution_count="2">
+<div id="755b3883" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT * FROM read_parquet('_lago_demo/**/*.parquet', hive_partitioning = true)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY id</span></span>
@@ -596,7 +596,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Hasta aquí, todo bien. Ahora llega una corrección: Nerea confirma su matrícula. Como Parquet es inmutable, no hay un <code>UPDATE</code> posible. Lo que hay es leer el fichero entero, aplicar el cambio en memoria y sobrescribirlo.</p>
-<div id="6d38e2b1" class="cell" data-execution_count="3">
+<div id="f2cf8d15" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE particion_2025 AS</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT id, alumno,</span></span>
