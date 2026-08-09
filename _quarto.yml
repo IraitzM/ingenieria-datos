@@ -66,6 +66,7 @@ book:
       - content/explotacion/semantica.qmd
       - content/explotacion/bi.qmd
       - content/explotacion/ds.qmd
+      - content/explotacion/ai.qmd
       - content/explotacion/mlops.qmd
 
     - content/references.qmd

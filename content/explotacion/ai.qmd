@@ -1,0 +1,128 @@
+# Agentes y asistentes
+
+El [primer capítulo de esta parte](intro.qmd#quién-consume-y-cómo) enumeraba cuatro consumidores y hemos atendido a dos: el analista con su [cuadro de mando](bi.qmd) y el científico de datos con su [tablón](ds.qmd). Queda el cuarto, que es el que ha aparecido de golpe y el que peor se porta.
+
+Un agente con acceso al almacén hace, en el fondo, lo mismo que una herramienta de BI: traduce una pregunta en SQL, la ejecuta y presenta el resultado. La diferencia está en lo que ocurre cuando la pregunta es ambigua, y esa diferencia lo cambia todo.
+
+## El agente que responde con aplomo
+
+Ya lo apuntamos al hablar de la [capa semántica](semantica.qmd#métricas-para-agentes) y conviene recuperarlo aquí como el problema central del capítulo, porque es la razón de que este consumidor merezca uno propio.
+
+Cuando quien pregunta es una persona, una definición ambigua produce una discusión. Alguien dice que los alumnos son 4.000, otro que 3.850, y la organización pierde una reunión averiguando quién contaba a los oyentes. Es caro y es molesto, pero **el desacuerdo es visible**.
+
+Cuando quien pregunta es un modelo de lenguaje, no hay desacuerdo. El agente no sabe que hay tres formas de contar alumnos, así que elige una, escribe el `WHERE` correspondiente y devuelve un número redondo con una frase segura. Nadie ve la elección. El resultado es **SQL plausible y silenciosamente equivocado**, que es bastante peor que un error ruidoso porque llega a una diapositiva sin que nadie lo revise.
+
+La tentación es tratarlo como un problema del modelo, y por tanto esperar a que lo arregle el siguiente. No lo es. Es un problema de contexto, y el contexto lo produce esta capa.
+
+## Lo que un agente necesita saber
+
+Para responder bien a "cuántos alumnos tenemos", un agente necesita tres cosas y solo la primera está en la base de datos:
+
+* **El esquema**: qué tablas hay, qué columnas y cómo se cruzan. Lo puede leer del catálogo del almacén.
+* **El significado**: qué cuenta la medida `alumnos`, si incluye a los que se dieron de baja, cuál es la granularidad de la tabla de hechos. Esto es la [capa semántica](semantica.qmd).
+* **El procedimiento**: que las matrículas anuladas se marcan pero no se borran, que el curso empieza en septiembre y no en enero, que la carga del lunes tarda dos horas y hasta entonces los números del fin de semana están incompletos. Esto no está escrito en ninguna parte, o está en la cabeza de tres personas.
+
+Dar solo lo primero es lo que produce el fallo de la sección anterior. Y es, casualmente, lo más fácil de dar, que es la razón de que sea lo que se hace por defecto.
+
+```{mermaid}
+flowchart LR
+    p["Pregunta"] --> ag["Agente"]
+    ag --> e["Esquema"]
+    ag --> s["Significado"]
+    ag --> r["Procedimiento"]
+    e --> dw[("Almacén")]
+    s --> dw
+    r --> dw
+
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    classDef falta fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    class dw almacen
+    class p,ag,e explotacion
+    class s,r falta
+```
+
+En ámbar, lo que no viene de serie.
+
+## Dos estándares que no compiten
+
+Aquí es donde conviene poner orden, porque en 2026 conviven dos iniciativas que suenan parecido, se citan juntas y resuelven mitades distintas del problema. Confundirlas lleva a esperar de una lo que solo da la otra.
+
+De **OSI** (_Open Semantic Interchange_), hoy [Apache Ossie](semantica.qmd#un-estándar-en-camino), ya hemos hablado: estandariza **qué significa una métrica**, con sus medidas, sus dimensiones y su agregación.
+
+El otro es [**OKF**](https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing) (_Open Knowledge Format_), publicado por Google en 2026, y estandariza otra cosa: **cómo el agente encuentra y lee el contexto**. Un paquete OKF es un directorio de ficheros markdown con frontmatter YAML, y poco más:
+
+``` {.default}
+ventas/
+├── index.md
+├── datasets/
+│   └── pedidos_odoo.md
+├── tables/
+│   ├── fct_pedidos.md
+│   └── dim_cliente.md
+└── metrics/
+    └── ingresos_semanales.md
+```
+
+Cada documento lleva unos campos estructurados en la cabecera (`type`, `title`, `description`, `resource`, `tags`, `timestamp`) y el cuerpo en markdown corriente. Los enlaces markdown entre documentos son las aristas del grafo de conocimiento. No hay SDK, no hay servicio que desplegar y no hay proveedor detrás: se versiona en git, se lee en GitHub y lo consume cualquier agente.
+
+| | Qué estandariza | Qué deja fuera |
+|---|---|---|
+| **OKF** | Cómo se empaqueta, se encuentra y se lee el contexto | Qué significa lo que hay dentro |
+| **Ossie** | Qué significa una métrica y cómo se agrega | Cómo llega al agente |
+
+: Las dos mitades del problema del contexto
+
+:::{.callout-important}
+# Un formato no es un acuerdo
+
+De todos los campos de OKF, el único obligatorio es `type`. Es una decisión deliberada y razonable (el formato quiere ser mínimamente opinado para que lo adopte cualquiera), pero tiene una consecuencia que conviene ver venir.
+
+Un paquete OKF perfectamente válido puede contener tres documentos que definan `alumnos` de tres maneras distintas. El formato garantiza que el agente **los va a encontrar y los va a poder leer**; no garantiza que digan lo mismo. Interoperabilidad de transporte, no de significado.
+
+Es el mismo aviso que hacíamos sobre la [capa semántica y el modelado](semantica.qmd): la pieza nueva se apoya en el trabajo de las anteriores, no lo sustituye. Un paquete de conocimiento sobre un almacén sin métricas definidas produce un agente que se equivoca con más documentación.
+:::
+
+## La vía práctica: MCP sobre la capa semántica
+
+Mientras los estándares se asientan, lo que funciona hoy es más modesto y ya está montado en el stack de este libro.
+
+Prácticamente todas las herramientas con capa semántica publican un servidor MCP (_Model Context Protocol_), que es el mecanismo por el que un agente descubre qué medidas y dimensiones existen y las consulta sin escribir SQL. El cambio de planteamiento es el que importa: en lugar de dar al agente las tablas y confiar en su criterio, se le da **un conjunto acotado de medidas ya validadas** y se le deja elegir entre ellas.
+
+La diferencia con el acceso directo, en la práctica:
+
+| | Acceso al esquema | Acceso a la capa semántica |
+|---|---|---|
+| Qué elige el agente | Tablas, `join`, filtros y agregación | Una medida de una lista corta |
+| Cómo falla | Inventa una agregación razonable | Dice que la métrica no existe |
+| Quién revisa la definición | Nadie | Quien la escribió en el YAML |
+
+Que el modo de fallo pase de "un número equivocado" a "no sé responder" es todo el avance. El segundo es recuperable.
+
+Sobre el [ejercicio del lago de datos](../appendices/datalake.qmd), esto no exige montar nada nuevo: la capa oro y las métricas de Rill que quedaron construidas al final del apéndice son exactamente lo que un agente necesita del otro lado. Rill, de hecho, ya se describe como una herramienta de BI para humanos y agentes.
+
+## El otro agente, el que escribe el código
+
+Todo lo anterior va del agente que **consulta** el almacén. Hay una segunda categoría que conviene no mezclar, porque el usuario es otro: el agente que **escribe** las transformaciones, y cuyo usuario somos nosotros.
+
+Herramientas como [nao](https://getnao.io/) van por ahí. La idea que las distingue de un asistente de código genérico es que el agente está conectado al almacén y al proyecto de dbt: importa el linaje, conoce las tablas y las columnas que existen de verdad, y por tanto propone modelos que se refieren a cosas reales en lugar de inventarse nombres verosímiles. El contexto vive, otra vez, en ficheros versionados (definiciones en markdown, configuración en YAML, consultas de ejemplo).
+
+Merece la pena señalar el patrón, porque se repite en los dos casos y es la conclusión práctica del capítulo: **lo que hace útil a un agente es el material que ya deberíamos tener escrito**. Las descripciones de los modelos de dbt, las definiciones de las métricas, el diccionario del [catálogo](../appendices/metadatado.qmd). Un equipo que las tenga puede conectar un agente en una tarde; uno que no, no lo arregla con mejor modelo.
+
+:::{.callout-warning}
+# Cuidado con el capítulo que envejece
+
+Esta es la parte del libro con la vida media más corta. OKF va por la v0.1 y sus propios autores la presentan como un punto de partida; Ossie convierte definiciones pero todavía no lo consume ningún producto de forma nativa; las herramientas de la sección anterior cambian de nombre y de dueño cada pocos meses.
+
+Lo que no cambia es el problema: un agente responde con la confianza de quien no sabe lo que no sabe, y la única defensa es que el significado esté escrito antes de que pregunte. Conviene leer este capítulo por ahí y tomarse las herramientas como lo que son, ejemplos de una fecha concreta.
+:::
+
+## Lo que le toca al ingeniero de datos
+
+La frontera es parecida a la que trazábamos con la [ciencia de datos](ds.qmd#lo-que-le-toca-al-ingeniero-de-datos), y por las mismas razones.
+
+Elegir el modelo, diseñar las instrucciones y evaluar la calidad de las respuestas **no** es trabajo del ingeniero de datos. Que exista una definición única de cada métrica, que esté escrita en un fichero versionado y que el agente no pueda acceder a nada que no haya pasado por ahí, **sí lo es**.
+
+Dicho de otra forma: no nos toca hacer que el agente sea listo, nos toca hacer que no pueda equivocarse en silencio. Y eso, convenientemente, es el mismo trabajo que llevamos haciendo desde el principio del libro. Un almacén bien modelado, con la historia intacta y las métricas acordadas por escrito, era ya la respuesta correcta antes de que hubiera nadie preguntándole en lenguaje natural.
+
+Queda un consumidor más, y es el que menos lo parece: el modelo que alguien entrenó con el [tablón](ds.qmd) y que ahora hay que [poner a funcionar](mlops.qmd).

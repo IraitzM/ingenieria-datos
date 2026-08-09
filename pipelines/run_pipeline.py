@@ -22,6 +22,7 @@ import dlt
 
 from odoo_extract import cargar, crear_pipeline
 
+# Proyecto dbt
 DBT_PROJECT_DIR = os.environ.get("DBT_PROJECT_DIR", "/app/dbt_project")
 
 

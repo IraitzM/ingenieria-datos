@@ -157,13 +157,13 @@ Cuando quien pregunta es una persona, una definición ambigua produce una discus
 
 Una capa semántica cambia el planteamiento: en lugar de dar al agente las tablas y confiar, se le da un conjunto acotado de medidas y dimensiones con sus definiciones. El agente elige entre métricas ya validadas en lugar de inventarse la agregación. Por eso prácticamente todas las herramientas de esta categoría han incorporado un servidor MCP, y por eso [Rill](../appendices/rill.qmd) se describe a sí mismo hoy como una herramienta de BI *para humanos y agentes*.
 
-Es, mirado con perspectiva, el mismo argumento del [catálogo de gobierno](../appendices/metadatado.qmd): lo que hace útil un dato es el contexto que lo acompaña.
+Es, mirado con perspectiva, el mismo argumento del [catálogo de gobierno](../appendices/metadatado.qmd): lo que hace útil un dato es el contexto que lo acompaña. Este consumidor tiene [capítulo propio](ai.qmd) más adelante, porque da bastante de sí.
 
 ## Un estándar en camino
 
 El punto débil de todo esto es el de siempre: cada herramienta define las métricas en su propio dialecto, y migrar significa reescribirlas.
 
-Para resolverlo nació **OSI** (_Open Semantic Interchange_), un formato neutral para definir métricas impulsado inicialmente por dbt Labs y Snowflake, que en junio de 2026 entró en la incubadora de Apache con el nombre de **Apache Ossie**. Ya existen conversores para MetricFlow, GoodData, Salesforce y Apache Polaris.
+Para resolverlo nació **OSI** (_Open Semantic Interchange_), un formato neutral para definir métricas impulsado inicialmente por dbt Labs y Snowflake, que en junio de 2026 entró en la incubadora de Apache con el nombre de [Apache Ossie](https://ossie.apache.org/). Ya existen conversores para MetricFlow, GoodData, Salesforce y Apache Polaris.
 
 :::{.callout-warning}
 # Todavía no lo soporta ningún producto de forma nativa

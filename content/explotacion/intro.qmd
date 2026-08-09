@@ -13,7 +13,7 @@ La capa de consumo no tiene un único cliente. Tiene cuatro, y cada uno quiere a
 * **Analistas de negocio**, que necesitan explorar: filtrar, agrupar, comparar con el mes pasado, bajar al detalle cuando algo llama la atención. Es el terreno de la [inteligencia de negocio](bi.qmd).
 * **Científicos de datos**, que necesitan el grano más fino posible y acceso programático, porque van a modelar. Es el terreno de la [ciencia de datos](ds.qmd).
 * **Aplicaciones**, que consumen métricas por API para mostrarlas dentro de un producto.
-* **Agentes y asistentes**, la incorporación reciente, que preguntan en lenguaje natural y necesitan saber qué significa cada cosa antes de responder.
+* **Agentes y asistentes**, la incorporación reciente, que preguntan en lenguaje natural y necesitan saber qué significa cada cosa antes de responder. Es el terreno de los [agentes](ai.qmd).
 
 Los cuatro hacen, en el fondo, las mismas preguntas. Y ahí empieza el problema.
 

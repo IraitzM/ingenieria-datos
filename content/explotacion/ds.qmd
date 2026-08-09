@@ -268,4 +268,4 @@ Conviene delimitar responsabilidades, porque esta frontera se difumina con facil
 
 Elegir el algoritmo, ajustar los hiperparámetros y validar el modelo **no** es trabajo del ingeniero de datos. Garantizar que el tablón sea reproducible, esté correctamente fechado y no filtre el futuro, **sí lo es**. Y no es un detalle menor: la mayoría de los modelos que fracasan al pasar a producción no fracasan por el algoritmo, fracasan porque el conjunto con el que se entrenaron no se parecía a lo que iban a ver.
 
-Con el tablón resuelto, queda mirar cómo evolucionan las herramientas de quien lo consume y qué ocurre cuando esos modelos hay que ponerlos a funcionar. Es el [último capítulo](mlops.qmd).
+Con el tablón resuelto queda el cuarto consumidor de esta parte, que pregunta en lenguaje natural y se equivoca sin levantar la voz: los [agentes](ai.qmd). Y después, qué ocurre cuando estos modelos hay que [ponerlos a funcionar](mlops.qmd).

@@ -17,13 +17,15 @@ from datetime import datetime, timezone
 import dlt
 from dlt.sources.sql_database import sql_table
 
+# Entorno Odoo
 ODOO_DB_HOST = os.environ.get("ODOO_DB_HOST", "localhost")
 ODOO_DB_PORT = os.environ.get("ODOO_DB_PORT", "5432")
 ODOO_DB_NAME = os.environ.get("ODOO_DB_NAME", "odoo_demo")
 ODOO_DB_USER = os.environ.get("ODOO_DB_USER", "odoo")
 ODOO_DB_PASSWORD = os.environ.get("ODOO_DB_PASSWORD", "odoo")
-DUCKDB_PATH = os.environ.get("DUCKDB_PATH", "warehouse/warehouse.duckdb")
 
+# Warehouse
+DUCKDB_PATH = os.environ.get("DUCKDB_PATH", "warehouse/warehouse.duckdb")
 RECORD_SOURCE = "odoo_erp"
 
 # Tabla de origen -> tabla de destino y columnas que nos llevamos.
