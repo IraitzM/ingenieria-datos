@@ -561,7 +561,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="montar-el-lago" class="level3" data-number="14.3.1">
 <h3 data-number="14.3.1" class="anchored" data-anchor-id="montar-el-lago"><span class="header-section-number">14.3.1</span> Montar el lago</h3>
 <p>Toda la ceremonia de instalación es esta:</p>
-<div id="6a73aee4" class="cell" data-execution_count="2">
+<div id="a9d51538" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
@@ -576,7 +576,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="la-primera-carga" class="level3" data-number="14.3.2">
 <h3 data-number="14.3.2" class="anchored" data-anchor-id="la-primera-carga"><span class="header-section-number">14.3.2</span> La primera carga</h3>
 <p>Creamos el esquema de aterrizaje y aterrizamos nuestros alumnos, con los metadatos de carga que ya sabemos que hay que poner.</p>
-<div id="5899d544" class="cell" data-execution_count="4">
+<div id="d658f7a0" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"CREATE SCHEMA staging"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
@@ -637,12 +637,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Se consulta como cualquier base de datos, pero lo que hay debajo no es un fichero de base de datos. Miremos el disco:</p>
-<div id="394e3b12" class="cell" data-execution_count="5">
+<div id="0d93af5d" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> raiz, _, ficheros <span class="kw">in</span> os.walk(<span class="st">"lago"</span>):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> ficheros:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(os.path.join(raiz, f))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lago/staging/alumnos/ducklake-019fe693-b4b8-7963-afd6-7ddb494e28ce.parquet</code></pre>
+<pre><code>lago/staging/alumnos/ducklake-019fe74d-8839-7c55-997a-375bb58a7fcc.parquet</code></pre>
 </div>
 </div>
 <p>Un fichero Parquet, en una ruta que refleja esquema y tabla. Cualquier motor que sepa leer Parquet puede leer ese fichero sin pedirle permiso a nadie, y ahí está la diferencia con un almacén propietario: <strong>los datos no están secuestrados por el formato</strong>.</p>
@@ -667,7 +667,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="la-segunda-carga" class="level3" data-number="14.3.3">
 <h3 data-number="14.3.3" class="anchored" data-anchor-id="la-segunda-carga"><span class="header-section-number">14.3.3</span> La segunda carga</h3>
 <p>Al día siguiente vuelve a ejecutarse la ingesta. Un alumno ha corregido su correo y hay una matrícula nueva.</p>
-<div id="e9f3a09f" class="cell" data-execution_count="6">
+<div id="93c92fab" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st">    UPDATE staging.alumnos</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SET email = 'iraitz.montalban@ejemplo.eus', _cargado_en = now()</span></span>
@@ -729,7 +729,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="el-historial" class="level3" data-number="14.3.4">
 <h3 data-number="14.3.4" class="anchored" data-anchor-id="el-historial"><span class="header-section-number">14.3.4</span> El historial</h3>
 <p>Cada operación ha dejado una versión. Y esas versiones son consultables:</p>
-<div id="5458d06d" class="cell" data-execution_count="7">
+<div id="49b9dbaf" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"SELECT snapshot_id, snapshot_time, changes FROM lago.snapshots()"</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <div>
@@ -748,37 +748,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
 <td>0</td>
-<td>2026-08-09 12:51:07.117418+00:00</td>
+<td>2026-08-09 16:14:05.774627+00:00</td>
 <td>{'schemas_created': ['main']}</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>1</td>
-<td>2026-08-09 12:51:07.347296+00:00</td>
+<td>2026-08-09 16:14:05.831469+00:00</td>
 <td>{'schemas_created': ['staging']}</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
 <td>2</td>
-<td>2026-08-09 12:51:07.546289+00:00</td>
+<td>2026-08-09 16:14:05.837056+00:00</td>
 <td>{'tables_created': ['staging.alumnos']}</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
 <td>3</td>
-<td>2026-08-09 12:51:07.567467+00:00</td>
+<td>2026-08-09 16:14:05.865436+00:00</td>
 <td>{'tables_inserted_into': ['2']}</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
 <td>4</td>
-<td>2026-08-09 12:51:07.601398+00:00</td>
+<td>2026-08-09 16:14:05.923647+00:00</td>
 <td>{'tables_inserted_into': ['2'], 'tables_delete...</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">5</th>
 <td>5</td>
-<td>2026-08-09 12:51:07.615784+00:00</td>
+<td>2026-08-09 16:14:05.943955+00:00</td>
 <td>{'tables_inserted_into': ['2']}</td>
 </tr>
 </tbody>
@@ -789,7 +789,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <p>Se lee la historia entera del lago: la creación del esquema, la de la tabla, la inserción inicial, la modificación (que internamente es un borrado más una inserción) y el alta de María.</p>
 <p>Y si tenemos las versiones, tenemos <strong>viaje en el tiempo</strong>. Así estaban las cosas en la versión 3, antes de la segunda carga:</p>
-<div id="a506f67c" class="cell" data-execution_count="8">
+<div id="278be974" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT id_alumno, nombre, email</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM staging.alumnos AT (VERSION =&gt; 3)</span></span>
@@ -835,7 +835,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <p>Cuatro alumnos ahora, tres entonces, y el correo antiguo de Iraitz intacto. Esto no es una copia de seguridad que alguien tuvo la precaución de hacer: es el estado natural de la tabla, disponible con una cláusula SQL.</p>
 <p>Podemos ir más lejos y preguntar directamente <strong>qué cambió</strong> entre dos versiones:</p>
-<div id="0f992663" class="cell" data-execution_count="9">
+<div id="bf155b04" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"USE lago.staging"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT snapshot_id, change_type, id_alumno, email</span></span>
@@ -860,16 +860,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
 <td>4</td>
-<td>update_postimage</td>
+<td>update_preimage</td>
 <td>1</td>
-<td>iraitz.montalban@ejemplo.eus</td>
+<td>iraitz@ejemplo.eus</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>4</td>
-<td>update_preimage</td>
+<td>update_postimage</td>
 <td>1</td>
-<td>iraitz@ejemplo.eus</td>
+<td>iraitz.montalban@ejemplo.eus</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
@@ -907,7 +907,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="cuando-el-origen-cambia-el-esquema" class="level3" data-number="14.3.5">
 <h3 data-number="14.3.5" class="anchored" data-anchor-id="cuando-el-origen-cambia-el-esquema"><span class="header-section-number">14.3.5</span> Cuando el origen cambia el esquema</h3>
 <p>Volvemos a la evolución del esquema, que decíamos que en esta capa debía ser permisiva. La secretaría empieza a registrar el teléfono:</p>
-<div id="f2182364" class="cell" data-execution_count="10">
+<div id="d3e9f03d" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"ALTER TABLE alumnos ADD COLUMN telefono VARCHAR"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
@@ -966,7 +966,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <p>La columna aparece, con valores nulos para lo que ya estaba cargado. Y lo interesante es que los ficheros Parquet antiguos <strong>no se han reescrito</strong>: el catálogo sabe que aquellos ficheros no tienen esa columna y la resuelve como nula al leerlos. Por eso añadir una columna es instantáneo aunque la tabla tenga mil millones de filas.</p>
 <p>Las versiones anteriores, además, siguen viéndose con el esquema que tenían entonces:</p>
-<div id="c821fc4a" class="cell" data-execution_count="11">
+<div id="eeee6ba6" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"SELECT * FROM alumnos AT (VERSION =&gt; 3) LIMIT 1"</span>).df().columns.tolist()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>['id_alumno', 'nombre', 'apellido', 'email', '_origen', '_cargado_en']</code></pre>
@@ -978,7 +978,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2 data-number="14.4" class="anchored" data-anchor-id="conectando-la-ingesta"><span class="header-section-number">14.4</span> Conectando la ingesta</h2>
 <p>Hasta aquí hemos escrito el SQL a mano para ver la mecánica. En la práctica, quien escribe en esta capa es la <a href="../../content/load/herramientas.html">herramienta de ingesta</a>, y dlt sabe hablar DuckLake de forma nativa.</p>
 <p>Montamos primero una secretaría académica de la que extraer, esta vez en SQLite, para tener un origen de verdad:</p>
-<div id="9582414b" class="cell" data-execution_count="12">
+<div id="dc0659e0" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>origen <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">"secretaria.db"</span>)</span>
@@ -1002,7 +1002,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Y declaramos el proceso completo: origen, destino y modo de escritura.</p>
-<div id="0afbca33" class="cell" data-execution_count="13">
+<div id="90d26328" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dlt</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dlt.sources.sql_database <span class="im">import</span> sql_database</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dlt.destinations <span class="im">import</span> ducklake</span>
@@ -1046,16 +1046,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 </div>
-<div id="0fb68242" class="cell" data-execution_count="14">
+<div id="daf98e50" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-stdout">
-<pre><code>Pipeline secretaria load step completed in 1.02 seconds
+<pre><code>Pipeline secretaria load step completed in 1.45 seconds
 1 load package(s) were loaded to destination ducklake and into dataset staging
 The ducklake destination used lago@sqlite:////home/runner/work/ingenieria-datos/ingenieria-datos/content/load/catalogo_dlt.sqlite@file:///home/runner/work/ingenieria-datos/ingenieria-datos/content/load/lago_dlt location to store data
-Load package 1786279869.2024791 is LOADED and contains no failed jobs</code></pre>
+Load package 1786292048.234932 is LOADED and contains no failed jobs</code></pre>
 </div>
 </div>
 <p>Simulamos ahora un día más en la vida de la secretaría y volvemos a ejecutar <strong>exactamente el mismo proceso</strong>:</p>
-<div id="f1039b7c" class="cell" data-execution_count="15">
+<div id="2474c4bd" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>origen.executescript(<span class="st">"""</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="st">    UPDATE alumnos</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SET email = 'iraitz.montalban@ejemplo.eus', actualizado = '2026-01-12 08:00:00'</span></span>
@@ -1067,16 +1067,16 @@ Load package 1786279869.2024791 is LOADED and contains no failed jobs</code></pr
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>info <span class="op">=</span> pipeline.run(fuente, write_disposition<span class="op">=</span><span class="st">"merge"</span>, primary_key<span class="op">=</span><span class="st">"id_alumno"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="546260f4" class="cell" data-execution_count="16">
+<div id="873242c1" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-stdout">
-<pre><code>Pipeline secretaria load step completed in 0.89 seconds
+<pre><code>Pipeline secretaria load step completed in 1.03 seconds
 1 load package(s) were loaded to destination ducklake and into dataset staging
 The ducklake destination used lago@sqlite:////home/runner/work/ingenieria-datos/ingenieria-datos/content/load/catalogo_dlt.sqlite@file:///home/runner/work/ingenieria-datos/ingenieria-datos/content/load/lago_dlt location to store data
-Load package 1786279870.3364792 is LOADED and contains no failed jobs</code></pre>
+Load package 1786292049.884687 is LOADED and contains no failed jobs</code></pre>
 </div>
 </div>
 <p>Y comprobamos el resultado enganchándonos al lago desde fuera, con una conexión DuckDB limpia, para dejar claro que el dato no pertenece a la herramienta que lo escribió:</p>
-<div id="6a483950" class="cell" data-execution_count="17">
+<div id="81e5907a" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>lector <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>lector.sql(<span class="st">"INSTALL ducklake; LOAD ducklake;"</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>lector.sql(<span class="st">"ATTACH 'ducklake:sqlite:catalogo_dlt.sqlite' AS lago_dlt"</span>)</span>
@@ -1131,7 +1131,7 @@ Load package 1786279870.3364792 is LOADED and contains no failed jobs</code></pr
 </div>
 </div>
 <p>El <code>merge</code> ha hecho su trabajo: el correo de Iraitz actualizado, María incorporada, y ni un duplicado. Veamos qué más ha dejado dlt por ahí:</p>
-<div id="ce08f8fa" class="cell" data-execution_count="18">
+<div id="63c17df1" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>lector.sql(<span class="st">"""</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT table_schema, table_name</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM information_schema.tables</span></span>

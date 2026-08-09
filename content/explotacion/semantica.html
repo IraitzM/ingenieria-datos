@@ -486,7 +486,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="el-problema-en-concreto" class="level2" data-number="19.1">
 <h2 data-number="19.1" class="anchored" data-anchor-id="el-problema-en-concreto"><span class="header-section-number">19.1</span> El problema, en concreto</h2>
 <p>Partimos de la capa de consumo que dejamos construida en la <a href="../../content/transform/business_vault.html">transformación</a>, con una carga más: Nerea se ha dado de alta en secretaría el día 13, pero todavía no ha elegido asignaturas.</p>
-<div id="df5f184b" class="cell" data-execution_count="2">
+<div id="3b1c3409" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select alumno_id, nombre_completo, tipo_correo, alta_en_almacen</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_marts.dim_alumno</span></span>
@@ -549,7 +549,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Ahora dos personas responden a la misma pregunta, <em>cuántos alumnos tenemos</em>. La primera cuenta los que están en la dimensión:</p>
-<div id="63071224" class="cell" data-execution_count="3">
+<div id="346738a8" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"select count(*) as alumnos from main_marts.dim_alumno"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -574,7 +574,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>La segunda entiende que alumno es quien está matriculado en algo, y lo cuenta desde los hechos:</p>
-<div id="5ae15f8e" class="cell" data-execution_count="4">
+<div id="67eb3fa0" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select count(distinct alumno_id) as alumnos</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_marts.fct_matriculas</span></span>
@@ -602,7 +602,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Y una tercera, que prepara el informe a fecha de cierre del día 11, filtra por los que ya constaban entonces:</p>
-<div id="31dbf867" class="cell" data-execution_count="5">
+<div id="6919416f" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select count(*) as alumnos</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_marts.dim_alumno</span></span>
