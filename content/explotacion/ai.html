@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -133,6 +133,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
 <script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <meta property="og:title" content="22&nbsp; Agentes y asistentes – Ingeniería de datos">
@@ -447,8 +450,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <li><a href="#lo-que-un-agente-necesita-saber" id="toc-lo-que-un-agente-necesita-saber" class="nav-link" data-scroll-target="#lo-que-un-agente-necesita-saber"><span class="header-section-number">22.2</span> Lo que un agente necesita saber</a></li>
   <li><a href="#dos-estándares-que-no-compiten" id="toc-dos-estándares-que-no-compiten" class="nav-link" data-scroll-target="#dos-estándares-que-no-compiten"><span class="header-section-number">22.3</span> Dos estándares que no compiten</a></li>
   <li><a href="#la-vía-práctica-mcp-sobre-la-capa-semántica" id="toc-la-vía-práctica-mcp-sobre-la-capa-semántica" class="nav-link" data-scroll-target="#la-vía-práctica-mcp-sobre-la-capa-semántica"><span class="header-section-number">22.4</span> La vía práctica: MCP sobre la capa semántica</a></li>
-  <li><a href="#el-otro-agente-el-que-escribe-el-código" id="toc-el-otro-agente-el-que-escribe-el-código" class="nav-link" data-scroll-target="#el-otro-agente-el-que-escribe-el-código"><span class="header-section-number">22.5</span> El otro agente, el que escribe el código</a></li>
-  <li><a href="#lo-que-le-toca-al-ingeniero-de-datos" id="toc-lo-que-le-toca-al-ingeniero-de-datos" class="nav-link" data-scroll-target="#lo-que-le-toca-al-ingeniero-de-datos"><span class="header-section-number">22.6</span> Lo que le toca al ingeniero de datos</a></li>
+  <li><a href="#la-segunda-puerta" id="toc-la-segunda-puerta" class="nav-link" data-scroll-target="#la-segunda-puerta"><span class="header-section-number">22.5</span> La segunda puerta</a></li>
+  <li><a href="#un-índice-es-una-materialización-más" id="toc-un-índice-es-una-materialización-más" class="nav-link" data-scroll-target="#un-índice-es-una-materialización-más"><span class="header-section-number">22.6</span> Un índice es una materialización más</a>
+  <ul class="collapse">
+  <li><a href="#el-índice-sobre-nuestro-propio-almacén" id="toc-el-índice-sobre-nuestro-propio-almacén" class="nav-link" data-scroll-target="#el-índice-sobre-nuestro-propio-almacén"><span class="header-section-number">22.6.1</span> El índice sobre nuestro propio almacén</a></li>
+  </ul></li>
+  <li><a href="#dónde-vive-el-vector" id="toc-dónde-vive-el-vector" class="nav-link" data-scroll-target="#dónde-vive-el-vector"><span class="header-section-number">22.7</span> Dónde vive el vector</a></li>
+  <li><a href="#cuando-el-parecido-no-basta" id="toc-cuando-el-parecido-no-basta" class="nav-link" data-scroll-target="#cuando-el-parecido-no-basta"><span class="header-section-number">22.8</span> Cuando el parecido no basta</a></li>
+  <li><a href="#la-arquitectura-entera" id="toc-la-arquitectura-entera" class="nav-link" data-scroll-target="#la-arquitectura-entera"><span class="header-section-number">22.9</span> La arquitectura, entera</a></li>
+  <li><a href="#el-otro-agente-el-que-escribe-el-código" id="toc-el-otro-agente-el-que-escribe-el-código" class="nav-link" data-scroll-target="#el-otro-agente-el-que-escribe-el-código"><span class="header-section-number">22.10</span> El otro agente, el que escribe el código</a></li>
+  <li><a href="#lo-que-le-toca-al-ingeniero-de-datos" id="toc-lo-que-le-toca-al-ingeniero-de-datos" class="nav-link" data-scroll-target="#lo-que-le-toca-al-ingeniero-de-datos"><span class="header-section-number">22.11</span> Lo que le toca al ingeniero de datos</a></li>
   </ul>
 </nav>
     </div>
@@ -620,8 +631,553 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p>Que el modo de fallo pase de “un número equivocado” a “no sé responder” es todo el avance. El segundo es recuperable.</p>
 <p>Sobre el <a href="../../content/appendices/datalake.html">ejercicio del lago de datos</a>, esto no exige montar nada nuevo: la capa oro y las métricas de Rill que quedaron construidas al final del apéndice son exactamente lo que un agente necesita del otro lado. Rill, de hecho, ya se describe como una herramienta de BI para humanos y agentes.</p>
 </section>
-<section id="el-otro-agente-el-que-escribe-el-código" class="level2" data-number="22.5">
-<h2 data-number="22.5" class="anchored" data-anchor-id="el-otro-agente-el-que-escribe-el-código"><span class="header-section-number">22.5</span> El otro agente, el que escribe el código</h2>
+<section id="la-segunda-puerta" class="level2" data-number="22.5">
+<h2 data-number="22.5" class="anchored" data-anchor-id="la-segunda-puerta"><span class="header-section-number">22.5</span> La segunda puerta</h2>
+<p>Esa vía resuelve el esquema y buena parte del significado, porque una medida viene con su definición al lado. Pero quedaban tres cosas en la lista y la tercera sigue fuera: el procedimiento. Y con él se queda fuera todo el significado que no cabe dentro de una medida, que es bastante: el glosario, las decisiones de modelado, la nota de que la carga del lunes tarda dos horas.</p>
+<p>Todo eso es texto, y el texto no cabe entero en el prompt. Hay que elegir qué trozo entra, y elegirlo por parecido es lo que hace un índice vectorial: se convierte cada documento en un vector, se convierte la pregunta en otro y se recuperan los más cercanos. De ahí vienen los <em>embeddings</em> a un libro de ingeniería de datos, y no por moda.</p>
+<p>El problema llega con ellos. El agente pasa a tener <strong>dos puertas</strong> y ninguna regla sobre cuál usar. Y la segunda devuelve texto, que es un formato en el que caben cifras. Basta con que alguien haya indexado la memoria del curso pasado para que, a la pregunta de cuántos alumnos hay, el agente conteste 4.120 sacado de un PDF sin haber tocado el almacén.</p>
+<p>Es la <a href="../../content/explotacion/intro.html#la-métrica-que-da-tres-números">métrica que da tres números</a> otra vez, con un agravante. Esta cuarta cifra no sale del almacén, así que <strong>ni siquiera es reproducible</strong>: no hay consulta que rehacer para comprobar de dónde salió.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>El índice no guarda cifras que el almacén sepa calcular
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Guarda significado y procedimiento. El número sale siempre de la métrica.</p>
+<p>Dicho en términos de diseño: la recuperación no responde, <strong>devuelve qué medida hay que usar y qué significa</strong>, y el agente la consulta. Es RAG que entrega herramientas, no respuestas.</p>
+</div>
+</div>
+<p>Con esa regla, cada pregunta tiene un dueño y deja de haber discusión sobre quién contesta:</p>
+<table class="caption-top table">
+<caption>Cada puerta con su pregunta</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pregunta</th>
+<th>Quién responde</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>¿Cuántos alumnos activos hay?</td>
+<td>La capa semántica</td>
+<td>Es determinista, agregable y auditable</td>
+</tr>
+<tr class="even">
+<td>¿Qué cuenta “alumno activo”?</td>
+<td>El índice vectorial</td>
+<td>Es texto, y hay varios candidatos</td>
+</tr>
+<tr class="odd">
+<td>¿De dónde sale ese número?</td>
+<td>El grafo de linaje</td>
+<td>Es un recorrido, no un parecido</td>
+</tr>
+</tbody>
+</table>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    p["Pregunta"] --&gt; ag["Agente"]
+    ag --&gt;|"significado"| vec["Índice vectorial&lt;br/&gt;documentación"]
+    ag --&gt;|"cifras"| sem["Capa semántica&lt;br/&gt;medidas"]
+    vec -.-&gt;|"qué medida usar"| sem
+    sem --&gt; dw[("Almacén")]
+
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class dw almacen
+    class p,ag,sem,vec explotacion
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Y de ahí sale lo que nos toca, que es la conciliación propiamente dicha: <strong>el corpus no es material nuevo, es una proyección de la capa de explotación</strong>. Las descripciones de los modelos de dbt, el campo <code>description</code> de cada métrica, el paquete OKF, el glosario del <a href="../../content/appendices/metadatado.html">catálogo</a>. Si el índice se genera en el mismo pipeline que construye la capa oro, no puede contradecir al almacén; como mucho puede quedarse viejo, que es un problema más pequeño y que ya sabemos tratar.</p>
+<p>Una carpeta de PDF que alguien sube aparte, no. Eso es una fuente de verdad paralela, sin linaje y sin dueño, y es justo lo que llevamos evitando desde la parte de ingesta.</p>
+</section>
+<section id="un-índice-es-una-materialización-más" class="level2" data-number="22.6">
+<h2 data-number="22.6" class="anchored" data-anchor-id="un-índice-es-una-materialización-más"><span class="header-section-number">22.6</span> Un índice es una materialización más</h2>
+<p>Si el corpus es derivado, el índice es una tabla más del almacén y le tocan las mismas preguntas que a cualquier otra. Son cuatro, y ninguna es nueva.</p>
+<p><strong>El grano.</strong> Qué es un fragmento. Es la misma decisión que el grano de una tabla de hechos: si el fragmento es demasiado grande la recuperación trae ruido, y si es demasiado pequeño trae frases sin contexto. La ventaja de partir de un corpus derivado es que ya viene troceado por nosotros, y se puede usar un fragmento por artefacto (un modelo, una columna, una métrica) en lugar de cortar el texto cada 512 caracteres a ver qué sale.</p>
+<p><strong>La frescura.</strong> A una tabla se le puede preguntar cuándo se cargó. Un fragmento no tiene nada, salvo que se lo pongamos, y <strong>un fragmento viejo no se distingue de uno nuevo</strong>: se recupera igual de bien y se cita con el mismo aplomo. De ahí que cada fila lleve cuándo se generó y de qué versión del artefacto salió.</p>
+<p><strong>El coste.</strong> Reembeber el corpus entero cada noche se paga en dinero y en tiempo. Solo debería reembeberse lo que ha cambiado, y para saberlo hace falta una huella del contenido, que es exactamente la idea del <code>hd_alumno</code> del <a href="../../content/transform/raw_vault.html">satélite</a>. Con un matiz caro: <strong>la versión del modelo de embeddings forma parte de la clave</strong>, porque dos vectores calculados con modelos distintos no se pueden comparar entre sí. Cambiar de modelo no es una migración, es reconstruir el índice entero.</p>
+<p><strong>El borrado.</strong> Cuando un modelo de dbt desaparece, su fragmento tiene que desaparecer con él. Aquí no sirve el “no se borra, se deduce el cierre” del vault, porque no hay consulta a fecha que salve al recuperador: si el fragmento sigue en la tabla, se recupera.</p>
+<p>Las cuatro apuntan al mismo sitio. El índice se reconstruye <strong>dentro del mismo <code>dbt build</code></strong> que construye la capa oro, como un modelo Python o un post-hook, y no en un cuaderno aparte que alguien ejecuta cuando se acuerda. No es comodidad, es la única forma de que no derive.</p>
+<section id="el-índice-sobre-nuestro-propio-almacén" class="level3" data-number="22.6.1">
+<h3 data-number="22.6.1" class="anchored" data-anchor-id="el-índice-sobre-nuestro-propio-almacén"><span class="header-section-number">22.6.1</span> El índice sobre nuestro propio almacén</h3>
+<p>Se ve mejor construyéndolo. Partimos de la secretaría académica con su vault y su capa de consumo ya montados, y el corpus no lo escribimos: lo saca dbt de su propio manifiesto, que es donde acaban las descripciones que alguien puso en los YAML.</p>
+<div id="3f6b27c2" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> artefacto(nombre):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Lee uno de los artefactos que dbt deja en target/."""</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    ruta <span class="op">=</span> os.path.join(utilidades.ESPACIO, <span class="st">"target"</span>, nombre)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(ruta, encoding<span class="op">=</span><span class="st">"utf-8"</span>) <span class="im">as</span> f:</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> json.load(f)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>manifest <span class="op">=</span> artefacto(<span class="st">"manifest.json"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>documentos <span class="op">=</span> []</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nodo <span class="kw">in</span> manifest[<span class="st">"nodes"</span>].values():</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> nodo[<span class="st">"resource_type"</span>] <span class="op">!=</span> <span class="st">"model"</span>:</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> nodo[<span class="st">"description"</span>]:</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        documentos.append((<span class="st">"modelo"</span>, nodo[<span class="st">"name"</span>], nodo[<span class="st">"description"</span>]))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> columna, detalle <span class="kw">in</span> nodo[<span class="st">"columns"</span>].items():</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> detalle[<span class="st">"description"</span>]:</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>            documentos.append(</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>                (<span class="st">"columna"</span>, <span class="ss">f"</span><span class="sc">{</span>nodo[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">.</span><span class="sc">{</span>columna<span class="sc">}</span><span class="ss">"</span>, detalle[<span class="st">"description"</span>])</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fuente <span class="kw">in</span> manifest[<span class="st">"sources"</span>].values():</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> fuente[<span class="st">"description"</span>]:</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        documentos.append((<span class="st">"origen"</span>, fuente[<span class="st">"name"</span>], fuente[<span class="st">"description"</span>]))</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>corpus <span class="op">=</span> pd.DataFrame(documentos, columns<span class="op">=</span>[<span class="st">"tipo"</span>, <span class="st">"activo"</span>, <span class="st">"texto"</span>])</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>corpus</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">tipo</th>
+<th data-quarto-table-cell-role="th">activo</th>
+<th data-quarto-table-cell-role="th">texto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>modelo</td>
+<td>hub_alumno</td>
+<td>Claves de negocio de los alumnos conocidos por...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>columna</td>
+<td>hub_alumno.hk_alumno</td>
+<td>Clave hash del alumno, calculada sobre la clav...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>columna</td>
+<td>hub_alumno.id_alumno</td>
+<td>Clave de negocio en el sistema origen.</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>modelo</td>
+<td>sat_alumno</td>
+<td>Atributos descriptivos del alumno, con una ver...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>columna</td>
+<td>sat_alumno.hd_alumno</td>
+<td>Huella de los atributos. Si no cambia, no se a...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>modelo</td>
+<td>link_matricula</td>
+<td>Relación entre un alumno y una asignatura que ...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>columna</td>
+<td>link_matricula.hk_alumno</td>
+<td>Debe existir en el hub. Es la integridad refer...</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>origen</td>
+<td>alumnos</td>
+<td>Alumnos que constan en secretaría, sin interpr...</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>origen</td>
+<td>asignaturas</td>
+<td>Catálogo de asignaturas ofertadas.</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>origen</td>
+<td>cursa</td>
+<td>Qué alumno cursa qué asignatura, la relación e...</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Diez fragmentos, y ni uno escrito para el agente: son los que ya estaban en el proyecto. Antes de seguir conviene mirar una cifra que sale del mismo manifiesto.</p>
+<div id="b559dc2e" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>modelos <span class="op">=</span> [n <span class="cf">for</span> n <span class="kw">in</span> manifest[<span class="st">"nodes"</span>].values() <span class="cf">if</span> n[<span class="st">"resource_type"</span>] <span class="op">==</span> <span class="st">"model"</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>descritos <span class="op">=</span> [n <span class="cf">for</span> n <span class="kw">in</span> modelos <span class="cf">if</span> n[<span class="st">"description"</span>]]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(descritos)<span class="sc">}</span><span class="ss"> de </span><span class="sc">{</span><span class="bu">len</span>(modelos)<span class="sc">}</span><span class="ss"> modelos tienen descripción"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3 de 12 modelos tienen descripción</code></pre>
+</div>
+</div>
+<p>Ahora los vectores. Usamos <a href="https://github.com/MinishLab/model2vec">model2vec</a>, que ejecuta modelos de embeddings estáticos con numpy y sin GPU: para diez documentos va sobrado y no arrastra media biblioteca de aprendizaje profundo al libro.</p>
+<div id="14a79f55" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> model2vec <span class="im">import</span> StaticModel</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> StaticModel.from_pretrained(<span class="st">"minishlab/potion-multilingual-128M"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>vectores <span class="op">=</span> modelo.encode((corpus.activo <span class="op">+</span> <span class="st">". "</span> <span class="op">+</span> corpus.texto).tolist())</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>vectores.shape</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>(10, 256)</code></pre>
+</div>
+</div>
+<p>Cada fragmento es ya un punto en un espacio de 256 dimensiones. Y como es una materialización más, se guarda donde vive el dato, en un esquema aparte del propio lago, con su huella de contenido y su marca de generación.</p>
+<div id="4a2ddd55" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dimension <span class="op">=</span> vectores.shape[<span class="dv">1</span>]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>fragmentos <span class="op">=</span> corpus.assign(vector<span class="op">=</span><span class="bu">list</span>(vectores.astype(<span class="st">"float32"</span>)))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"INSTALL ducklake; LOAD ducklake;"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="ss">f"ATTACH 'ducklake:sqlite:</span><span class="sc">{</span>utilidades<span class="sc">.</span>CATALOGO<span class="sc">}</span><span class="ss">' AS lago (DATA_PATH '</span><span class="sc">{</span>utilidades<span class="sc">.</span>DATOS<span class="sc">}</span><span class="ss">')"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"USE lago"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"CREATE SCHEMA IF NOT EXISTS indice"</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"""</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE OR REPLACE TABLE indice.fragmentos AS</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT tipo, activo, texto, vector,</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="st">           md5(texto)                AS hash_contenido,</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="st">           current_localtimestamp()  AS generado_en</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM fragmentos</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>con.sql(<span class="st">"DESCRIBE indice.fragmentos"</span>).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">column_name</th>
+<th data-quarto-table-cell-role="th">column_type</th>
+<th data-quarto-table-cell-role="th">null</th>
+<th data-quarto-table-cell-role="th">key</th>
+<th data-quarto-table-cell-role="th">default</th>
+<th data-quarto-table-cell-role="th">extra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>tipo</td>
+<td>VARCHAR</td>
+<td>YES</td>
+<td>None</td>
+<td>NULL</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>activo</td>
+<td>VARCHAR</td>
+<td>YES</td>
+<td>None</td>
+<td>NULL</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>texto</td>
+<td>VARCHAR</td>
+<td>YES</td>
+<td>None</td>
+<td>NULL</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>vector</td>
+<td>FLOAT[]</td>
+<td>YES</td>
+<td>None</td>
+<td>NaN</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>hash_contenido</td>
+<td>VARCHAR</td>
+<td>YES</td>
+<td>None</td>
+<td>NULL</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>generado_en</td>
+<td>TIMESTAMP</td>
+<td>YES</td>
+<td>None</td>
+<td>NULL</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>El vector queda como lista y no como vector de tamaño fijo, porque es lo que admite el formato abierto de debajo; el tamaño se impone al consultar, que es donde hace falta. Y ya se puede preguntar. La distancia del coseno es una función del núcleo de DuckDB, así que esto no necesita ninguna extensión ni ningún servicio.</p>
+<div id="82b85160" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pregunta <span class="op">=</span> <span class="st">"¿Cuántos alumnos tenemos?"</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>consulta <span class="op">=</span> modelo.encode([pregunta])[<span class="dv">0</span>].astype(<span class="st">"float32"</span>).tolist()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>con.execute(<span class="ss">f"""</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ss">    SELECT activo, tipo,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ss">           round(array_cosine_distance(vector::FLOAT[</span><span class="sc">{</span>dimension<span class="sc">}</span><span class="ss">],</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ss">                                       ?::FLOAT[</span><span class="sc">{</span>dimension<span class="sc">}</span><span class="ss">]), 3) AS distancia</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ss">    FROM indice.fragmentos</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ss">    ORDER BY distancia</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ss">    LIMIT 3</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span>, [consulta]).df()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">activo</th>
+<th data-quarto-table-cell-role="th">tipo</th>
+<th data-quarto-table-cell-role="th">distancia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>sat_alumno</td>
+<td>modelo</td>
+<td>0.425</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>hub_alumno</td>
+<td>modelo</td>
+<td>0.480</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>alumnos</td>
+<td>origen</td>
+<td>0.487</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Merece la pena mirar esa respuesta con calma, porque es el resultado que justifica el capítulo.</p>
+<p>El recuperador ha devuelto tres documentos con toda naturalidad y <strong>ninguno responde a la pregunta</strong>. El primero describe un satélite con la historia de los atributos, el segundo las claves de negocio y el tercero la tabla de aterrizaje sin interpretar. Nada de eso cuenta alumnos.</p>
+<p>Las dos tablas que sí saben contarlos, <code>dim_alumno</code> y <code>fct_matriculas</code>, no aparecen por ningún lado. Y no es culpa del modelo de embeddings: es que <strong>no están en el índice</strong>. Nadie escribió su descripción, así que no hay documento que recuperar. Un índice no puede indexar lo que no se escribió.</p>
+<p>La respuesta, mientras tanto, estaba a una consulta de distancia por la otra puerta:</p>
+<div id="788a88e7" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>con.close()  <span class="co"># el lago no admite dos escritores a la vez</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"select count(*) as alumnos from main_marts.dim_alumno"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">alumnos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Y hay un detalle más en la recuperación de antes que conviene no pasar por alto: las tres distancias son casi iguales. El recuperador no tiene forma de decir <em>ninguno de estos vale</em>. Devuelve siempre sus tres mejores, y sin un umbral el agente los recibe como si fueran buenos. Es el aplomo del principio del capítulo, ahora instalado en la pieza de recuperación.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>Un índice no arregla la documentación, la amplifica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La reacción natural al ver ese resultado es cambiar de modelo de embeddings o de estrategia de troceado. No es ahí. Con tres modelos descritos de doce, ningún recuperador va a encontrar lo que no está escrito, y lo que sí está (hashes, claves de negocio, integridad referencial) es precisamente lo que no hace falta para responder a una pregunta de negocio.</p>
+<p>Es el aviso que hacíamos con OKF, un paso más allá. Un paquete de conocimiento sin métricas definidas produce un agente que se equivoca con más documentación. Un índice vectorial sobre un almacén sin describir produce un agente que se equivoca <strong>con más confianza</strong>, porque ahora acompaña el error con citas.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="dónde-vive-el-vector" class="level2" data-number="22.7">
+<h2 data-number="22.7" class="anchored" data-anchor-id="dónde-vive-el-vector"><span class="header-section-number">22.7</span> Dónde vive el vector</h2>
+<p>Lo acabamos de hacer dentro de DuckDB sin instalar nada, y eso adelanta bastante la recomendación. Pero conviene el mapa completo, porque es la decisión con más ruido alrededor de todas las de este capítulo.</p>
+<table class="caption-top table">
+<caption>Dónde puede vivir el índice vectorial</caption>
+<thead>
+<tr class="header">
+<th>Dónde</th>
+<th>Ejemplos</th>
+<th>Consecuencia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>En el propio almacén</td>
+<td><code>vss</code> de DuckDB, pgvector, vector search de Snowflake y Databricks</td>
+<td>El vector es una columna más: se reconstruye con el resto y no hay nada que sincronizar</td>
+</tr>
+<tr class="even">
+<td>Embebido, en fichero</td>
+<td>LanceDB, FAISS, Chroma</td>
+<td>Cabe en el repositorio y viaja con el proyecto</td>
+</tr>
+<tr class="odd">
+<td>Servicio gestionado</td>
+<td><a href="https://www.pinecone.io/">Pinecone</a>, Turbopuffer</td>
+<td>Escala y latencia sin operar nada; una copia más del dato, con su propio retraso</td>
+</tr>
+<tr class="even">
+<td>Autoalojado</td>
+<td>Qdrant, Weaviate, Milvus</td>
+<td>Control del coste y del dato; una pieza más que operar</td>
+</tr>
+</tbody>
+</table>
+<p>Para el caso que nos ocupa la respuesta por defecto es la primera fila, y el argumento es de ingeniería de datos y no de rendimiento. La documentación de un almacén son cientos o unos miles de fragmentos, no millones. Montar un servicio aparte para eso añade <strong>una copia más que sincronizar</strong>, con su propio retraso y su propia manera de quedarse vieja, que es justo el problema que llevamos todo el libro evitando.</p>
+<p>Pinecone y los suyos se justifican cuando el corpus es del producto y no del almacén: millones de documentos, latencia de percentil 99, multi-tenencia. Ahí el índice <em>es</em> la aplicación y merece su propia infraestructura. Para responder a qué cuenta la medida de alumnos activos, no.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>El índice HNSW de DuckDB todavía no es para producción
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La extensión <code>vss</code> añade índices HNSW, pero su persistencia sigue siendo experimental: hay que activarla con <code>hnsw_enable_experimental_persistence</code> y la recuperación tras una parada inesperada no está resuelta.</p>
+<p>Con unos miles de fragmentos da igual, y por eso el ejemplo de arriba no la usa: la fuerza bruta con <code>array_cosine_distance</code> recorre la tabla entera en milisegundos y es núcleo de DuckDB. El índice hace falta cuando la tabla crece, y para entonces probablemente la conversación sea otra.</p>
+</div>
+</div>
+</section>
+<section id="cuando-el-parecido-no-basta" class="level2" data-number="22.8">
+<h2 data-number="22.8" class="anchored" data-anchor-id="cuando-el-parecido-no-basta"><span class="header-section-number">22.8</span> Cuando el parecido no basta</h2>
+<p>Hay una pregunta que el índice de arriba no sabe contestar por mucho que mejoremos el corpus: <em>si cambio <code>stg_alumnos</code>, ¿qué se rompe?</em></p>
+<p>No hay ningún documento que se <strong>parezca</strong> a esa pregunta. La respuesta no es un texto que recuperar, es un recorrido: de un modelo a los que lo referencian, y de ahí a los paneles que los consumen. Para eso hace falta un grafo, y de ahí viene el nombre feo de GraphRAG.</p>
+<p>Lo interesante para nosotros es que <strong>ese grafo ya lo tenemos, y por duplicado</strong>.</p>
+<p><strong>Uno, el grafo de metadatos.</strong> Es el mismo <code>manifest.json</code> del que acabamos de sacar el corpus: su <code>parent_map</code> es la lista de aristas, y el <a href="../../content/appendices/metadatado.html#el-grafo-completo">apéndice de metadatado</a> ya lo recorre entero para dibujar el linaje de principio a fin. GraphRAG sobre este stack no consiste en construir nada, sino en dejar que el agente recorra lo que ya se dibuja solo en cada ejecución.</p>
+<p><strong>Dos, el propio Data Vault.</strong> Un hub es un nodo, un enlace es una arista y un satélite guarda las propiedades de ese nodo con toda su historia. <code>hub_alumno</code>, <code>link_matricula</code> y <code>sat_alumno</code> son literalmente eso. No hay que convertir el vault en un grafo de conocimiento: hay que leerlo como lo que ya es.</p>
+<p>Y ahí aparece la coincidencia más fina, que merece su párrafo. Los grafos de conocimiento temporales guardan en cada arista cuándo empezó a ser cierta y cuándo dejó de serlo, además de cuándo se supo. Es la distinción bitemporal, y es la misma que llevamos usando desde el raw vault entre el tiempo del negocio y el <code>load_date</code>. Con una diferencia de estilo: <a href="https://help.getzep.com/graphiti/getting-started/overview">Graphiti</a> materializa el cierre en la propia arista, mientras que <a href="../../content/transform/raw_vault.html"><code>sat_alumno</code></a> no lo guarda y lo deduce con una ventana, y <a href="../../content/transform/business_vault.html"><code>pit_alumno</code></a> es esa deducción precalculada. La consulta a fecha del business vault y la consulta <em>point in time</em> de un grafo temporal son la misma operación con dos vocabularios distintos.</p>
+<table class="caption-top table">
+<caption>Herramientas para la parte de grafo</caption>
+<thead>
+<tr class="header">
+<th>Herramienta</th>
+<th>Qué hace</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://github.com/Graphify-Labs/graphify">Graphify</a></td>
+<td>Convierte código, esquemas SQL, configuración y documentación en un grafo consultable, con parseo determinista y sin índice vectorial</td>
+<td>Cuando lo que hay que recorrer es el repositorio</td>
+</tr>
+<tr class="even">
+<td><a href="https://help.getzep.com/graphiti/getting-started/overview">Graphiti</a></td>
+<td>Grafo de conocimiento temporal para memoria de agentes, con validez bitemporal en cada arista</td>
+<td>Cuando el agente tiene que recordar y las cosas cambian</td>
+</tr>
+<tr class="odd">
+<td>Microsoft GraphRAG, LightRAG</td>
+<td>Extraen entidades y relaciones desde texto usando un modelo de lenguaje</td>
+<td>Cuando solo hay documentos y no hay esquema</td>
+</tr>
+<tr class="even">
+<td>Neo4j, Kùzu, Apache AGE</td>
+<td>El almacén donde vive el grafo</td>
+<td>Kùzu es a los grafos lo que DuckDB a la analítica: embebido y sin servidor</td>
+</tr>
+</tbody>
+</table>
+<p>La distinción que importa de esa tabla no es quién la publica, sino <strong>de dónde sale el grafo</strong>. Graphify lo deriva de estructura que ya existe y lo hace con parseo determinista, sin modelo de por medio. Microsoft GraphRAG y LightRAG lo <strong>infieren del texto</strong> con un modelo de lenguaje, lo cual cuesta dinero y acierta a veces. Graphiti admite las dos vías, y su aportación está en otro sitio: en el tiempo.</p>
+<p>Para un almacén, inferir es casi siempre el error caro de esta categoría. Nosotros tenemos el grafo por construcción, en el manifiesto y en el vault, y pagar por adivinar con un modelo lo que ya sabemos con certeza no mejora nada. Determinista donde se pueda, inferido solo donde no quede otra.</p>
+</section>
+<section id="la-arquitectura-entera" class="level2" data-number="22.9">
+<h2 data-number="22.9" class="anchored" data-anchor-id="la-arquitectura-entera"><span class="header-section-number">22.9</span> La arquitectura, entera</h2>
+<p>Juntando las tres piezas, lo que queda no es un agente con acceso al almacén sino un agente con tres recuperadores y una regla de precedencia.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    p["Pregunta"] --&gt; ag["Agente"]
+    ag --&gt; m["Métrica&lt;br/&gt;MCP sobre la capa semántica"]
+    ag --&gt; v["Vectorial&lt;br/&gt;catálogo y documentación"]
+    ag --&gt; g["Grafo&lt;br/&gt;linaje y vault"]
+    v -.-&gt;|"qué medida usar"| m
+    g -.-&gt;|"de dónde sale"| m
+    m --&gt; oro[("Capa oro")]
+    v --&gt; idx[("Índice derivado&lt;br/&gt;del catálogo")]
+    g --&gt; lin[("manifest.json&lt;br/&gt;hubs y enlaces")]
+
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
+    class oro,idx,lin almacen
+    class p,ag,m,v,g explotacion
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>La regla de precedencia es la de antes y cabe en una línea: <strong>si la pregunta lleva número, gana la métrica</strong>. Los otros dos recuperadores sirven para elegir bien la métrica y para explicar de dónde sale, nunca para sustituirla.</p>
+<p>Falta saber si funciona, y esa parte también es nuestra. La forma barata de medirlo es un fichero de preguntas de referencia con la medida que cada una debería activar, versionado junto al proyecto y ejecutado en cada construcción. Es la idea de las pruebas de dbt aplicada a la recuperación: si al tocar una descripción una pregunta deja de encontrar su medida, salta en la integración continua y no en una reunión. La calidad de la redacción de la respuesta no es cosa nuestra; que el recuperador traiga el documento correcto, sí.</p>
+</section>
+<section id="el-otro-agente-el-que-escribe-el-código" class="level2" data-number="22.10">
+<h2 data-number="22.10" class="anchored" data-anchor-id="el-otro-agente-el-que-escribe-el-código"><span class="header-section-number">22.10</span> El otro agente, el que escribe el código</h2>
 <p>Todo lo anterior va del agente que <strong>consulta</strong> el almacén. Hay una segunda categoría que conviene no mezclar, porque el usuario es otro: el agente que <strong>escribe</strong> las transformaciones, y cuyo usuario somos nosotros.</p>
 <p>Herramientas como <a href="https://getnao.io/">nao</a> van por ahí. La idea que las distingue de un asistente de código genérico es que el agente está conectado al almacén y al proyecto de dbt: importa el linaje, conoce las tablas y las columnas que existen de verdad, y por tanto propone modelos que se refieren a cosas reales en lugar de inventarse nombres verosímiles. El contexto vive, otra vez, en ficheros versionados (definiciones en markdown, configuración en YAML, consultas de ejemplo).</p>
 <p>Merece la pena señalar el patrón, porque se repite en los dos casos y es la conclusión práctica del capítulo: <strong>lo que hace útil a un agente es el material que ya deberíamos tener escrito</strong>. Las descripciones de los modelos de dbt, las definiciones de las métricas, el diccionario del <a href="../../content/appendices/metadatado.html">catálogo</a>. Un equipo que las tenga puede conectar un agente en una tarde; uno que no, no lo arregla con mejor modelo.</p>
@@ -636,14 +1192,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 <div class="callout-body-container callout-body">
 <p>Esta es la parte del libro con la vida media más corta. OKF va por la v0.1 y sus propios autores la presentan como un punto de partida; Ossie convierte definiciones pero todavía no lo consume ningún producto de forma nativa; las herramientas de la sección anterior cambian de nombre y de dueño cada pocos meses.</p>
+<p>Las tablas de bases vectoriales y de grafos envejecen todavía más rápido, y los modelos de embeddings más aún: el que usa el ejemplo será viejo antes que el resto del capítulo. Están puestas para enseñar en qué se diferencian las categorías, no para elegir proveedor a partir de ellas.</p>
 <p>Lo que no cambia es el problema: un agente responde con la confianza de quien no sabe lo que no sabe, y la única defensa es que el significado esté escrito antes de que pregunte. Conviene leer este capítulo por ahí y tomarse las herramientas como lo que son, ejemplos de una fecha concreta.</p>
 </div>
 </div>
 </section>
-<section id="lo-que-le-toca-al-ingeniero-de-datos" class="level2" data-number="22.6">
-<h2 data-number="22.6" class="anchored" data-anchor-id="lo-que-le-toca-al-ingeniero-de-datos"><span class="header-section-number">22.6</span> Lo que le toca al ingeniero de datos</h2>
+<section id="lo-que-le-toca-al-ingeniero-de-datos" class="level2" data-number="22.11">
+<h2 data-number="22.11" class="anchored" data-anchor-id="lo-que-le-toca-al-ingeniero-de-datos"><span class="header-section-number">22.11</span> Lo que le toca al ingeniero de datos</h2>
 <p>La frontera es parecida a la que trazábamos con la <a href="../../content/explotacion/ds.html#lo-que-le-toca-al-ingeniero-de-datos">ciencia de datos</a>, y por las mismas razones.</p>
 <p>Elegir el modelo, diseñar las instrucciones y evaluar la calidad de las respuestas <strong>no</strong> es trabajo del ingeniero de datos. Que exista una definición única de cada métrica, que esté escrita en un fichero versionado y que el agente no pueda acceder a nada que no haya pasado por ahí, <strong>sí lo es</strong>.</p>
+<p>Con el contexto recuperado la frontera no se mueve, solo se alarga por nuestro lado con tres cosas más:</p>
+<ul>
+<li>Que el corpus sea <strong>derivado y no original</strong>, para que no pueda contradecir al almacén.</li>
+<li>Que se reconstruya <strong>en el mismo pipeline</strong>, con su huella de contenido y su marca de generación, para que quedarse viejo sea visible.</li>
+<li>Que el agente <strong>no pueda contestar una cifra desde el índice</strong>, porque las cifras salen de la métrica.</li>
+</ul>
 <p>Dicho de otra forma: no nos toca hacer que el agente sea listo, nos toca hacer que no pueda equivocarse en silencio. Y eso, convenientemente, es el mismo trabajo que llevamos haciendo desde el principio del libro. Un almacén bien modelado, con la historia intacta y las métricas acordadas por escrito, era ya la respuesta correcta antes de que hubiera nadie preguntándole en lenguaje natural.</p>
 <p>Queda un consumidor más, y es el que menos lo parece: el modelo que alguien entrenó con el <a href="../../content/explotacion/ds.html">tablón</a> y que ahora hay que <a href="../../content/explotacion/mlops.html">poner a funcionar</a>.</p>
 
