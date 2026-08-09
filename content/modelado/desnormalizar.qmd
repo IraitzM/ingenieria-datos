@@ -44,7 +44,7 @@ Por ejemplo, asumamos que un alumno solo cursa una asignatura. Podemos incluir e
 ```{mermaid}
 erDiagram
     ALUMNOS {
-        numero id_alumno
+        numero id_alumno PK
         texto nombre
         texto apellido
         numero id_asignatura FK
@@ -52,13 +52,13 @@ erDiagram
     ASIGNATURAS {
         numero id_asignatura PK
         texto nombre
-        numero id_docente FK
+        numero id_profesor FK
     }
     PROFESORES {
         numero id_profesor PK
         texto nombre
     }
-    ALUMNOS }|--|{ ASIGNATURAS: matriculado
+    ALUMNOS }o--|| ASIGNATURAS: matriculado
     PROFESORES ||--o{ ASIGNATURAS: imparte
 ```
 
@@ -92,15 +92,15 @@ erDiagram
     ASIGNATURAS {
         numero id_asignatura PK
         texto nombre
-        numero id_docente FK
+        numero id_profesor FK
     }
     PROFESORES {
         numero id_profesor PK
         texto nombre
     }
 
-    ALUMNOS }|--|{ CURSA: matriculado
-    CURSA }|--|{ ASIGNATURAS: cursando
+    ALUMNOS ||--o{ CURSA: matriculado
+    ASIGNATURAS ||--o{ CURSA: cursando
     PROFESORES ||--o{ ASIGNATURAS: imparte
 ```
 
@@ -128,8 +128,8 @@ erDiagram
         texto nombre
     }
 
-    ALUMNOS }|--|{ CURSA: matriculado
-    CURSA }|--|{ ASIGNATURAS: cursando
+    ALUMNOS ||--o{ CURSA: matriculado
+    ASIGNATURAS ||--o{ CURSA: cursando
     PROFESORES ||--o{ CURSA: imparte
 ```
 

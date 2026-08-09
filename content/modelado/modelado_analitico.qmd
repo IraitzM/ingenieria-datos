@@ -50,10 +50,10 @@ erDiagram
         numero total
     }
 
-    DIM_TIEMPO }|--o{ FACT_FACTURAS: fecha
-    DIM_PRODUCTOS }|--o{ FACT_FACTURAS: producto
-    DIM_CLIENTES }|--o{ FACT_FACTURAS: cliente
-    DIM_EMPLEADOS }|--o{ FACT_FACTURAS: empleado
+    DIM_TIEMPO ||--o{ FACT_FACTURAS: fecha
+    DIM_PRODUCTOS ||--o{ FACT_FACTURAS: producto
+    DIM_CLIENTES ||--o{ FACT_FACTURAS: cliente
+    DIM_EMPLEADOS ||--o{ FACT_FACTURAS: empleado
 ```
 
 El enfoque se basa en que las dimensiones son instancias de datos poco cambiantes (listado de empleados, clientes, productos,...) mientras que los hechos crecen de forma constante (en nuestro caso las ventas facturadas). Aunque esto no siempre pasa así y podemos tener información cambiante en nuestras dimensiones como veremos [más adelante](#scd).
@@ -167,17 +167,17 @@ erDiagram
         numero total
     }
 
-    DIM_TERRITORIOS }|--o{ DIM_EMPLEADOS: en
-    DIM_CATEGORIAS }|--o{ DIM_PRODUCTOS: pertenece
-    DIM_PROVEEDORES }|--o{ DIM_PRODUCTOS: provee
+    DIM_TERRITORIOS ||--o{ DIM_EMPLEADOS: en
+    DIM_CATEGORIAS ||--o{ DIM_PRODUCTOS: pertenece
+    DIM_PROVEEDORES ||--o{ DIM_PRODUCTOS: provee
 
-    DIM_TRIMESTRES }|--o{ DIM_TIEMPO: en
-    DIM_MESES }|--o{ DIM_TIEMPO: en
+    DIM_TRIMESTRES ||--o{ DIM_TIEMPO: en
+    DIM_MESES ||--o{ DIM_TIEMPO: en
 
-    DIM_TIEMPO }|--o{ FACT_FACTURAS: fecha
-    DIM_PRODUCTOS }|--o{ FACT_FACTURAS: producto
-    DIM_CLIENTES }|--o{ FACT_FACTURAS: cliente
-    DIM_EMPLEADOS }|--o{ FACT_FACTURAS: empleado
+    DIM_TIEMPO ||--o{ FACT_FACTURAS: fecha
+    DIM_PRODUCTOS ||--o{ FACT_FACTURAS: producto
+    DIM_CLIENTES ||--o{ FACT_FACTURAS: cliente
+    DIM_EMPLEADOS ||--o{ FACT_FACTURAS: empleado
 ```
 
 Si conseguimos tener dimensiones comunes a todas las áreas de negocio, esto nos da una consolidación de la información con poca variación entre unidades. Sin embargo, suele ser común la variación entre unidades de esas dimensiones comunes a nuestra actividad. El control sobre estas dimensiones clave ha hecho que la gestión de datos maestros se convierta en una actividad en si misma.

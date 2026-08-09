@@ -130,21 +130,14 @@ erDiagram
     CURSA{
         numero id_alumno FK
         numero id_asignatura FK
-        numero id_profesor FK
-        numero anio
     }
     ASIGNATURAS {
         numero id_asignatura PK
         texto nombre
     }
-    PROFESORES {
-        numero id_profesor PK
-        texto nombre
-    }
 
-    ALUMNOS }|--|{ CURSA: matriculado
-    CURSA }|--|{ ASIGNATURAS: cursando
-    PROFESORES ||--o{ CURSA: imparte
+    ALUMNOS ||--o{ CURSA: matriculado
+    ASIGNATURAS ||--o{ CURSA: cursando
 ```
 
 ```{python}

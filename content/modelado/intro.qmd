@@ -45,7 +45,7 @@ erDiagram
     }
 
     PROFESORES {
-        numero id_alumno
+        numero id_profesor
         texto nombre
         texto apellido
     }
@@ -58,8 +58,8 @@ La clave es entender cómo interactúan entre sí. Por ejemplo, un alumno estar�
 ```{mermaid}
 %%| fig-width: 6.5
 erDiagram
-    ALUMNOS ||--|| ASIGNATURAS : matriculado
-    PROFESORES ||--|| ASIGNATURAS : imparte
+    ALUMNOS }|--|{ ASIGNATURAS : matriculado
+    PROFESORES ||--|{ ASIGNATURAS : imparte
 ```
 
 A estas nociones, (_matriculado_ e _imparte_) las conocemos como **relaciones** (Natural Business Relationships[^2]) que no son más que eventos clave de nuestra operativa y juntas conforman un diagrama entidad relación, que representa de forma lógica el **qué** y **cómo** opera nuestra empresa de una forma lógica. El hecho de transformar e ir concretando el modelo conceptual a esta representación más detallada se la conoce como **modelado lógico**, donde deberemos ir definiendo aspectos clave a la hora de poder explotar esta información y responder preguntas que surgirán sobre los datos.
@@ -79,13 +79,13 @@ erDiagram
     }
 
     PROFESORES {
-        numero id_alumno
+        numero id_profesor
         texto nombre
         texto apellido
     }
 
-    ALUMNOS ||--|| ASIGNATURAS : matriculado
-    PROFESORES ||--|| ASIGNATURAS : imparte
+    ALUMNOS }|--|{ ASIGNATURAS : matriculado
+    PROFESORES ||--|{ ASIGNATURAS : imparte
 ```
 
 Estas relaciones también pueden disponer de atributos, como el año de matriculación o impartición, y esto define la granularidad de estas relaciones. Es decir, cómo se relacionan las instancias de las distintas entidades entre sí. Veamos un ejemplo sencillo:
