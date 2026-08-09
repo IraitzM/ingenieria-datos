@@ -713,7 +713,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="cargando-el-vault" class="level2" data-number="17.7">
 <h2 data-number="17.7" class="anchored" data-anchor-id="cargando-el-vault"><span class="header-section-number">17.7</span> Cargando el vault</h2>
 <p>Veámoslo funcionando. Partimos del aterrizaje tal y como lo dejó la ingesta el 10 de enero:</p>
-<div id="83ec4c85" class="cell" data-execution_count="2">
+<div id="c6b560dc" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select id_alumno, nombre, email</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from staging.alumnos</span></span>
@@ -757,22 +757,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 </div>
-<div id="7ebc78a9" class="cell" data-execution_count="3">
+<div id="d3503544" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(utilidades.resumen(utilidades.dbt(<span class="st">"run"</span>, <span class="st">"--select"</span>, <span class="st">"prep raw_vault"</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1 of 7 OK created sql view model main_prep.stg_alumnos ......................... [OK in 0.12s]
+<pre><code>1 of 7 OK created sql view model main_prep.stg_alumnos ......................... [OK in 0.13s]
 2 of 7 OK created sql view model main_prep.stg_asignaturas ..................... [OK in 0.07s]
 3 of 7 OK created sql view model main_prep.stg_matriculas ...................... [OK in 0.07s]
-4 of 7 OK created sql incremental model main_raw_vault.hub_alumno .............. [OK in 0.13s]
-5 of 7 OK created sql incremental model main_raw_vault.sat_alumno .............. [OK in 0.07s]
-6 of 7 OK created sql incremental model main_raw_vault.hub_asignatura .......... [OK in 0.08s]
+4 of 7 OK created sql incremental model main_raw_vault.hub_alumno .............. [OK in 0.14s]
+5 of 7 OK created sql incremental model main_raw_vault.sat_alumno .............. [OK in 0.08s]
+6 of 7 OK created sql incremental model main_raw_vault.hub_asignatura .......... [OK in 0.09s]
 7 of 7 OK created sql incremental model main_raw_vault.link_matricula .......... [OK in 0.07s]
 Completed successfully
 Done. PASS=7 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=7</code></pre>
 </div>
 </div>
 <p>El hub tiene los tres alumnos y el satélite sus tres versiones:</p>
-<div id="2dc35a2f" class="cell" data-execution_count="4">
+<div id="9afd05d1" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select h.id_alumno, s.email, s.load_date</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_raw_vault.hub_alumno h</span></span>
@@ -820,7 +820,7 @@ Done. PASS=7 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=7</code></pre>
 <section id="segunda-carga" class="level3" data-number="17.7.1">
 <h3 data-number="17.7.1" class="anchored" data-anchor-id="segunda-carga"><span class="header-section-number">17.7.1</span> Segunda carga</h3>
 <p>Dos días después, la ingesta vuelve a ejecutarse. Iraitz ha corregido su correo y María se ha matriculado:</p>
-<div id="e1770786" class="cell" data-execution_count="5">
+<div id="b7a8d63b" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>utilidades.cargar(utilidades.CARGA_2)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
@@ -873,11 +873,11 @@ Done. PASS=7 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=7</code></pre>
 </div>
 </div>
 <p>Ojo a un detalle: en staging hay <strong>cuatro filas</strong>, el estado actual del origen. Nada más. La historia no está ahí.</p>
-<div id="3d50c2ab" class="cell" data-execution_count="6">
+<div id="6e0f0528" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(utilidades.resumen(utilidades.dbt(<span class="st">"run"</span>, <span class="st">"--select"</span>, <span class="st">"prep raw_vault"</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>1 of 7 OK created sql view model main_prep.stg_alumnos ......................... [OK in 0.14s]
-2 of 7 OK created sql view model main_prep.stg_asignaturas ..................... [OK in 0.09s]
+2 of 7 OK created sql view model main_prep.stg_asignaturas ..................... [OK in 0.10s]
 3 of 7 OK created sql view model main_prep.stg_matriculas ...................... [OK in 0.10s]
 4 of 7 OK created sql incremental model main_raw_vault.hub_alumno .............. [OK in 0.17s]
 5 of 7 OK created sql incremental model main_raw_vault.sat_alumno .............. [OK in 0.07s]
@@ -888,7 +888,7 @@ Done. PASS=7 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=7</code></pre>
 </div>
 </div>
 <p>Y ahora lo que importa. El hub sigue teniendo una fila por alumno, con la fecha en que apareció cada uno:</p>
-<div id="d033b82b" class="cell" data-execution_count="7">
+<div id="fd2e8965" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select id_alumno, load_date as primera_vez</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_raw_vault.hub_alumno</span></span>
@@ -934,7 +934,7 @@ Done. PASS=7 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=7</code></pre>
 </div>
 </div>
 <p>Mientras que el satélite ha guardado la historia:</p>
-<div id="346ba6f2" class="cell" data-execution_count="8">
+<div id="5fa3d303" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select h.id_alumno, s.email, s.load_date</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_raw_vault.sat_alumno s</span></span>
@@ -993,7 +993,7 @@ Done. PASS=7 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=7</code></pre>
 </div>
 <p>Cinco filas, no ocho. Iraitz tiene dos versiones porque su correo cambió, María tiene una porque acaba de llegar, y Javier y Miguel siguen con una sola porque <strong>no cambió nada suyo</strong>. Eso es el <code>hashdiff</code> trabajando: sin él, la segunda carga habría duplicado los cuatro registros.</p>
 <p>Y con eso ya podemos responder a la pregunta que no podía responder staging:</p>
-<div id="3e832aff" class="cell" data-execution_count="9">
+<div id="e4d45a05" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select h.id_alumno, s.email</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_raw_vault.sat_alumno s</span></span>
@@ -1031,7 +1031,7 @@ Done. PASS=7 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=7</code></pre>
 <section id="probar-el-vault" class="level2" data-number="17.8">
 <h2 data-number="17.8" class="anchored" data-anchor-id="probar-el-vault"><span class="header-section-number">17.8</span> Probar el vault</h2>
 <p>Las pruebas que importan en un raw vault son pocas y siempre las mismas:</p>
-<div id="c429db87" class="cell" data-execution_count="10">
+<div id="82dd1c67" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(utilidades.resumen(utilidades.dbt(<span class="st">"test"</span>, <span class="st">"--select"</span>, <span class="st">"raw_vault"</span>), utilidades.TESTS))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>1 of 15 PASS not_null_hub_alumno_hk_alumno ..................................... [PASS in 0.06s]

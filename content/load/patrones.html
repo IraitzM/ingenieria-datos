@@ -615,7 +615,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Veámoslo funcionando. Preparamos primero una secretaría académica de juguete, con el mismo modelo que ya conocemos pero añadiendo el campo que nos va a servir de huella.</p>
-<div id="1b8433ba" class="cell" data-execution_count="1">
+<div id="2a528d55" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>origen <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">":memory:"</span>)</span>
@@ -639,7 +639,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Nuestro proceso de extracción mantiene una marca de agua y solo pide lo posterior a ella.</p>
-<div id="4ff10df2" class="cell" data-execution_count="2">
+<div id="a7bcc0d3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extraer(conexion, marca):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Devuelve los registros posteriores a la marca y la nueva marca."""</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    filas <span class="op">=</span> conexion.execute(</span>
@@ -658,7 +658,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Si nadie toca el origen, la siguiente ejecución no trae nada. Que es justo lo que queremos.</p>
-<div id="212f1b03" class="cell" data-execution_count="3">
+<div id="622f0df6" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>filas, marca <span class="op">=</span> extraer(origen, marca)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(filas)<span class="sc">}</span><span class="ss"> registros | nueva marca: </span><span class="sc">{</span>marca<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -666,7 +666,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Ahora se matricula una alumna nueva y otro corrige su apellido.</p>
-<div id="9f9f65c2" class="cell" data-execution_count="4">
+<div id="e9aa47ad" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>origen.executescript(<span class="st">"""</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">    INSERT INTO alumnos VALUES (4, 'María', 'Garcia', '2026-01-12 10:00:00');</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">    UPDATE alumnos SET apellido = 'Fernández', actualizado = '2026-01-12 11:00:00'</span></span>

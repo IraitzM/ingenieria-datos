@@ -488,7 +488,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
 
     PROFESORES {
-        numero id_alumno
+        numero id_profesor
         texto nombre
         texto apellido
     }
@@ -508,8 +508,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">erDiagram
-    ALUMNOS ||--|| ASIGNATURAS : matriculado
-    PROFESORES ||--|| ASIGNATURAS : imparte
+    ALUMNOS }|--|{ ASIGNATURAS : matriculado
+    PROFESORES ||--|{ ASIGNATURAS : imparte
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -535,13 +535,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
 
     PROFESORES {
-        numero id_alumno
+        numero id_profesor
         texto nombre
         texto apellido
     }
 
-    ALUMNOS ||--|| ASIGNATURAS : matriculado
-    PROFESORES ||--|| ASIGNATURAS : imparte
+    ALUMNOS }|--|{ ASIGNATURAS : matriculado
+    PROFESORES ||--|{ ASIGNATURAS : imparte
 </pre>
 </div>
 <p></p></figure><p></p>
