@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>19&nbsp; La capa semántica – Ingeniería de datos</title>
+<title>22&nbsp; Agentes y asistentes – Ingeniería de datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -64,15 +64,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/explotacion/bi.html" rel="next">
-<link href="../../content/explotacion/intro.html" rel="prev">
+<link href="../../content/explotacion/mlops.html" rel="next">
+<link href="../../content/explotacion/ds.html" rel="prev">
 <link href="../../cover.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -133,12 +133,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
 <script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
-<meta property="og:title" content="19&nbsp; La capa semántica – Ingeniería de datos">
+<meta property="og:title" content="22&nbsp; Agentes y asistentes – Ingeniería de datos">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
 <meta property="og:site_name" content="Ingeniería de datos">
@@ -155,7 +152,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/semantica.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/ai.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Agentes y asistentes</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -359,7 +356,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
   </div>
 </li>
@@ -377,7 +374,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/explotacion/ai.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/explotacion/ai.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Agentes y asistentes</span></span></a>
   </div>
 </li>
@@ -446,13 +443,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#el-problema-en-concreto" id="toc-el-problema-en-concreto" class="nav-link active" data-scroll-target="#el-problema-en-concreto"><span class="header-section-number">19.1</span> El problema, en concreto</a>
-  <ul class="collapse">
-  <li><a href="#qué-define-una-capa-semántica" id="toc-qué-define-una-capa-semántica" class="nav-link" data-scroll-target="#qué-define-una-capa-semántica"><span class="header-section-number">19.1.1</span> Qué define una capa semántica</a></li>
-  <li><a href="#dónde-vive" id="toc-dónde-vive" class="nav-link" data-scroll-target="#dónde-vive"><span class="header-section-number">19.1.2</span> Dónde vive</a></li>
-  </ul></li>
-  <li><a href="#métricas-para-agentes" id="toc-métricas-para-agentes" class="nav-link" data-scroll-target="#métricas-para-agentes"><span class="header-section-number">19.2</span> Métricas para agentes</a></li>
-  <li><a href="#un-estándar-en-camino" id="toc-un-estándar-en-camino" class="nav-link" data-scroll-target="#un-estándar-en-camino"><span class="header-section-number">19.3</span> Un estándar en camino</a></li>
+  <li><a href="#el-agente-que-responde-con-aplomo" id="toc-el-agente-que-responde-con-aplomo" class="nav-link active" data-scroll-target="#el-agente-que-responde-con-aplomo"><span class="header-section-number">22.1</span> El agente que responde con aplomo</a></li>
+  <li><a href="#lo-que-un-agente-necesita-saber" id="toc-lo-que-un-agente-necesita-saber" class="nav-link" data-scroll-target="#lo-que-un-agente-necesita-saber"><span class="header-section-number">22.2</span> Lo que un agente necesita saber</a></li>
+  <li><a href="#dos-estándares-que-no-compiten" id="toc-dos-estándares-que-no-compiten" class="nav-link" data-scroll-target="#dos-estándares-que-no-compiten"><span class="header-section-number">22.3</span> Dos estándares que no compiten</a></li>
+  <li><a href="#la-vía-práctica-mcp-sobre-la-capa-semántica" id="toc-la-vía-práctica-mcp-sobre-la-capa-semántica" class="nav-link" data-scroll-target="#la-vía-práctica-mcp-sobre-la-capa-semántica"><span class="header-section-number">22.4</span> La vía práctica: MCP sobre la capa semántica</a></li>
+  <li><a href="#el-otro-agente-el-que-escribe-el-código" id="toc-el-otro-agente-el-que-escribe-el-código" class="nav-link" data-scroll-target="#el-otro-agente-el-que-escribe-el-código"><span class="header-section-number">22.5</span> El otro agente, el que escribe el código</a></li>
+  <li><a href="#lo-que-le-toca-al-ingeniero-de-datos" id="toc-lo-que-le-toca-al-ingeniero-de-datos" class="nav-link" data-scroll-target="#lo-que-le-toca-al-ingeniero-de-datos"><span class="header-section-number">22.6</span> Lo que le toca al ingeniero de datos</a></li>
   </ul>
 </nav>
     </div>
@@ -462,9 +458,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/semantica.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/explotacion/intro.html">Explotación de los datos</a></li><li class="breadcrumb-item"><a href="../../content/explotacion/ai.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Agentes y asistentes</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></h1>
+<h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Agentes y asistentes</span></h1>
 </div>
 
 
@@ -481,293 +477,175 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </header>
 
 
-<p>Una capa semántica es, despojada de marketing, <strong>un diccionario ejecutable</strong>. Traduce las tablas y columnas del almacén al vocabulario que usa la gente, y fija cómo se calcula cada métrica de forma que nadie tenga que volver a decidirlo.</p>
-<p>La palabra clave es <em>ejecutable</em>. Un glosario en el catálogo de gobierno dice qué significa <em>alumno activo</em>; una capa semántica <strong>lo calcula</strong>, y por tanto no puede desactualizarse sin que algo se rompa.</p>
-<section id="el-problema-en-concreto" class="level2" data-number="19.1">
-<h2 data-number="19.1" class="anchored" data-anchor-id="el-problema-en-concreto"><span class="header-section-number">19.1</span> El problema, en concreto</h2>
-<p>Partimos de la capa de consumo que dejamos construida en la <a href="../../content/transform/business_vault.html">transformación</a>, con una carga más: Nerea se ha dado de alta en secretaría el día 13, pero todavía no ha elegido asignaturas.</p>
-<div id="9772c5d4" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select alumno_id, nombre_completo, tipo_correo, alta_en_almacen</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_marts.dim_alumno</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="st">    order by alumno_id</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">alumno_id</th>
-<th data-quarto-table-cell-role="th">nombre_completo</th>
-<th data-quarto-table-cell-role="th">tipo_correo</th>
-<th data-quarto-table-cell-role="th">alta_en_almacen</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>1</td>
-<td>Iraitz Montalbán</td>
-<td>interno</td>
-<td>2026-01-10 03:00:00</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>2</td>
-<td>Javier Garcia</td>
-<td>interno</td>
-<td>2026-01-10 03:00:00</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>3</td>
-<td>Miguel Fernandez</td>
-<td>interno</td>
-<td>2026-01-10 03:00:00</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>4</td>
-<td>María Garcia</td>
-<td>interno</td>
-<td>2026-01-12 03:00:00</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>5</td>
-<td>Nerea Aguirre</td>
-<td>interno</td>
-<td>2026-01-13 03:00:00</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>Ahora dos personas responden a la misma pregunta, <em>cuántos alumnos tenemos</em>. La primera cuenta los que están en la dimensión:</p>
-<div id="fb806c19" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"select count(*) as alumnos from main_marts.dim_alumno"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">alumnos</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>5</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>La segunda entiende que alumno es quien está matriculado en algo, y lo cuenta desde los hechos:</p>
-<div id="cacdcccf" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select count(distinct alumno_id) as alumnos</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_marts.fct_matriculas</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">alumnos</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>4</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>Y una tercera, que prepara el informe a fecha de cierre del día 11, filtra por los que ya constaban entonces:</p>
-<div id="098ba669" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select count(*) as alumnos</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">    from main_marts.dim_alumno</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">    where alta_en_almacen &lt;= timestamp '2026-01-11'</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">alumnos</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>3</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>Tres consultas, tres números, cero errores. Y las tres son defendibles: Nerea está dada de alta pero no cursa nada, así que entra en la primera cuenta y no en la segunda; y ni ella ni María constaban el día 11, de ahí la tercera.</p>
-<p>Con cinco alumnos la discrepancia es anecdótica y se explica en un minuto. Con cuarenta mil es una reunión de dos horas en la que nadie tiene forma de demostrar que su número es el correcto.</p>
-<p>La conclusión incómoda es que <strong>el modelo dimensional no protege de esto</strong>. Hace las consultas fáciles de escribir, que es justo lo que permite escribir muchas y distintas.</p>
-<section id="qué-define-una-capa-semántica" class="level3" data-number="19.1.1">
-<h3 data-number="19.1.1" class="anchored" data-anchor-id="qué-define-una-capa-semántica"><span class="header-section-number">19.1.1</span> Qué define una capa semántica</h3>
-<p>Tres cosas, y siempre las mismas independientemente de la herramienta:</p>
+<p>El <a href="../../content/explotacion/intro.html#quién-consume-y-cómo">primer capítulo de esta parte</a> enumeraba cuatro consumidores y hemos atendido a dos: el analista con su <a href="../../content/explotacion/bi.html">cuadro de mando</a> y el científico de datos con su <a href="../../content/explotacion/ds.html">tablón</a>. Queda el cuarto, que es el que ha aparecido de golpe y el que peor se porta.</p>
+<p>Un agente con acceso al almacén hace, en el fondo, lo mismo que una herramienta de BI: traduce una pregunta en SQL, la ejecuta y presenta el resultado. La diferencia está en lo que ocurre cuando la pregunta es ambigua, y esa diferencia lo cambia todo.</p>
+<section id="el-agente-que-responde-con-aplomo" class="level2" data-number="22.1">
+<h2 data-number="22.1" class="anchored" data-anchor-id="el-agente-que-responde-con-aplomo"><span class="header-section-number">22.1</span> El agente que responde con aplomo</h2>
+<p>Ya lo apuntamos al hablar de la <a href="../../content/explotacion/semantica.html#métricas-para-agentes">capa semántica</a> y conviene recuperarlo aquí como el problema central del capítulo, porque es la razón de que este consumidor merezca uno propio.</p>
+<p>Cuando quien pregunta es una persona, una definición ambigua produce una discusión. Alguien dice que los alumnos son 4.000, otro que 3.850, y la organización pierde una reunión averiguando quién contaba a los oyentes. Es caro y es molesto, pero <strong>el desacuerdo es visible</strong>.</p>
+<p>Cuando quien pregunta es un modelo de lenguaje, no hay desacuerdo. El agente no sabe que hay tres formas de contar alumnos, así que elige una, escribe el <code>WHERE</code> correspondiente y devuelve un número redondo con una frase segura. Nadie ve la elección. El resultado es <strong>SQL plausible y silenciosamente equivocado</strong>, que es bastante peor que un error ruidoso porque llega a una diapositiva sin que nadie lo revise.</p>
+<p>La tentación es tratarlo como un problema del modelo, y por tanto esperar a que lo arregle el siguiente. No lo es. Es un problema de contexto, y el contexto lo produce esta capa.</p>
+</section>
+<section id="lo-que-un-agente-necesita-saber" class="level2" data-number="22.2">
+<h2 data-number="22.2" class="anchored" data-anchor-id="lo-que-un-agente-necesita-saber"><span class="header-section-number">22.2</span> Lo que un agente necesita saber</h2>
+<p>Para responder bien a “cuántos alumnos tenemos”, un agente necesita tres cosas y solo la primera está en la base de datos:</p>
 <ul>
-<li><strong>Dimensiones</strong>: por qué se puede cortar el dato. Asignatura, tipo de correo, curso.</li>
-<li><strong>Medidas</strong>: qué se puede calcular y <strong>con qué expresión exacta</strong>. Aquí es donde vive la definición de <em>alumno activo</em>, escrita una vez.</li>
-<li><strong>Uniones y grano</strong>: qué tablas se pueden combinar y a qué nivel de detalle, para que nadie sume un importe dos veces por unir mal.</li>
+<li><strong>El esquema</strong>: qué tablas hay, qué columnas y cómo se cruzan. Lo puede leer del catálogo del almacén.</li>
+<li><strong>El significado</strong>: qué cuenta la medida <code>alumnos</code>, si incluye a los que se dieron de baja, cuál es la granularidad de la tabla de hechos. Esto es la <a href="../../content/explotacion/semantica.html">capa semántica</a>.</li>
+<li><strong>El procedimiento</strong>: que las matrículas anuladas se marcan pero no se borran, que el curso empieza en septiembre y no en enero, que la carga del lunes tarda dos horas y hasta entonces los números del fin de semana están incompletos. Esto no está escrito en ninguna parte, o está en la cabeza de tres personas.</li>
 </ul>
-<p>A partir de ahí, la herramienta de consumo no escribe SQL contra las tablas: pide <em>esta medida cortada por esta dimensión</em>, y la capa semántica genera el SQL. Que es exactamente la diferencia entre tener una definición y tener tres.</p>
+<p>Dar solo lo primero es lo que produce el fallo de la sección anterior. Y es, casualmente, lo más fácil de dar, que es la razón de que sea lo que se hace por defecto.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-    dw[("Capa de consumo&lt;br/&gt;dim_alumno, fct_matriculas")]
-    sem["Capa semántica&lt;br/&gt;medidas y dimensiones"]
-    dw --&gt; sem
-    sem --&gt; bi["Cuadros de mando"]
-    sem --&gt; api["API / aplicaciones"]
-    sem --&gt; ag["Agentes"]
-    sem --&gt; hoja["Hojas de cálculo"]
+    p["Pregunta"] --&gt; ag["Agente"]
+    ag --&gt; e["Esquema"]
+    ag --&gt; s["Significado"]
+    ag --&gt; r["Procedimiento"]
+    e --&gt; dw[("Almacén")]
+    s --&gt; dw
+    r --&gt; dw
 
-    %% Paleta por bloque del libro
-    classDef transformacion fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef almacen fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
     classDef explotacion fill:#e6ddf5,stroke:#7457bd,stroke-width:1.5px,color:#332757
-    class dw transformacion
-    class sem explotacion
+    classDef falta fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    class dw almacen
+    class p,ag,e explotacion
+    class s,r falta
 </pre>
 </div>
 <p></p></figure><p></p>
 </div>
 </div>
 </div>
+<p>En ámbar, lo que no viene de serie.</p>
 </section>
-<section id="dónde-vive" class="level3" data-number="19.1.2">
-<h3 data-number="19.1.2" class="anchored" data-anchor-id="dónde-vive"><span class="header-section-number">19.1.2</span> Dónde vive</h3>
-<p>Históricamente la capa semántica estuvo <strong>dentro</strong> de la herramienta de BI. El caso canónico es LookML, el lenguaje de Looker, que popularizó la idea de definir métricas en ficheros versionados. El problema evidente de esa ubicación es que las definiciones quedan cautivas: quien no use esa herramienta, no las tiene.</p>
-<p>De ahí que hayan aparecido cuatro ubicaciones posibles, y merece la pena saber cuál es cuál:</p>
+<section id="dos-estándares-que-no-compiten" class="level2" data-number="22.3">
+<h2 data-number="22.3" class="anchored" data-anchor-id="dos-estándares-que-no-compiten"><span class="header-section-number">22.3</span> Dos estándares que no compiten</h2>
+<p>Aquí es donde conviene poner orden, porque en 2026 conviven dos iniciativas que suenan parecido, se citan juntas y resuelven mitades distintas del problema. Confundirlas lleva a esperar de una lo que solo da la otra.</p>
+<p>De <strong>OSI</strong> (<em>Open Semantic Interchange</em>), hoy <a href="../../content/explotacion/semantica.html#un-estándar-en-camino">Apache Ossie</a>, ya hemos hablado: estandariza <strong>qué significa una métrica</strong>, con sus medidas, sus dimensiones y su agregación.</p>
+<p>El otro es <a href="https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing"><strong>OKF</strong></a> (<em>Open Knowledge Format</em>), publicado por Google en 2026, y estandariza otra cosa: <strong>cómo el agente encuentra y lee el contexto</strong>. Un paquete OKF es un directorio de ficheros markdown con frontmatter YAML, y poco más:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ventas/</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>├── index.md</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>├── datasets/</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>│   └── pedidos_odoo.md</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>├── tables/</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>│   ├── fct_pedidos.md</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>│   └── dim_cliente.md</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>└── metrics/</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    └── ingresos_semanales.md</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Cada documento lleva unos campos estructurados en la cabecera (<code>type</code>, <code>title</code>, <code>description</code>, <code>resource</code>, <code>tags</code>, <code>timestamp</code>) y el cuerpo en markdown corriente. Los enlaces markdown entre documentos son las aristas del grafo de conocimiento. No hay SDK, no hay servicio que desplegar y no hay proveedor detrás: se versiona en git, se lee en GitHub y lo consume cualquier agente.</p>
 <table class="caption-top table">
-<caption>Dónde puede vivir la capa semántica</caption>
+<caption>Las dos mitades del problema del contexto</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Dónde</th>
-<th>Ejemplos</th>
-<th>Consecuencia</th>
+<th></th>
+<th>Qué estandariza</th>
+<th>Qué deja fuera</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>En la herramienta de BI</td>
-<td>LookML, métricas de Power BI, <strong>métricas de Rill</strong></td>
-<td>Cómodo e integrado; cautivo si es cerrado</td>
+<td><strong>OKF</strong></td>
+<td>Cómo se empaqueta, se encuentra y se lee el contexto</td>
+<td>Qué significa lo que hay dentro</td>
 </tr>
 <tr class="even">
-<td>Como servicio aparte</td>
-<td><a href="https://cube.dev/">Cube</a></td>
-<td>Sirve a varias herramientas por SQL, REST o MCP; una pieza más que operar</td>
-</tr>
-<tr class="odd">
-<td>Junto a las transformaciones</td>
-<td><a href="https://docs.getdbt.com/docs/build/about-metricflow">dbt Semantic Layer</a> (MetricFlow)</td>
-<td>Las métricas viven con los modelos que las alimentan</td>
-</tr>
-<tr class="even">
-<td>En el propio almacén</td>
-<td>Vistas semánticas de Snowflake, métricas de Databricks</td>
-<td>Máximo rendimiento, máxima dependencia del proveedor</td>
+<td><strong>Ossie</strong></td>
+<td>Qué significa una métrica y cómo se agrega</td>
+<td>Cómo llega al agente</td>
 </tr>
 </tbody>
 </table>
-<p>Para nuestro stack hay dos respuestas defendibles. Si la exploración se hace con <a href="../../content/appendices/rill.html">Rill</a>, la capa semántica va incluida y consulta directamente el lakehouse. Si el consumidor va a ser más de uno, el sitio correcto es junto a las transformaciones, en el propio dbt, que es de donde las lee <a href="../../content/explotacion/bi.html#lightdash">Lightdash</a>. Empecemos por la primera, que es la más corta de enseñar. Una métrica se declara así:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># metrics/alumnos.yaml</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">type</span><span class="kw">:</span><span class="at"> metrics_view</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span><span class="kw">:</span><span class="at"> dim_alumno</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">timeseries</span><span class="kw">:</span><span class="at"> alta_en_almacen</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dimensions</span><span class="kw">:</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">column</span><span class="kw">:</span><span class="at"> tipo_correo</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">display_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"Tipo de correo"</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">column</span><span class="kw">:</span><span class="at"> dominio_email</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">display_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"Dominio"</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">measures</span><span class="kw">:</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> alumnos</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">expression</span><span class="kw">:</span><span class="at"> COUNT(*)</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">display_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"Alumnos"</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">    description</span><span class="kw">: </span><span class="ch">&gt;</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      Alumnos dados de alta en secretaría, estén matriculados o no en alguna</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>      asignatura. Para contar únicamente los que cursan algo, usar la medida</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>      "alumnos matriculados" del panel de matrículas.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Ese campo <code>description</code> es la mitad del valor y se subestima constantemente. Nótese que resuelve por escrito <strong>exactamente la ambigüedad</strong> que acabamos de ver: dice qué cuenta esta medida, y remite a la otra para el caso contrario. Es el acuerdo que evita la reunión de las dos horas, y solo hay que tomarlo una vez.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>La capa semántica no sustituye al modelado
+<span class="screen-reader-only">Importante</span>Un formato no es un acuerdo
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Conviene decirlo porque se vende lo contrario. Una capa semántica sobre un almacén mal modelado produce métricas rápidas y erróneas: si el grano de la tabla de hechos está mal, la definición más cuidada seguirá sumando dos veces.</p>
-<p>Se apoya en el trabajo de las partes anteriores, no lo reemplaza. En nuestro caso se apoya en un modelo en estrella construido sobre un vault que conserva la historia, y por eso puede permitirse ser tan corta.</p>
+<p>De todos los campos de OKF, el único obligatorio es <code>type</code>. Es una decisión deliberada y razonable (el formato quiere ser mínimamente opinado para que lo adopte cualquiera), pero tiene una consecuencia que conviene ver venir.</p>
+<p>Un paquete OKF perfectamente válido puede contener tres documentos que definan <code>alumnos</code> de tres maneras distintas. El formato garantiza que el agente <strong>los va a encontrar y los va a poder leer</strong>; no garantiza que digan lo mismo. Interoperabilidad de transporte, no de significado.</p>
+<p>Es el mismo aviso que hacíamos sobre la <a href="../../content/explotacion/semantica.html">capa semántica y el modelado</a>: la pieza nueva se apoya en el trabajo de las anteriores, no lo sustituye. Un paquete de conocimiento sobre un almacén sin métricas definidas produce un agente que se equivoca con más documentación.</p>
 </div>
 </div>
 </section>
+<section id="la-vía-práctica-mcp-sobre-la-capa-semántica" class="level2" data-number="22.4">
+<h2 data-number="22.4" class="anchored" data-anchor-id="la-vía-práctica-mcp-sobre-la-capa-semántica"><span class="header-section-number">22.4</span> La vía práctica: MCP sobre la capa semántica</h2>
+<p>Mientras los estándares se asientan, lo que funciona hoy es más modesto y ya está montado en el stack de este libro.</p>
+<p>Prácticamente todas las herramientas con capa semántica publican un servidor MCP (<em>Model Context Protocol</em>), que es el mecanismo por el que un agente descubre qué medidas y dimensiones existen y las consulta sin escribir SQL. El cambio de planteamiento es el que importa: en lugar de dar al agente las tablas y confiar en su criterio, se le da <strong>un conjunto acotado de medidas ya validadas</strong> y se le deja elegir entre ellas.</p>
+<p>La diferencia con el acceso directo, en la práctica:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Acceso al esquema</th>
+<th>Acceso a la capa semántica</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Qué elige el agente</td>
+<td>Tablas, <code>join</code>, filtros y agregación</td>
+<td>Una medida de una lista corta</td>
+</tr>
+<tr class="even">
+<td>Cómo falla</td>
+<td>Inventa una agregación razonable</td>
+<td>Dice que la métrica no existe</td>
+</tr>
+<tr class="odd">
+<td>Quién revisa la definición</td>
+<td>Nadie</td>
+<td>Quien la escribió en el YAML</td>
+</tr>
+</tbody>
+</table>
+<p>Que el modo de fallo pase de “un número equivocado” a “no sé responder” es todo el avance. El segundo es recuperable.</p>
+<p>Sobre el <a href="../../content/appendices/datalake.html">ejercicio del lago de datos</a>, esto no exige montar nada nuevo: la capa oro y las métricas de Rill que quedaron construidas al final del apéndice son exactamente lo que un agente necesita del otro lado. Rill, de hecho, ya se describe como una herramienta de BI para humanos y agentes.</p>
 </section>
-<section id="métricas-para-agentes" class="level2" data-number="19.2">
-<h2 data-number="19.2" class="anchored" data-anchor-id="métricas-para-agentes"><span class="header-section-number">19.2</span> Métricas para agentes</h2>
-<p>Hay una razón nueva, y bastante fuerte, para tomarse esto en serio en 2026.</p>
-<p>Cuando quien pregunta es una persona, una definición ambigua produce una discusión. Cuando quien pregunta es un modelo de lenguaje con acceso al almacén, produce <strong>SQL plausible y silenciosamente equivocado</strong>. El agente no sabe que hay tres formas de contar alumnos: elegirá una, la ejecutará y presentará el resultado con total aplomo.</p>
-<p>Una capa semántica cambia el planteamiento: en lugar de dar al agente las tablas y confiar, se le da un conjunto acotado de medidas y dimensiones con sus definiciones. El agente elige entre métricas ya validadas en lugar de inventarse la agregación. Por eso prácticamente todas las herramientas de esta categoría han incorporado un servidor MCP, y por eso <a href="../../content/appendices/rill.html">Rill</a> se describe a sí mismo hoy como una herramienta de BI <em>para humanos y agentes</em>.</p>
-<p>Es, mirado con perspectiva, el mismo argumento del <a href="../../content/appendices/metadatado.html">catálogo de gobierno</a>: lo que hace útil un dato es el contexto que lo acompaña. Este consumidor tiene <a href="../../content/explotacion/ai.html">capítulo propio</a> más adelante, porque da bastante de sí.</p>
-</section>
-<section id="un-estándar-en-camino" class="level2" data-number="19.3">
-<h2 data-number="19.3" class="anchored" data-anchor-id="un-estándar-en-camino"><span class="header-section-number">19.3</span> Un estándar en camino</h2>
-<p>El punto débil de todo esto es el de siempre: cada herramienta define las métricas en su propio dialecto, y migrar significa reescribirlas.</p>
-<p>Para resolverlo nació <strong>OSI</strong> (<em>Open Semantic Interchange</em>), un formato neutral para definir métricas impulsado inicialmente por dbt Labs y Snowflake, que en junio de 2026 entró en la incubadora de Apache con el nombre de <a href="https://ossie.apache.org/">Apache Ossie</a>. Ya existen conversores para MetricFlow, GoodData, Salesforce y Apache Polaris.</p>
+<section id="el-otro-agente-el-que-escribe-el-código" class="level2" data-number="22.5">
+<h2 data-number="22.5" class="anchored" data-anchor-id="el-otro-agente-el-que-escribe-el-código"><span class="header-section-number">22.5</span> El otro agente, el que escribe el código</h2>
+<p>Todo lo anterior va del agente que <strong>consulta</strong> el almacén. Hay una segunda categoría que conviene no mezclar, porque el usuario es otro: el agente que <strong>escribe</strong> las transformaciones, y cuyo usuario somos nosotros.</p>
+<p>Herramientas como <a href="https://getnao.io/">nao</a> van por ahí. La idea que las distingue de un asistente de código genérico es que el agente está conectado al almacén y al proyecto de dbt: importa el linaje, conoce las tablas y las columnas que existen de verdad, y por tanto propone modelos que se refieren a cosas reales en lugar de inventarse nombres verosímiles. El contexto vive, otra vez, en ficheros versionados (definiciones en markdown, configuración en YAML, consultas de ejemplo).</p>
+<p>Merece la pena señalar el patrón, porque se repite en los dos casos y es la conclusión práctica del capítulo: <strong>lo que hace útil a un agente es el material que ya deberíamos tener escrito</strong>. Las descripciones de los modelos de dbt, las definiciones de las métricas, el diccionario del <a href="../../content/appendices/metadatado.html">catálogo</a>. Un equipo que las tenga puede conectar un agente en una tarde; uno que no, no lo arregla con mejor modelo.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Advertencia</span>Todavía no lo soporta ningún producto de forma nativa
+<span class="screen-reader-only">Advertencia</span>Cuidado con el capítulo que envejece
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A día de hoy Ossie permite <strong>convertir</strong> definiciones entre formatos, pero ninguna herramienta lo consume directamente. Es una apuesta razonable de futuro y una mala base para una decisión de hoy.</p>
-<p>La recomendación práctica: elegir la herramienta por lo que hace ahora, y valorar como un plus que sus definiciones estén en YAML versionado, porque eso es lo que hará barata la conversión el día que haga falta.</p>
+<p>Esta es la parte del libro con la vida media más corta. OKF va por la v0.1 y sus propios autores la presentan como un punto de partida; Ossie convierte definiciones pero todavía no lo consume ningún producto de forma nativa; las herramientas de la sección anterior cambian de nombre y de dueño cada pocos meses.</p>
+<p>Lo que no cambia es el problema: un agente responde con la confianza de quien no sabe lo que no sabe, y la única defensa es que el significado esté escrito antes de que pregunte. Conviene leer este capítulo por ahí y tomarse las herramientas como lo que son, ejemplos de una fecha concreta.</p>
 </div>
 </div>
-<p>Con las métricas definidas, toca ponerlas delante de quien tiene las preguntas.</p>
+</section>
+<section id="lo-que-le-toca-al-ingeniero-de-datos" class="level2" data-number="22.6">
+<h2 data-number="22.6" class="anchored" data-anchor-id="lo-que-le-toca-al-ingeniero-de-datos"><span class="header-section-number">22.6</span> Lo que le toca al ingeniero de datos</h2>
+<p>La frontera es parecida a la que trazábamos con la <a href="../../content/explotacion/ds.html#lo-que-le-toca-al-ingeniero-de-datos">ciencia de datos</a>, y por las mismas razones.</p>
+<p>Elegir el modelo, diseñar las instrucciones y evaluar la calidad de las respuestas <strong>no</strong> es trabajo del ingeniero de datos. Que exista una definición única de cada métrica, que esté escrita en un fichero versionado y que el agente no pueda acceder a nada que no haya pasado por ahí, <strong>sí lo es</strong>.</p>
+<p>Dicho de otra forma: no nos toca hacer que el agente sea listo, nos toca hacer que no pueda equivocarse en silencio. Y eso, convenientemente, es el mismo trabajo que llevamos haciendo desde el principio del libro. Un almacén bien modelado, con la historia intacta y las métricas acordadas por escrito, era ya la respuesta correcta antes de que hubiera nadie preguntándole en lenguaje natural.</p>
+<p>Queda un consumidor más, y es el que menos lo parece: el modelo que alguien entrenó con el <a href="../../content/explotacion/ds.html">tablón</a> y que ahora hay que <a href="../../content/explotacion/mlops.html">poner a funcionar</a>.</p>
 
 
 </section>
@@ -1175,13 +1053,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/explotacion/intro.html" class="pagination-link" aria-label="Explotación de los datos">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Explotación de los datos</span>
+      <a href="../../content/explotacion/ds.html" class="pagination-link" aria-label="Ciencia de datos">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/explotacion/bi.html" class="pagination-link" aria-label="Inteligencia de negocio">
-        <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/explotacion/mlops.html" class="pagination-link" aria-label="Del cuaderno a producción">
+        <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
