@@ -61,3 +61,34 @@
     )
     WHERE dv_fila = 1
 {%- endmacro %}
+
+{#
+  Relación vigente de un enlace, según su clave conductora.
+
+  Los enlaces también son de solo inserción, y eso tiene una consecuencia que
+  se pasa por alto con facilidad: cuando una relación cambia (un empleado se
+  traslada de departamento, un producto se recategoriza) no se sustituye nada.
+  Entra una fila nueva y la anterior sigue ahí. Al consultar el enlace sin más,
+  ese empleado sale dos veces y cualquier recuento lo cuenta dos veces.
+
+  La **clave conductora** (driving key) es el extremo del enlace que se mueve:
+  el empleado, no el departamento. Quedándose con su carga más reciente se
+  obtiene la relación vigente sin haber cerrado ninguna fila, igual que en los
+  satélites.
+
+  Lo que esta macro no cubre conviene tenerlo presente: si la relación
+  desaparece del origen (el empleado se queda sin departamento), la última fila
+  escrita sigue siendo la del departamento antiguo y aquí se dará por vigente.
+  Distinguir "sigue igual" de "ya no está" exige un satélite de efectividad del
+  enlace, que este proyecto no monta.
+#}
+{% macro enlace_vigente(relacion, clave_conductora) -%}
+    SELECT * EXCLUDE (dv_fila)
+    FROM (
+        SELECT
+            *,
+            row_number() OVER (PARTITION BY {{ clave_conductora }} ORDER BY load_date DESC) AS dv_fila
+        FROM {{ relacion }}
+    )
+    WHERE dv_fila = 1
+{%- endmacro %}

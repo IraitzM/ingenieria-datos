@@ -1,0 +1,99 @@
+# Capa semántica del catálogo, a grano de línea de pedido.
+#
+# Es la segunda vista de métricas del proyecto y existe por una razón concreta:
+# **el grano**. `ventas.yaml` mide pedidos y aquí se miden líneas, y aunque las
+# dos consulten el mismo almacén no se pueden mezclar. La prueba está en las
+# medidas: allí la facturación es `sum(amount_total)` sobre la cabecera y aquí
+# es `sum(price_total)` sobre la línea. Sumar la primera a este grano la
+# multiplicaría por el número de líneas de cada pedido.
+#
+# Que la capa semántica obligue a declarar de qué tabla sale cada medida es
+# justamente lo que evita esa suma imposible: nadie puede pedir la facturación
+# del pedido desglosada por producto, porque esa combinación no existe en
+# ninguna de las dos vistas.
+
+version: 1
+type: metrics_view
+display_name: "Catálogo"
+
+connector: duckdb
+table: point_in_time_order_lines
+
+timeseries: date_order
+
+dimensions:
+  - name: producto
+    column: product_name
+    display_name: "Producto"
+  - name: categoria
+    column: category_path
+    display_name: "Categoría"
+    description: >
+      Ruta completa en el árbol del catálogo. Se usa la ruta y no el nombre
+      corto porque en el origen hay dos categorías distintas llamadas
+      "Saleable", en ramas diferentes.
+  - name: tipo_producto
+    column: product_type
+    display_name: "Tipo"
+    description: "`consu`, `service` o `product`, tal y como lo llama Odoo."
+  - name: codigo
+    column: product_code
+    display_name: "Referencia"
+  - name: cliente
+    column: customer_name
+    display_name: "Cliente"
+  - name: comercial
+    column: salesperson_name
+    display_name: "Comercial"
+  - name: pais
+    column: country_name
+    display_name: "País"
+
+measures:
+  - name: facturacion_linea
+    expression: sum(price_total)
+    display_name: "Facturación"
+    format_preset: currency_eur
+    description: >
+      Importe de las líneas con impuestos. A grano de pedido completo coincide
+      con la facturación del panel de ventas; en cuanto se filtra por producto,
+      deja de hacerlo, y es correcto que así sea.
+  - name: base_imponible
+    expression: sum(price_subtotal)
+    display_name: "Base imponible"
+    format_preset: currency_eur
+  - name: unidades
+    expression: sum(quantity)
+    display_name: "Unidades"
+  - name: lineas
+    expression: count(*)
+    display_name: "Líneas"
+  - name: pedidos
+    expression: count(distinct order_id)
+    display_name: "Pedidos"
+  - name: clientes
+    expression: count(distinct customer_id)
+    display_name: "Clientes"
+  - name: productos
+    expression: count(distinct product_id)
+    display_name: "Productos distintos"
+  - name: precio_medio
+    expression: sum(price_subtotal) / nullif(sum(quantity), 0)
+    display_name: "Precio medio unitario"
+    format_preset: currency_eur
+    description: >
+      Ponderado por unidades, no la media de los precios de línea. La
+      diferencia importa: la media simple daría el mismo peso a una línea de
+      una unidad que a otra de cien.
+  - name: descuento_concedido
+    expression: sum(importe_descuento)
+    display_name: "Descuento concedido"
+    format_preset: currency_eur
+  - name: tasa_descuento
+    expression: sum(importe_descuento) / nullif(sum(price_unit * quantity), 0)
+    display_name: "Tasa de descuento"
+    format_preset: percentage
+    description: >
+      Descuento sobre el importe a precio de línea. Calculada como cociente de
+      sumas y no como media de porcentajes, que es el error clásico: promediar
+      porcentajes da el mismo peso a una línea de diez euros que a una de mil.

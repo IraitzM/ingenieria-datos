@@ -11,9 +11,13 @@
   )
 }}
 
+-- `team_id` sí es un atributo del pedido y no una relación con un hub, porque
+-- el equipo comercial se modela como tabla de referencia (ver `ref_sales_team`
+-- y la explicación que lleva dentro). Se guarda el código y se decodifica al
+-- consultar.
 {% set atributos = [
     'order_reference', 'order_state', 'date_order',
-    'amount_untaxed', 'amount_tax', 'amount_total'
+    'amount_untaxed', 'amount_tax', 'amount_total', 'team_id'
 ] %}
 
 WITH fuente AS (
@@ -25,6 +29,7 @@ WITH fuente AS (
         amount_untaxed,
         amount_tax,
         amount_total,
+        team_id,
         {{ hashdiff(atributos) }}    AS hashdiff,
         {{ dv_load_date() }}         AS load_date,
         '{{ var("record_source") }}' AS record_source

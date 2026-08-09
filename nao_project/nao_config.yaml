@@ -1,0 +1,91 @@
+# Proyecto de nao: el agente analítico sobre el almacén.
+#
+# nao son dos piezas y conviene no confundirlas, porque solo una necesita
+# hablar con la base de datos:
+#
+#   * `nao-core`, la CLI, que construye el **contexto**: recorre el almacén y
+#     el repositorio de dbt y deja ficheros markdown describiendo lo que hay.
+#     Vive en la imagen de utilidades y se ejecuta como trabajo de un solo uso.
+#   * el contenedor del chat, que sirve la interfaz y consume ese contexto.
+#
+# Es la misma separación que hay entre `dbt docs generate` y `dbt docs serve`,
+# y por el mismo motivo: generar necesita el almacén, servir no.
+
+project_name: lago-odoo
+
+databases:
+  - name: almacen
+    type: duckdb
+    # Ruta dentro del contenedor. Los dos servicios montan ./warehouse en /data,
+    # así que la misma ruta absoluta vale para la CLI y para el chat.
+    path: /data/warehouse.duckdb
+
+    # Qué se le enseña al agente de cada tabla. `columns` es el esquema y
+    # `preview` unas filas de muestra.
+    #
+    # `ai_summary` existe y se ha dejado fuera a propósito: haría una llamada al
+    # modelo por cada tabla durante el sync, y con cincuenta tablas eso es
+    # cincuenta llamadas cada vez que se reconstruye el contexto. La descripción
+    # de qué es cada modelo ya la escribimos en los YAML de dbt, y el agente la
+    # lee del repositorio.
+    templates:
+      - columns
+      - preview
+
+    profiling:
+      refresh_policy: interval
+      interval_days: 1
+
+    # Solo la capa oro. Es la decisión de diseño de esta pieza y la que más se
+    # nota al usarla.
+    #
+    # La tentación es apuntar el agente a todo el almacén, que total ya está
+    # ahí. El problema es que entonces puede contestar desde `raw`, donde el
+    # nombre del producto es un JSON, los presupuestos se mezclan con los
+    # pedidos y el contador de clientes miente. Todo el trabajo de las capas
+    # intermedias existe precisamente para que nadie tenga que contestar desde
+    # ahí, y dejarlas al alcance del agente sería tirarlo por la ventana en el
+    # último paso.
+    #
+    # El vault tampoco entra: guarda la historia, pero responder con él exige
+    # encadenar hubs y satélites, y eso ya lo hace la capa oro una vez.
+    #
+    # El patrón se compara con `esquema.tabla`, así que el asterisco no es
+    # opcional: `main` a secas no casa con `main.kpis_daily` y el sync termina
+    # con un "Nothing to sync" que no explica por qué.
+    include:
+      - "main.*"
+
+    exclude: []
+
+repos:
+  # El proyecto de dbt como contexto. Aquí está lo que la base de datos no
+  # puede contar: el SQL de cada modelo, las pruebas y, sobre todo, las
+  # descripciones de los `_*.yml` y los bloques de `docs/`. Ese es el motivo de
+  # que documentar con bloques reutilizables deje de ser higiene y pase a tener
+  # un consumidor: lo que allí se escribió una vez, el agente lo lee.
+  - name: dbt
+    local_path: /app/dbt_project
+
+    # Sin esta lista, nao copia el proyecto entero: cuatrocientos noventa y
+    # tres ficheros, casi todos de `target/` (el `manifest.json`, el catálogo y
+    # el sitio de documentación ya compilado) y de `logs/`. Nada de eso ayuda
+    # al agente y sí llena su contexto de ruido generado.
+    #
+    # Lo que se le da es el código y la documentación escrita a mano, que es
+    # exactamente lo que la base de datos no puede contarle.
+    include:
+      - "models/**/*.sql"
+      - "models/**/*.yml"
+      - "macros/**/*.sql"
+      - "tests/**/*.sql"
+      - "docs/**/*.md"
+      - "dbt_project.yml"
+
+# Sin clave no hay agente. Se deja a nulo en el fichero versionado y la clave
+# llega por variable de entorno al contenedor del chat, que es donde se usa.
+# Ver el apéndice: no es una decisión de comodidad, es que este fichero está en
+# un repositorio público.
+llm: null
+notion: null
+slack: null

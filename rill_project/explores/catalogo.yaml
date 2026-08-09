@@ -1,0 +1,40 @@
+# Panel de exploración del catálogo, a grano de línea.
+#
+# Aquí las dimensiones se enumeran en lugar de exponerlas con `"*"`, y el orden
+# no es casual: es el que se recorre al investigar por qué ha cambiado una
+# cifra de producto. Primero la categoría, luego el producto concreto y solo
+# después el cliente o el comercial que lo compró.
+
+version: 1
+type: explore
+display_name: "Catálogo"
+
+metrics_view: catalogo
+
+dimensions:
+  - categoria
+  - producto
+  - tipo_producto
+  - cliente
+  - comercial
+  - pais
+
+measures:
+  - facturacion_linea
+  - unidades
+  - lineas
+  - pedidos
+  - productos
+  - precio_medio
+  - descuento_concedido
+  - tasa_descuento
+
+defaults:
+  measures:
+    - facturacion_linea
+    - unidades
+    - tasa_descuento
+  dimensions:
+    - categoria
+    - producto
+  time_range: P3M

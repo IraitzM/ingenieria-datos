@@ -1,12 +1,17 @@
 # Capa semántica: qué es una venta y cómo se mide.
 #
 # Se apoya en la vista point_in_time_orders, que ya trae el pedido con su
-# cliente resuelto. La alternativa (que Rill reconstruyera el vault por su
-# cuenta con modelos propios) duplicaría en la herramienta una lógica que ya
-# vive en dbt, y eso es justo lo que conviene no hacer.
+# cliente, su comercial y su departamento resueltos. La alternativa (que Rill
+# reconstruyera el vault por su cuenta con modelos propios) duplicaría en la
+# herramienta una lógica que ya vive en dbt, y eso es justo lo que conviene no
+# hacer.
 #
 # El nombre de la tabla va sin cualificar. Rill busca en el esquema por defecto
 # de la base de datos adjunta, y por eso la capa oro se materializa ahí.
+#
+# El grano de esta vista es el pedido. Todo lo que se quiera medir por producto
+# o por categoría va en `catalogo.yaml`, que ataca el grano de línea: mezclarlo
+# aquí multiplicaría la facturación por el número de líneas de cada pedido.
 
 version: 1
 type: metrics_view
@@ -24,29 +29,70 @@ dimensions:
   - name: ciudad
     column: city
     display_name: "Ciudad"
+  - name: pais
+    column: country_name
+    display_name: "País"
   - name: estado
     column: order_state
     display_name: "Estado del pedido"
   - name: es_empresa
     column: is_company
     display_name: "Es empresa"
+  - name: comercial
+    column: salesperson_name
+    display_name: "Comercial"
+    description: >
+      Empleado que firmó el pedido. "Sin asignar" cuando la cuenta que lo firmó
+      no corresponde a ninguna ficha de plantilla, que es una situación real
+      del origen y no un fallo de la carga.
+  - name: departamento
+    column: department_path
+    display_name: "Departamento"
+    description: >
+      Departamento **actual** del comercial, con su ruta completa en el
+      organigrama. Si alguien se traslada, sus pedidos antiguos pasan a
+      contarse en el departamento nuevo.
+  - name: equipo
+    column: team_name
+    display_name: "Equipo comercial"
 
 measures:
   - name: facturacion
     expression: sum(amount_total)
     display_name: "Facturación"
+    format_preset: currency_eur
     description: >
       Importe total con impuestos de los pedidos confirmados. No incluye
       presupuestos, porque el filtro se aplica ya en la capa de staging.
   - name: base_imponible
     expression: sum(amount_untaxed)
     display_name: "Base imponible"
+    format_preset: currency_eur
+  - name: impuestos
+    expression: sum(amount_tax)
+    display_name: "Impuestos"
+    format_preset: currency_eur
   - name: pedidos
     expression: count(distinct order_id)
     display_name: "Pedidos"
   - name: clientes
     expression: count(distinct customer_id)
     display_name: "Clientes"
+  - name: comerciales
+    expression: count(distinct employee_id)
+    display_name: "Comerciales activos"
+    description: >
+      Empleados distintos con al menos un pedido en el periodo. Los pedidos sin
+      comercial resuelto no suman aquí, porque su `employee_id` es nulo.
   - name: ticket_medio
     expression: sum(amount_total) / nullif(count(distinct order_id), 0)
     display_name: "Ticket medio"
+    format_preset: currency_eur
+  - name: facturacion_por_comercial
+    expression: sum(amount_total) / nullif(count(distinct employee_id), 0)
+    display_name: "Facturación por comercial"
+    format_preset: currency_eur
+    description: >
+      Reparto de la facturación entre los comerciales que han vendido en el
+      periodo. Ojo al interpretarla: el denominador cambia con el filtro, así
+      que no es comparable entre periodos con distinta plantilla activa.

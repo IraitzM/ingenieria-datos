@@ -52,23 +52,27 @@ uv export --no-hashes -o requirements.txt
 
 ## El ejercicio de proyecto
 
-Un lago de datos de principio a fin, con [Odoo](https://www.odoo.com/) (un ERP de código abierto con datos de demostración) como origen. La gracia está en que su base de datos no está diseñada para que la analicemos. Todo el recorrido, con sus decisiones de diseño y sus ejercicios, está contado en [`content/appendices/datalake.qmd`](content/appendices/datalake.qmd).
+Un lago de datos de principio a fin, con [Odoo](https://www.odoo.com/) (un ERP de código abierto con datos de demostración) como origen, del que se instalan los módulos de ventas y recursos humanos. La gracia está en que su base de datos no está diseñada para que la analicemos. Todo el recorrido, con sus decisiones de diseño y sus ejercicios, está contado en [`content/appendices/datalake.qmd`](content/appendices/datalake.qmd).
+
+De Odoo salen diez tablas y al final quedan treinta y siete modelos con ciento setenta y nueve pruebas: un Data Vault de seis hubs, cinco enlaces, siete satélites y dos tablas de referencia, y encima siete modelos de explotación que alimentan tres paneles de Rill y un `canvas`.
 
 ```
 Odoo/PostgreSQL --> dlt --> DuckDB (raw) --> dbt --> vault --> dbt --> oro --> Rill
+                                                       |                  `--> nao
                                                        `--> dbt docs (linaje)
 ```
 
 | Pieza | Papel | Dónde queda |
 |---|---|---|
-| Odoo 16 y PostgreSQL 15 | Sistema origen con datos de demostración | `http://localhost:8069` (admin/admin) |
+| Odoo 16 y PostgreSQL 15 | Sistema origen, con ventas y recursos humanos | `http://localhost:8069` (admin/admin) |
 | dlt | Ingesta de Odoo al almacén | [`pipelines/`](pipelines/) |
 | DuckDB | El almacén, las cuatro capas | `warehouse/warehouse.duckdb` |
 | dbt | Data Vault y capa de explotación | [`dbt_project/`](dbt_project/) |
 | dbt docs | Diccionario de modelos y grafo de linaje | `http://localhost:8081` |
-| Rill | Panel de exploración | [`rill_project/`](rill_project/), en `http://localhost:9010` |
+| Rill | Paneles de exploración | [`rill_project/`](rill_project/), en `http://localhost:9010` |
+| nao | Agente analítico sobre la capa oro | [`nao_project/`](nao_project/), en `http://localhost:5005` |
 
-Todo se orquesta desde [`docker-compose.yml`](docker-compose.yml). Hacen falta Docker con el complemento `compose`, unos 4 GiB de memoria libre y unos 3 GiB de disco.
+Todo se orquesta desde [`docker-compose.yml`](docker-compose.yml). Hacen falta Docker con el complemento `compose`, unos 4 GiB de memoria libre y unos 3 GiB de disco, que pasan a 7 GiB si se monta también el agente (la imagen de nao ocupa 3,5 GiB). El agente necesita además una clave de LLM en `ANTHROPIC_API_KEY` o `OPENAI_API_KEY`; sin ella el resto del ejercicio funciona igual.
 
 ```bash
 docker compose up -d                          # levanta Odoo con sus datos

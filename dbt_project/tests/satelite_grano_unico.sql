@@ -32,3 +32,24 @@ SELECT 'sat_order_line', CAST(hk_order_product AS VARCHAR), load_date, count(*)
 FROM {{ ref('sat_order_line') }}
 GROUP BY 1, 2, 3
 HAVING count(*) > 1
+
+UNION ALL
+
+SELECT 'sat_employee_details', CAST(hk_employee AS VARCHAR), load_date, count(*)
+FROM {{ ref('sat_employee_details') }}
+GROUP BY 1, 2, 3
+HAVING count(*) > 1
+
+UNION ALL
+
+SELECT 'sat_department_details', CAST(hk_department AS VARCHAR), load_date, count(*)
+FROM {{ ref('sat_department_details') }}
+GROUP BY 1, 2, 3
+HAVING count(*) > 1
+
+UNION ALL
+
+SELECT 'sat_category_details', CAST(hk_category AS VARCHAR), load_date, count(*)
+FROM {{ ref('sat_category_details') }}
+GROUP BY 1, 2, 3
+HAVING count(*) > 1

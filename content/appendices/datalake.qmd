@@ -12,7 +12,7 @@ Este montaje no continúa el ejemplo de la academia ni comparte nada con él. Lo
 
 ## Lo que se va a levantar
 
-Seis piezas, todas de código abierto, cada una haciendo exactamente un trabajo.
+Siete piezas, todas de código abierto, cada una haciendo exactamente un trabajo.
 
 ```{mermaid}
 flowchart LR
@@ -23,7 +23,9 @@ flowchart LR
     v --> t2["dbt"]
     t2 --> g[("DuckDB<br/>oro")]
     g --> r["Rill"]
+    g --> n["nao"]
     t2 -.-> doc["dbt docs"]
+    t2 -.-> n
 
     classDef origen fill:#ececf0,stroke:#868d9c,stroke-width:1.5px,color:#2b2f3a
     classDef carga fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
@@ -35,28 +37,31 @@ flowchart LR
     class d carga
     class b,v,g almacen
     class t,t2 transformacion
-    class r explotacion
+    class r,n explotacion
     class doc documentacion
 ```
 
-La flecha de puntos es la única que no lleva datos: dbt docs no transforma nada, se limita a publicar lo que dbt sabe de sus propios modelos.
+Las flechas de puntos son las únicas que no llevan datos. dbt docs no transforma nada, se limita a publicar lo que dbt sabe de sus propios modelos. La que llega a nao es de la misma naturaleza y es la que hace interesante a esa pieza: el agente recibe el dato por un lado y **el proyecto de dbt por el otro**, porque para contestar bien no le basta con ver las tablas, necesita saber qué decidimos al construirlas.
 
 | Pieza | Papel | Dónde queda |
 |---|---|---|
-| Odoo 16 y PostgreSQL 15 | Sistema origen con datos de demostración | `http://localhost:8069` |
+| Odoo 16 y PostgreSQL 15 | Sistema origen, con los módulos de ventas y recursos humanos y sus datos de demostración | `http://localhost:8069` |
 | dlt | Ingesta de Odoo al almacén | `pipelines/odoo_extract.py` |
 | DuckDB | El almacén, las cuatro capas | `warehouse/warehouse.duckdb` |
 | dbt | Data Vault y capa de explotación | `dbt_project/` |
 | dbt docs | Diccionario de modelos y grafo de linaje | `http://localhost:8081` |
-| Rill | Panel de exploración | `http://localhost:9010` |
+| Rill | Paneles de exploración | `http://localhost:9010` |
+| nao | Agente analítico sobre la capa oro | `http://localhost:5005` |
 
 : Las piezas del ejercicio y dónde encontrarlas
 
-Los puertos no son los de costumbre y la razón es evitar choques: el 3000 lo usa Evidence en el [capítulo de inteligencia de negocio](../explotacion/bi.qmd), el 8585 lo ocupa OpenMetadata en el [apéndice de metadatado](metadatado.qmd) y el 9009 es el de un Rill arrancado en local como se ve en el [apéndice de exploración](rill.qmd). Aquí PostgreSQL se publica en el 5433, Rill en el 9010 y la documentación en el 8081 (dbt docs sirve por defecto en el 8080, que es de los puertos más disputados de cualquier portátil).
+Los puertos no son los de costumbre y la razón es evitar choques: el 3000 lo usa Evidence en el [capítulo de inteligencia de negocio](../explotacion/bi.qmd), el 8585 lo ocupa OpenMetadata en el [apéndice de metadatado](metadatado.qmd) y el 9009 es el de un Rill arrancado en local como se ve en el [apéndice de exploración](rill.qmd). Aquí PostgreSQL se publica en el 5433, Rill en el 9010 y la documentación en el 8081 (dbt docs sirve por defecto en el 8080, que es de los puertos más disputados de cualquier portátil). nao se queda en su 5005 de siempre, que no lo disputa nadie.
 
 ## Antes de empezar
 
-Hace falta Docker con el complemento `compose`, unos 4 GiB de memoria libre y unos 3 GiB de disco, casi todo para la imagen de Odoo. La primera ejecución tarda lo que tarde la descarga.
+Hace falta Docker con el complemento `compose` y unos 4 GiB de memoria libre. De disco, unos 3 GiB para llegar hasta el panel y **unos 7 GiB si se monta también el agente**: la imagen de nao ocupa 3,5 GiB ella sola, más que todo lo demás junto. Es una cifra que conviene saber antes y no a mitad de descarga, y una razón perfectamente legítima para dejar esa última pieza para otro día: el ejercicio está completo sin ella.
+
+La primera ejecución tarda lo que tarde la descarga.
 
 ## Puesta en marcha
 
@@ -66,7 +71,13 @@ Hace falta Docker con el complemento `compose`, unos 4 GiB de memoria libre y un
 docker compose up -d
 ```
 
-Esto arranca PostgreSQL, crea la base de datos de Odoo con el módulo de ventas y sus datos de demostración, y deja el ERP escuchando. La creación de la base de datos la hace un servicio de un solo uso (`odoo-init`) en lugar del asistente web, que es lo que suele proponerse y que tiene el inconveniente de no ser reproducible: obliga a rellenar un formulario a mano y a acordarse de marcar la casilla de los datos de demostración.
+Esto arranca PostgreSQL, crea la base de datos de Odoo con los módulos de ventas y recursos humanos y sus datos de demostración, y deja el ERP escuchando. La creación de la base de datos la hace un servicio de un solo uso (`odoo-init`) en lugar del asistente web, que es lo que suele proponerse y que tiene el inconveniente de no ser reproducible: obliga a rellenar un formulario a mano y a acordarse de marcar la casilla de los datos de demostración.
+
+Los módulos se instalan de una vez en la orden del servicio, y no son gratis en el sentido que importa aquí:
+
+```yaml
+command: ["odoo", "-d", "odoo_demo", "-i", "sale_management,hr", "--stop-after-init"]
+```
 
 El primer arranque tarda un par de minutos en inicializar la base. Se sabe que ha terminado cuando el servicio de inicialización ha salido con código cero:
 
@@ -82,17 +93,30 @@ A partir de ahí Odoo responde en `http://localhost:8069`, con usuario `admin` y
 docker compose run --rm extract
 ```
 
-dlt lee cinco tablas de Odoo y las deja en el esquema `raw` sin más cambio que el nombre. Al terminar informa de lo cargado, y estos son los números que salen con los datos de demostración:
+dlt lee diez tablas de Odoo y las deja en el esquema `raw` sin más cambio que el nombre. Al terminar informa de lo cargado, y estos son los números que salen con los datos de demostración:
 
 ```
-raw.raw_customers: 40
+raw.raw_customers: 66
 raw.raw_orders: 20
 raw.raw_order_lines: 44
 raw.raw_products: 34
 raw.raw_product_templates: 29
+raw.raw_product_categories: 9
+raw.raw_employees: 20
+raw.raw_departments: 7
+raw.raw_sales_teams: 5
+raw.raw_countries: 250
 ```
 
 Si esos números no cuadran, no tiene sentido seguir: algo ha fallado en el origen y todo lo que venga después heredará el problema.
+
+:::{.callout-important}
+# Once columnas de cincuenta y ocho
+
+`hr_employee` es la tabla que obliga a pensar antes de copiar. Tiene cincuenta y ocho columnas y en `ODOO_TABLES` solo se declaran once, porque entre las otras cuarenta y siete están el número de la seguridad social, el pasaporte, la fecha de nacimiento, el estado civil, el género y el permiso de trabajo.
+
+Son datos personales de categoría especial y **el almacén analítico no tiene ninguna razón para verlos**. Que la ingesta declare las columnas una a una en lugar de hacer un `SELECT *` deja de ser una manía de estilo y pasa a ser el control que lo impide: con la lista explícita, incorporar un dato sensible exige escribirlo, y eso aparece en la revisión del cambio. Con `SELECT *`, entra solo el día que alguien añada un campo en el ERP y nadie se entera.
+:::
 
 ### Construir el vault
 
@@ -103,10 +127,10 @@ docker compose run --rm transform
 dbt encadena las tres capas que quedan (staging, vault y explotación) y a continuación ejecuta las pruebas. La salida termina así:
 
 ```
-Done. PASS=74 WARN=0 ERROR=0 SKIP=0 TOTAL=74
+Done. PASS=216 WARN=0 ERROR=0 SKIP=0 TOTAL=216
 ```
 
-Las setenta y cuatro incluyen diecisiete modelos y cincuenta y siete pruebas. Que pasen todas no significa que el modelo sea bueno, pero que falle una sí significa que algo está mal, y en este proyecto hay pruebas puestas justo donde el Data Vault se rompe con más facilidad.
+Los doscientos dieciséis incluyen treinta y siete modelos y ciento setenta y nueve pruebas. Que pasen todas no significa que el modelo sea bueno, pero que falle una sí significa que algo está mal, y en este proyecto hay pruebas puestas justo donde el Data Vault se rompe con más facilidad.
 
 ### Las dos cosas de una vez
 
@@ -121,7 +145,7 @@ Está en `pipelines/run_pipeline.py` y son tres líneas de fondo: se crea el pip
 :::{.callout-important}
 # `run_all` no ejecuta las pruebas
 
-El nombre engaña. `run_all()` hace `dbt deps`, `dbt seed` y `dbt run`, es decir el equivalente a `dbt run` y no a `dbt build`: **las pruebas de los modelos no entran**. Quedarse ahí dejaría el vault sin sus cincuenta y siete comprobaciones y sin enterarse. Por eso el script pide las pruebas aparte, con `transformacion.test()`, y suma los dos resultados antes de decidir si ha ido bien.
+El nombre engaña. `run_all()` hace `dbt deps`, `dbt seed` y `dbt run`, es decir el equivalente a `dbt run` y no a `dbt build`: **las pruebas de los modelos no entran**. Quedarse ahí dejaría el vault sin sus ciento setenta y nueve comprobaciones y sin enterarse. Por eso el script pide las pruebas aparte, con `transformacion.test()`, y suma los dos resultados antes de decidir si ha ido bien.
 :::
 
 ### Ver el linaje
@@ -137,7 +161,7 @@ El primero deja en `dbt_project/target/` el `manifest.json` (los modelos y sus d
 
 ![Linaje de datos en dbt docs](../../assets/dbt-linaje.png)
 
-Se lee de izquierda a derecha y es exactamente el recorrido que cuenta este apéndice: en verde las cinco tablas de `raw` que dejó dlt, y en azul las cuatro vistas de staging, los tres hubs, los dos enlaces, los cuatro satélites y las cuatro tablas de explotación. El nodo `satelite_grano_unico` no es un modelo sino la prueba singular de `dbt_project/tests/`, porque en el grafo de dbt **las pruebas son nodos como cualquier otro**: cuelgan de aquello que comprueban, que es justo lo que permite a `dbt build` ordenar la ejecución sin que nadie escriba las dependencias a mano.
+Se lee de izquierda a derecha y es exactamente el recorrido que cuenta este apéndice: en verde las diez tablas de `raw` que dejó dlt, y en azul las diez vistas de staging, los seis hubs, los cinco enlaces, los siete satélites, las dos tablas de referencia y los siete modelos de explotación. Los nodos `satelite_grano_unico` y `cobertura_comercial` no son modelos sino las pruebas singulares de `dbt_project/tests/`, porque en el grafo de dbt **las pruebas son nodos como cualquier otro**: cuelgan de aquello que comprueban, que es justo lo que permite a `dbt build` ordenar la ejecución sin que nadie escriba las dependencias a mano.
 
 :::{.callout-note}
 # Servir no bloquea el almacén, generar sí
@@ -147,7 +171,32 @@ Se lee de izquierda a derecha y es exactamente el recorrido que cuenta este apé
 Quien sí abre el almacén es `dbt docs generate`, porque el catálogo de columnas tiene que consultarlo. Con Rill levantado falla con el mismo `Conflicting lock is held in PID 0` de siempre, de modo que el orden que funciona es generar la documentación primero y arrancar el panel después.
 :::
 
-Las descripciones que aparecen al pinchar un modelo salen de los `description:` de `_core_models.yml` y `_stg_sources.yml`. No hay nada automático en esa parte: lo que no esté escrito ahí sale vacío, y un diccionario de datos sin descripciones es poco más que la lista de columnas que ya da la base de datos.
+### Escribir la documentación una sola vez
+
+Las descripciones que aparecen al pinchar un modelo salen de los `description:` de los cuatro ficheros YAML del proyecto. No hay nada automático en esa parte: lo que no esté escrito ahí sale vacío, y un diccionario de datos sin descripciones es poco más que la lista de columnas que ya da la base de datos.
+
+Con treinta y siete modelos esa escritura tiene un problema que con cuatro no se notaba. Las columnas `load_date`, `record_source` y `hashdiff` aparecen en los veinte modelos del vault, y describirlas en cada YAML son veinte copias del mismo párrafo esperando a desincronizarse en cuanto alguien corrija una. La respuesta de dbt son los **bloques de documentación**: texto con nombre, guardado aparte, que se referencia desde donde haga falta.
+
+```markdown
+{% docs dv_load_date %}
+Momento en el que esta fila entró en el almacén. **No es una fecha de
+negocio**: no dice cuándo ocurrió el hecho, dice cuándo nos enteramos.
+{% enddocs %}
+```
+
+Y en el YAML del modelo:
+
+```yaml
+- name: load_date
+  description: "{{ doc('dv_load_date') }}"
+```
+
+Los bloques viven en `dbt_project/docs/`, declarado en `dbt_project.yml` con `docs-paths`. Son quince y se reparten en dos ficheros con propósitos distintos, que es la separación que conviene copiar:
+
+* `columnas_vault.md` describe las **columnas técnicas** del patrón (las claves hash, la fecha de carga, la huella de cambios). Contesta a "¿qué es esta columna?".
+* `entidades.md` describe las **entidades de negocio** (qué es un cliente aquí, qué es un empleado, por qué el equipo comercial no tiene hub). Contesta a "¿qué es esta cosa?", que es la pregunta que más discusiones ahorra y la que ningún esquema de base de datos responde. Es el germen de un glosario, y por eso se referencia tanto desde el hub como desde el modelo de la capa oro: la misma definición sale en los dos sitios.
+
+Hay un bloque con nombre reservado, `__overview__`, que sustituye la portada del sitio por la que se quiera. La que trae el proyecto explica las cuatro capas y por dónde empezar a mirar, que es más útil que la página genérica de dbt para quien abre esto por primera vez.
 
 El límite del grafo se ve mejor con la imagen delante: dbt solo dibuja lo que pasa por sus `ref()` y sus `source()`. El tramo de Odoo a `raw` lo hizo dlt y aquí no existe (las tablas de `raw` aparecen como el principio del mundo, cuando son la mitad de la historia), y el panel de Rill que consume la capa oro tampoco. Coser los tres tramos es precisamente el trabajo de un catálogo de gobierno, y cómo se reconstruye ese linaje completo a partir del `manifest.json` de dbt y del esquema que deja dlt está en el [apéndice de metadatado](metadatado.qmd#trazabilidad-de-principio-a-fin-con-dlt-y-dbt).
 
@@ -159,7 +208,30 @@ docker compose --profile bi up -d rill
 
 El panel queda en `http://localhost:9010`. Rill consulta el mismo fichero DuckDB que acaba de construir dbt, sin copiar nada.
 
-![Dashboard en Rill](../../assets/ri.png)
+![El panel de ventas en Rill](../../assets/ri.png)
+
+Lo que hay dentro son cuatro pantallas y tres vistas de métricas, y el reparto no es decorativo:
+
+| Recurso | Tabla que ataca | Grano | Para qué |
+|---|---|---|---|
+| `metrics/ventas.yaml` | `point_in_time_orders` | Pedido | Facturación, ticket medio, reparto por comercial y departamento |
+| `metrics/catalogo.yaml` | `point_in_time_order_lines` | Línea de pedido | Unidades, precio medio ponderado, descuentos por producto y categoría |
+| `metrics/plantilla.yaml` | `employee_360` | Empleado | Quién hay, dónde y qué parte de la plantilla vende |
+| `canvas/resumen.yaml` | Las tres | Composición fija | La portada que se mira sin tocar nada |
+
+: Los recursos del proyecto de Rill
+
+Las tres vistas de métricas consultan el mismo almacén y **no se pueden mezclar**, porque miden granos distintos. Se ve en la definición de la misma cifra: en `ventas` la facturación es `sum(amount_total)` sobre la cabecera del pedido, y en `catalogo` es `sum(price_total)` sobre la línea. Sumar la primera a grano de línea la multiplicaría por el número de líneas de cada pedido, y el total saldría inflado sin que nada avisara.
+
+Que la capa semántica obligue a declarar de qué tabla sale cada medida es justamente lo que hace imposible ese error: nadie puede pedir la facturación del pedido desglosada por producto, porque esa combinación no existe en ninguna de las dos vistas. Es la diferencia entre una capa semántica y una carpeta de consultas guardadas.
+
+El `canvas` es el tercer tipo de recurso y responde a una necesidad distinta de la del `explore`. Un `explore` es una herramienta de investigación: se entra sin saber qué se busca. Un `canvas` es una composición fija, para la pantalla que alguien mira cada lunes. Puede juntar bloques de las tres vistas de métricas en una misma página porque cada bloque declara de cuál bebe.
+
+:::{.callout-tip}
+# El rango temporal por defecto decide la primera impresión
+
+Sin declarar `defaults`, Rill abre el panel en las últimas veinticuatro horas. Con estos datos de demostración eso deja fuera casi todo el histórico: la portada aparece medio vacía y la serie temporal, plana. Dos líneas de configuración (`time_ranges` y `defaults: time_range`) son la diferencia entre un panel que se entiende al abrirlo y uno que parece roto.
+:::
 
 :::{.callout-warning}
 # Rill bloquea el almacén
@@ -175,6 +247,115 @@ docker compose stop rill
 Por eso Rill vive tras un perfil de Compose y no arranca con el `up -d` general: el orden natural (cargar, transformar y después explorar) evita el choque. Al terminar de reconstruir, `docker compose --profile bi up -d rill` lo devuelve a su sitio.
 :::
 
+### Preguntar en castellano
+
+La última pieza es [nao](https://getnao.io/), un agente analítico de código abierto. Se monta en dos pasos y la separación entre ellos es la misma que ya vimos con dbt docs:
+
+```bash
+docker compose run --rm nao-context
+docker compose --profile ai up -d nao
+```
+
+El primero construye el **contexto**: recorre la capa oro y el proyecto de dbt y deja en `nao_project/` una carpeta de ficheros markdown describiendo lo que hay. El segundo levanta el chat en `http://localhost:5005`, que consume ese contexto. Generar necesita el almacén; servir, no. Hay que rehacer el contexto cuando cambie el modelo, exactamente igual que `dbt docs generate`.
+
+Al entrar la primera vez pide crear una cuenta, que es local del contenedor.
+
+#### Lo que se le enseña, y lo que no
+
+Aquí está la decisión de diseño de esta pieza, y es la que más se nota al usarla. En `nao_project/nao_config.yaml`:
+
+```yaml
+databases:
+  - name: almacen
+    type: duckdb
+    path: /data/warehouse.duckdb
+    include:
+      - "main.*"
+```
+
+**Solo la capa oro.** La tentación es apuntar el agente a todo el almacén, que total ya está ahí, y es un error que se paga en la primera respuesta: desde `raw` el nombre del producto es un JSON, los presupuestos se mezclan con los pedidos y el contador de clientes miente. Todo el trabajo de las capas intermedias existe precisamente para que nadie tenga que contestar desde ahí. Dejarlas al alcance del agente sería tirarlo por la ventana en el último paso.
+
+El vault tampoco entra: guarda la historia, pero responder con él exige encadenar hubs y satélites, y eso ya lo hace la capa oro una vez. Con el filtro puesto, el agente ve siete tablas.
+
+:::{.callout-warning}
+# El patrón se compara con `esquema.tabla`
+
+`main` a secas no casa con `main.kpis_daily`, así que el asterisco no es decorativo. Sin él, el sync termina con un `Nothing to sync` en verde, sin errores y sin contexto, que es de las formas más incómodas de fallar: parece que ha ido bien.
+:::
+
+La segunda mitad de la configuración es la que de verdad cambia las respuestas:
+
+```yaml
+repos:
+  - name: dbt
+    local_path: /app/dbt_project
+    include:
+      - "models/**/*.sql"
+      - "models/**/*.yml"
+      - "docs/**/*.md"
+```
+
+El proyecto de dbt entero como contexto. Aquí está lo que la base de datos no puede contarle: el SQL de cada modelo, las pruebas y, sobre todo, las descripciones de los YAML y los bloques de `docs/`. **Ese es el momento en que documentar deja de ser higiene y pasa a tener un consumidor**: lo que se escribió una vez en `entidades.md` es lo que evita que el agente se invente qué es un cliente aquí.
+
+La lista de `include` tampoco sobra. Sin ella nao copia el proyecto completo, cuatrocientos noventa y tres ficheros, casi todos de `target/` y de `logs/`: el manifiesto, el catálogo y el sitio de documentación ya compilado. Nada de eso ayuda y todo eso ocupa contexto. Con el filtro se queda en cuarenta y nueve.
+
+#### La documentación no viaja por un solo camino
+
+Merece la pena mirar lo que el sync deja escrito, en `nao_project/databases/.../table=employee_360/columns.md`:
+
+```markdown
+# employee_360
+
+## Description
+
+_No description available._
+```
+
+Y sin embargo esa descripción existe, está en `_analytics_models.yml`. Lo que pasa es que el proveedor de DuckDB de nao saca el esquema con Ibis, que no trae los comentarios del catálogo. El proyecto los escribe igualmente, porque es lo correcto:
+
+```yaml
+models:
+  data_vault_odoo:
+    +persist_docs:
+      relation: true
+      columns: true
+```
+
+Con eso, `dbt build` deja las descripciones dentro de la propia base de datos (`COMMENT ON`), donde las encuentra cualquier cliente SQL o catálogo sin saber que dbt existe:
+
+```sql
+SELECT table_name, comment FROM duckdb_tables() WHERE comment IS NOT NULL;
+```
+
+A nao esas descripciones le llegan por el otro lado, con el repositorio sincronizado. Son **dos caminos distintos para la misma documentación y ninguna herramienta usa los dos**, que es una buena razón para escribirla una sola vez y publicarla por todos los sitios que se pueda.
+
+#### La clave y lo que sale de casa
+
+El agente necesita un modelo, y ahí hay dos cosas que decir.
+
+La clave llega por variable de entorno y no se versiona:
+
+```bash
+export ANTHROPIC_API_KEY=sk-...
+docker compose --profile ai up -d nao
+```
+
+Sin ella la interfaz arranca igual y avisa con un "Configure a model" en el cuadro de texto, que es un modo degradado razonable: se puede mirar el contexto construido sin gastar un céntimo.
+
+Lo segundo es más importante y no lo pregunta nadie. **Un agente analítico manda a un tercero el esquema de tu almacén y muestras de tus filas.** Es inherente a cómo funciona, no un defecto de esta herramienta. Aquí es donde la decisión que tomamos en la ingesta deja de ser teórica: los documentos de identidad y las fechas de nacimiento de `hr_employee` no salieron nunca del ERP, así que no hay forma de que acaben en una llamada a un modelo. Si hubiéramos hecho un `SELECT *` porque total ya se filtrará luego, ese "luego" habría llegado justo aquí.
+
+Y una tercera, menor: nao envía telemetría de uso a PostHog por defecto. Son eventos del tipo "mensaje enviado", no datos del almacén, pero el ejercicio la desactiva de forma explícita con `POSTHOG_DISABLED: "true"` porque una decisión así se toma, no se descubre.
+
+:::{.callout-note}
+# Con este sí se puede trabajar a la vez
+
+Al contrario que Rill, nao **no impide reconstruir el almacén**. Su proveedor de DuckDB abre el fichero en solo lectura y no mantiene la conexión abierta, de modo que con el chat levantado `dbt build` funciona con normalidad.
+
+Esto obliga a afinar la regla del bloqueo, que es más sencilla de lo que parecía: DuckDB admite **varios lectores a la vez y un solo escritor**. Con Rill levantado, `nao sync` entra sin problema (los dos leen) y dbt falla (quiere escribir). Lo que no puede solaparse es la escritura, no la lectura.
+:::
+
+El estado propio del chat (la cuenta y el historial de conversaciones) vive en un SQLite dentro del contenedor, así que sobrevive a `stop` y `start` pero no a `down`. Para un ejercicio está bien; para algo serio, la imagen admite un PostgreSQL con `DB_URI`.
+
 ### Comprobar que está todo
 
 ```bash
@@ -183,7 +364,15 @@ import duckdb
 con = duckdb.connect('/data/warehouse.duckdb', read_only=True)
 print(con.execute('SELECT count(*) FROM vault.hub_customer').fetchone())
 print(con.execute('SELECT * FROM main.kpis_daily LIMIT 5').fetchall())
+print(con.execute('SELECT sum(amount_total) FROM main.point_in_time_orders').fetchone())
+print(con.execute('SELECT sum(price_total) FROM main.point_in_time_order_lines').fetchone())
 "
+```
+
+Las dos últimas líneas son la comprobación que más veces salva un panel: **tienen que dar lo mismo** (17.670,50). Si no coinciden, algún salto por el vault está multiplicando filas y todo lo que se mida a grano de línea estará inflado.
+
+```bash
+docker compose run --rm transform dbt test
 ```
 
 ## Lo que ha quedado construido
@@ -192,18 +381,43 @@ Cuatro capas en un mismo fichero DuckDB, cada una en su esquema.
 
 | Esquema | Capa | Contenido |
 |---|---|---|
-| `raw` | Bronce | Reflejo de Odoo, sin transformar (5 tablas) |
-| `staging` | Preparación | Vistas que resuelven las rarezas del origen (4 vistas) |
-| `vault` | Plata | 3 hubs, 2 enlaces y 4 satélites |
-| `main` | Oro | `point_in_time_orders`, `kpis_daily`, `customer_360`, `customer_history` |
+| `raw` | Bronce | Reflejo de Odoo, sin transformar (10 tablas) |
+| `staging` | Preparación | Vistas que resuelven las rarezas del origen (10 vistas) |
+| `vault` | Plata | 6 hubs, 5 enlaces, 7 satélites y 2 tablas de referencia |
+| `main` | Oro | `point_in_time_orders`, `point_in_time_order_lines`, `kpis_daily`, `customer_360`, `customer_history`, `employee_360`, `product_performance` |
 
 : Las capas del almacén y lo que hay en cada una
+
+Los dos consumidores finales no ven lo mismo, y no por casualidad. Rill ataca tres tablas de `main` a través de su capa semántica, y el agente de nao ve las siete y nada más. Ninguno de los dos llega al vault ni a `raw`: la capa oro es la frontera, y por debajo de ella el almacén es asunto de dbt.
+
+El vault entero, con las entidades nuevas y las relaciones que las unen:
+
+```{mermaid}
+flowchart LR
+    hc(("Cliente")) --- loc[["Pedido<br/>Cliente"]]
+    loc --- ho(("Pedido"))
+    ho --- lop[["Pedido<br/>Producto"]]
+    lop --- hp(("Producto"))
+    ho --- loe[["Pedido<br/>Empleado"]]
+    loe --- he(("Empleado"))
+    he --- led[["Empleado<br/>Departamento"]]
+    led --- hd(("Departamento"))
+    hp --- lpc[["Producto<br/>Categoría"]]
+    lpc --- hcat(("Categoría"))
+
+    classDef hub fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef enlace fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    class hc,ho,hp,he,hd,hcat hub
+    class loc,lop,loe,led,lpc enlace
+```
+
+Los círculos son hubs (claves de negocio) y los rectángulos, enlaces (relaciones). Los satélites no se dibujan para no emborronarlo: cuelgan de casi todos ellos y son los que guardan los atributos y su historia. Las dos tablas de referencia (`ref_country` y `ref_sales_team`) tampoco aparecen, porque no se relacionan con nada: se consultan al final, para traducir códigos.
 
 Que la capa de explotación viva en `main` y no en un esquema propio llamado `analytics` no es un descuido. Rill solo sabe direccionar tablas del esquema por defecto de la base de datos que adjunta (sus claves `database` y `database_schema` se ignoran con este conector), de modo que una tabla en un esquema `analytics` resulta invisible para el panel. Las capas de abajo sí van en su esquema porque solo las consume dbt. Es un ejemplo pequeño y muy típico de cómo una limitación de la herramienta de consumo acaba decidiendo dónde se materializa el dato.
 
 ## Las decisiones que importan
 
-Cuatro cosas de este montaje merecen explicación, porque son las que separan un Data Vault que funciona de uno que parece funcionar.
+Ocho cosas de este montaje merecen explicación, porque son las que separan un Data Vault que funciona de uno que parece funcionar.
 
 ### El hub se carga desde todos los orígenes
 
@@ -244,6 +458,70 @@ Un enlace guarda la relación y las claves de los hubs que une. Nada más. Meter
 
 La solución del ejercicio es tomar la línea de pedido como grano del enlace, conservar su identificador como clave degenerada y colgar del enlace un satélite (`sat_order_line`) con cantidades y precios.
 
+### Lo que parece un atributo y es una entidad
+
+Al entrar los módulos nuevos aparece la decisión que más veces se toma mal, y hay que tomarla tres veces seguidas: el departamento del empleado, la categoría del producto y el equipo del pedido son, los tres, una columna con un número que apunta a otra tabla. La pregunta es si esa columna se queda dentro del satélite o se convierte en un hub con su enlace.
+
+La respuesta no es "siempre hub". Depende de si la cosa referida **tiene identidad propia y atributos que interese historiar**:
+
+* **El departamento sí.** Tiene nombre, responsable y posición en un organigrama, y todo eso cambia. Va a `hub_department` con su satélite, y la adscripción del empleado a `link_employee_department`.
+* **La categoría también.** Y aquí se ve mejor la consecuencia de equivocarse: con `categ_id` metido en el satélite del producto, renombrar una categoría escribiría una versión nueva en los cientos de productos que cuelgan de ella, como si todos hubiesen cambiado.
+* **El puesto (`job_title`) no.** Llega como texto libre en la ficha del empleado, no referencia a ninguna tabla y nadie va a preguntar por la historia de un puesto. Se queda como atributo.
+* **El equipo comercial, tampoco, pero por otra razón.** Es una entidad de verdad, con responsable y objetivos. Lo que pasa es que en este almacén solo aparece para que el `team_id` del pedido se lea como "Pre-Sales", y para eso basta una **tabla de referencia**.
+
+Ese tercer tipo de tabla del Data Vault es el que menos se explica. No lleva clave hash, no lleva satélite y no es de solo inserción: se reconstruye entera en cada carga. `ref_country` es el ejemplo de manual (doscientas cincuenta filas que no cambian casi nunca y existen para que `country_id = 233` se lea como "United States"), y `ref_sales_team` es el caso discutible, puesto ahí a propósito para que se vea dónde está la frontera.
+
+La regla no es sobre la entidad, es sobre el uso: **una tabla de referencia es una entidad de la que no queremos historia**. Lo que se renuncia al elegirla es justo eso: si un país cambia de nombre, el nombre viejo desaparece del almacén y los informes de hace tres años se redibujan con el nombre nuevo. Para países es asumible; para una tabla de tarifas sería un desastre, y ahí la decisión correcta es la contraria.
+
+### Los enlaces también tienen versión vigente
+
+Esta es la trampa que aparece en cuanto un enlace deja de ser inmutable, y cuesta verla porque no rompe nada: solo cambia los números.
+
+Los satélites eran de solo inserción y ya sabíamos deducir su versión vigente. Los enlaces también lo son, y eso significa que **cuando una relación cambia no se sustituye nada**. Si un empleado se traslada de departamento, el enlace pasa a tener dos filas para esa persona, una por cada departamento, y las dos son ciertas. Al consultarlo sin más, ese empleado sale dos veces, y una plantilla de veinte personas aparece como veintiuna en el panel.
+
+La solución no es cerrar filas, que es lo que un vault no hace, sino declarar cuál es la **clave conductora** (*driving key*) de la relación: el extremo que se mueve. En el traslado se mueve el empleado, no el departamento. Quedándose con su carga más reciente sale la relación vigente:
+
+```sql
+{% macro enlace_vigente(relacion, clave_conductora) -%}
+    SELECT * EXCLUDE (dv_fila)
+    FROM (
+        SELECT *,
+            row_number() OVER (PARTITION BY {{ clave_conductora }}
+                               ORDER BY load_date DESC) AS dv_fila
+        FROM {{ relacion }}
+    )
+    WHERE dv_fila = 1
+{%- endmacro %}
+```
+
+Es la misma idea que `satelite_vigente()` aplicada a un sitio donde casi nadie la aplica. Lo que esta macro no cubre conviene tenerlo presente: si la relación **desaparece** del origen, la última fila escrita sigue siendo la antigua y aquí se dará por vigente. Distinguir "sigue igual" de "ya no está" exige un satélite de efectividad del enlace, y este proyecto no lo monta.
+
+La prueba que protege de todo esto no está en el vault sino en la capa oro, y es de las más aburridas que existen: `employee_360.employee_id` tiene que ser única. Si alguien consulta el enlace olvidando la clave conductora, esa unicidad se rompe y la carga se para antes de que nadie mire un número inflado.
+
+### Dos identidades para la misma persona
+
+El pedido dice quién es el comercial con un `user_id`, que es una **cuenta de Odoo** (`res_users`). La plantilla vive en `hr_employee`, que apunta a su cuenta con otro `user_id` propio. Son dos identificadores distintos de la misma persona, y no hay ninguna columna que los case: hay que ir por el único sitio donde coinciden.
+
+Elegir mal la clave de negocio del hub aquí se paga a la vista: montado sobre la cuenta de usuario, `hub_employee` se quedaría con dos de veinte empleados, porque la mayoría de la plantilla no tiene cuenta en el ERP.
+
+La traducción se hace una sola vez, en `stg_order_salesperson`, y esa es la parte que importa. Si viviera dentro del enlace del vault, cada modelo que necesitase al comercial tendría que repetirla, y bastaría con que dos la resolvieran distinto para que el almacén contase dos historias. El `INNER JOIN` de ese modelo deja fuera los pedidos cuyo comercial no es empleado (un usuario del portal, una cuenta de integración), que es lo seguro, y una prueba con `severity: warn` avisa de cuántos se quedan por el camino sin romper la carga:
+
+```sql
+{{ config(severity = 'warn') }}
+```
+
+La distinción entre avisar y fallar es una decisión de diseño, no un descuido. Que un pedido lo firme una cuenta sin ficha de empleado es una situación legítima del origen, así que parar la carga por eso sería castigar al almacén por algo que pasa en el ERP. Lo que no puede ocurrir es que pase en silencio: el día que alguien cambie la cuenta de un comercial, sus pedidos desaparecerían del panel de rendimiento sin que ninguna carga fallase.
+
+### El grano manda
+
+`point_in_time_orders` tiene una fila por pedido y `point_in_time_order_lines` una por línea. Las dos traen facturación y las dos son correctas, pero **no son la misma facturación**, y mezclarlas es la forma más común de que un panel dé números que no cuadran.
+
+A grano de pedido, `sum(amount_total)` es la facturación. A grano de línea, la misma suma la multiplica por el número de líneas de cada pedido: en este almacén, quince pedidos y treinta y tres líneas convertirían 17.670,50 euros en bastante más. Por eso la vista de línea no arrastra el importe de la cabecera, sino que suma `price_total`, y cuenta pedidos con `count(distinct order_id)`.
+
+La comprobación que conviene tener a mano es que las dos sumas coincidan cuando no hay filtro, y en este almacén coinciden. En cuanto se filtra por producto dejan de hacerlo, y es correcto que así sea: un producto no es responsable del pedido entero.
+
+Lo mismo pasa en la capa semántica, y ahí queda mejor resuelto: `ventas.yaml` y `catalogo.yaml` son dos vistas de métricas distintas precisamente porque atacan granos distintos, y eso hace imposible pedirle a Rill una combinación que no existe.
+
 ### El modelo físico de un ERP no es el que enseña
 
 Esta es la lección que justifica usar Odoo en lugar de un origen de juguete. Lo que la interfaz presenta como un producto con su nombre y su precio, por debajo es otra cosa:
@@ -252,7 +530,25 @@ Esta es la lección que justifica usar Odoo en lugar de un origen de juguete. Lo
 * **`product_template.name` es `jsonb`**, porque desde Odoo 16 los campos traducibles se guardan como un diccionario de idiomas. Hay que extraerlo con `json_extract_string(name, '$.en_US')`.
 * **`standard_price` no existe como columna.** Vive en `ir_property`, porque depende de la compañía. Cualquier cálculo de margen tiene que ir allí.
 
-Todo esto se resuelve en `stg_products.sql`, que es exactamente para lo que sirve la capa de staging: **absorber la rareza del origen una sola vez** para que no se propague al resto.
+Con los módulos nuevos aparece una cuarta, y es la más traicionera porque parece una regla y no lo es. Uno aprende que en Odoo 16 los nombres son JSON y lo aplica a todo. Pues no:
+
+| Tabla | Tipo de `name` |
+|---|---|
+| `product_template` | `jsonb` |
+| `hr_job` | `jsonb` |
+| `crm_team` | `jsonb` |
+| `res_country` | `jsonb` |
+| `hr_department` | `varchar` |
+| `product_category` | `varchar` |
+| `hr_employee` | `varchar` |
+
+: El mismo nombre de columna, cuatro veces JSON y tres veces texto
+
+La diferencia la decide cada modelo de Odoo al declarar el campo como traducible o no, así que **no hay una regla que aplicar a ciegas**: hay que mirar `information_schema` tabla por tabla. Descubrirlo tarde significa un `json_extract_string` sobre una columna de texto, que en DuckDB no falla con un error claro sino que devuelve `NULL`, y un panel lleno de huecos es mucho más difícil de diagnosticar que una consulta que se rompe.
+
+Hay una quinta rareza que solo se ve mirando los datos y no el esquema: en el catálogo de demostración **hay dos categorías distintas llamadas "Saleable"**, una colgando de "All" y otra de "All / Saleable / Services". Agrupar por el nombre corto en un panel mezclaría dos cosas que no son la misma, así que lo que se usa para agrupar es la ruta completa. Ningún tipo de dato ni ninguna restricción de la base de datos avisa de esto.
+
+Todo esto se resuelve en la capa de staging, que es exactamente para lo que sirve: **absorber la rareza del origen una sola vez** para que no se propague al resto.
 
 ## Ejercicios
 
@@ -307,15 +603,72 @@ Ahora sí: `Got 15 results`, la prueba `relationships` del enlace falla y el pro
 
 La conclusión es la que interesa: el filtro por sí solo no era el fallo, y la carga multiorigen del hub no era una precaución decorativa. Cada uno tapaba al otro, y solo quitando los dos aparece el problema. Para volver atrás, basta con deshacer ambos cambios y repetir el `--full-refresh`.
 
+### Trasladar a alguien de departamento
+
+Es el ejercicio que enseña la clave conductora, y se hace en una orden:
+
+```bash
+docker exec dl-postgres psql -U odoo -d odoo_demo \
+  -c "UPDATE hr_employee SET department_id=2 WHERE id=7;"
+
+docker compose stop rill
+docker compose run --rm extract
+docker compose run --rm transform
+```
+
+Marc Demo pasa de Investigación y Desarrollo a Ventas. Lo que hay que mirar después son tres recuentos, y cada uno dice algo distinto:
+
+```sql
+SELECT count(*) FROM vault.link_employee_department;  -- 20 -> 21
+SELECT count(*) FROM vault.sat_employee_details;      -- 20 -> 20
+SELECT count(*) FROM main.employee_360;               -- 20 -> 20
+```
+
+El enlace crece porque la relación nueva se añade sin borrar la vieja. **El satélite no se mueve**, y esa es la comprobación de que el diseño era el correcto: como el departamento no es un atributo del empleado, un traslado no ensucia su ficha. Y la capa oro sigue con veinte filas porque `enlace_vigente()` se queda con la última adscripción; si se quita esa macro del modelo, la prueba de unicidad de `employee_360` falla y la carga se para, que es exactamente lo que tenía que pasar.
+
+En el enlace quedan las dos adscripciones con su fecha, así que la pregunta "¿en qué departamento estaba cuando firmó aquel pedido?" tiene respuesta. Contestarla es el siguiente ejercicio.
+
+### Modelar la jerarquía como enlace
+
+Los departamentos y las categorías son árboles, y este proyecto se salta el problema: guarda `parent_id` y la ruta ya calculada (`department_path`) como atributos del satélite, porque el origen las da hechas.
+
+La forma estricta es un **enlace jerárquico**, un enlace cuyos dos extremos apuntan al mismo hub (`link_department_hierarchy`, con `hk_department_hijo` y `hk_department_padre`). Montarlo obliga a resolver dos cosas que el atajo esconde: cómo se consulta la ruta completa sin la columna precalculada (con un `WITH RECURSIVE`) y qué pasa con la raíz, que no tiene padre. Merece la pena hacerlo con las categorías, que son solo nueve.
+
 ### Añadir un origen
 
 Odoo tiene facturas (`account_move` y `account_move_line`). Añadirlas es el recorrido completo: declararlas en `ODOO_TABLES` del pipeline, crear su modelo de staging, decidir si la factura es un hub nuevo o un satélite del pedido (pista: tiene identidad y vida propias) y llevarla hasta la capa de explotación.
+
+### Comprobar al agente
+
+Los agentes analíticos se prueban mal a ojo, porque contestan siempre y con aplomo. La forma útil de evaluarlo es preguntarle algo cuya respuesta ya conocemos por otro camino:
+
+> ¿Cuánto facturamos en total y cuántos pedidos hubo?
+
+Tiene que decir 17.670,50 y 15, que es lo que enseña el panel de Rill. Después conviene subir la dificultad hacia las preguntas donde el modelo importa:
+
+> ¿Qué comercial vendió más y de qué departamento es?
+
+> ¿Qué productos del catálogo no se han vendido nunca?
+
+La segunda es la interesante, porque solo se puede contestar desde `product_performance`: quien parta de las líneas de pedido no puede ver lo que no se vendió. Si el agente responde bien a esa, es que está usando el modelo y no improvisando SQL.
+
+El ejercicio de verdad viene después: quitar el `include` de `nao_config.yaml` para que vea también `raw`, volver a sincronizar y repetir las mismas preguntas. Las respuestas empeoran de una forma muy concreta, contando presupuestos como pedidos, y se entiende de golpe para qué servían las capas intermedias.
+
+### Calcular el margen
+
+`product_performance` mide facturación, unidades y descuento, y no dice nada de rentabilidad. No es un olvido: el coste (`standard_price`) no es una columna en Odoo, vive en `ir_property` porque depende de la compañía, y ahí está guardado como texto junto con propiedades de cualquier otro modelo.
+
+Traerlo obliga a lo que ninguna tabla limpia enseña: filtrar `ir_property` por el campo que corresponde a `standard_price`, quedarse con la propiedad de la compañía adecuada, convertir el valor y decidir qué hacer con los productos que no la tienen. Es el ejercicio que más se parece al trabajo real de este oficio.
 
 ## Lo que hay que vigilar
 
 **Las versiones de dbt y su adaptador tienen que ir emparejadas.** Si se instala `dbt-duckdb` sin fijar también `dbt-core`, pip resuelve el núcleo más nuevo que exista y lo empareja con un adaptador viejo. Esa combinación arranca, avisa de que el plugin está desactualizado y luego **se cae de forma intermitente**, que es la peor manera de fallar. Las versiones van fijadas en `docker/toolbox.Dockerfile`.
 
-**DuckDB escribe con un solo proceso.** Además de lo ya dicho sobre Rill, el proyecto usa un único hilo de dbt (`threads: 1`). Subirlo no acelera nada y provoca caídas cuando varios modelos escriben a la vez.
+**DuckDB escribe con un solo proceso.** Admite varios lectores a la vez, pero un único escritor: es la regla que explica por qué nao convive con Rill y dbt no. Además, el proyecto usa un único hilo de dbt (`threads: 1`). Subirlo no acelera nada y provoca caídas cuando varios modelos escriben a la vez.
+
+**nao también va emparejado consigo mismo.** La CLI que construye el contexto (`nao-core`, en la imagen de utilidades) y el contenedor del chat tienen que ser de la misma versión, por el mismo motivo que dbt y su adaptador. Es un proyecto joven que solo publica etiquetas por commit, así que fijar la versión obliga a escribir el hash (`getnao/nao:b325bba`, la 0.3.3). Con `latest` bastaría con que cambiaran el formato del contexto para que el ya construido dejara de leerse.
+
+**`pyarrow-hotfix` hace falta y no lo pide nadie.** La versión de duckdb del proyecto lo importa siempre que convierte un resultado a Arrow, aunque el parche solo fuera necesario para pyarrow anterior al 14. Sin ese paquete, `nao sync` conecta, encuentra las tablas, falla en todas con un `No module named 'pyarrow_hotfix'` y aun así termina imprimiendo `7 tables synced` en verde. El contexto queda vacío y nada avisa.
 
 **El directorio `warehouse/` tiene que existir antes del primer arranque.** Si no está, Docker lo crea como `root` y los contenedores, que corren con el usuario del anfitrión, no pueden escribir. En el repositorio va un `.gitkeep` para que exista siempre.
 
@@ -327,13 +680,21 @@ Por mantenerlo reproducible en un portátil, tres piezas se han quedado a la pue
 
 **La orquestación.** Aquí el pipeline son dos órdenes seguidas que se lanzan a mano, y para un único origen eso no pide orquestador ninguno: dlt sabe ejecutar un proyecto dbt por su cuenta (`dlt.dbt.package`), con lo que las dos órdenes se convierten en un script y la dependencia queda expresada por el propio flujo del programa. La maquinaria empieza a compensar cuando los orígenes son varios y hay que esperar a todos. Ambas cosas están en el [capítulo de herramientas de ingesta](../load/herramientas.qmd#quién-lo-pone-en-marcha).
 
-**La exploración de verdad.** El panel que queda montado es mínimo, con una vista de métricas y un `explore`. Cómo se saca partido a Rill está en su [apéndice](rill.qmd).
+**Los datos.** Esta es la limitación que más se nota al abrir los paneles y no tiene arreglo desde el código: los datos de demostración de Odoo son quince pedidos, dos comerciales y dos categorías con ventas. El modelo soporta mucho más, pero lo que se ve en pantalla son cifras pequeñas. Inventarse volumen habría sido fácil y habría estropeado lo único que justifica usar un ERP real como origen, que es que sus rarezas son las de verdad. Lo que se enseña aquí es el recorrido, no el volumen.
+
+**La exploración de verdad.** Quedan tres vistas de métricas, tres paneles de exploración y un `canvas`, que ya es un proyecto de Rill con forma, pero se queda en la superficie de lo que la herramienta hace. Cómo se le saca partido está en su [apéndice](rill.qmd).
 
 ## Desmontarlo
 
 ```bash
-docker compose --profile bi --profile docs --profile jobs down -v
-rm -rf warehouse/warehouse.duckdb
+docker compose --profile bi --profile docs --profile jobs --profile ai down -v
+rm -rf warehouse/warehouse.duckdb nao_project/databases nao_project/repos
 ```
 
-El `-v` borra también los volúmenes, es decir, la base de datos de Odoo. Sin él, el ERP conserva sus datos y volver a levantarlo es inmediato.
+El `-v` borra también los volúmenes, es decir, la base de datos de Odoo. Sin él, el ERP conserva sus datos y volver a levantarlo es inmediato. Lo que se borra a mano son artefactos generados: el almacén y el contexto del agente se reconstruyen con las mismas órdenes de siempre.
+
+Las imágenes se quedan, y son unos 7 GiB. Para recuperar el espacio de la más grande:
+
+```bash
+docker rmi getnao/nao:b325bba
+```

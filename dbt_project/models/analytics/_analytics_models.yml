@@ -1,0 +1,189 @@
+version: 2
+
+# La capa oro no tenía documentación ni pruebas, y es la que ve el panel.
+#
+# Las pruebas de unicidad de este fichero parecen triviales y son las más
+# valiosas del proyecto. Todo modelo de esta capa recorre el vault encadenando
+# enlaces y satélites, y **cada uno de esos saltos puede multiplicar filas**:
+# basta con que un satélite tenga dos versiones vigentes o con que un enlace
+# devuelva dos relaciones por olvidar la clave conductora para que la
+# facturación aparezca duplicada. El error no rompe nada, solo cambia los
+# números, que es la manera de fallar más cara de todas.
+#
+# Declarar el grano de cada modelo y comprobarlo convierte ese fallo silencioso
+# en una carga que se para.
+
+models:
+
+  - name: point_in_time_orders
+    description: >
+      El pedido con su contexto resuelto: cliente, país, comercial,
+      departamento y equipo. Es el punto de entrada natural al almacén y la
+      base de la vista de métricas de ventas.
+
+
+      **Grano: un pedido.** El departamento y la categoría que se atribuyen son
+      los vigentes hoy, no los que había el día de la venta: si un comercial se
+      traslada, sus pedidos antiguos pasan a contarse en el departamento nuevo.
+      Es la interpretación habitual (se quiere ver el equipo tal y como está
+      ahora) y el vault guarda lo necesario para calcular la otra.
+    columns:
+      - name: order_id
+        description: "{{ doc('entidad_pedido') }}"
+        data_tests: [not_null, unique]
+      - name: amount_total
+        description: "Importe con impuestos. Sumar solo a este grano."
+        data_tests: [not_null]
+      - name: salesperson_name
+        description: >
+          Comercial que firmó el pedido, o "Sin asignar" cuando la cuenta que
+          lo firmó no corresponde a ningún empleado.
+        data_tests: [not_null]
+      - name: department_path
+        description: "Departamento vigente del comercial, con su ruta completa."
+        data_tests: [not_null]
+      - name: team_name
+        description: "{{ doc('entidad_equipo') }}"
+      - name: country_name
+        description: "País del cliente, ya decodificado."
+
+  - name: point_in_time_order_lines
+    description: >
+      La línea de pedido con su producto, su categoría y todo el contexto del
+      pedido al que pertenece.
+
+
+      **Grano: una línea de pedido.** A este grano no se puede sumar
+      `amount_total`: hay que usar `price_total`, que es el importe de la
+      línea, y contar pedidos con `count(distinct order_id)`.
+    columns:
+      - name: order_line_id
+        description: "{{ doc('dv_degenerate_key') }}"
+        data_tests: [not_null, unique]
+      - name: order_id
+        description: "Pedido al que pertenece la línea. Se repite entre líneas."
+        data_tests: [not_null]
+      - name: quantity
+        description: "Unidades vendidas en la línea."
+      - name: price_total
+        description: "Importe de la línea con impuestos."
+      - name: importe_descuento
+        description: >
+          Diferencia entre el precio de línea sin descuento y lo cobrado.
+          Calculado aquí una vez para que no lo reinvente cada panel.
+      - name: category_path
+        description: "{{ doc('entidad_categoria') }}"
+        data_tests: [not_null]
+
+  - name: customer_360
+    description: >
+      Ficha de cliente con su actividad agregada.
+      {{ doc('entidad_cliente') }}
+
+
+      **Grano: un cliente.** Entran todos, tengan pedidos o no.
+    columns:
+      - name: customer_id
+        data_tests: [not_null, unique]
+      - name: facturacion_total
+        description: "Suma de los importes de sus pedidos. Cero si no tiene."
+        data_tests: [not_null]
+      - name: dias_desde_ultimo_pedido
+        description: >
+          Días transcurridos desde la última compra, calculados sobre la fecha
+          de ejecución. NULL en quien no ha comprado nunca, que no es lo mismo
+          que un número muy grande.
+
+  - name: customer_history
+    description: >
+      Histórico de cambios del cliente, con el intervalo de validez de cada
+      versión calculado al vuelo.
+
+
+      Existe para enseñar de dónde sale el `dv_end_date` del que habla toda la
+      literatura de Data Vault sin que el satélite lo tenga guardado: se deduce
+      con `lead()` sobre la carga siguiente. **Grano: una versión de un
+      cliente**, así que aquí el cliente sí se repite.
+    columns:
+      - name: customer_id
+        data_tests: [not_null]
+      - name: dv_start_date
+        description: "{{ doc('dv_load_date') }}"
+        data_tests: [not_null]
+      - name: dv_end_date
+        description: >
+          Carga en la que esta versión dejó de ser cierta. NULL si sigue
+          vigente. No está almacenada en ningún sitio: se calcula.
+      - name: es_version_vigente
+        data_tests: [not_null]
+
+  - name: employee_360
+    description: >
+      Ficha de empleado con su actividad comercial.
+      {{ doc('entidad_empleado') }}
+
+
+      **Grano: un empleado.** Entra la plantilla completa, venda o no.
+    columns:
+      - name: employee_id
+        description: >
+          Si esta prueba de unicidad falla, lo más probable es que alguien haya
+          consultado `link_employee_department` sin resolver la clave
+          conductora y los empleados trasladados aparezcan dos veces.
+        data_tests: [not_null, unique]
+      - name: department_path
+        description: "Departamento vigente, con su ruta en el organigrama."
+        data_tests: [not_null]
+      - name: es_comercial
+        description: >
+          Calculado a partir de la actividad, no declarado en el origen: en
+          Odoo no hay ningún campo que diga si alguien vende.
+        data_tests: [not_null]
+      - name: facturacion_total
+        data_tests: [not_null]
+
+  - name: product_performance
+    description: >
+      Rendimiento del catálogo. {{ doc('entidad_producto') }}
+
+
+      **Grano: un producto.** Entran también los que no se han vendido nunca,
+      que son los que interesa mirar cuando la pregunta es qué hay parado.
+      No incluye margen: el coste no se ha traído del ERP porque en Odoo no es
+      una columna.
+    columns:
+      - name: product_id
+        data_tests: [not_null, unique]
+      - name: category_path
+        description: "{{ doc('entidad_categoria') }}"
+        data_tests: [not_null]
+      - name: unidades
+        description: "Unidades vendidas, sumadas desde el grano de línea."
+        data_tests: [not_null]
+      - name: desviacion_sobre_tarifa
+        description: >
+          Cuánto se aparta el precio medio de venta del de catálogo, en tanto
+          por uno. Negativo si se vendió por debajo de tarifa. NULL si el
+          producto no tiene tarifa o no se ha vendido.
+      - name: nunca_vendido
+        data_tests: [not_null]
+
+  - name: kpis_daily
+    description: >
+      Métricas de venta agregadas por día, listas para una serie temporal.
+
+
+      **Grano: un día con actividad.** Los días sin pedidos no aparecen: no hay
+      fila de ceros, hay ausencia de fila. Para una serie continua hay que
+      cruzar con un calendario, y esa es una de las piezas que este ejercicio
+      deja fuera.
+    columns:
+      - name: fecha
+        data_tests: [not_null, unique]
+      - name: facturacion
+        data_tests: [not_null]
+      - name: unidades
+        description: >
+          Sumadas a grano de línea y traídas aparte, para no multiplicar la
+          facturación por el número de líneas de cada pedido.
+        data_tests: [not_null]

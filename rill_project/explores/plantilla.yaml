@@ -1,0 +1,23 @@
+# Panel de plantilla.
+#
+# Sin serie temporal, porque la vista de métricas que lo alimenta tampoco la
+# tiene. Es el panel que contesta a "quién hay y dónde", y de paso al cruce que
+# nadie tiene a mano en el ERP: qué parte de la plantilla vende.
+
+version: 1
+type: explore
+display_name: "Plantilla"
+
+metrics_view: plantilla
+
+dimensions: "*"
+measures: "*"
+
+defaults:
+  measures:
+    - empleados
+    - comerciales
+    - facturacion_total
+  dimensions:
+    - departamento
+    - puesto

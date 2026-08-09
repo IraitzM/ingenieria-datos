@@ -38,9 +38,9 @@ def transformar(pipeline: dlt.Pipeline) -> list:
     # ejecuta "todo": hace `dbt deps`, `dbt seed` y `dbt run`, pero NO las
     # pruebas de los modelos. Es el equivalente a `dbt run`, no a `dbt build`.
     #
-    # Quedarse solo con esta llamada dejaría el ejercicio sin sus cincuenta y
-    # siete comprobaciones, que son las que detectan que un enlace ha quedado
-    # colgando. Las pruebas hay que pedirlas aparte.
+    # Quedarse solo con esta llamada dejaría el ejercicio sin sus ciento
+    # setenta y nueve comprobaciones, que son las que detectan que un enlace ha
+    # quedado colgando. Las pruebas hay que pedirlas aparte.
     modelos = transformacion.run_all()
     pruebas = transformacion.test()
 

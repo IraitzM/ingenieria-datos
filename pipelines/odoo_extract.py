@@ -30,13 +30,19 @@ RECORD_SOURCE = "odoo_erp"
 
 # Tabla de origen -> tabla de destino y columnas que nos llevamos.
 #
-# Dos avisos que cuestan una tarde si se descubren tarde:
+# Tres avisos que cuestan una tarde si se descubren tarde:
 #
 #   * `product_product` no tiene ni nombre ni precio. En Odoo son campos de la
 #     plantilla (`product_template`), y `standard_price` ni siquiera es una
 #     columna: vive en `ir_property` porque depende de la compañía.
 #   * `product_template.name` es `jsonb`, porque desde Odoo 16 los campos
 #     traducibles se guardan como un diccionario de idiomas.
+#   * Que un campo se llame `name` no dice nada de su tipo. En este mismo
+#     esquema `hr_department.name` y `product_category.name` son `varchar`,
+#     mientras que `hr_job.name`, `crm_team.name` y `res_country.name` son
+#     `jsonb`. La diferencia la decide cada modelo de Odoo al declarar el campo
+#     como traducible o no, así que no hay regla que aplicar a ciegas: hay que
+#     mirar `information_schema` tabla por tabla.
 ODOO_TABLES = {
     "res_partner": {
         "destino": "raw_customers",
@@ -51,6 +57,10 @@ ODOO_TABLES = {
         "columnas": [
             "id", "name", "partner_id", "state", "date_order",
             "amount_total", "amount_tax", "amount_untaxed",
+            # `user_id` es el comercial que firma el pedido y `team_id` su
+            # equipo. El primero apunta a `res_users`, no a `hr_employee`:
+            # resolver esa correspondencia es trabajo de la capa de staging.
+            "user_id", "team_id",
             "create_date", "write_date",
         ],
     },
@@ -75,6 +85,53 @@ ODOO_TABLES = {
             "id", "name", "type", "categ_id", "list_price", "weight",
             "volume", "default_code", "active", "create_date", "write_date",
         ],
+    },
+    "product_category": {
+        "destino": "raw_product_categories",
+        "columnas": [
+            "id", "name", "complete_name", "parent_id",
+            "create_date", "write_date",
+        ],
+    },
+    # `hr_employee` tiene cincuenta y ocho columnas y la lista de abajo se
+    # queda en once. No es por ahorrar espacio: ahí dentro están el número de
+    # la seguridad social, el pasaporte, la fecha de nacimiento, el estado
+    # civil, el género y el permiso de trabajo. Son datos personales de
+    # categoría especial y el almacén analítico no tiene ninguna razón para
+    # verlos, así que no salen del ERP.
+    #
+    # Es la diferencia entre declarar las columnas y hacer un `SELECT *`: con
+    # la lista explícita, incorporar un dato sensible exige escribirlo, y eso
+    # se ve en la revisión del cambio.
+    "hr_employee": {
+        "destino": "raw_employees",
+        "columnas": [
+            "id", "name", "work_email", "work_phone", "job_title",
+            "department_id", "user_id", "company_id", "active",
+            "create_date", "write_date",
+        ],
+    },
+    "hr_department": {
+        "destino": "raw_departments",
+        "columnas": [
+            "id", "name", "complete_name", "parent_id", "manager_id",
+            "company_id", "active", "create_date", "write_date",
+        ],
+    },
+    "crm_team": {
+        "destino": "raw_sales_teams",
+        "columnas": [
+            "id", "name", "user_id", "company_id", "active",
+            "create_date", "write_date",
+        ],
+    },
+    # Doscientos cincuenta países para decodificar un puñado de identificadores
+    # numéricos. Es el ejemplo de manual de tabla de referencia: no cambia casi
+    # nunca, no tiene interés analítico propio y existe solo para que
+    # `country_id = 233` se lea como "United States".
+    "res_country": {
+        "destino": "raw_countries",
+        "columnas": ["id", "name", "code", "create_date", "write_date"],
     },
 }
 

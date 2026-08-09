@@ -1,0 +1,64 @@
+# Capa semántica de la plantilla.
+#
+# Esta vista no tiene `timeseries`, y es el ejemplo de que no todo panel es una
+# serie temporal. `employee_360` describe un estado (quién hay y en qué
+# departamento), no una sucesión de hechos: poner una fecha aquí obligaría a
+# elegir una arbitrariamente, y el resultado sería un gráfico que sube y baja
+# sin significar nada.
+#
+# Al no declararla, Rill quita las comparaciones con el periodo anterior y las
+# ventanas móviles, que es exactamente lo que corresponde.
+
+version: 1
+type: metrics_view
+display_name: "Plantilla"
+
+connector: duckdb
+table: employee_360
+
+dimensions:
+  - name: departamento
+    column: department_path
+    display_name: "Departamento"
+  - name: puesto
+    column: job_title
+    display_name: "Puesto"
+  - name: empleado
+    column: employee_name
+    display_name: "Empleado"
+  - name: es_comercial
+    column: es_comercial
+    display_name: "Vende"
+    description: >
+      Se calcula a partir de la actividad, no viene declarado en el ERP: en
+      Odoo no hay ningún campo que diga si una persona vende.
+  - name: activo
+    column: empleado_activo
+    display_name: "En plantilla"
+
+measures:
+  - name: empleados
+    expression: count(*)
+    display_name: "Empleados"
+  - name: comerciales
+    expression: count(*) filter (where es_comercial)
+    display_name: "Con ventas"
+  - name: facturacion_total
+    expression: sum(facturacion_total)
+    display_name: "Facturación"
+    format_preset: currency_eur
+  - name: pedidos
+    expression: sum(pedidos)
+    display_name: "Pedidos"
+  - name: clientes_atendidos
+    expression: sum(clientes)
+    display_name: "Clientes atendidos"
+    description: >
+      Suma de los clientes de cada comercial. **No es el número de clientes
+      distintos**: si dos personas atienden al mismo cliente, cuenta dos veces.
+      Para el recuento sin duplicar hay que ir al panel de ventas, donde el
+      grano lo permite.
+  - name: facturacion_media
+    expression: sum(facturacion_total) / nullif(count(*) filter (where es_comercial), 0)
+    display_name: "Facturación media por comercial"
+    format_preset: currency_eur

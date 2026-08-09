@@ -1,46 +1,107 @@
 version: 2
 
-# Pruebas de conformidad del Data Vault.
+# Pruebas de conformidad del Data Vault y diccionario del esquema `vault`.
 #
 # Las del proyecto anterior estaban escritas como macros invocadas desde dentro
 # de los propios modelos, cosa que dbt no ejecuta nunca como prueba: se
 # limitaba a concatenar SQL al final del SELECT. Estas son pruebas de verdad,
 # se ejecutan con `dbt test` y fallan cuando el modelo se rompe.
+#
+# Las descripciones de las columnas técnicas (`load_date`, `record_source`,
+# `hashdiff`, las claves hash) no están escritas aquí sino en
+# `docs/columnas_vault.md`, y se traen con `doc()`. Son las mismas columnas en
+# los veinte modelos del esquema, así que repetir el texto veinte veces solo
+# garantizaría que veinte copias se desincronicen.
 
 models:
 
   # ----------------------------------------------------------------- hubs --
 
   - name: hub_customer
-    description: "Claves de negocio de cliente. Solo inserción."
+    description: >
+      Claves de negocio de cliente. Solo inserción.
+      {{ doc('entidad_cliente') }}
     columns:
       - name: hk_customer
-        description: "Clave hash de la clave de negocio."
+        description: "{{ doc('dv_hash_key') }}"
         data_tests: [not_null, unique]
       - name: customer_id
         description: "Clave de negocio original de Odoo."
         data_tests: [not_null, unique]
       - name: load_date
+        description: "{{ doc('dv_load_date') }}"
         data_tests: [not_null]
       - name: record_source
+        description: "{{ doc('dv_record_source') }}"
         data_tests: [not_null]
 
   - name: hub_order
+    description: >
+      Claves de negocio de pedido. {{ doc('entidad_pedido') }}
     columns:
       - name: hk_order
+        description: "{{ doc('dv_hash_key') }}"
         data_tests: [not_null, unique]
       - name: order_id
         data_tests: [not_null, unique]
       - name: load_date
+        description: "{{ doc('dv_load_date') }}"
         data_tests: [not_null]
 
   - name: hub_product
+    description: >
+      Claves de negocio de producto. {{ doc('entidad_producto') }}
     columns:
       - name: hk_product
+        description: "{{ doc('dv_hash_key') }}"
         data_tests: [not_null, unique]
       - name: product_id
         data_tests: [not_null, unique]
       - name: load_date
+        description: "{{ doc('dv_load_date') }}"
+        data_tests: [not_null]
+
+  - name: hub_employee
+    description: >
+      Claves de negocio de empleado. {{ doc('entidad_empleado') }}
+    columns:
+      - name: hk_employee
+        description: "{{ doc('dv_hash_key') }}"
+        data_tests: [not_null, unique]
+      - name: employee_id
+        description: >
+          Identificador de la ficha de plantilla, no de la cuenta de usuario.
+        data_tests: [not_null, unique]
+      - name: load_date
+        description: "{{ doc('dv_load_date') }}"
+        data_tests: [not_null]
+
+  - name: hub_department
+    description: >
+      Claves de negocio de departamento. {{ doc('entidad_departamento') }}
+      Se carga desde tres orígenes, incluido el propio padre de cada
+      departamento.
+    columns:
+      - name: hk_department
+        description: "{{ doc('dv_hash_key') }}"
+        data_tests: [not_null, unique]
+      - name: department_id
+        data_tests: [not_null, unique]
+      - name: load_date
+        description: "{{ doc('dv_load_date') }}"
+        data_tests: [not_null]
+
+  - name: hub_category
+    description: >
+      Claves de negocio de categoría de producto. {{ doc('entidad_categoria') }}
+    columns:
+      - name: hk_category
+        description: "{{ doc('dv_hash_key') }}"
+        data_tests: [not_null, unique]
+      - name: category_id
+        data_tests: [not_null, unique]
+      - name: load_date
+        description: "{{ doc('dv_load_date') }}"
         data_tests: [not_null]
 
   # ---------------------------------------------------------------- links --
@@ -49,6 +110,7 @@ models:
     description: "Relación pedido - cliente."
     columns:
       - name: hk_order_customer
+        description: "{{ doc('dv_link_hash_key') }}"
         data_tests: [not_null, unique]
       - name: hk_order
         description: "Tiene que existir en el hub de pedido."
@@ -68,9 +130,10 @@ models:
     description: "Relación pedido - producto, a grano de línea."
     columns:
       - name: hk_order_product
+        description: "{{ doc('dv_link_hash_key') }}"
         data_tests: [not_null, unique]
       - name: order_line_id
-        description: "Clave degenerada: el identificador de la línea en Odoo."
+        description: "{{ doc('dv_degenerate_key') }}"
         data_tests: [not_null, unique]
       - name: hk_order
         data_tests:
@@ -84,6 +147,77 @@ models:
           - relationships:
               to: ref('hub_product')
               field: hk_product
+
+  - name: link_order_employee
+    description: >
+      Relación pedido - empleado: qué comercial firmó cada venta. El grano es
+      el pedido, porque en el origen un pedido tiene un solo comercial.
+    columns:
+      - name: hk_order_employee
+        description: "{{ doc('dv_link_hash_key') }}"
+        data_tests: [not_null, unique]
+      - name: hk_order
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_order')
+              field: hk_order
+      - name: hk_employee
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_employee')
+              field: hk_employee
+
+  - name: link_employee_department
+    description: >
+      Relación empleado - departamento. Guarda todas las adscripciones por las
+      que ha pasado cada empleado, no solo la actual: la vigente se resuelve al
+      consultar con `enlace_vigente()`, tomando el empleado como clave
+      conductora.
+    columns:
+      - name: hk_employee_department
+        description: "{{ doc('dv_link_hash_key') }}"
+        data_tests: [not_null, unique]
+      - name: hk_employee
+        description: >
+          Clave conductora de la relación: es el extremo que se mueve cuando
+          alguien cambia de departamento. **No es única**, y no debe serlo: un
+          traslado añade una fila y las dos son ciertas.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_employee')
+              field: hk_employee
+      - name: hk_department
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_department')
+              field: hk_department
+
+  - name: link_product_category
+    description: >
+      Relación producto - categoría, historiada igual que la del empleado con
+      su departamento. La categoría vigente se resuelve con `enlace_vigente()`
+      tomando el producto como clave conductora.
+    columns:
+      - name: hk_product_category
+        description: "{{ doc('dv_link_hash_key') }}"
+        data_tests: [not_null, unique]
+      - name: hk_product
+        description: "Clave conductora. No es única por el mismo motivo."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_product')
+              field: hk_product
+      - name: hk_category
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_category')
+              field: hk_category
 
   # ----------------------------------------------------------- satellites --
 
@@ -97,11 +231,16 @@ models:
               to: ref('hub_customer')
               field: hk_customer
       - name: hashdiff
+        description: "{{ doc('dv_hashdiff') }}"
         data_tests: [not_null]
       - name: load_date
+        description: "{{ doc('dv_load_date') }}"
         data_tests: [not_null]
 
   - name: sat_order_status
+    description: >
+      Estado e importes del pedido. Es el satélite que más se mueve, porque un
+      pedido cambia de estado varias veces a lo largo de su vida.
     columns:
       - name: hk_order
         data_tests:
@@ -110,11 +249,16 @@ models:
               to: ref('hub_order')
               field: hk_order
       - name: hashdiff
+        description: "{{ doc('dv_hashdiff') }}"
         data_tests: [not_null]
       - name: load_date
+        description: "{{ doc('dv_load_date') }}"
         data_tests: [not_null]
 
   - name: sat_product_pricing
+    description: >
+      Descripción y tarifa del producto. `list_price` es el precio de catálogo,
+      no el precio al que se vendió: ese está en el satélite de la línea.
     columns:
       - name: hk_product
         data_tests:
@@ -123,8 +267,10 @@ models:
               to: ref('hub_product')
               field: hk_product
       - name: hashdiff
+        description: "{{ doc('dv_hashdiff') }}"
         data_tests: [not_null]
       - name: load_date
+        description: "{{ doc('dv_load_date') }}"
         data_tests: [not_null]
 
   - name: sat_order_line
@@ -137,6 +283,103 @@ models:
               to: ref('link_order_product')
               field: hk_order_product
       - name: hashdiff
+        description: "{{ doc('dv_hashdiff') }}"
         data_tests: [not_null]
       - name: load_date
+        description: "{{ doc('dv_load_date') }}"
+        data_tests: [not_null]
+
+  - name: sat_employee_details
+    description: >
+      Datos profesionales del empleado. El departamento **no está aquí**: es
+      una relación con otra entidad y vive en `link_employee_department`.
+    columns:
+      - name: hk_employee
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_employee')
+              field: hk_employee
+      - name: job_title
+        description: >
+          Puesto tal y como lo escribe recursos humanos. Es texto libre y no
+          referencia a ninguna entidad, por eso sí es un atributo.
+      - name: hashdiff
+        description: "{{ doc('dv_hashdiff') }}"
+        data_tests: [not_null]
+      - name: load_date
+        description: "{{ doc('dv_load_date') }}"
+        data_tests: [not_null]
+
+  - name: sat_department_details
+    description: "Nombre, ruta en el organigrama y responsable del departamento."
+    columns:
+      - name: hk_department
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_department')
+              field: hk_department
+      - name: department_path
+        description: >
+          Ruta completa en el árbol. Es lo que hay que enseñar en un panel: el
+          nombre corto no dice de qué rama cuelga.
+      - name: hashdiff
+        description: "{{ doc('dv_hashdiff') }}"
+        data_tests: [not_null]
+      - name: load_date
+        description: "{{ doc('dv_load_date') }}"
+        data_tests: [not_null]
+
+  - name: sat_category_details
+    description: "Nombre y ruta de la categoría de producto."
+    columns:
+      - name: hk_category
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('hub_category')
+              field: hk_category
+      - name: category_path
+        description: >
+          Ruta completa. Cambia cuando se renombra un ancestro, aunque la
+          categoría en sí no haya cambiado, y esa versión nueva queda guardada.
+        data_tests: [not_null]
+      - name: hashdiff
+        description: "{{ doc('dv_hashdiff') }}"
+        data_tests: [not_null]
+      - name: load_date
+        description: "{{ doc('dv_load_date') }}"
+        data_tests: [not_null]
+
+  # ------------------------------------------------------------ reference --
+
+  - name: ref_country
+    description: >
+      {{ doc('entidad_pais') }}
+
+
+      Tabla de referencia: se reconstruye entera en cada carga y no guarda
+      histórico. Sin clave hash, sin satélite y sin enlace.
+    columns:
+      - name: country_id
+        description: "Identificador de Odoo, válido solo en esta instalación."
+        data_tests: [not_null, unique]
+      - name: country_code
+        description: "Código ISO de dos letras: la clave que vale fuera."
+        data_tests: [not_null]
+      - name: country_name
+        data_tests: [not_null]
+
+  - name: ref_sales_team
+    description: >
+      {{ doc('entidad_equipo') }}
+
+
+      Tabla de referencia, con la misma renuncia al histórico que el catálogo
+      de países.
+    columns:
+      - name: team_id
+        data_tests: [not_null, unique]
+      - name: team_name
         data_tests: [not_null]

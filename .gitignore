@@ -33,6 +33,13 @@ rill_project/tmp/
 dbt_project/target/
 dbt_project/logs/
 
+# Contexto que construye `nao sync`. Se versiona la configuración, no el
+# resultado: son ficheros generados a partir del almacén y del proyecto de dbt,
+# y se rehacen con `docker compose run --rm nao-context`. La carpeta repos/ es
+# además una copia del proyecto de dbt que ya está versionado al lado.
+nao_project/databases/
+nao_project/repos/
+
 # Credenciales locales (no versionar)
 secrets/
 

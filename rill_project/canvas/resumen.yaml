@@ -1,0 +1,96 @@
+# Panel de resumen.
+#
+# El tercer tipo de recurso del proyecto y el que responde a una necesidad
+# distinta de las otras dos. Un `explore` es una herramienta de investigación:
+# se entra sin saber qué se busca. Un `canvas` es una composición fija, y sirve
+# para lo contrario, para la pantalla que alguien mira cada lunes sin querer
+# tocar nada.
+#
+# Lo que hace interesante a este es que junta en una sola página cifras que
+# vienen de vistas de métricas distintas (`ventas` a grano de pedido,
+# `catalogo` a grano de línea, `plantilla` sin serie temporal). Cada bloque
+# declara de cuál bebe, y por eso puede haberlas juntas sin riesgo de que
+# alguien sume dos granos.
+
+version: 1
+type: canvas
+display_name: "Resumen"
+
+# Sin esto el panel se abre en las últimas veinticuatro horas, que es el valor
+# por defecto de Rill, y con los datos de demostración eso deja fuera casi todo
+# el histórico: la portada aparecería medio vacía y con una serie temporal
+# plana. Es un detalle de configuración que decide por completo la primera
+# impresión de quien abre el panel.
+time_ranges:
+  - P7D
+  - P4W
+  - P3M
+  - P1Y
+
+defaults:
+  time_range: P3M
+
+rows:
+  - items:
+      - markdown:
+          content: |
+            ## Ventas de Odoo
+
+            Pedidos confirmados con su comercial, su catálogo y su plantilla.
+            Los datos son los de demostración de Odoo, así que las cifras son
+            pequeñas: lo que se enseña aquí es el recorrido, no el volumen.
+        width: 12
+
+  - items:
+      - kpi_grid:
+          metrics_view: ventas
+          measures:
+            - facturacion
+            - pedidos
+            - clientes
+            - ticket_medio
+          comparison:
+            - delta
+        width: 12
+
+  - items:
+      - line_chart:
+          metrics_view: ventas
+          x:
+            field: date_order
+            type: temporal
+          y:
+            field: facturacion
+            type: quantitative
+        width: 8
+      # En los gráficos de barras el eje `x` tiene que ser la dimensión y el
+      # `y` la medida. Ponerlo al revés (que es lo natural si uno piensa en
+      # barras horizontales) da un error de reconciliación bastante claro.
+      - bar_chart:
+          metrics_view: ventas
+          x:
+            field: comercial
+            type: nominal
+          y:
+            field: facturacion
+            type: quantitative
+        width: 4
+
+  - items:
+      - bar_chart:
+          metrics_view: catalogo
+          x:
+            field: categoria
+            type: nominal
+          y:
+            field: facturacion_linea
+            type: quantitative
+        width: 6
+      - table:
+          metrics_view: plantilla
+          columns:
+            - departamento
+            - empleados
+            - comerciales
+            - facturacion_total
+        width: 6

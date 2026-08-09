@@ -13,6 +13,10 @@ SELECT
     amount_untaxed,
     amount_tax,
     amount_total,
+    -- El comercial llega como cuenta de usuario, no como empleado. Casar las
+    -- dos identidades es trabajo de `stg_order_salesperson`.
+    user_id           AS salesperson_user_id,
+    team_id,
     create_date,
     write_date
 FROM {{ source('raw', 'raw_orders') }}

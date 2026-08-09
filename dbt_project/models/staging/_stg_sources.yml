@@ -58,3 +58,58 @@ sources:
         columns:
           - name: id
             data_tests: [not_null, unique]
+
+      - name: raw_product_categories
+        description: >
+          product_category de Odoo: el árbol de categorías del catálogo. Aquí
+          `name` sí es texto plano, al contrario que en la plantilla.
+        columns:
+          - name: id
+            data_tests: [not_null, unique]
+          - name: complete_name
+            description: "Ruta completa en el árbol, ya calculada por el origen."
+          - name: parent_id
+            description: "Categoría de la que cuelga. NULL en la raíz."
+
+      - name: raw_employees
+        description: >
+          hr_employee de Odoo, con solo once de sus cincuenta y ocho columnas.
+          El recorte no es por tamaño: el resto son datos personales de
+          categoría especial que no tienen por qué salir del ERP.
+        columns:
+          - name: id
+            data_tests: [not_null, unique]
+          - name: department_id
+            description: "Departamento al que pertenece. Puede venir a NULL."
+          - name: user_id
+            description: >
+              Cuenta de Odoo asociada al empleado, si tiene. Es el único puente
+              entre la plantilla y el comercial que firma un pedido.
+
+      - name: raw_departments
+        description: "hr_department de Odoo: el organigrama, en árbol."
+        columns:
+          - name: id
+            data_tests: [not_null, unique]
+          - name: manager_id
+            description: >
+              Responsable del departamento, referencia a hr_employee. En los
+              datos de demostración viene vacío en todos.
+
+      - name: raw_sales_teams
+        description: >
+          crm_team de Odoo: los equipos comerciales. Llega con el módulo de
+          ventas, sin necesidad de instalar el CRM. Su `name` es JSON.
+        columns:
+          - name: id
+            data_tests: [not_null, unique]
+
+      - name: raw_countries
+        description: >
+          res_country de Odoo: el catálogo de países. Doscientas cincuenta
+          filas que existen para decodificar identificadores numéricos.
+        columns:
+          - name: id
+            data_tests: [not_null, unique]
+          - name: code
+            description: "Código ISO de dos letras, la clave estable de verdad."

@@ -6,11 +6,15 @@
 # Rill no copia nada: consulta el mismo fichero DuckDB que acaba de construir
 # dbt, así que no hay una segunda versión de la verdad que mantener.
 #
-# `mode: read` evita que Rill escriba en el almacén, pero conviene no llamarse
-# a engaño: DuckDB toma un bloqueo exclusivo sobre el fichero igualmente, así
-# que con Rill levantado dbt no puede reconstruir nada y falla con un
-# "Conflicting lock is held". Por eso Rill vive tras un perfil de Compose y el
-# orden del ejercicio es cargar, transformar y solo entonces explorar.
+# `mode: read` evita que Rill escriba en el almacén, y eso decide con quién
+# puede convivir. DuckDB admite **varios lectores a la vez, pero un solo
+# escritor**: con Rill levantado, `nao sync` entra sin problema porque también
+# abre en solo lectura, mientras que dbt falla con un "Conflicting lock is
+# held" en cuanto intenta reconstruir algo.
+#
+# Por eso Rill vive tras un perfil de Compose y el orden del ejercicio es
+# cargar, transformar y solo entonces explorar: lo que no puede solaparse es la
+# escritura, no la lectura.
 
 type: connector
 driver: duckdb

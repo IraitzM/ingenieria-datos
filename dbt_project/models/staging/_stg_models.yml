@@ -1,0 +1,136 @@
+version: 2
+
+# La capa de staging no tenía documentación propia: solo estaban descritas las
+# tablas de origen. Es un olvido muy común y tiene consecuencias, porque en el
+# grafo de linaje estos modelos son justo los que explican por qué el dato de
+# arriba no se parece al del ERP. Las decisiones de negocio que se toman aquí
+# (qué pedidos cuentan, qué contactos entran) no se ven en ningún otro sitio.
+
+models:
+
+  - name: stg_customers
+    description: >
+      Contactos de Odoo normalizados. **No filtra clientes**: en staging entra
+      todo contacto, porque un filtro de negocio no puede decidir qué claves
+      existen. El rango de cliente se conserva como atributo.
+    columns:
+      - name: customer_id
+        description: "{{ doc('entidad_cliente') }}"
+        data_tests: [not_null, unique]
+      - name: customer_rank
+        description: >
+          Contador de Odoo, no fiable como filtro. Ver la descripción de la
+          entidad cliente.
+
+  - name: stg_orders
+    description: "{{ doc('entidad_pedido') }}"
+    columns:
+      - name: order_id
+        data_tests: [not_null, unique]
+      - name: customer_id
+        description: "Cliente del pedido."
+        data_tests: [not_null]
+      - name: order_state
+        description: "Solo `sale` o `done`; el resto se descarta aquí."
+        data_tests:
+          - accepted_values:
+              values: ['sale', 'done']
+      - name: salesperson_user_id
+        description: >
+          Cuenta de Odoo del comercial. **No es un identificador de empleado**:
+          para llegar a la plantilla hay que pasar por `stg_order_salesperson`.
+      - name: team_id
+        description: "{{ doc('entidad_equipo') }}"
+
+  - name: stg_order_lines
+    description: >
+      Líneas de pedido, sin las de sección y nota (las que en Odoo existen para
+      maquetar el documento impreso y no representan nada vendido).
+    columns:
+      - name: order_line_id
+        data_tests: [not_null, unique]
+      - name: product_id
+        data_tests: [not_null]
+
+  - name: stg_products
+    description: "{{ doc('entidad_producto') }}"
+    columns:
+      - name: product_id
+        data_tests: [not_null, unique]
+      - name: product_name
+        description: >
+          Extraído del JSON de la plantilla, idioma `en_US`. Puede venir a NULL
+          si la variante no tiene plantilla.
+      - name: category_id
+        description: "{{ doc('entidad_categoria') }}"
+
+  - name: stg_product_categories
+    description: "{{ doc('entidad_categoria') }}"
+    columns:
+      - name: category_id
+        data_tests: [not_null, unique]
+      - name: category_path
+        description: >
+          Ruta completa en el árbol. Es la que hay que usar para agrupar: el
+          nombre corto está repetido entre ramas.
+        data_tests: [not_null]
+
+  - name: stg_employees
+    description: "{{ doc('entidad_empleado') }}"
+    columns:
+      - name: employee_id
+        data_tests: [not_null, unique]
+      - name: user_id
+        description: >
+          Cuenta de Odoo del empleado, si tiene. Tiene que ser única entre los
+          que la tienen: dos empleados compartiendo cuenta harían que un pedido
+          se atribuyese a dos personas.
+        data_tests:
+          - unique
+      - name: department_id
+        description: "Departamento al que pertenece."
+
+  - name: stg_departments
+    description: "{{ doc('entidad_departamento') }}"
+    columns:
+      - name: department_id
+        data_tests: [not_null, unique]
+      - name: department_path
+        data_tests: [not_null]
+
+  - name: stg_sales_teams
+    description: "{{ doc('entidad_equipo') }}"
+    columns:
+      - name: team_id
+        data_tests: [not_null, unique]
+
+  - name: stg_countries
+    description: "{{ doc('entidad_pais') }}"
+    columns:
+      - name: country_id
+        data_tests: [not_null, unique]
+      - name: country_code
+        description: "Código ISO de dos letras."
+        data_tests: [not_null]
+
+  - name: stg_order_salesperson
+    description: >
+      Correspondencia entre el pedido y el empleado que lo firmó, resolviendo
+      el salto de cuenta de usuario a ficha de plantilla. Existe para que esa
+      traducción se haga en un solo sitio del proyecto.
+    columns:
+      - name: order_id
+        description: >
+          Un pedido tiene un comercial y solo uno, así que esta columna es
+          única. Si dejara de serlo, el rendimiento por comercial contaría el
+          mismo pedido dos veces.
+        data_tests: [not_null, unique]
+      - name: employee_id
+        description: >
+          Empleado resuelto. Tiene que existir en la plantilla, porque de aquí
+          sale el enlace del vault.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_employees')
+              field: employee_id

@@ -28,6 +28,10 @@ SELECT
     c.email,
     c.city,
     c.country_id,
+    -- Decodificado con la tabla de referencia. Hasta ahora esta ficha enseñaba
+    -- un número al que nadie podía dar sentido sin abrir Odoo.
+    pais.country_name,
+    pais.country_code,
     c.is_company,
 
     coalesce(p.pedidos, 0)            AS pedidos,
@@ -47,3 +51,5 @@ INNER JOIN cliente c
     ON c.hk_customer = hc.hk_customer
 LEFT JOIN pedidos p
     ON p.customer_id = hc.customer_id
+LEFT JOIN {{ ref('ref_country') }} pais
+    ON pais.country_id = c.country_id

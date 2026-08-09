@@ -10,6 +10,12 @@ model-paths: ['models']
 macro-paths: ['macros']
 test-paths: ['tests']
 
+# Los bloques `{% docs %}` viven en su propio directorio. Por defecto dbt los
+# buscaría también dentro de models/, pero separarlos deja claro que son texto
+# reutilizable y no configuración de un modelo concreto: el mismo bloque
+# describe la columna `load_date` en los veinte modelos del vault.
+docs-paths: ['docs']
+
 target-path: 'target'
 clean-targets:
   - 'target'
@@ -22,6 +28,27 @@ vars:
 
 models:
   data_vault_odoo:
+    # Empuja las descripciones de los YAML a los comentarios de la propia base
+    # de datos (`COMMENT ON` de DuckDB), no solo al sitio de dbt docs. Se
+    # comprueba así:
+    #
+    #   SELECT table_name, comment FROM duckdb_tables() WHERE comment IS NOT NULL;
+    #
+    # El motivo es que la documentación sirve donde está el dato, no donde está
+    # la herramienta que la escribió: cualquier cliente SQL o catálogo que mire
+    # el almacén encuentra el texto sin saber que dbt existe.
+    #
+    # Conviene no venderlo como más de lo que es. La versión de nao que usa
+    # este ejercicio **no lee estos comentarios**: su proveedor de DuckDB saca
+    # el esquema con Ibis, que no los trae, y por eso su contexto de base de
+    # datos dice "No description available" aunque aquí estén. Las
+    # descripciones le llegan por el otro lado, con el repositorio de dbt
+    # sincronizado. Son dos caminos distintos para la misma documentación y
+    # ninguna herramienta usa los dos.
+    +persist_docs:
+      relation: true
+      columns: true
+
     staging:
       +materialized: view
       +schema: staging

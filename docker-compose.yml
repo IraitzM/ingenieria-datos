@@ -1,15 +1,17 @@
-# Ejercicio del apéndice: Odoo -> dlt -> DuckDB -> dbt -> Rill
+# Ejercicio del apéndice: Odoo -> dlt -> DuckDB -> dbt -> Rill y nao
 #
 # Los puertos están elegidos para no chocar con los ejemplos del libro:
 # Evidence usa el 3000, OpenMetadata el 8585 y el Rill del apéndice
 # correspondiente el 9009. Aquí Rill se publica en el 9010, PostgreSQL en el
-# 5433 y dbt docs en el 8081, de modo que este ejercicio puede convivir con el
-# resto.
+# 5433, dbt docs en el 8081 y nao en el 5005, de modo que este ejercicio puede
+# convivir con el resto.
 #
 #   docker compose up -d              levanta Odoo (con datos de demostración)
 #   docker compose run --rm extract   carga Odoo en DuckDB (capa bronce)
 #   docker compose run --rm transform construye el Data Vault y la capa oro
 #   docker compose --profile docs up -d docs   publica el linaje en el 8081
+#   docker compose run --rm nao-context        construye el contexto del agente
+#   docker compose --profile ai up -d nao      publica el chat en el 5005
 #   docker compose down -v            lo desmonta todo
 
 name: datalake-odoo
@@ -67,7 +69,7 @@ services:
       - odoo_data:/var/lib/odoo
     networks:
       - datalake
-    command: ["odoo", "-d", "odoo_demo", "-i", "sale_management", "--stop-after-init"]
+    command: ["odoo", "-d", "odoo_demo", "-i", "sale_management,hr", "--stop-after-init"]
     restart: "no"
 
   odoo:
@@ -204,6 +206,76 @@ services:
     # Sin --host el servidor escucha en 127.0.0.1 dentro del contenedor y desde
     # el anfitrión no se le ve, aunque el puerto esté publicado.
     command: ["dbt", "docs", "serve", "--port", "8080", "--host", "0.0.0.0", "--no-browser"]
+    restart: unless-stopped
+
+  # ------------------------------------------------------- agente nao --
+
+  # Construcción del contexto del agente. Trabajo de un solo uso, como
+  # `extract` y `transform`, y por el mismo motivo: abre el almacén.
+  #
+  # Recorre la capa oro y el proyecto de dbt y deja en nao_project/ una carpeta
+  # de ficheros markdown que describen lo que hay. Ese contexto es lo único que
+  # el chat necesita para saber de qué va este almacén, y hay que reconstruirlo
+  # cuando cambie el modelo, igual que `dbt docs generate`.
+  #
+  #   docker compose run --rm nao-context
+  nao-context:
+    build:
+      context: .
+      dockerfile: docker/toolbox.Dockerfile
+    image: datalake-toolbox
+    container_name: dl-nao-context
+    profiles: ["jobs"]
+    user: "1000:1000"
+    working_dir: /app/project
+    volumes:
+      - ./warehouse:/data
+      - ./nao_project:/app/project
+      # De solo lectura: el contexto se construye leyendo el proyecto de dbt,
+      # nunca escribiendo en él.
+      - ./dbt_project:/app/dbt_project:ro
+    networks:
+      - datalake
+    entrypoint: ["nao"]
+    command: ["sync"]
+
+  # El chat del agente. Vive tras un perfil propio y no arranca con `up -d`,
+  # por la misma razón que Rill: acaba consultando el mismo fichero DuckDB.
+  #
+  #   docker compose --profile ai up -d nao
+  nao:
+    # Etiqueta fijada a propósito. El proyecto solo publica etiquetas por
+    # commit (`latest`, `main`, `alpha` y el hash), así que fijar la versión
+    # obliga a usar el hash: este es el 0.3.3, emparejado con la versión de
+    # `nao-core` que instala la imagen de utilidades. Con `latest` bastaría con
+    # que publicaran un cambio de formato para que el contexto ya construido
+    # dejara de leerse.
+    image: getnao/nao:b325bba
+    container_name: dl-nao
+    profiles: ["ai"]
+    ports:
+      - "5005:5005"
+    environment:
+      NAO_DEFAULT_PROJECT_PATH: /app/project
+      NAO_CONTEXT_SOURCE: local
+      # El contenedor sirve la interfaz en esta dirección y la usa para las
+      # redirecciones de sesión. Sin ella, el inicio de sesión rebota.
+      BETTER_AUTH_URL: http://localhost:5005
+      # La clave llega del entorno del anfitrión y no se versiona. Sin ninguna
+      # de las dos, la interfaz arranca igual y el agente no contesta.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      # nao envía telemetría de uso a PostHog por defecto, desde el servidor y
+      # desde el navegador. No es dato del almacén (son eventos del tipo
+      # "mensaje enviado"), pero en un ejercicio sobre gobierno del dato
+      # conviene que la decisión sea explícita y no un descubrimiento.
+      POSTHOG_DISABLED: "true"
+    volumes:
+      - ./nao_project:/app/project
+      - ./warehouse:/data
+      - ./dbt_project:/app/dbt_project:ro
+    networks:
+      - datalake
     restart: unless-stopped
 
   # ------------------------------------------------------------------ bi --
