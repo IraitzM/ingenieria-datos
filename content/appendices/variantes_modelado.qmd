@@ -92,11 +92,18 @@ flowchart LR
     C[Concepto de negocio] --> K[Clave<br/>casi nunca cambia]
     C --> X[Contexto<br/>cambia a diario]
     C --> R[Relación<br/>aparece y desaparece]
+
+    classDef clave fill:#d5e6f5,stroke:#3d7cb0,stroke-width:1.5px,color:#12354e
+    classDef contexto fill:#d7eddc,stroke:#4a9463,stroke-width:1.5px,color:#1c4a2e
+    classDef relacion fill:#fae3c8,stroke:#bf7f28,stroke-width:1.5px,color:#573809
+    class K clave
+    class X contexto
+    class R relacion
 ```
 
-Las tres piezas son siempre las mismas: la **clave** del concepto, su **contexto** descriptivo y sus **relaciones** con otros conceptos. Lo que cambia de una técnica a otra es cómo se agrupa el contexto, cómo se identifican las filas y cuánta abstracción se mete en el concepto. Quienes se dedican a esto calculan que las variantes coinciden entre sí en un 80 % o 85 %, y la experiencia lo confirma: quien entiende una entiende las demás en una tarde.
+Las tres piezas son siempre las mismas: la [clave]{.c-clave} del concepto, su [contexto]{.c-contexto} descriptivo y sus [relaciones]{.c-relacion} con otros conceptos. Lo que cambia de una técnica a otra es cómo se agrupa el contexto, cómo se identifican las filas y cuánta abstracción se mete en el concepto. Quienes se dedican a esto calculan que las variantes coinciden entre sí en un 80 % o 85 %, y la experiencia lo confirma: quien entiende una entiende las demás en una tarde.
 
-Veamos las diferencias sobre el mismo caso, el alumno que se matricula que ya usamos en la parte de transformación.
+Veamos las diferencias sobre el mismo caso, el alumno que se matricula que ya usamos en la parte de transformación. En los dos diagramas que siguen **el color indica el papel, no la técnica**: lo que va en azul guarda identidades, lo que va en verde guarda contexto y lo que va en naranja guarda relaciones. Así se ve de un vistazo que un [hub]{.c-clave} y un [ancla]{.c-clave} son la misma idea con dos nombres.
 
 ### Data Vault
 
@@ -124,9 +131,18 @@ erDiagram
     }
     HUB_ALUMNO ||--o{ SAT_ALUMNO : describe
     HUB_ALUMNO ||--o{ LINK_MATRICULA : participa
+
+    classDef clave fill:#d5e6f5,stroke:#3d7cb0,stroke-width:2px,color:#12354e
+    classDef contexto fill:#d7eddc,stroke:#4a9463,stroke-width:2px,color:#1c4a2e
+    classDef relacion fill:#fae3c8,stroke:#bf7f28,stroke-width:2px,color:#573809
+    class HUB_ALUMNO clave
+    class SAT_ALUMNO contexto
+    class LINK_MATRICULA relacion
 ```
 
-La particularidad frente al resto de la familia es que **agrupa el contexto en racimos**: un satélite lleva varios atributos juntos, normalmente los que vienen del mismo origen o cambian al mismo ritmo. Es una decisión pragmática que reduce el número de tablas a cambio de que un cambio en cualquier atributo del racimo genere una fila nueva con todos los demás repetidos.
+Tres formas y ninguna más: el [hub]{.c-clave} guarda la lista de claves de negocio que existen, el [satélite]{.c-contexto} los atributos descriptivos con su historia, y el [enlace]{.c-relacion} el hecho de que dos conceptos estuvieron relacionados.
+
+La particularidad frente al resto de la familia es que **agrupa el contexto en racimos**: un [satélite]{.c-contexto} lleva varios atributos juntos, normalmente los que vienen del mismo origen o cambian al mismo ritmo. Es una decisión pragmática que reduce el número de tablas a cambio de que un cambio en cualquier atributo del racimo genere una fila nueva con todos los demás repetidos.
 
 **A favor**: es el único con ecosistema real (paquetes de dbt, herramientas de automatización, gente en el mercado laboral que lo conoce, literatura abundante). La clave hash permite cargar todo en paralelo sin consultar el destino. Y el reparto entre reglas duras y blandas que impone es valioso incluso si nunca se construye un vault.
 
@@ -172,14 +188,25 @@ erDiagram
     AL_ALUMNO ||--o{ MATRICULA : cursa
     AS_ASIGNATURA ||--o{ MATRICULA : escursada
     EST_ESTADO ||--o{ MATRICULA : califica
+
+    classDef clave fill:#d5e6f5,stroke:#3d7cb0,stroke-width:2px,color:#12354e
+    classDef contexto fill:#d7eddc,stroke:#4a9463,stroke-width:2px,color:#1c4a2e
+    classDef relacion fill:#fae3c8,stroke:#bf7f28,stroke-width:2px,color:#573809
+    classDef valor fill:#e6ddf5,stroke:#7457bd,stroke-width:2px,color:#332757
+    class AL_ALUMNO clave
+    class AS_ASIGNATURA clave
+    class AL_NOM_NOMBRE contexto
+    class AL_EMA_EMAIL contexto
+    class MATRICULA relacion
+    class EST_ESTADO valor
 ```
 
 Cuatro construcciones y ninguna más:
 
-* **Anclas** (_anchors_), que solo contienen identidades. Equivalen al hub, pero aún más desnudas.
-* **Atributos**, una tabla por propiedad, con su propia historia.
-* **Lazos** (_ties_), que relacionan anclas. Equivalen al enlace.
-* **Nudos** (_knots_), tablas pequeñas de valores compartidos y estables (estados, tipos, categorías) que se referencian desde varios sitios y evitan repetir literales.
+* [Anclas]{.c-clave} (_anchors_), que solo contienen identidades. Equivalen al [hub]{.c-clave}, pero aún más desnudas.
+* [Atributos]{.c-contexto}, una tabla por propiedad, con su propia historia. Donde Data Vault pone un [satélite]{.c-contexto} con cinco columnas, aquí hay cinco tablas.
+* [Lazos]{.c-relacion} (_ties_), que relacionan anclas. Equivalen al [enlace]{.c-relacion}.
+* [Nudos]{.c-valor} (_knots_), tablas pequeñas de valores compartidos y estables (estados, tipos, categorías) que se referencian desde varios sitios y evitan repetir literales. Es la única pieza sin equivalente en Data Vault.
 
 Es además **estrictamente aditivo** y admite bitemporalidad completa: nada se actualiza ni se borra, ni siquiera un borrado del origen, que se registra como una aserción más.
 

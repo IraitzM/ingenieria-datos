@@ -97,3 +97,35 @@ svg.mermaid-js .cluster-label {
   font-weight: 600;
   letter-spacing: 0.02em;
 }
+
+/* Piezas de un ensemble ------------------------------------------
+   En el apéndice de variantes de modelado cada pieza lleva color según
+   su PAPEL, no según su técnica: por eso un hub y un ancla comparten
+   color. El término en el texto va del mismo color que su tabla en el
+   diagrama.
+
+   El color es redundante a propósito: la palabra ya dice de qué pieza
+   se habla, así que quien no distinga los tonos no se pierde nada. */
+
+.c-clave    { color: #17618f; font-weight: 600; }
+.c-contexto { color: #2f6b46; font-weight: 600; }
+.c-relacion { color: #8a5a12; font-weight: 600; }
+.c-valor    { color: #5a44a0; font-weight: 600; }
+
+/* En los diagramas ER, mermaid escribe el relleno del classDef como
+   atributo de presentación (fill="...") y no como estilo en línea. El
+   atributo pierde contra su propia regla de tema, así que el color se
+   declara pero no se ve. En los diagramas de flujo sí usa estilo en
+   línea, y por eso aquellos funcionan sin ayuda.
+
+   Cada entidad son dos trazados: el primero es el fondo y el segundo
+   solo el contorno, cuyo relleno ha de seguir vacío. */
+
+svg[aria-roledescription="er"] {
+  g.node > g > path:nth-of-type(2) { fill: none !important; }
+
+  g.node.clave    > g > path:first-of-type { fill: #d5e6f5 !important; }
+  g.node.contexto > g > path:first-of-type { fill: #d7eddc !important; }
+  g.node.relacion > g > path:first-of-type { fill: #fae3c8 !important; }
+  g.node.valor    > g > path:first-of-type { fill: #e6ddf5 !important; }
+}
