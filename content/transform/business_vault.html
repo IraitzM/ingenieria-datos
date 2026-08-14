@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-72b5612593ed4768f813ef22264b3b89.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-5654c63b48dddc82f74614a25711f121.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -538,7 +538,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a> <span class="kw">and</span> sat.load_date <span class="op">&lt;=</span> fechas.load_date</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">group</span> <span class="kw">by</span> fechas.hk_alumno, fechas.load_date</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Con ella, preguntar por el estado en una fecha se convierte en una unión por igualdad en lugar de una ventana:</p>
-<div id="c2771943" class="cell" data-execution_count="2">
+<div id="2bc41306" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>utilidades.dbt(<span class="st">"run"</span>, <span class="st">"--select"</span>, <span class="st">"business_vault"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
@@ -684,27 +684,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">join</span> {{ <span class="fu">ref</span>(<span class="st">'hub_alumno'</span>) }}     <span class="kw">as</span> hub_a <span class="kw">on</span> hub_a.hk_alumno <span class="op">=</span> <span class="kw">link</span>.hk_alumno</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">join</span> {{ <span class="fu">ref</span>(<span class="st">'hub_asignatura'</span>) }} <span class="kw">as</span> hub_s <span class="kw">on</span> hub_s.hk_asignatura <span class="op">=</span> <span class="kw">link</span>.hk_asignatura</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Construyamos el almacén entero de una vez:</p>
-<div id="e4b244ee" class="cell" data-execution_count="3">
+<div id="26ad4ce7" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(utilidades.resumen(utilidades.dbt(<span class="st">"build"</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1 of 27 OK created sql view model main_prep.stg_alumnos ........................ [OK in 0.14s]
+<pre><code>1 of 27 OK created sql view model main_prep.stg_alumnos ........................ [OK in 0.15s]
 2 of 27 OK created sql view model main_prep.stg_asignaturas .................... [OK in 0.10s]
-3 of 27 OK created sql view model main_prep.stg_matriculas ..................... [OK in 0.10s]
+3 of 27 OK created sql view model main_prep.stg_matriculas ..................... [OK in 0.11s]
 4 of 27 OK created sql incremental model main_raw_vault.hub_alumno ............. [OK in 0.17s]
-5 of 27 OK created sql incremental model main_raw_vault.sat_alumno ............. [OK in 0.06s]
-6 of 27 OK created sql incremental model main_raw_vault.hub_asignatura ......... [OK in 0.07s]
+5 of 27 OK created sql incremental model main_raw_vault.sat_alumno ............. [OK in 0.07s]
+6 of 27 OK created sql incremental model main_raw_vault.hub_asignatura ......... [OK in 0.08s]
 7 of 27 OK created sql incremental model main_raw_vault.link_matricula ......... [OK in 0.08s]
-23 of 27 OK created sql table model main_business_vault.pit_alumno ............. [OK in 0.14s]
-24 of 27 OK created sql table model main_business_vault.sat_alumno_bv .......... [OK in 0.12s]
+23 of 27 OK created sql table model main_business_vault.pit_alumno ............. [OK in 0.15s]
+24 of 27 OK created sql table model main_business_vault.sat_alumno_bv .......... [OK in 0.13s]
 25 of 27 OK created sql table model main_marts.dim_asignatura .................. [OK in 0.11s]
 26 of 27 OK created sql table model main_marts.fct_matriculas .................. [OK in 0.10s]
-27 of 27 OK created sql table model main_marts.dim_alumno ...................... [OK in 0.09s]
+27 of 27 OK created sql table model main_marts.dim_alumno ...................... [OK in 0.10s]
 Completed successfully
 Done. PASS=27 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=27</code></pre>
 </div>
 </div>
 <p>Y comprobemos el resultado:</p>
-<div id="ab728559" class="cell" data-execution_count="4">
+<div id="70e414bb" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"select * from main_marts.dim_alumno order by alumno_id"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <div>
@@ -772,7 +772,7 @@ Done. PASS=27 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=27</code></pre>
 </div>
 <p>Ni claves hash, ni hashdiff, ni versiones. Cuatro alumnos con su información vigente y, de propina, dos fechas que responden a preguntas frecuentes: desde cuándo lo conocemos y cuándo cambió por última vez.</p>
 <p>Ahora sí, la pregunta del principio se responde con SQL de andar por casa:</p>
-<div id="4125eea3" class="cell" data-execution_count="5">
+<div id="46b9ce70" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">        a.asignatura,</span></span>
@@ -821,7 +821,7 @@ Done. PASS=27 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=27</code></pre>
 <section id="el-recorrido-completo" class="level2" data-number="18.3">
 <h2 data-number="18.3" class="anchored" data-anchor-id="el-recorrido-completo"><span class="header-section-number">18.3</span> El recorrido completo</h2>
 <p>Merece la pena ver de un vistazo lo que ha pasado con un dato concreto. El correo de Iraitz entró en el sistema origen, aterrizó en staging, se hasheó en la preparación, se historificó en el satélite, se clasificó en el business vault y acabó aplanado en la dimensión:</p>
-<div id="bc54a002" class="cell" data-execution_count="6">
+<div id="1f31ef5c" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select 'staging'       as capa, email        as valor, _cargado_en as fecha</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">        from staging.alumnos where id_alumno = 1</span></span>
