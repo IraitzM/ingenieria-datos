@@ -72,6 +72,7 @@ book:
     - content/references.qmd
 
   appendices:
+    - content/appendices/variantes_modelado.qmd
     - content/appendices/metadatado.qmd
     - content/appendices/calidad.qmd
     - content/appendices/rill.qmd

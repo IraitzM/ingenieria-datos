@@ -1,0 +1,338 @@
+## Variantes de modelado {.appendix}
+
+Este libro toma pronto una decisión y luego no la discute demasiado: para la capa de integración usa [Data Vault](../transform/raw_vault.qmd). Es una elección razonable y muy extendida, pero conviene saber que es **una** opción dentro de una familia con varios miembros, y que esa familia convive con propuestas que atacan el problema desde el lado contrario.
+
+Este apéndice es el mapa. No pretende convencer de cambiar de técnica, sino explicar qué hay, por qué apareció cada cosa y qué se paga por ella. Casi todo lo que sigue se inventó entre 1990 y 2010, en sectores muy concretos y por motivos muy concretos, y entender esos motivos ahorra discusiones religiosas.
+
+## El problema que todas intentan resolver
+
+Los dos modelos clásicos que ya conocemos, el almacén normalizado de [Inmon](../modelado/modelado_analitico.qmd) y el [modelo dimensional](../modelado/modelado_analitico.qmd#modelado-dimensional) de Kimball, dan por supuestas tres cosas:
+
+1. Que sabemos qué preguntas se van a hacer cuando diseñamos.
+2. Que los sistemas origen son estables en su estructura.
+3. Que la historia tiene un solo reloj y una granularidad modesta (la dimensión lentamente cambiante y poco más).
+
+Ninguna de las tres se sostuvo. Durante los noventa y los dos mil aparecieron tres presiones simultáneas que las rompieron:
+
+* **Integración.** Fusiones, adquisiciones y un ERP por cada división. De repente hay cuatro sistemas que dicen saber quién es un cliente, con cuatro claves distintas y ninguna común.
+* **Cambio estructural.** El software empaquetado se actualiza, el negocio lanza productos nuevos y el regulador pide un campo que nadie guardaba. Cada cambio obligaba a migrar tablas y a rehacer cargas históricas.
+* **Auditoría.** Basilea II, SOX y Solvencia II introdujeron una pregunta incómoda: no basta con saber cuál es el número, hay que poder reproducir **el número que se publicó en marzo, con los datos que había en marzo**, y explicar por qué ahora es otro.
+
+::: {.callout-note}
+# Dónde nació cada cosa
+
+No es casualidad que Data Vault saliera de la división de astronáutica de Lockheed Martin (trazabilidad y auditoría), que Anchor Modeling saliera de una aseguradora sueca (contratos que duran décadas y cambian de estructura por el camino) y que la malla de datos saliera de una consultora (el cuello de botella organizativo). Cada técnica lleva impreso el problema de quien la sufrió.
+:::
+
+Contra esas tres presiones, lo que rompe en cada modelo clásico es bastante predecible:
+
+| | **Normalizado (3FN)** | **Dimensional (estrella)** |
+|---|---|---|
+| Origen nuevo | Hay que reconciliar claves antes de cargar | Hay que conformar la dimensión antes de cargar |
+| Atributo nuevo | `ALTER TABLE` y relleno histórico | Columna nueva en la dimensión, sin historia previa |
+| Origen que desaparece | La tabla queda con huecos o hay que borrar | Se pierde el rastro de qué lo informaba |
+| Corrección retroactiva | Se pisa el valor anterior | La SCD2 guarda el cambio, no el error |
+| Carga en paralelo | Limitada, hay dependencias de clave | Limitada, los hechos esperan a las dimensiones |
+
+: Lo que se atasca en los modelos clásicos cuando el mundo se mueve
+
+Todo lo que viene a continuación son respuestas a esa tabla.
+
+## Las raíces teóricas
+
+Antes de ver las técnicas conviene tener tres ideas en la cabeza, porque explican por qué los modelos que veremos tienen esa forma tan peculiar y no otra.
+
+### Hasta dónde llega la normalización
+
+En el capítulo de [formas normales](../modelado/formasnormales.qmd) llegamos hasta la tercera y paramos, que es donde para casi todo el mundo. Existen más: Boyce-Codd, la cuarta y la quinta, que persiguen dependencias cada vez más raras y aparecen poco en la práctica.
+
+La que importa aquí es la **sexta forma normal (6FN)**, formalizada por Date, Darwen y Lorentzos a principios de los dos mil [@date2002temporal] y, significativamente, en un libro sobre datos temporales. Su definición práctica cabe en una línea:
+
+> Una tabla en 6FN contiene la clave y **como mucho un atributo no clave**.
+
+Dicho así suena a exageración académica. Su consecuencia no lo es: si cada atributo vive en su propia tabla, **añadir un atributo es añadir una tabla, no alterar una existente**. Y si cada tabla lleva su propia marca temporal, cada atributo tiene su propia historia con su propia granularidad, sin arrastrar a los demás. El nombre de un alumno puede cambiar tres veces y su correo ninguna, y eso no genera ni una fila redundante.
+
+El precio también cabe en una línea: una entidad con doce atributos son doce tablas, y una consulta que las quiera todas son doce `JOIN`.
+
+### Dos relojes
+
+La segunda idea es que **el tiempo del dato no es uno solo**. La distinción viene de la literatura de bases de datos temporales [@snodgrass1999temporal] y acabó en el estándar SQL:2011:
+
+* **Tiempo de validez**: cuándo el hecho fue cierto en el mundo real. El alumno se mudó el 3 de marzo.
+* **Tiempo de transacción**: cuándo el sistema se enteró y lo dio por cierto. El almacén lo cargó el 17 de abril.
+
+Con los dos relojes se puede responder a la pregunta de auditoría de antes: qué creíamos en marzo sobre lo que pasó en febrero. Con uno solo, no. Y esto no es teórico: es exactamente la diferencia entre `load_date` (transacción) y la fecha de efecto del negocio (validez) que aparece en los satélites del [raw vault](../transform/raw_vault.qmd).
+
+La trampa habitual es implementar solo el reloj de carga, llamarlo historia y descubrir dos años después que no se puede reconstruir un informe antiguo porque el origen mandó una corrección y se aplicó encima.
+
+### Modelar la conversación, no el mundo
+
+La tercera raíz es menos conocida y viene de los Países Bajos. La familia de **modelado orientado a hechos** (NIAM, luego ORM de Halpin [@halpin2008orm] y FCO-IM) propone construir el modelo a partir de **frases verbalizadas por el experto del dominio**, no a partir de entidades dibujadas por el modelador:
+
+> «El alumno con DNI 12345678Z se matriculó en la asignatura BD-101 el 3 de septiembre de 2025.»
+
+De ahí se derivan mecánicamente los tipos de hecho, y de los tipos de hecho se derivan las tablas. Lo interesante para nosotros es que un modelo así **no tiene forma todavía**: la misma verbalización puede generar un modelo entidad-relación, uno dimensional o un Data Vault. Es una capa por encima, no una alternativa.
+
+Aparece aquí porque explica una queja recurrente: cuando un Data Vault sale mal, casi nunca es por la técnica, es porque **nadie acordó qué es un alumno** antes de construir el hub. Estas técnicas son la disciplina que fuerza ese acuerdo.
+
+## La familia ensemble
+
+Ya presentamos el [modelado lógico ensamblado](../modelado/nuevos_paradigmas.qmd#modelos-lógicos-ensamblados) al hablar de nuevos paradigmas. El término lo popularizó Hans Hultgren [@hultgren2012ensemble] al darse cuenta de que varias técnicas desarrolladas por separado, en países distintos y sin conocerse, habían llegado casi a la misma solución.
+
+La idea común se llama **descomposición unificada**: en lugar de guardar un concepto de negocio en una tabla, se parte en piezas **según la velocidad a la que cambia cada una**, manteniéndolas unidas por la clave de negocio.
+
+```{mermaid}
+flowchart LR
+    C[Concepto de negocio] --> K[Clave<br/>casi nunca cambia]
+    C --> X[Contexto<br/>cambia a diario]
+    C --> R[Relación<br/>aparece y desaparece]
+```
+
+Las tres piezas son siempre las mismas: la **clave** del concepto, su **contexto** descriptivo y sus **relaciones** con otros conceptos. Lo que cambia de una técnica a otra es cómo se agrupa el contexto, cómo se identifican las filas y cuánta abstracción se mete en el concepto. Quienes se dedican a esto calculan que las variantes coinciden entre sí en un 80 % o 85 %, y la experiencia lo confirma: quien entiende una entiende las demás en una tarde.
+
+Veamos las diferencias sobre el mismo caso, el alumno que se matricula que ya usamos en la parte de transformación.
+
+### Data Vault
+
+Es el miembro más conocido y el que sigue este libro. Dan Linstedt lo desarrolló entre 1990 y 2000 dentro de Lockheed Martin, lo publicó en 2001 y presentó la versión 2.0 en 2013, que es la que añade las claves hash, la orientación a plataformas masivamente paralelas y toda la parte de metodología y arquitectura que va más allá del modelo [@linstedt2015vault].
+
+```{mermaid}
+erDiagram
+    HUB_ALUMNO {
+        hash hk_alumno PK
+        numero id_alumno
+        fecha load_date
+        texto record_source
+    }
+    SAT_ALUMNO {
+        hash hk_alumno FK
+        fecha load_date
+        texto nombre
+        texto email
+    }
+    LINK_MATRICULA {
+        hash hk_matricula PK
+        hash hk_alumno FK
+        hash hk_asignatura FK
+        fecha load_date
+    }
+    HUB_ALUMNO ||--o{ SAT_ALUMNO : describe
+    HUB_ALUMNO ||--o{ LINK_MATRICULA : participa
+```
+
+La particularidad frente al resto de la familia es que **agrupa el contexto en racimos**: un satélite lleva varios atributos juntos, normalmente los que vienen del mismo origen o cambian al mismo ritmo. Es una decisión pragmática que reduce el número de tablas a cambio de que un cambio en cualquier atributo del racimo genere una fila nueva con todos los demás repetidos.
+
+**A favor**: es el único con ecosistema real (paquetes de dbt, herramientas de automatización, gente en el mercado laboral que lo conoce, literatura abundante). La clave hash permite cargar todo en paralelo sin consultar el destino. Y el reparto entre reglas duras y blandas que impone es valioso incluso si nunca se construye un vault.
+
+**En contra**: agrupar atributos en satélites es una decisión de diseño que hay que acertar, y se acierta poco a la primera. El número de tablas crece rápido. Y la [tentación de exponerlo](../transform/raw_vault.qmd) al usuario final acaba siempre mal.
+
+### Anchor Modeling
+
+La alternativa más radical y la más elegante. Olle Regardt y Lars Rönnbäck la implementaron por primera vez en 2004 en la aseguradora sueca Länsförsäkringar, y luego se formalizó académicamente con la Universidad de Estocolmo, ganando el premio al mejor artículo del congreso ER de 2009 y publicándose después en revista [@roennbaeck2010anchor].
+
+Su decisión de partida es llevar la 6FN hasta el final: **un atributo, una tabla**. Nada de racimos.
+
+```{mermaid}
+erDiagram
+    AL_ALUMNO {
+        numero AL_ID PK
+    }
+    AL_NOM_NOMBRE {
+        numero AL_ID FK
+        texto AL_NOM_valor
+        fecha AL_NOM_desde
+    }
+    AL_EMA_EMAIL {
+        numero AL_ID FK
+        texto AL_EMA_valor
+        fecha AL_EMA_desde
+    }
+    AS_ASIGNATURA {
+        numero AS_ID PK
+    }
+    MATRICULA {
+        numero AL_ID FK
+        numero AS_ID FK
+        numero EST_ID FK
+        fecha desde
+    }
+    EST_ESTADO {
+        numero EST_ID PK
+        texto EST_valor
+    }
+
+    AL_ALUMNO ||--o{ AL_NOM_NOMBRE : tiene
+    AL_ALUMNO ||--o{ AL_EMA_EMAIL : tiene
+    AL_ALUMNO ||--o{ MATRICULA : cursa
+    AS_ASIGNATURA ||--o{ MATRICULA : escursada
+    EST_ESTADO ||--o{ MATRICULA : califica
+```
+
+Cuatro construcciones y ninguna más:
+
+* **Anclas** (_anchors_), que solo contienen identidades. Equivalen al hub, pero aún más desnudas.
+* **Atributos**, una tabla por propiedad, con su propia historia.
+* **Lazos** (_ties_), que relacionan anclas. Equivalen al enlace.
+* **Nudos** (_knots_), tablas pequeñas de valores compartidos y estables (estados, tipos, categorías) que se referencian desde varios sitios y evitan repetir literales.
+
+Es además **estrictamente aditivo** y admite bitemporalidad completa: nada se actualiza ni se borra, ni siquiera un borrado del origen, que se registra como una aserción más.
+
+**A favor**: la evolución del esquema es genuinamente no destructiva. Añadir un atributo nunca toca nada existente. No hay nulos, no hay redundancia y no hay que acertar ningún agrupamiento porque no hay agrupamientos que acertar. Y viene con [herramienta propia](https://www.anchormodeling.com/) que genera el DDL, las vistas de consulta y las funciones temporales a partir del modelo dibujado, lo cual mitiga bastante el problema siguiente.
+
+**En contra**: el número de tablas es sencillamente enorme, y nadie escribe esas consultas a mano (se consultan las vistas generadas, no las tablas). El rendimiento depende de que el optimizador sepa hacer **eliminación de tablas**, es decir, descartar del plan las tablas de las que no se selecciona ninguna columna. Los motores comerciales maduros lo hacen bien, pero no conviene darlo por supuesto sin comprobarlo en el motor que se vaya a usar. Y el ecosistema es minúsculo comparado con el de Data Vault.
+
+### Focal Point
+
+Desarrollada en Suecia por Patrik Lager y Poe Eriksson, en el mismo caldo de cultivo que Anchor. Se distingue por trabajar con **conceptos más abstractos**: en lugar de modelar «alumno» y «profesor» y «personal de administración», modela «persona» y deja el papel concreto como contexto.
+
+Su proceso también invierte el orden habitual: primero se construye el modelo objetivo a partir de lo que el negocio dice que necesita, y solo después se mapean los sistemas origen contra él.
+
+**A favor**: la abstracción hace que integrar un origen nuevo casi nunca exija conceptos nuevos, solo mapeos nuevos, y eso mantiene el modelo pequeño y estable en el tiempo.
+
+**En contra**: es exactamente la misma virtud vista al revés. Un modelo abstracto es un modelo que el negocio no reconoce como suyo, y modelar bien en abstracto es difícil. Fuera de Escandinavia su adopción es testimonial.
+
+### Head & Version
+
+El miembro pragmático de la familia, y probablemente el que más se parece a lo que mucha gente construye sin saber que tiene nombre. Fusiona dos piezas:
+
+```{mermaid}
+erDiagram
+    HEAD_ALUMNO {
+        numero id_alumno PK
+        texto dni
+        fecha fecha_nacimiento
+        fecha load_date
+    }
+    VER_ALUMNO {
+        numero id_version PK
+        numero id_alumno FK
+        texto nombre
+        texto email
+        fecha desde
+        fecha hasta
+    }
+    HEAD_ALUMNO ||--o{ VER_ALUMNO : versiona
+```
+
+La **cabeza** es un hub que además guarda los atributos considerados estáticos, los que mantienen una relación 1:1 con la clave para siempre (fecha de nacimiento, DNI). La **versión** funciona como un satélite, pero con clave subrogada propia y con fecha de fin explícita en lugar de deducirla al consultar.
+
+**A favor**: bastantes menos tablas y menos ceremonia. Las consultas se parecen mucho más a lo que un analista ya sabe escribir, y el cierre explícito de la vigencia evita las funciones de ventana que hacen falta en un satélite puro.
+
+**En contra**: «estático» es una categoría más frágil de lo que parece (las fechas de nacimiento se corrigen, los DNI se rectifican) y cuando falla hay que migrar la cabeza, que es justamente lo que la familia quería evitar. Cerrar la vigencia obliga además a **actualizar** la fila anterior, y con ello se pierde la carga puramente aditiva y su paralelismo.
+
+### 2G y Hyper Agility
+
+Se mencionan por completitud, porque aparecen en cualquier comparativa de la familia. **2G** y **Hyper Agility** (esta última de Lars Boström) son variantes con menor difusión pública y sin literatura accesible comparable a las anteriores. Sus diferencias respecto a lo ya visto están en los detalles de identificación y de agrupamiento del contexto, no en el planteamiento.
+
+### Comparativa
+
+| | **Data Vault** | **Anchor** | **Focal Point** | **Head & Version** |
+|---|---|---|---|---|
+| Origen | Lockheed Martin, EE. UU., 1990-2000 | Länsförsäkringar y Univ. Estocolmo, Suecia, 2004 | Suecia, años 2000 | Práctica europea |
+| Contexto | Agrupado en satélites | Una tabla por atributo (6FN) | Agrupado, más abstracto | Estático en la cabeza, resto en versiones |
+| Nivel del concepto | Concepto de negocio | Concepto de negocio | Más abstracto | Concepto de negocio |
+| Identificación | Hash de la clave de negocio | Subrogada por ancla | Subrogada | Subrogada |
+| Vigencia | Solo fecha de inicio, se deduce | Solo inicio, bitemporal opcional | Solo inicio | Inicio y fin explícitos |
+| Operaciones | Solo inserción | Solo inserción | Solo inserción | Inserción y actualización |
+| Nº de tablas | Alto | Muy alto | Medio | Medio |
+| Ecosistema | Amplio | Herramienta propia | Escaso | Escaso |
+
+: Los cuatro miembros principales de la familia ensemble sobre el mismo problema
+
+## Del lado del consumo
+
+Todo lo anterior ataca la capa de integración. Hay otra corriente que da eso por resuelto y se pelea con el problema contrario: el modelo dimensional también tiene sus miserias cuando el analista se pone a combinar tablas.
+
+### Unified Star Schema
+
+Publicado en 2020 por Francesco Puppini con el respaldo de Bill Inmon [@inmon2020uss], parte de una observación muy honesta: en un esquema en estrella con varias tablas de hechos, el usuario que combina tablas por su cuenta se topa con trampas clásicas (bucles, granularidades no conformadas y los llamados _fan trap_ y _chasm trap_) que **inflan los importes sin avisar**.
+
+La propuesta es tan simple como discutible: que las entidades **no se unan nunca directamente entre sí**, sino a través de una única tabla intermedia llamada puente de Puppini.
+
+```{mermaid}
+erDiagram
+    PUENTE {
+        texto etapa
+        numero id_alumno FK
+        numero id_asignatura FK
+        numero id_matricula FK
+        numero medida_matriculas
+    }
+    ALUMNOS {
+        numero id_alumno PK
+        texto nombre
+    }
+    ASIGNATURAS {
+        numero id_asignatura PK
+        texto nombre
+    }
+    MATRICULAS {
+        numero id_matricula PK
+        fecha fecha
+    }
+    ALUMNOS ||--o{ PUENTE : por
+    ASIGNATURAS ||--o{ PUENTE : por
+    MATRICULAS ||--o{ PUENTE : por
+```
+
+El puente es la unión de todas las combinaciones válidas, con una columna que indica de qué etapa procede cada fila. Cualquier consulta pasa por él y las trampas desaparecen porque no hay caminos alternativos posibles.
+
+**A favor**: elimina de raíz una clase entera de errores silenciosos, que son los peores. Y no exige conocer los requisitos al diseñar, porque el puente sirve para cualquier combinación futura.
+
+**En contra**: el puente es una tabla enorme y única, con todo lo que eso implica de coste de reconstrucción y de punto único de contención (en un escenario de [malla de datos](../modelado/nuevos_paradigmas.qmd#la-malla-de-datos) es directamente contradictorio). El soporte en las herramientas de BI es desigual, y explicar el modelo a alguien que lleva quince años haciendo estrellas cuesta más de lo que parece.
+
+### Activity Schema
+
+La propuesta más rupturista de la lista, creada por Ahmed Elsamadisi en Narrator hacia 2020 y publicada después como especificación abierta [@activityschema2021]. Su tesis: para analizar el comportamiento de una entidad a lo largo del tiempo, no hacen falta dimensiones ni hechos, hace falta **una sola tabla de serie temporal** con un esquema fijo.
+
+Todo se reduce a frases del tipo «esta entidad hizo esta actividad en este momento»:
+
+| Columna | Contenido |
+|---|---|
+| `entity_uuid` | Quién (el alumno, el cliente) |
+| `ts` | Cuándo |
+| `activity` | Qué hizo (`se_matriculo`, `aprobo`, `abandono`) |
+| `activity_occurrence` | Si era la primera vez, la segunda... |
+| `activity_repeated_at` | Cuándo volvió a hacerlo |
+| `link` | Referencia al registro de origen |
+| `revenue_impact` | Importe asociado, si lo hay |
+| Características | Atributos propios de esa actividad |
+
+: Estructura de la tabla de actividades, simplificada (la especificación fija once columnas y en su versión 2 agrupa las características en un campo estructurado)
+
+Lo llamativo es que **no hay claves foráneas ni uniones planeadas**. Las preguntas se responden combinando la tabla consigo misma con relaciones temporales: primera vez que ocurrió A antes de B, la última C anterior a cada A, cuántas D entre dos A consecutivas. Al ser siempre las mismas operaciones, se pueden encapsular y reutilizar.
+
+**A favor**: para preguntas de recorrido, embudo y atribución es un modelo notablemente mejor que la estrella, donde esas preguntas acaban siendo SQL de trescientas líneas. Añadir una actividad nueva no toca el esquema.
+
+**En contra**: fuera de ese dominio se vuelve incómodo rápidamente. Los estados de un balance, los inventarios y los agregados financieros no son actividades de una entidad, y forzarlos ahí duele. Las uniones temporales son caras. Y el ecosistema depende de una empresa y una especificación con poca masa crítica, lo que es un riesgo real a la hora de apostar por él.
+
+### One Big Table
+
+La opción de no modelar. Se aplana todo en una tabla ancha y se deja que el motor columnar haga el resto. Ya apareció en el libro con su nombre castellano, el [tablón](../explotacion/ds.qmd), al preparar datos para modelizar.
+
+Su defensa moderna es puramente económica: en un motor columnar las columnas no leídas no se pagan, y la comparativa que circula (procedente de un proveedor, conviene decirlo) sitúa las tablas anchas entre un 25 % y un 50 % por delante de la estrella en los almacenes en la nube más habituales. Contra eso, los propios motores columnares actuales resuelven las uniones de estrella muy bien, así que la ventaja depende mucho del caso.
+
+Lo que casi nunca se menciona en esa comparación es el coste del cambio: corregir el nombre de un producto en una estrella es actualizar una fila de la dimensión, y en un tablón es reescribir millones de filas. Por eso el tablón funciona bien como **capa de consumo desechable y reconstruible**, y mal como fuente de la verdad.
+
+## Cómo elegir
+
+Después de todo lo anterior, la pregunta práctica no es cuál es mejor sino cuál corresponde a la situación de cada uno. Ordenados de menos a más ceremonia:
+
+| Situación | Técnica razonable |
+|---|---|
+| Un origen, requisitos estables, equipo pequeño | Estrella con SCD2, y nada más |
+| Un origen, mucha exploración de comportamiento | Estrella o Activity Schema si el dominio es de recorrido |
+| Varios orígenes, cambio moderado, sin auditoría formal | Estrella con capa de preparación historificada |
+| Varios orígenes, cambio alto, auditoría exigible | Data Vault |
+| Cambio estructural constante y equipo dispuesto a automatizar | Anchor Modeling |
+| Analistas que combinan tablas por su cuenta y se equivocan | Puente de Puppini sobre lo que ya haya |
+
+: Un mapa aproximado, que no sustituye a conocer el caso
+
+Y tres avisos que valen más que la tabla.
+
+**El primero**: la variable que decide no es el volumen de datos, es el **ritmo de cambio** multiplicado por el **número de orígenes**. Un almacén de veinte terabytes con un solo origen estable no necesita nada de esto. Uno de doscientos gigabytes que integra siete sistemas y absorbe una empresa al año, sí.
+
+**El segundo**: ninguna de estas técnicas se expone al usuario final, ni siquiera las del lado del consumo. Todas asumen una capa de presentación por encima, y esa capa casi siempre acaba siendo dimensional, porque es la que la gente y las herramientas entienden. Esto no es una derrota del modelo dimensional, es su sitio.
+
+**El tercero, y el que más caro sale ignorar**: la dificultad de estas técnicas nunca está en el SQL. Está en acordar qué es un alumno, cuál es su clave de negocio y quién decide cuando dos sistemas no se ponen de acuerdo. Ese trabajo hay que hacerlo igual, se elija lo que se elija, y no lo hace la herramienta. Es la misma conclusión a la que llegamos hablando de [metadatado](metadatado.qmd) y de la [malla de datos](../modelado/nuevos_paradigmas.qmd#la-malla-de-datos), y no es coincidencia.
