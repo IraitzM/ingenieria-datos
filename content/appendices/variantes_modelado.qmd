@@ -4,6 +4,12 @@ Este libro toma pronto una decisión y luego no la discute demasiado: para la ca
 
 Este apéndice es el mapa. No pretende convencer de cambiar de técnica, sino explicar qué hay, por qué apareció cada cosa y qué se paga por ella. Casi todo lo que sigue se inventó entre 1990 y 2010, en sectores muy concretos y por motivos muy concretos, y entender esos motivos ahorra discusiones religiosas.
 
+Y ya que hablamos de un mapa, dibujémoslo. Con licencia poética, pero con las fechas en su sitio: cuanto más al este, más reciente y menos probado en producción.
+
+![El territorio del modelado de datos, de oeste a este](../../assets/mapa_modelado.svg){width=100%}
+
+Conviene leerlo con una advertencia: que un territorio sea más oriental no lo hace mejor. La Constelación de Kimball lleva habitada treinta años y sigue siendo el destino final de casi todos los viajes, mientras que varias de las islas del extremo derecho aún no han demostrado que se pueda vivir en ellas.
+
 ## El problema que todas intentan resolver
 
 Los dos modelos clásicos que ya conocemos, el almacén normalizado de [Inmon](../modelado/modelado_analitico.qmd) y el [modelo dimensional](../modelado/modelado_analitico.qmd#modelado-dimensional) de Kimball, dan por supuestas tres cosas:
@@ -21,7 +27,7 @@ Ninguna de las tres se sostuvo. Durante los noventa y los dos mil aparecieron tr
 ::: {.callout-note}
 # Dónde nació cada cosa
 
-No es casualidad que Data Vault saliera de la división de astronáutica de Lockheed Martin (trazabilidad y auditoría), que Anchor Modeling saliera de una aseguradora sueca (contratos que duran décadas y cambian de estructura por el camino) y que la malla de datos saliera de una consultora (el cuello de botella organizativo). Cada técnica lleva impreso el problema de quien la sufrió.
+No es casualidad que Data Vault saliera de la división de astronáutica de Lockheed Martin (trazabilidad y auditoría), que Anchor Modeling saliera de una aseguradora sueca (contratos que duran décadas y cambian de estructura por el camino) y que la malla de datos (Data Mesh) saliera de una consultora (el cuello de botella organizativo). Cada técnica lleva impreso el problema de quien la sufrió.
 :::
 
 Contra esas tres presiones, lo que rompe en cada modelo clásico es bastante predecible:
