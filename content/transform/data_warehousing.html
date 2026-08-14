@@ -588,7 +588,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="ejecutarlo" class="level2" data-number="16.3">
 <h2 data-number="16.3" class="anchored" data-anchor-id="ejecutarlo"><span class="header-section-number">16.3</span> Ejecutarlo</h2>
 <p>Preparamos el lago con lo que dejó la ingesta y lanzamos dbt.</p>
-<div id="bd070840" class="cell" data-execution_count="1">
+<div id="1e8e027f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> utilidades</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>utilidades.usar(<span class="st">"dbt"</span>)</span>
@@ -641,11 +641,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Con el aterrizaje en su sitio, <code>dbt build</code> construye los modelos y ejecuta las pruebas en el orden correcto:</p>
-<div id="c073986c" class="cell" data-execution_count="3">
+<div id="caaeaa42" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>salida <span class="op">=</span> utilidades.dbt(<span class="st">"build"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(utilidades.resumen(salida))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1 of 27 OK created sql view model main_prep.stg_alumnos ........................ [OK in 0.13s]
+<pre><code>1 of 27 OK created sql view model main_prep.stg_alumnos ........................ [OK in 0.12s]
 2 of 27 OK created sql view model main_prep.stg_asignaturas .................... [OK in 0.07s]
 3 of 27 OK created sql view model main_prep.stg_matriculas ..................... [OK in 0.07s]
 4 of 27 OK created sql incremental model main_raw_vault.hub_alumno ............. [OK in 0.14s]
@@ -653,10 +653,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 6 of 27 OK created sql incremental model main_raw_vault.hub_asignatura ......... [OK in 0.09s]
 7 of 27 OK created sql incremental model main_raw_vault.link_matricula ......... [OK in 0.07s]
 23 of 27 OK created sql table model main_business_vault.pit_alumno ............. [OK in 0.10s]
-24 of 27 OK created sql table model main_business_vault.sat_alumno_bv .......... [OK in 0.09s]
+24 of 27 OK created sql table model main_business_vault.sat_alumno_bv .......... [OK in 0.08s]
 25 of 27 OK created sql table model main_marts.dim_asignatura .................. [OK in 0.09s]
 26 of 27 OK created sql table model main_marts.fct_matriculas .................. [OK in 0.10s]
-27 of 27 OK created sql table model main_marts.dim_alumno ...................... [OK in 0.10s]
+27 of 27 OK created sql table model main_marts.dim_alumno ...................... [OK in 0.09s]
 Completed successfully
 Done. PASS=27 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=27</code></pre>
 </div>
@@ -811,7 +811,7 @@ Done. PASS=27 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=27</code></pre>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">arguments</span><span class="kw">:</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="at">            </span><span class="fu">columnas</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"hk_alumno"</span><span class="kw">,</span><span class="at"> </span><span class="st">"load_date"</span><span class="kw">]</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Veámoslos correr:</p>
-<div id="5d1fd7be" class="cell" data-execution_count="4">
+<div id="5611870e" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(utilidades.resumen(utilidades.dbt(<span class="st">"test"</span>), utilidades.TESTS))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>1 of 15 PASS not_null_hub_alumno_hk_alumno ..................................... [PASS in 0.06s]
@@ -826,9 +826,9 @@ Done. PASS=27 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=27</code></pre>
 10 of 15 PASS relationships_sat_alumno_hk_alumno__hk_alumno__ref_hub_alumno_ ... [PASS in 0.05s]
 11 of 15 PASS unique_combination_sat_alumno_hk_alumno__load_date ............... [PASS in 0.03s]
 12 of 15 PASS unique_hub_alumno_hk_alumno ...................................... [PASS in 0.03s]
-13 of 15 PASS unique_hub_alumno_id_alumno ...................................... [PASS in 0.03s]
-14 of 15 PASS unique_hub_asignatura_hk_asignatura .............................. [PASS in 0.03s]
-15 of 15 PASS unique_link_matricula_hk_matricula ............................... [PASS in 0.03s]
+13 of 15 PASS unique_hub_alumno_id_alumno ...................................... [PASS in 0.02s]
+14 of 15 PASS unique_hub_asignatura_hk_asignatura .............................. [PASS in 0.02s]
+15 of 15 PASS unique_link_matricula_hk_matricula ............................... [PASS in 0.02s]
 Completed successfully
 Done. PASS=15 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=15</code></pre>
 </div>

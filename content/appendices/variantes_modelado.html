@@ -486,6 +486,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <p>Este libro toma pronto una decisión y luego no la discute demasiado: para la capa de integración usa <a href="../../content/transform/raw_vault.html">Data Vault</a>. Es una elección razonable y muy extendida, pero conviene saber que es <strong>una</strong> opción dentro de una familia con varios miembros, y que esa familia convive con propuestas que atacan el problema desde el lado contrario.</p>
 <p>Este apéndice es el mapa. No pretende convencer de cambiar de técnica, sino explicar qué hay, por qué apareció cada cosa y qué se paga por ella. Casi todo lo que sigue se inventó entre 1990 y 2010, en sectores muy concretos y por motivos muy concretos, y entender esos motivos ahorra discusiones religiosas.</p>
+<p>Y ya que hablamos de un mapa, dibujémoslo. Con licencia poética, pero con las fechas en su sitio: cuanto más al este, más reciente y menos probado en producción.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../assets/mapa_modelado.svg" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>El territorio del modelado de datos, de oeste a este</figcaption>
+</figure>
+</div>
+<p>Conviene leerlo con una advertencia: que un territorio sea más oriental no lo hace mejor. La Constelación de Kimball lleva habitada treinta años y sigue siendo el destino final de casi todos los viajes, mientras que varias de las islas del extremo derecho aún no han demostrado que se pueda vivir en ellas.</p>
 <section id="el-problema-que-todas-intentan-resolver" class="level2" data-number="A.1">
 <h2 data-number="A.1" class="anchored" data-anchor-id="el-problema-que-todas-intentan-resolver"><span class="header-section-number">A.1</span> El problema que todas intentan resolver</h2>
 <p>Los dos modelos clásicos que ya conocemos, el almacén normalizado de <a href="../../content/modelado/modelado_analitico.html">Inmon</a> y el <a href="../../content/modelado/modelado_analitico.html#modelado-dimensional">modelo dimensional</a> de Kimball, dan por supuestas tres cosas:</p>
@@ -510,7 +518,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>No es casualidad que Data Vault saliera de la división de astronáutica de Lockheed Martin (trazabilidad y auditoría), que Anchor Modeling saliera de una aseguradora sueca (contratos que duran décadas y cambian de estructura por el camino) y que la malla de datos saliera de una consultora (el cuello de botella organizativo). Cada técnica lleva impreso el problema de quien la sufrió.</p>
+<p>No es casualidad que Data Vault saliera de la división de astronáutica de Lockheed Martin (trazabilidad y auditoría), que Anchor Modeling saliera de una aseguradora sueca (contratos que duran décadas y cambian de estructura por el camino) y que la malla de datos (Data Mesh) saliera de una consultora (el cuello de botella organizativo). Cada técnica lleva impreso el problema de quien la sufrió.</p>
 </div>
 </div>
 <p>Contra esas tres presiones, lo que rompe en cada modelo clásico es bastante predecible:</p>
