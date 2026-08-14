@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Apéndice A — Variantes de modelado – Ingeniería de datos</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../content/appendices/metadatado.html" rel="next">
+<link href="../../content/references.html" rel="prev">
+<link href="../../cover.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-72b5612593ed4768f813ef22264b3b89.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-MXHDHE1HP5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MXHDHE1HP5');
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PLKHBRCG');</script>
+<!-- End Google Tag Manager -->
+
+<meta name="keywords" content="Ingeniería de datos, dbt, dlt, data lake, data warehouse">
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Apéndice A — Variantes de modelado – Ingeniería de datos">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://iraitzm.github.io/ingenieria-datos/cover.png">
+<meta property="og:site_name" content="Ingeniería de datos">
+<meta property="og:image:height" content="1536">
+<meta property="og:image:width" content="1024">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/appendices/variantes_modelado.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../content/appendices/variantes_modelado.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Variantes de modelado</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Ingeniería de datos</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/IraitzM/ingenieria-datos" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=|url|" title="LinkedIn" class="quarto-navigation-tool px-1" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prólogo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducción</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../content/modelado/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelado de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/formasnormales.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Formas normales</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/desnormalizar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Desnormalizar</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/modelado_analitico.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelado analítico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/modelado/nuevos_paradigmas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Nuevos paradigmas</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sistemas gestores de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Sistemas de gestión de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/rdbms_transaccional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Base de datos operacional</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Structured Query Language</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/dbms_analítica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Base de datos analítica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/arquitecturas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Elección de arquitecturas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/sistemas/nuevos-formatos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Formatos abiertos</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Ingesta de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Extracción</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/patrones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Patrones de carga</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/herramientas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Herramientas de ingesta</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/load/staging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">La capa de aterrizaje</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Transformación de datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Transformación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/data_warehousing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">dbt sobre el lakehouse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/raw_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">El raw vault</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/transform/business_vault.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Business vault y consumo</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../content/explotacion/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Explotación de los datos</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/semantica.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">La capa semántica</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/bi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Inteligencia de negocio</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/ds.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Ciencia de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/ai.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Agentes y asistentes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/explotacion/mlops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Del cuaderno a producción</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Referencias</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/variantes_modelado.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Variantes de modelado</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/metadatado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/calidad.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Calidad de datos</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/rill.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Exploración con Rill</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/datalake.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#el-problema-que-todas-intentan-resolver" id="toc-el-problema-que-todas-intentan-resolver" class="nav-link active" data-scroll-target="#el-problema-que-todas-intentan-resolver"><span class="header-section-number">A.1</span> El problema que todas intentan resolver</a></li>
+  <li><a href="#las-raíces-teóricas" id="toc-las-raíces-teóricas" class="nav-link" data-scroll-target="#las-raíces-teóricas"><span class="header-section-number">A.2</span> Las raíces teóricas</a>
+  <ul class="collapse">
+  <li><a href="#hasta-dónde-llega-la-normalización" id="toc-hasta-dónde-llega-la-normalización" class="nav-link" data-scroll-target="#hasta-dónde-llega-la-normalización"><span class="header-section-number">A.2.1</span> Hasta dónde llega la normalización</a></li>
+  <li><a href="#dos-relojes" id="toc-dos-relojes" class="nav-link" data-scroll-target="#dos-relojes"><span class="header-section-number">A.2.2</span> Dos relojes</a></li>
+  <li><a href="#modelar-la-conversación-no-el-mundo" id="toc-modelar-la-conversación-no-el-mundo" class="nav-link" data-scroll-target="#modelar-la-conversación-no-el-mundo"><span class="header-section-number">A.2.3</span> Modelar la conversación, no el mundo</a></li>
+  </ul></li>
+  <li><a href="#la-familia-ensemble" id="toc-la-familia-ensemble" class="nav-link" data-scroll-target="#la-familia-ensemble"><span class="header-section-number">A.3</span> La familia ensemble</a>
+  <ul class="collapse">
+  <li><a href="#data-vault" id="toc-data-vault" class="nav-link" data-scroll-target="#data-vault"><span class="header-section-number">A.3.1</span> Data Vault</a></li>
+  <li><a href="#anchor-modeling" id="toc-anchor-modeling" class="nav-link" data-scroll-target="#anchor-modeling"><span class="header-section-number">A.3.2</span> Anchor Modeling</a></li>
+  <li><a href="#focal-point" id="toc-focal-point" class="nav-link" data-scroll-target="#focal-point"><span class="header-section-number">A.3.3</span> Focal Point</a></li>
+  <li><a href="#head-version" id="toc-head-version" class="nav-link" data-scroll-target="#head-version"><span class="header-section-number">A.3.4</span> Head &amp; Version</a></li>
+  <li><a href="#g-y-hyper-agility" id="toc-g-y-hyper-agility" class="nav-link" data-scroll-target="#g-y-hyper-agility"><span class="header-section-number">A.3.5</span> 2G y Hyper Agility</a></li>
+  <li><a href="#comparativa" id="toc-comparativa" class="nav-link" data-scroll-target="#comparativa"><span class="header-section-number">A.3.6</span> Comparativa</a></li>
+  </ul></li>
+  <li><a href="#del-lado-del-consumo" id="toc-del-lado-del-consumo" class="nav-link" data-scroll-target="#del-lado-del-consumo"><span class="header-section-number">A.4</span> Del lado del consumo</a>
+  <ul class="collapse">
+  <li><a href="#unified-star-schema" id="toc-unified-star-schema" class="nav-link" data-scroll-target="#unified-star-schema"><span class="header-section-number">A.4.1</span> Unified Star Schema</a></li>
+  <li><a href="#activity-schema" id="toc-activity-schema" class="nav-link" data-scroll-target="#activity-schema"><span class="header-section-number">A.4.2</span> Activity Schema</a></li>
+  <li><a href="#one-big-table" id="toc-one-big-table" class="nav-link" data-scroll-target="#one-big-table"><span class="header-section-number">A.4.3</span> One Big Table</a></li>
+  </ul></li>
+  <li><a href="#cómo-elegir" id="toc-cómo-elegir" class="nav-link" data-scroll-target="#cómo-elegir"><span class="header-section-number">A.5</span> Cómo elegir</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLKHBRCG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/appendices/variantes_modelado.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../content/appendices/variantes_modelado.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Variantes de modelado</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Apéndice A — Variantes de modelado</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Este libro toma pronto una decisión y luego no la discute demasiado: para la capa de integración usa <a href="../../content/transform/raw_vault.html">Data Vault</a>. Es una elección razonable y muy extendida, pero conviene saber que es <strong>una</strong> opción dentro de una familia con varios miembros, y que esa familia convive con propuestas que atacan el problema desde el lado contrario.</p>
+<p>Este apéndice es el mapa. No pretende convencer de cambiar de técnica, sino explicar qué hay, por qué apareció cada cosa y qué se paga por ella. Casi todo lo que sigue se inventó entre 1990 y 2010, en sectores muy concretos y por motivos muy concretos, y entender esos motivos ahorra discusiones religiosas.</p>
+<section id="el-problema-que-todas-intentan-resolver" class="level2" data-number="A.1">
+<h2 data-number="A.1" class="anchored" data-anchor-id="el-problema-que-todas-intentan-resolver"><span class="header-section-number">A.1</span> El problema que todas intentan resolver</h2>
+<p>Los dos modelos clásicos que ya conocemos, el almacén normalizado de <a href="../../content/modelado/modelado_analitico.html">Inmon</a> y el <a href="../../content/modelado/modelado_analitico.html#modelado-dimensional">modelo dimensional</a> de Kimball, dan por supuestas tres cosas:</p>
+<ol type="1">
+<li>Que sabemos qué preguntas se van a hacer cuando diseñamos.</li>
+<li>Que los sistemas origen son estables en su estructura.</li>
+<li>Que la historia tiene un solo reloj y una granularidad modesta (la dimensión lentamente cambiante y poco más).</li>
+</ol>
+<p>Ninguna de las tres se sostuvo. Durante los noventa y los dos mil aparecieron tres presiones simultáneas que las rompieron:</p>
+<ul>
+<li><strong>Integración.</strong> Fusiones, adquisiciones y un ERP por cada división. De repente hay cuatro sistemas que dicen saber quién es un cliente, con cuatro claves distintas y ninguna común.</li>
+<li><strong>Cambio estructural.</strong> El software empaquetado se actualiza, el negocio lanza productos nuevos y el regulador pide un campo que nadie guardaba. Cada cambio obligaba a migrar tablas y a rehacer cargas históricas.</li>
+<li><strong>Auditoría.</strong> Basilea II, SOX y Solvencia II introdujeron una pregunta incómoda: no basta con saber cuál es el número, hay que poder reproducir <strong>el número que se publicó en marzo, con los datos que había en marzo</strong>, y explicar por qué ahora es otro.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Dónde nació cada cosa
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>No es casualidad que Data Vault saliera de la división de astronáutica de Lockheed Martin (trazabilidad y auditoría), que Anchor Modeling saliera de una aseguradora sueca (contratos que duran décadas y cambian de estructura por el camino) y que la malla de datos saliera de una consultora (el cuello de botella organizativo). Cada técnica lleva impreso el problema de quien la sufrió.</p>
+</div>
+</div>
+<p>Contra esas tres presiones, lo que rompe en cada modelo clásico es bastante predecible:</p>
+<table class="caption-top table">
+<caption>Lo que se atasca en los modelos clásicos cuando el mundo se mueve</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Normalizado (3FN)</strong></th>
+<th><strong>Dimensional (estrella)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Origen nuevo</td>
+<td>Hay que reconciliar claves antes de cargar</td>
+<td>Hay que conformar la dimensión antes de cargar</td>
+</tr>
+<tr class="even">
+<td>Atributo nuevo</td>
+<td><code>ALTER TABLE</code> y relleno histórico</td>
+<td>Columna nueva en la dimensión, sin historia previa</td>
+</tr>
+<tr class="odd">
+<td>Origen que desaparece</td>
+<td>La tabla queda con huecos o hay que borrar</td>
+<td>Se pierde el rastro de qué lo informaba</td>
+</tr>
+<tr class="even">
+<td>Corrección retroactiva</td>
+<td>Se pisa el valor anterior</td>
+<td>La SCD2 guarda el cambio, no el error</td>
+</tr>
+<tr class="odd">
+<td>Carga en paralelo</td>
+<td>Limitada, hay dependencias de clave</td>
+<td>Limitada, los hechos esperan a las dimensiones</td>
+</tr>
+</tbody>
+</table>
+<p>Todo lo que viene a continuación son respuestas a esa tabla.</p>
+</section>
+<section id="las-raíces-teóricas" class="level2" data-number="A.2">
+<h2 data-number="A.2" class="anchored" data-anchor-id="las-raíces-teóricas"><span class="header-section-number">A.2</span> Las raíces teóricas</h2>
+<p>Antes de ver las técnicas conviene tener tres ideas en la cabeza, porque explican por qué los modelos que veremos tienen esa forma tan peculiar y no otra.</p>
+<section id="hasta-dónde-llega-la-normalización" class="level3" data-number="A.2.1">
+<h3 data-number="A.2.1" class="anchored" data-anchor-id="hasta-dónde-llega-la-normalización"><span class="header-section-number">A.2.1</span> Hasta dónde llega la normalización</h3>
+<p>En el capítulo de <a href="../../content/modelado/formasnormales.html">formas normales</a> llegamos hasta la tercera y paramos, que es donde para casi todo el mundo. Existen más: Boyce-Codd, la cuarta y la quinta, que persiguen dependencias cada vez más raras y aparecen poco en la práctica.</p>
+<p>La que importa aquí es la <strong>sexta forma normal (6FN)</strong>, formalizada por Date, Darwen y Lorentzos a principios de los dos mil <span class="citation" data-cites="date2002temporal">(<a href="../references.html#ref-date2002temporal" role="doc-biblioref">Date et&nbsp;al. 2002</a>)</span> y, significativamente, en un libro sobre datos temporales. Su definición práctica cabe en una línea:</p>
+<blockquote class="blockquote">
+<p>Una tabla en 6FN contiene la clave y <strong>como mucho un atributo no clave</strong>.</p>
+</blockquote>
+<p>Dicho así suena a exageración académica. Su consecuencia no lo es: si cada atributo vive en su propia tabla, <strong>añadir un atributo es añadir una tabla, no alterar una existente</strong>. Y si cada tabla lleva su propia marca temporal, cada atributo tiene su propia historia con su propia granularidad, sin arrastrar a los demás. El nombre de un alumno puede cambiar tres veces y su correo ninguna, y eso no genera ni una fila redundante.</p>
+<p>El precio también cabe en una línea: una entidad con doce atributos son doce tablas, y una consulta que las quiera todas son doce <code>JOIN</code>.</p>
+</section>
+<section id="dos-relojes" class="level3" data-number="A.2.2">
+<h3 data-number="A.2.2" class="anchored" data-anchor-id="dos-relojes"><span class="header-section-number">A.2.2</span> Dos relojes</h3>
+<p>La segunda idea es que <strong>el tiempo del dato no es uno solo</strong>. La distinción viene de la literatura de bases de datos temporales <span class="citation" data-cites="snodgrass1999temporal">(<a href="../references.html#ref-snodgrass1999temporal" role="doc-biblioref">Snodgrass 1999</a>)</span> y acabó en el estándar SQL:2011:</p>
+<ul>
+<li><strong>Tiempo de validez</strong>: cuándo el hecho fue cierto en el mundo real. El alumno se mudó el 3 de marzo.</li>
+<li><strong>Tiempo de transacción</strong>: cuándo el sistema se enteró y lo dio por cierto. El almacén lo cargó el 17 de abril.</li>
+</ul>
+<p>Con los dos relojes se puede responder a la pregunta de auditoría de antes: qué creíamos en marzo sobre lo que pasó en febrero. Con uno solo, no. Y esto no es teórico: es exactamente la diferencia entre <code>load_date</code> (transacción) y la fecha de efecto del negocio (validez) que aparece en los satélites del <a href="../../content/transform/raw_vault.html">raw vault</a>.</p>
+<p>La trampa habitual es implementar solo el reloj de carga, llamarlo historia y descubrir dos años después que no se puede reconstruir un informe antiguo porque el origen mandó una corrección y se aplicó encima.</p>
+</section>
+<section id="modelar-la-conversación-no-el-mundo" class="level3" data-number="A.2.3">
+<h3 data-number="A.2.3" class="anchored" data-anchor-id="modelar-la-conversación-no-el-mundo"><span class="header-section-number">A.2.3</span> Modelar la conversación, no el mundo</h3>
+<p>La tercera raíz es menos conocida y viene de los Países Bajos. La familia de <strong>modelado orientado a hechos</strong> (NIAM, luego ORM de Halpin <span class="citation" data-cites="halpin2008orm">(<a href="../references.html#ref-halpin2008orm" role="doc-biblioref">Halpin y Morgan 2008</a>)</span> y FCO-IM) propone construir el modelo a partir de <strong>frases verbalizadas por el experto del dominio</strong>, no a partir de entidades dibujadas por el modelador:</p>
+<blockquote class="blockquote">
+<p>«El alumno con DNI 12345678Z se matriculó en la asignatura BD-101 el 3 de septiembre de 2025.»</p>
+</blockquote>
+<p>De ahí se derivan mecánicamente los tipos de hecho, y de los tipos de hecho se derivan las tablas. Lo interesante para nosotros es que un modelo así <strong>no tiene forma todavía</strong>: la misma verbalización puede generar un modelo entidad-relación, uno dimensional o un Data Vault. Es una capa por encima, no una alternativa.</p>
+<p>Aparece aquí porque explica una queja recurrente: cuando un Data Vault sale mal, casi nunca es por la técnica, es porque <strong>nadie acordó qué es un alumno</strong> antes de construir el hub. Estas técnicas son la disciplina que fuerza ese acuerdo.</p>
+</section>
+</section>
+<section id="la-familia-ensemble" class="level2" data-number="A.3">
+<h2 data-number="A.3" class="anchored" data-anchor-id="la-familia-ensemble"><span class="header-section-number">A.3</span> La familia ensemble</h2>
+<p>Ya presentamos el <a href="../../content/modelado/nuevos_paradigmas.html#modelos-lógicos-ensamblados">modelado lógico ensamblado</a> al hablar de nuevos paradigmas. El término lo popularizó Hans Hultgren <span class="citation" data-cites="hultgren2012ensemble">(<a href="../references.html#ref-hultgren2012ensemble" role="doc-biblioref">Hultgren 2012</a>)</span> al darse cuenta de que varias técnicas desarrolladas por separado, en países distintos y sin conocerse, habían llegado casi a la misma solución.</p>
+<p>La idea común se llama <strong>descomposición unificada</strong>: en lugar de guardar un concepto de negocio en una tabla, se parte en piezas <strong>según la velocidad a la que cambia cada una</strong>, manteniéndolas unidas por la clave de negocio.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    C[Concepto de negocio] --&gt; K[Clave&lt;br/&gt;casi nunca cambia]
+    C --&gt; X[Contexto&lt;br/&gt;cambia a diario]
+    C --&gt; R[Relación&lt;br/&gt;aparece y desaparece]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Las tres piezas son siempre las mismas: la <strong>clave</strong> del concepto, su <strong>contexto</strong> descriptivo y sus <strong>relaciones</strong> con otros conceptos. Lo que cambia de una técnica a otra es cómo se agrupa el contexto, cómo se identifican las filas y cuánta abstracción se mete en el concepto. Quienes se dedican a esto calculan que las variantes coinciden entre sí en un 80 % o 85 %, y la experiencia lo confirma: quien entiende una entiende las demás en una tarde.</p>
+<p>Veamos las diferencias sobre el mismo caso, el alumno que se matricula que ya usamos en la parte de transformación.</p>
+<section id="data-vault" class="level3" data-number="A.3.1">
+<h3 data-number="A.3.1" class="anchored" data-anchor-id="data-vault"><span class="header-section-number">A.3.1</span> Data Vault</h3>
+<p>Es el miembro más conocido y el que sigue este libro. Dan Linstedt lo desarrolló entre 1990 y 2000 dentro de Lockheed Martin, lo publicó en 2001 y presentó la versión 2.0 en 2013, que es la que añade las claves hash, la orientación a plataformas masivamente paralelas y toda la parte de metodología y arquitectura que va más allá del modelo <span class="citation" data-cites="linstedt2015vault">(<a href="../references.html#ref-linstedt2015vault" role="doc-biblioref">Linstedt y Olschimke 2015</a>)</span>.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    HUB_ALUMNO {
+        hash hk_alumno PK
+        numero id_alumno
+        fecha load_date
+        texto record_source
+    }
+    SAT_ALUMNO {
+        hash hk_alumno FK
+        fecha load_date
+        texto nombre
+        texto email
+    }
+    LINK_MATRICULA {
+        hash hk_matricula PK
+        hash hk_alumno FK
+        hash hk_asignatura FK
+        fecha load_date
+    }
+    HUB_ALUMNO ||--o{ SAT_ALUMNO : describe
+    HUB_ALUMNO ||--o{ LINK_MATRICULA : participa
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>La particularidad frente al resto de la familia es que <strong>agrupa el contexto en racimos</strong>: un satélite lleva varios atributos juntos, normalmente los que vienen del mismo origen o cambian al mismo ritmo. Es una decisión pragmática que reduce el número de tablas a cambio de que un cambio en cualquier atributo del racimo genere una fila nueva con todos los demás repetidos.</p>
+<p><strong>A favor</strong>: es el único con ecosistema real (paquetes de dbt, herramientas de automatización, gente en el mercado laboral que lo conoce, literatura abundante). La clave hash permite cargar todo en paralelo sin consultar el destino. Y el reparto entre reglas duras y blandas que impone es valioso incluso si nunca se construye un vault.</p>
+<p><strong>En contra</strong>: agrupar atributos en satélites es una decisión de diseño que hay que acertar, y se acierta poco a la primera. El número de tablas crece rápido. Y la <a href="../../content/transform/raw_vault.html">tentación de exponerlo</a> al usuario final acaba siempre mal.</p>
+</section>
+<section id="anchor-modeling" class="level3" data-number="A.3.2">
+<h3 data-number="A.3.2" class="anchored" data-anchor-id="anchor-modeling"><span class="header-section-number">A.3.2</span> Anchor Modeling</h3>
+<p>La alternativa más radical y la más elegante. Olle Regardt y Lars Rönnbäck la implementaron por primera vez en 2004 en la aseguradora sueca Länsförsäkringar, y luego se formalizó académicamente con la Universidad de Estocolmo, ganando el premio al mejor artículo del congreso ER de 2009 y publicándose después en revista <span class="citation" data-cites="roennbaeck2010anchor">(<a href="../references.html#ref-roennbaeck2010anchor" role="doc-biblioref">Rönnbäck et&nbsp;al. 2010</a>)</span>.</p>
+<p>Su decisión de partida es llevar la 6FN hasta el final: <strong>un atributo, una tabla</strong>. Nada de racimos.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    AL_ALUMNO {
+        numero AL_ID PK
+    }
+    AL_NOM_NOMBRE {
+        numero AL_ID FK
+        texto AL_NOM_valor
+        fecha AL_NOM_desde
+    }
+    AL_EMA_EMAIL {
+        numero AL_ID FK
+        texto AL_EMA_valor
+        fecha AL_EMA_desde
+    }
+    AS_ASIGNATURA {
+        numero AS_ID PK
+    }
+    MATRICULA {
+        numero AL_ID FK
+        numero AS_ID FK
+        numero EST_ID FK
+        fecha desde
+    }
+    EST_ESTADO {
+        numero EST_ID PK
+        texto EST_valor
+    }
+
+    AL_ALUMNO ||--o{ AL_NOM_NOMBRE : tiene
+    AL_ALUMNO ||--o{ AL_EMA_EMAIL : tiene
+    AL_ALUMNO ||--o{ MATRICULA : cursa
+    AS_ASIGNATURA ||--o{ MATRICULA : escursada
+    EST_ESTADO ||--o{ MATRICULA : califica
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Cuatro construcciones y ninguna más:</p>
+<ul>
+<li><strong>Anclas</strong> (<em>anchors</em>), que solo contienen identidades. Equivalen al hub, pero aún más desnudas.</li>
+<li><strong>Atributos</strong>, una tabla por propiedad, con su propia historia.</li>
+<li><strong>Lazos</strong> (<em>ties</em>), que relacionan anclas. Equivalen al enlace.</li>
+<li><strong>Nudos</strong> (<em>knots</em>), tablas pequeñas de valores compartidos y estables (estados, tipos, categorías) que se referencian desde varios sitios y evitan repetir literales.</li>
+</ul>
+<p>Es además <strong>estrictamente aditivo</strong> y admite bitemporalidad completa: nada se actualiza ni se borra, ni siquiera un borrado del origen, que se registra como una aserción más.</p>
+<p><strong>A favor</strong>: la evolución del esquema es genuinamente no destructiva. Añadir un atributo nunca toca nada existente. No hay nulos, no hay redundancia y no hay que acertar ningún agrupamiento porque no hay agrupamientos que acertar. Y viene con <a href="https://www.anchormodeling.com/">herramienta propia</a> que genera el DDL, las vistas de consulta y las funciones temporales a partir del modelo dibujado, lo cual mitiga bastante el problema siguiente.</p>
+<p><strong>En contra</strong>: el número de tablas es sencillamente enorme, y nadie escribe esas consultas a mano (se consultan las vistas generadas, no las tablas). El rendimiento depende de que el optimizador sepa hacer <strong>eliminación de tablas</strong>, es decir, descartar del plan las tablas de las que no se selecciona ninguna columna. Los motores comerciales maduros lo hacen bien, pero no conviene darlo por supuesto sin comprobarlo en el motor que se vaya a usar. Y el ecosistema es minúsculo comparado con el de Data Vault.</p>
+</section>
+<section id="focal-point" class="level3" data-number="A.3.3">
+<h3 data-number="A.3.3" class="anchored" data-anchor-id="focal-point"><span class="header-section-number">A.3.3</span> Focal Point</h3>
+<p>Desarrollada en Suecia por Patrik Lager y Poe Eriksson, en el mismo caldo de cultivo que Anchor. Se distingue por trabajar con <strong>conceptos más abstractos</strong>: en lugar de modelar «alumno» y «profesor» y «personal de administración», modela «persona» y deja el papel concreto como contexto.</p>
+<p>Su proceso también invierte el orden habitual: primero se construye el modelo objetivo a partir de lo que el negocio dice que necesita, y solo después se mapean los sistemas origen contra él.</p>
+<p><strong>A favor</strong>: la abstracción hace que integrar un origen nuevo casi nunca exija conceptos nuevos, solo mapeos nuevos, y eso mantiene el modelo pequeño y estable en el tiempo.</p>
+<p><strong>En contra</strong>: es exactamente la misma virtud vista al revés. Un modelo abstracto es un modelo que el negocio no reconoce como suyo, y modelar bien en abstracto es difícil. Fuera de Escandinavia su adopción es testimonial.</p>
+</section>
+<section id="head-version" class="level3" data-number="A.3.4">
+<h3 data-number="A.3.4" class="anchored" data-anchor-id="head-version"><span class="header-section-number">A.3.4</span> Head &amp; Version</h3>
+<p>El miembro pragmático de la familia, y probablemente el que más se parece a lo que mucha gente construye sin saber que tiene nombre. Fusiona dos piezas:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    HEAD_ALUMNO {
+        numero id_alumno PK
+        texto dni
+        fecha fecha_nacimiento
+        fecha load_date
+    }
+    VER_ALUMNO {
+        numero id_version PK
+        numero id_alumno FK
+        texto nombre
+        texto email
+        fecha desde
+        fecha hasta
+    }
+    HEAD_ALUMNO ||--o{ VER_ALUMNO : versiona
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>La <strong>cabeza</strong> es un hub que además guarda los atributos considerados estáticos, los que mantienen una relación 1:1 con la clave para siempre (fecha de nacimiento, DNI). La <strong>versión</strong> funciona como un satélite, pero con clave subrogada propia y con fecha de fin explícita en lugar de deducirla al consultar.</p>
+<p><strong>A favor</strong>: bastantes menos tablas y menos ceremonia. Las consultas se parecen mucho más a lo que un analista ya sabe escribir, y el cierre explícito de la vigencia evita las funciones de ventana que hacen falta en un satélite puro.</p>
+<p><strong>En contra</strong>: «estático» es una categoría más frágil de lo que parece (las fechas de nacimiento se corrigen, los DNI se rectifican) y cuando falla hay que migrar la cabeza, que es justamente lo que la familia quería evitar. Cerrar la vigencia obliga además a <strong>actualizar</strong> la fila anterior, y con ello se pierde la carga puramente aditiva y su paralelismo.</p>
+</section>
+<section id="g-y-hyper-agility" class="level3" data-number="A.3.5">
+<h3 data-number="A.3.5" class="anchored" data-anchor-id="g-y-hyper-agility"><span class="header-section-number">A.3.5</span> 2G y Hyper Agility</h3>
+<p>Se mencionan por completitud, porque aparecen en cualquier comparativa de la familia. <strong>2G</strong> y <strong>Hyper Agility</strong> (esta última de Lars Boström) son variantes con menor difusión pública y sin literatura accesible comparable a las anteriores. Sus diferencias respecto a lo ya visto están en los detalles de identificación y de agrupamiento del contexto, no en el planteamiento.</p>
+</section>
+<section id="comparativa" class="level3" data-number="A.3.6">
+<h3 data-number="A.3.6" class="anchored" data-anchor-id="comparativa"><span class="header-section-number">A.3.6</span> Comparativa</h3>
+<table class="caption-top table">
+<caption>Los cuatro miembros principales de la familia ensemble sobre el mismo problema</caption>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Data Vault</strong></th>
+<th><strong>Anchor</strong></th>
+<th><strong>Focal Point</strong></th>
+<th><strong>Head &amp; Version</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Origen</td>
+<td>Lockheed Martin, EE. UU., 1990-2000</td>
+<td>Länsförsäkringar y Univ. Estocolmo, Suecia, 2004</td>
+<td>Suecia, años 2000</td>
+<td>Práctica europea</td>
+</tr>
+<tr class="even">
+<td>Contexto</td>
+<td>Agrupado en satélites</td>
+<td>Una tabla por atributo (6FN)</td>
+<td>Agrupado, más abstracto</td>
+<td>Estático en la cabeza, resto en versiones</td>
+</tr>
+<tr class="odd">
+<td>Nivel del concepto</td>
+<td>Concepto de negocio</td>
+<td>Concepto de negocio</td>
+<td>Más abstracto</td>
+<td>Concepto de negocio</td>
+</tr>
+<tr class="even">
+<td>Identificación</td>
+<td>Hash de la clave de negocio</td>
+<td>Subrogada por ancla</td>
+<td>Subrogada</td>
+<td>Subrogada</td>
+</tr>
+<tr class="odd">
+<td>Vigencia</td>
+<td>Solo fecha de inicio, se deduce</td>
+<td>Solo inicio, bitemporal opcional</td>
+<td>Solo inicio</td>
+<td>Inicio y fin explícitos</td>
+</tr>
+<tr class="even">
+<td>Operaciones</td>
+<td>Solo inserción</td>
+<td>Solo inserción</td>
+<td>Solo inserción</td>
+<td>Inserción y actualización</td>
+</tr>
+<tr class="odd">
+<td>Nº de tablas</td>
+<td>Alto</td>
+<td>Muy alto</td>
+<td>Medio</td>
+<td>Medio</td>
+</tr>
+<tr class="even">
+<td>Ecosistema</td>
+<td>Amplio</td>
+<td>Herramienta propia</td>
+<td>Escaso</td>
+<td>Escaso</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="del-lado-del-consumo" class="level2" data-number="A.4">
+<h2 data-number="A.4" class="anchored" data-anchor-id="del-lado-del-consumo"><span class="header-section-number">A.4</span> Del lado del consumo</h2>
+<p>Todo lo anterior ataca la capa de integración. Hay otra corriente que da eso por resuelto y se pelea con el problema contrario: el modelo dimensional también tiene sus miserias cuando el analista se pone a combinar tablas.</p>
+<section id="unified-star-schema" class="level3" data-number="A.4.1">
+<h3 data-number="A.4.1" class="anchored" data-anchor-id="unified-star-schema"><span class="header-section-number">A.4.1</span> Unified Star Schema</h3>
+<p>Publicado en 2020 por Francesco Puppini con el respaldo de Bill Inmon <span class="citation" data-cites="inmon2020uss">(<a href="../references.html#ref-inmon2020uss" role="doc-biblioref">Inmon y Puppini 2020</a>)</span>, parte de una observación muy honesta: en un esquema en estrella con varias tablas de hechos, el usuario que combina tablas por su cuenta se topa con trampas clásicas (bucles, granularidades no conformadas y los llamados <em>fan trap</em> y <em>chasm trap</em>) que <strong>inflan los importes sin avisar</strong>.</p>
+<p>La propuesta es tan simple como discutible: que las entidades <strong>no se unan nunca directamente entre sí</strong>, sino a través de una única tabla intermedia llamada puente de Puppini.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    PUENTE {
+        texto etapa
+        numero id_alumno FK
+        numero id_asignatura FK
+        numero id_matricula FK
+        numero medida_matriculas
+    }
+    ALUMNOS {
+        numero id_alumno PK
+        texto nombre
+    }
+    ASIGNATURAS {
+        numero id_asignatura PK
+        texto nombre
+    }
+    MATRICULAS {
+        numero id_matricula PK
+        fecha fecha
+    }
+    ALUMNOS ||--o{ PUENTE : por
+    ASIGNATURAS ||--o{ PUENTE : por
+    MATRICULAS ||--o{ PUENTE : por
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>El puente es la unión de todas las combinaciones válidas, con una columna que indica de qué etapa procede cada fila. Cualquier consulta pasa por él y las trampas desaparecen porque no hay caminos alternativos posibles.</p>
+<p><strong>A favor</strong>: elimina de raíz una clase entera de errores silenciosos, que son los peores. Y no exige conocer los requisitos al diseñar, porque el puente sirve para cualquier combinación futura.</p>
+<p><strong>En contra</strong>: el puente es una tabla enorme y única, con todo lo que eso implica de coste de reconstrucción y de punto único de contención (en un escenario de <a href="../../content/modelado/nuevos_paradigmas.html#la-malla-de-datos">malla de datos</a> es directamente contradictorio). El soporte en las herramientas de BI es desigual, y explicar el modelo a alguien que lleva quince años haciendo estrellas cuesta más de lo que parece.</p>
+</section>
+<section id="activity-schema" class="level3" data-number="A.4.2">
+<h3 data-number="A.4.2" class="anchored" data-anchor-id="activity-schema"><span class="header-section-number">A.4.2</span> Activity Schema</h3>
+<p>La propuesta más rupturista de la lista, creada por Ahmed Elsamadisi en Narrator hacia 2020 y publicada después como especificación abierta <span class="citation" data-cites="activityschema2021">(<a href="../references.html#ref-activityschema2021" role="doc-biblioref">Elsamadisi 2021</a>)</span>. Su tesis: para analizar el comportamiento de una entidad a lo largo del tiempo, no hacen falta dimensiones ni hechos, hace falta <strong>una sola tabla de serie temporal</strong> con un esquema fijo.</p>
+<p>Todo se reduce a frases del tipo «esta entidad hizo esta actividad en este momento»:</p>
+<table class="caption-top table">
+<caption>Estructura de la tabla de actividades, simplificada (la especificación fija once columnas y en su versión 2 agrupa las características en un campo estructurado)</caption>
+<thead>
+<tr class="header">
+<th>Columna</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>entity_uuid</code></td>
+<td>Quién (el alumno, el cliente)</td>
+</tr>
+<tr class="even">
+<td><code>ts</code></td>
+<td>Cuándo</td>
+</tr>
+<tr class="odd">
+<td><code>activity</code></td>
+<td>Qué hizo (<code>se_matriculo</code>, <code>aprobo</code>, <code>abandono</code>)</td>
+</tr>
+<tr class="even">
+<td><code>activity_occurrence</code></td>
+<td>Si era la primera vez, la segunda…</td>
+</tr>
+<tr class="odd">
+<td><code>activity_repeated_at</code></td>
+<td>Cuándo volvió a hacerlo</td>
+</tr>
+<tr class="even">
+<td><code>link</code></td>
+<td>Referencia al registro de origen</td>
+</tr>
+<tr class="odd">
+<td><code>revenue_impact</code></td>
+<td>Importe asociado, si lo hay</td>
+</tr>
+<tr class="even">
+<td>Características</td>
+<td>Atributos propios de esa actividad</td>
+</tr>
+</tbody>
+</table>
+<p>Lo llamativo es que <strong>no hay claves foráneas ni uniones planeadas</strong>. Las preguntas se responden combinando la tabla consigo misma con relaciones temporales: primera vez que ocurrió A antes de B, la última C anterior a cada A, cuántas D entre dos A consecutivas. Al ser siempre las mismas operaciones, se pueden encapsular y reutilizar.</p>
+<p><strong>A favor</strong>: para preguntas de recorrido, embudo y atribución es un modelo notablemente mejor que la estrella, donde esas preguntas acaban siendo SQL de trescientas líneas. Añadir una actividad nueva no toca el esquema.</p>
+<p><strong>En contra</strong>: fuera de ese dominio se vuelve incómodo rápidamente. Los estados de un balance, los inventarios y los agregados financieros no son actividades de una entidad, y forzarlos ahí duele. Las uniones temporales son caras. Y el ecosistema depende de una empresa y una especificación con poca masa crítica, lo que es un riesgo real a la hora de apostar por él.</p>
+</section>
+<section id="one-big-table" class="level3" data-number="A.4.3">
+<h3 data-number="A.4.3" class="anchored" data-anchor-id="one-big-table"><span class="header-section-number">A.4.3</span> One Big Table</h3>
+<p>La opción de no modelar. Se aplana todo en una tabla ancha y se deja que el motor columnar haga el resto. Ya apareció en el libro con su nombre castellano, el <a href="../../content/explotacion/ds.html">tablón</a>, al preparar datos para modelizar.</p>
+<p>Su defensa moderna es puramente económica: en un motor columnar las columnas no leídas no se pagan, y la comparativa que circula (procedente de un proveedor, conviene decirlo) sitúa las tablas anchas entre un 25 % y un 50 % por delante de la estrella en los almacenes en la nube más habituales. Contra eso, los propios motores columnares actuales resuelven las uniones de estrella muy bien, así que la ventaja depende mucho del caso.</p>
+<p>Lo que casi nunca se menciona en esa comparación es el coste del cambio: corregir el nombre de un producto en una estrella es actualizar una fila de la dimensión, y en un tablón es reescribir millones de filas. Por eso el tablón funciona bien como <strong>capa de consumo desechable y reconstruible</strong>, y mal como fuente de la verdad.</p>
+</section>
+</section>
+<section id="cómo-elegir" class="level2" data-number="A.5">
+<h2 data-number="A.5" class="anchored" data-anchor-id="cómo-elegir"><span class="header-section-number">A.5</span> Cómo elegir</h2>
+<p>Después de todo lo anterior, la pregunta práctica no es cuál es mejor sino cuál corresponde a la situación de cada uno. Ordenados de menos a más ceremonia:</p>
+<table class="caption-top table">
+<caption>Un mapa aproximado, que no sustituye a conocer el caso</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Situación</th>
+<th>Técnica razonable</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Un origen, requisitos estables, equipo pequeño</td>
+<td>Estrella con SCD2, y nada más</td>
+</tr>
+<tr class="even">
+<td>Un origen, mucha exploración de comportamiento</td>
+<td>Estrella o Activity Schema si el dominio es de recorrido</td>
+</tr>
+<tr class="odd">
+<td>Varios orígenes, cambio moderado, sin auditoría formal</td>
+<td>Estrella con capa de preparación historificada</td>
+</tr>
+<tr class="even">
+<td>Varios orígenes, cambio alto, auditoría exigible</td>
+<td>Data Vault</td>
+</tr>
+<tr class="odd">
+<td>Cambio estructural constante y equipo dispuesto a automatizar</td>
+<td>Anchor Modeling</td>
+</tr>
+<tr class="even">
+<td>Analistas que combinan tablas por su cuenta y se equivocan</td>
+<td>Puente de Puppini sobre lo que ya haya</td>
+</tr>
+</tbody>
+</table>
+<p>Y tres avisos que valen más que la tabla.</p>
+<p><strong>El primero</strong>: la variable que decide no es el volumen de datos, es el <strong>ritmo de cambio</strong> multiplicado por el <strong>número de orígenes</strong>. Un almacén de veinte terabytes con un solo origen estable no necesita nada de esto. Uno de doscientos gigabytes que integra siete sistemas y absorbe una empresa al año, sí.</p>
+<p><strong>El segundo</strong>: ninguna de estas técnicas se expone al usuario final, ni siquiera las del lado del consumo. Todas asumen una capa de presentación por encima, y esa capa casi siempre acaba siendo dimensional, porque es la que la gente y las herramientas entienden. Esto no es una derrota del modelo dimensional, es su sitio.</p>
+<p><strong>El tercero, y el que más caro sale ignorar</strong>: la dificultad de estas técnicas nunca está en el SQL. Está en acordar qué es un alumno, cuál es su clave de negocio y quién decide cuando dos sistemas no se ponen de acuerdo. Ese trabajo hay que hacerlo igual, se elija lo que se elija, y no lo hace la herramienta. Es la misma conclusión a la que llegamos hablando de <a href="../../content/appendices/metadatado.html">metadatado</a> y de la <a href="../../content/modelado/nuevos_paradigmas.html#la-malla-de-datos">malla de datos</a>, y no es coincidencia.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-date2002temporal" class="csl-entry" role="listitem">
+Date, C. J., Hugh Darwen, y Nikos A. Lorentzos. 2002. <em>Temporal Data and the Relational Model</em>. Morgan Kaufmann.
+</div>
+<div id="ref-activityschema2021" class="csl-entry" role="listitem">
+Elsamadisi, Ahmed. 2021. <em>Activity Schema Specification</em>. <a href="https://www.activityschema.com/" class="uri">Https://www.activityschema.com/</a>.
+</div>
+<div id="ref-halpin2008orm" class="csl-entry" role="listitem">
+Halpin, Terry, y Tony Morgan. 2008. <em>Information Modeling and Relational Databases</em>. 2.ª ed. Morgan Kaufmann.
+</div>
+<div id="ref-hultgren2012ensemble" class="csl-entry" role="listitem">
+Hultgren, Hans. 2012. <em>Modeling the Agile Data Warehouse with Data Vault</em>. New Hamilton.
+</div>
+<div id="ref-inmon2020uss" class="csl-entry" role="listitem">
+Inmon, William H., y Francesco Puppini. 2020. <em>The Unified Star Schema: An Agile and Resilient Approach to Data Warehouse and Analytics Design</em>. Technics Publications.
+</div>
+<div id="ref-linstedt2015vault" class="csl-entry" role="listitem">
+Linstedt, Daniel, y Michael Olschimke. 2015. <em>Building a Scalable Data Warehouse with Data Vault 2.0</em>. Morgan Kaufmann.
+</div>
+<div id="ref-roennbaeck2010anchor" class="csl-entry" role="listitem">
+Rönnbäck, Lars, Olle Regardt, Maria Bergholtz, Paul Johannesson, y Petia Wohed. 2010. <span>«Anchor modeling: Agile information modeling in evolving data environments»</span>. <em>Data &amp; Knowledge Engineering</em> 69 (12): 1229-53.
+</div>
+<div id="ref-snodgrass1999temporal" class="csl-entry" role="listitem">
+Snodgrass, Richard T. 1999. <em>Developing Time-Oriented Database Applications in SQL</em>. Morgan Kaufmann.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/iraitzm\.github\.io\/ingenieria-datos\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../content/references.html" class="pagination-link" aria-label="Referencias">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Referencias</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../content/appendices/metadatado.html" class="pagination-link" aria-label="Metadatado y catálogo">
+        <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2025, Iraitz Montalbán</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/IraitzM">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/iraitzmontalban/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

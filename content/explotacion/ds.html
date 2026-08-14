@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-181dfe74f60b45fb364f5d98d01a2ee9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-72b5612593ed4768f813ef22264b3b89.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -403,32 +403,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../../content/appendices/variantes_modelado.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Variantes de modelado</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../../content/appendices/metadatado.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Metadatado y catálogo</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/appendices/calidad.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Calidad de datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Calidad de datos</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/appendices/rill.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Exploración con Rill</span></span></a>
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Exploración con Rill</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/appendices/datalake.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></span></a>
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Ejercicio: un lago de datos entero</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../content/appendices/de_storybook.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">La danza del Ingeniero de Datos</span></span></a>
   </div>
 </li>
       </ul>
@@ -486,7 +492,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <section id="acceso-programático" class="level2" data-number="21.1">
 <h2 data-number="21.1" class="anchored" data-anchor-id="acceso-programático"><span class="header-section-number">21.1</span> Acceso programático</h2>
 <p>Empecemos por lo fácil, que además es una de las ventajas menos publicitadas de haber construido sobre formatos abiertos. Para leer el almacén desde Python no hace falta ningún servidor, ningún controlador propietario ni ninguna exportación:</p>
-<div id="67b4c45c" class="cell" data-execution_count="2">
+<div id="4348e9bb" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> duckdb.<span class="ex">connect</span>()</span>
@@ -588,7 +594,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h3 data-number="21.1.1" class="anchored" data-anchor-id="cuando-sql-no-es-la-herramienta"><span class="header-section-number">21.1.1</span> Cuando SQL no es la herramienta</h3>
 <p>Hay, sin embargo, una fricción real en lo anterior. Quien viene de pandas piensa en transformaciones encadenadas, no en una consulta de treinta líneas, y acaba haciendo lo previsible: <code>SELECT *</code>, traérselo todo a memoria y transformar en Python. Funciona hasta que la tabla no cabe, que es siempre justo después de que el análisis se vuelva interesante.</p>
 <p><a href="https://ibis-project.org/">Ibis</a> resuelve esa fricción por el otro lado. Ofrece una API de dataframes muy parecida a la de pandas, pero <strong>no ejecuta nada</strong>: construye una expresión y la compila al SQL del motor que haya debajo. El cálculo ocurre donde están los datos y a Python solo vuelve el resultado.</p>
-<div id="c0112393" class="cell" data-execution_count="4">
+<div id="65c58882" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ibis</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ibis.duckdb.<span class="ex">connect</span>()</span>
@@ -663,7 +669,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 </div>
 <p>Eso se lee como pandas y se comporta como SQL. La prueba está en que la expresión sabe enseñar en qué se ha traducido:</p>
-<div id="a5abc461" class="cell" data-execution_count="5">
+<div id="1bb2b822" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ibis.to_sql(tablon))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>SELECT
@@ -731,7 +737,7 @@ ORDER BY
 <p>Los algoritmos de aprendizaje automático, salvo excepciones, esperan una matriz: <strong>una fila por observación y una columna por variable</strong>. No saben unir tablas ni entienden un modelo en estrella. Alguien tiene que aplanar.</p>
 <p>Ese aplanado tiene nombre propio en la jerga en castellano, el <strong>tablón</strong>, y en inglés se le llama <em>one big table</em> o, cuando se construye para modelizar, <em>analytical base table</em>. Es la desnormalización llevada a su extremo, y por una vez está justificada: aquí no perseguimos integridad ni ahorro de espacio, perseguimos que un algoritmo pueda leerlo.</p>
 <p>Sobre el modelo en estrella que construimos, la versión sencilla es un <code>JOIN</code> y una agregación:</p>
-<div id="24319135" class="cell" data-execution_count="7">
+<div id="1b3c0e11" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st">    select</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">        a.alumno_id,</span></span>
@@ -841,7 +847,7 @@ ORDER BY
 <h2 data-number="21.4" class="anchored" data-anchor-id="el-tablón-correcto-a-fecha"><span class="header-section-number">21.4</span> El tablón correcto a fecha</h2>
 <p>Aquí es donde todo el trabajo de la <a href="../../content/transform/raw_vault.html">parte de transformación</a> empieza a pagar solo. Los satélites no guardan el estado actual: guardan <strong>todos los estados con su fecha</strong>. Y con eso se puede reconstruir la foto de cualquier día.</p>
 <p>La estructura cambia: ya no hay una fila por alumno, sino una fila por <strong>alumno y fecha de observación</strong>, con cada variable tal y como se conocía ese día.</p>
-<div id="e608a8ad" class="cell" data-execution_count="8">
+<div id="91535370" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">with fechas as (</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">    select unnest([timestamp '2026-01-11', timestamp '2026-01-14']) as fecha_obs</span></span>
@@ -967,7 +973,7 @@ ORDER BY
 <section id="la-variable-objetivo" class="level2" data-number="21.5">
 <h2 data-number="21.5" class="anchored" data-anchor-id="la-variable-objetivo"><span class="header-section-number">21.5</span> La variable objetivo</h2>
 <p>Falta la otra mitad. Las variables predictoras miran hacia atrás desde la fecha de observación; la <strong>variable objetivo</strong> mira hacia adelante a propósito, porque es lo que queremos predecir.</p>
-<div id="4c34ef46" class="cell" data-execution_count="9">
+<div id="5652acfe" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>utilidades.consultar(<span class="st">"""</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">with fechas as (</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">    select unnest([timestamp '2026-01-11', timestamp '2026-01-14']) as fecha_obs</span></span>
